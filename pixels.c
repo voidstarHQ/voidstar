@@ -176,45 +176,44 @@ static
 GLboolean
 ReadData() {
 
-    size_t bytes = wWIDTH * wHEIGHT * 3;
-    if (fread(Image, 1, bytes, stdin) == bytes) {
-        printf("here %d\n", Image[0]);
-        return GL_TRUE;
-    }
-    else {
-        perror("read");
-        return GL_FALSE;
-    }
-
-    /* GLboolean is_first = GL_TRUE; */
-    /* unsigned char previous = 0; */
-    /* for (int i = 0; i < wWIDTH * wHEIGHT; ++i) { */
-    /*     unsigned char current = 0; */
-    /*     if (fread(&current, 1, 1, stdin) == 1) { */
-    /*         printf("here %d\n", current); */
-    /*         if (GL_TRUE == is_first) { */
-    /*             is_first = GL_FALSE; */
-    /*             printf("here %d\n", current); */
-    /*             previous = current; */
-    /*             continue; */
-    /*         } */
-    /*         int idx = wWIDTH * previous + current; */
-    /*         Image[idx + 0] = 1; */
-    /*         Image[idx + 1] = 0; */
-    /*         Image[idx + 2] = 1; */
-    /*         previous = current; */
-    /*     } */
-    /*     else { */
-    /*         perror("read"); */
-    /*         return GL_FALSE; */
-    /*     } */
+    /* size_t bytes = wWIDTH * wHEIGHT * 3; */
+    /* if (fread(Image, 1, bytes, stdin) == bytes) { */
+    /*     printf("here %d\n", Image[0]); */
+    /*     return GL_TRUE; */
+    /* } */
+    /* else { */
+    /*     perror("read"); */
+    /*     return GL_FALSE; */
     /* } */
 
-    for (int i = 0; i < wWIDTH * wHEIGHT * 3; i += 3) {
-        Image[i + 0] = 0;
-        Image[i + 1] = 0;
-        Image[i + 2] = 1;
+    GLboolean is_first = GL_TRUE;
+    unsigned char previous = 0;
+    for (int i = 0; i < wWIDTH * wHEIGHT; ++i) {
+        unsigned char current = 0;
+        if (fread(&current, 1, 1, stdin) == 1) {
+            printf("here %d\n", current);
+            if (GL_TRUE == is_first) {
+                is_first = GL_FALSE;
+                previous = current;
+                continue;
+            }
+            int idx = wWIDTH * previous + current;
+            Image[idx + 0] = 255;
+            Image[idx + 1] = 255;
+            Image[idx + 2] = 255;
+            previous = current;
+        }
+        else {
+            perror("read");
+            return GL_FALSE;
+        }
     }
+
+    /* for (int i = 0; i < wWIDTH * wHEIGHT * 3; i += 3) { */
+    /*     Image[i + 0] = 220; */
+    /*     Image[i + 1] = 0; */
+    /*     Image[i + 2] = 210; */
+    /* } */
 
     return GL_TRUE;
 }
