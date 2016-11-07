@@ -33,6 +33,7 @@ Reset(void) {
 static
 void
 Display(void) {
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
 #if 0
