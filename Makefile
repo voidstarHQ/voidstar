@@ -1,9 +1,30 @@
-CFLAGS += -Wall -Wextra -pedantic
-CXXFLAGS += $(CFLAGS) --std=c++0x
+CC ?= clang
+CFLAGS += -Wall -Wextra
+LDFLAGS := -lGL -lGLU -lm -lglut -lGLEW
+CXXFLAGS += $(CFLAGS) --std=c++1y
 
-all:
-	clang $(CFLAGS) -o miners -lGL -lGLU -lm -lglut -lglfw -lGLEW pixels.c
-	# ./miners
+TARGET := miners
+SRC := pixels.c
+OBJ := $(SRC:.c=.o)
 
-clean:
-	$(if $(wildcard miners), rm miners)
+OS := $(shell uname)
+ifeq ($(OS),Darwin)
+    LDFLAGS += -lglfw
+endif
+
+all: $(TARGET)
+
+run: $(TARGET)
+	./$<
+
+$(TARGET): $(OBJ)
+	$(CC) $(LDFLAGS) -o $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+clean::
+	$(RM) $(OBJ)
+
+nuke:: clean
+	$(RM) $(TARGET)
