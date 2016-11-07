@@ -7,7 +7,7 @@
 #define wWIDTH  260
 #define wHEIGHT 260
 
-static GLubyte Image[wWIDTH * wHEIGHT * 3];
+static GLubyte Image[wWIDTH * wHEIGHT * 4];
 
 static int Xpos, Ypos;
 static int SkipPixels, SkipRows;
@@ -26,13 +26,61 @@ Reset(void) {
     SkipPixels = SkipRows = 0;
     Scissor = 0;
     Zpos = -1.0;
-    Xzoom = Yzoom = 1.0;
+    Xzoom = Yzoom = 2.0;
+}
+
+
+static
+GLboolean
+ReadData() {
+    printf("ReadData\n");
+
+    /* size_t bytes = wWIDTH * wHEIGHT * 4; */
+    /* if (fread(Image, 1, bytes, stdin) == bytes) { */
+    /*     printf("here %d\n", Image[0]); */
+    /*     return GL_TRUE; */
+    /* } */
+    /* else { */
+    /*     perror("read"); */
+    /*     return GL_FALSE; */
+    /* } */
+
+    for (int i = 0; i < wWIDTH * wHEIGHT * 4; i += 4) {
+        Image[i + 0] = 0;
+        Image[i + 1] = 0;
+        Image[i + 2] = 0;
+        Image[i + 2] = 1;
+    }
+
+    unsigned char previous = 0;
+    /* for (int i = 0; i < wWIDTH * wHEIGHT; ++i) { */
+    for (int i = 0; i < wWIDTH * wHEIGHT; i += 3) {
+        unsigned char current = 0;
+        if (fread(&current, 1, 1, stdin) == 1) {
+            if (0 == i) {
+                previous = current;
+                continue;
+            }
+            int idx = wWIDTH * previous + current;
+            Image[idx + 0] = 1 + Image[idx + 0];
+            Image[idx + 1] = 1 + Image[idx + 1];
+            Image[idx + 2] = 1 + Image[idx + 2];
+            previous = current;
+        }
+        else {
+            perror("read");
+            return GL_FALSE;
+        }
+    }
+
+    return GL_TRUE;
 }
 
 
 static
 void
 Display(void) {
+    printf("Display \n");
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -52,7 +100,10 @@ Display(void) {
     if (Scissor)
         glEnable(GL_SCISSOR_TEST);
 
-    glDrawPixels(wWIDTH, wHEIGHT, GL_RGB, GL_UNSIGNED_BYTE, Image);
+    if (GL_TRUE != ReadData())
+        printf("!read\n");
+    /* glDrawPixels(wWIDTH, wHEIGHT, GL_BGRA, GL_UNSIGNED_BYTE, Image); */
+    glDrawPixels(wWIDTH, wHEIGHT, GL_LUMINANCE, GL_UNSIGNED_BYTE, Image);
 
     glDisable(GL_SCISSOR_TEST);
 
@@ -66,6 +117,7 @@ Display(void) {
 static
 void
 Reshape(int width, int height) {
+    printf("Reshape \n");
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -112,15 +164,19 @@ Key(unsigned char key, int x, int y) {
         break;
     case 'x':
         Xzoom -= 0.1;
+        printf("Xzoom %f\n", Xzoom);
         break;
     case 'X':
         Xzoom += 0.1;
+        printf("Xzoom %f\n", Xzoom);
         break;
     case 'y':
         Yzoom -= 0.1;
+        printf("Yzoom %f\n", Yzoom);
         break;
     case 'Y':
         Yzoom += 0.1;
+        printf("Yzoom %f\n", Yzoom);
         break;
     case 'z':
         Zpos -= 0.1;
@@ -173,62 +229,10 @@ SpecialKey(int key, int x, int y) {
 
 
 static
-GLboolean
-ReadData() {
-
-    /* size_t bytes = wWIDTH * wHEIGHT * 3; */
-    /* if (fread(Image, 1, bytes, stdin) == bytes) { */
-    /*     printf("here %d\n", Image[0]); */
-    /*     return GL_TRUE; */
-    /* } */
-    /* else { */
-    /*     perror("read"); */
-    /*     return GL_FALSE; */
-    /* } */
-
-    GLboolean is_first = GL_TRUE;
-    unsigned char previous = 0;
-    for (int i = 0; i < wWIDTH * wHEIGHT; ++i) {
-        unsigned char current = 0;
-        if (fread(&current, 1, 1, stdin) == 1) {
-            printf("here %d\n", current);
-            if (GL_TRUE == is_first) {
-                is_first = GL_FALSE;
-                previous = current;
-                continue;
-            }
-            int idx = wWIDTH * previous + current;
-            Image[idx + 0] = 255;
-            Image[idx + 1] = 255;
-            Image[idx + 2] = 255;
-            previous = current;
-        }
-        else {
-            perror("read");
-            return GL_FALSE;
-        }
-    }
-
-    /* for (int i = 0; i < wWIDTH * wHEIGHT * 3; i += 3) { */
-    /*     Image[i + 0] = 220; */
-    /*     Image[i + 1] = 0; */
-    /*     Image[i + 2] = 210; */
-    /* } */
-
-    return GL_TRUE;
-}
-
-
-static
 void
 Init(GLboolean ciMode) {
    printf("GL_VERSION = %s\n", (char *) glGetString(GL_VERSION));
    printf("GL_RENDERER = %s\n", (char *) glGetString(GL_RENDERER));
-
-   if (GL_TRUE != ReadData()) {
-      printf("!read\n");
-      exit(0);
-   }
 
 #if 0
    if (ciMode) {
@@ -260,24 +264,25 @@ Init(GLboolean ciMode) {
 static
 void
 Usage(void) {
-    printf("Keys:\n");
-    printf("       SPACE  Reset Parameters\n");
-    printf("     Up/Down  Move image up/down\n");
-    printf("  Left/Right  Move image left/right\n");
-    printf("           x  Decrease X-axis PixelZoom\n");
-    printf("           X  Increase X-axis PixelZoom\n");
-    printf("           y  Decrease Y-axis PixelZoom\n");
-    printf("           Y  Increase Y-axis PixelZoom\n");
-    printf("           p  Decrease GL_UNPACK_SKIP_PIXELS*\n");
-    printf("           P  Increase GL_UNPACK_SKIP_PIXELS*\n");
-    printf("           r  Decrease GL_UNPACK_SKIP_ROWS*\n");
-    printf("           R  Increase GL_UNPACK_SKIP_ROWS*\n");
-    printf("           s  Toggle GL_SCISSOR_TEST\n");
-    printf("           z  Decrease RasterPos Z\n");
-    printf("           Z  Increase RasterPos Z\n");
+    printf("Keys:\n"
+           "       SPACE  Reset Parameters\n"
+           "     Up/Down  Move image up/down\n"
+           "  Left/Right  Move image left/right\n"
+           "           x  Decrease X-axis PixelZoom\n"
+           "           X  Increase X-axis PixelZoom\n"
+           "           y  Decrease Y-axis PixelZoom\n"
+           "           Y  Increase Y-axis PixelZoom\n"
+           "           p  Decrease GL_UNPACK_SKIP_PIXELS*\n"
+           "           P  Increase GL_UNPACK_SKIP_PIXELS*\n"
+           "           r  Decrease GL_UNPACK_SKIP_ROWS*\n"
+           "           R  Increase GL_UNPACK_SKIP_ROWS*\n"
+           "           s  Toggle GL_SCISSOR_TEST\n"
+           "           z  Decrease RasterPos Z\n"
+           "           Z  Increase RasterPos Z\n"
 
-    printf("           f  Toggle front/back buffer drawing\n");
-    printf("         ESC  Exit\n");
+           "           f  Toggle front/back buffer drawing\n"
+           "         ESC  Exit\n"
+        );
 }
 
 
@@ -286,7 +291,7 @@ main(int argc, char *argv[]) {
     GLboolean ciMode = GL_FALSE;
     int i = 1;
 
-    glutInitWindowSize(wWIDTH, wHEIGHT);
+    glutInitWindowSize(2*wWIDTH, 2*wHEIGHT);
     glutInit(&argc, argv);
 
     if (argc > i && strcmp(argv[i], "-ci") == 0) {
