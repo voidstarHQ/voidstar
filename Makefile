@@ -1,16 +1,11 @@
-CC ?= clang
+CC := clang
 CFLAGS += -Wall -Wextra
-LDFLAGS := -lGL -lGLU -lm -lglut -lGLEW
+LDFLAGS := -lGL -lGLU -lm -lglut -lglfw -lGLEW
 CXXFLAGS += $(CFLAGS) --std=c++1y
 
 TARGET := miners
 SRC := pixels.c
 OBJ := $(SRC:.c=.o)
-
-OS := $(shell uname)
-ifeq ($(OS),Darwin)
-    LDFLAGS += -lglfw
-endif
 
 all: $(TARGET)
 
