@@ -103,8 +103,8 @@ Display(void) {
 
     if (GL_TRUE != ReadData())
         printf("!read\n");
-    /* glDrawPixels(wWIDTH, wHEIGHT, GL_BGRA, GL_UNSIGNED_BYTE, Image); */
-    glDrawPixels(wWIDTH, wHEIGHT, GL_LUMINANCE, GL_UNSIGNED_BYTE, Image);
+    glDrawPixels(wWIDTH, wHEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, Image);
+    /* glDrawPixels(wWIDTH, wHEIGHT, GL_LUMINANCE, GL_UNSIGNED_BYTE, Image); */
 
     glDisable(GL_SCISSOR_TEST);
 
