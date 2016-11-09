@@ -3,21 +3,19 @@
 
 #define wWIDTH  260
 #define wHEIGHT 260
+#define PIXL 3
 
-static GLubyte Image[wWIDTH * wHEIGHT * 3];
+static GLubyte Image[wWIDTH * wHEIGHT * PIXL];
 
 
 static
 GLboolean
 ReadData() {
-    for (int i = 0; i < wWIDTH * wHEIGHT * 3; i += 4) {
-        Image[i + 0] = 0;
-        Image[i + 1] = 0;
-        Image[i + 2] = 0;
-    }
+    for (int i = 0; i < wWIDTH * wHEIGHT * PIXL; ++i)
+        Image[i] = 0;
 
     unsigned char previous = 0;
-    for (int i = 0; i < wWIDTH * wHEIGHT; i += 3) {
+    for (int i = 0; i < wWIDTH * wHEIGHT * PIXL; i += PIXL) {
         unsigned char current = 0;
         if (fread(&current, 1, 1, stdin) == 1) {
             if (0 == i) {
