@@ -1,28 +1,28 @@
 #include <stdio.h>
 #include <GL/glut.h>
 
-#define wWIDTH  260
-#define wHEIGHT 260
+#define WIDTH  256
+#define HEIGHT 256
 #define PIXL 4
 
-static GLubyte Image[wWIDTH * wHEIGHT * PIXL];
+static GLubyte Image[WIDTH * HEIGHT * PIXL];
 
 
 static
 GLboolean
 ReadData() {
-    for (int i = 0; i < wWIDTH * wHEIGHT * PIXL; ++i)
+    for (int i = 0; i < WIDTH * HEIGHT * PIXL; ++i)
         Image[i] = 0;
 
     unsigned char previous = 0;
-    for (int i = 0; i < wWIDTH * wHEIGHT * PIXL; i += PIXL) {
+    for (int i = 0; i < WIDTH * HEIGHT * PIXL; i += PIXL) {
         unsigned char current = 0;
         if (fread(&current, 1, 1, stdin) == 1) {
             if (0 == i) {
                 previous = current;
                 continue;
             }
-            int idx = wWIDTH * previous + current;
+            int idx = WIDTH * previous + current;
             Image[idx + 0] = 1 + Image[idx + 0];
             Image[idx + 1] = 1 + Image[idx + 1];
             Image[idx + 2] = 1 + Image[idx + 2];
@@ -49,8 +49,8 @@ Display(void) {
         perror("read");
         exit(0);
     }
-    glDrawPixels(wWIDTH, wHEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, Image);
-    /* glDrawPixels(wWIDTH, wHEIGHT, GL_LUMINANCE, GL_UNSIGNED_BYTE, Image); */
+    glDrawPixels(WIDTH, HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, Image);
+    /* glDrawPixels(WIDTH, HEIGHT, GL_LUMINANCE, GL_UNSIGNED_BYTE, Image); */
 
     glutSwapBuffers();
 }
@@ -88,15 +88,14 @@ int
 main(int argc, char *argv[]) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
-    glutInitWindowSize(3 * wWIDTH, 3 * wHEIGHT);
+    glutInitWindowSize(3 * WIDTH, 3 * HEIGHT);
     glutCreateWindow(argv[0]);
 
     printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
     printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
-    printf("%dx%d\n", wWIDTH, wHEIGHT);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, wWIDTH);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, WIDTH);
 
     printf("Keys:\n"
            "     ESC Q q  Exit\n");
