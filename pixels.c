@@ -33,18 +33,6 @@ Reset(void) {
 static
 GLboolean
 ReadData() {
-    printf("ReadData\n");
-
-    /* size_t bytes = wWIDTH * wHEIGHT * 4; */
-    /* if (fread(Image, 1, bytes, stdin) == bytes) { */
-    /*     printf("here %d\n", Image[0]); */
-    /*     return GL_TRUE; */
-    /* } */
-    /* else { */
-    /*     perror("read"); */
-    /*     return GL_FALSE; */
-    /* } */
-
     for (int i = 0; i < wWIDTH * wHEIGHT * 4; i += 4) {
         Image[i + 0] = 0;
         Image[i + 1] = 0;
@@ -68,10 +56,8 @@ ReadData() {
             Image[idx + 3] = 255;
             previous = current;
         }
-        else {
-            perror("read");
+        else
             return GL_FALSE;
-        }
     }
 
     return GL_TRUE;
@@ -81,7 +67,6 @@ ReadData() {
 static
 void
 Display(void) {
-    printf("Display \n");
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -101,8 +86,10 @@ Display(void) {
     if (Scissor)
         glEnable(GL_SCISSOR_TEST);
 
-    if (GL_TRUE != ReadData())
-        printf("!read\n");
+    if (GL_TRUE != ReadData()) {
+        perror("read");
+        exit(0);
+    }
     glDrawPixels(wWIDTH, wHEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, Image);
     /* glDrawPixels(wWIDTH, wHEIGHT, GL_LUMINANCE, GL_UNSIGNED_BYTE, Image); */
 
@@ -118,7 +105,6 @@ Display(void) {
 static
 void
 Reshape(int width, int height) {
-    printf("Reshape \n");
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
