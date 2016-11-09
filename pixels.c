@@ -3,7 +3,7 @@
 
 #define wWIDTH  260
 #define wHEIGHT 260
-#define PIXL 3
+#define PIXL 4
 
 static GLubyte Image[wWIDTH * wHEIGHT * PIXL];
 
@@ -26,6 +26,7 @@ ReadData() {
             Image[idx + 0] = 1 + Image[idx + 0];
             Image[idx + 1] = 1 + Image[idx + 1];
             Image[idx + 2] = 1 + Image[idx + 2];
+            Image[idx + 3] = 255;
             previous = current;
         }
         else
@@ -48,7 +49,7 @@ Display(void) {
         perror("read");
         exit(0);
     }
-    glDrawPixels(wWIDTH, wHEIGHT, GL_RGB, GL_UNSIGNED_BYTE, Image);
+    glDrawPixels(wWIDTH, wHEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, Image);
     /* glDrawPixels(wWIDTH, wHEIGHT, GL_LUMINANCE, GL_UNSIGNED_BYTE, Image); */
 
     glutSwapBuffers();
