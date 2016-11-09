@@ -19,7 +19,7 @@ $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean::
-	$(RM) $(OBJ)
+	$(if $(wildcard $(OBJ)), $(RM) $(OBJ))
 
 nuke:: clean
 	$(RM) $(TARGET)
