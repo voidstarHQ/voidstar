@@ -4,22 +4,20 @@
 #define wWIDTH  260
 #define wHEIGHT 260
 
-static GLubyte Image[wWIDTH * wHEIGHT * 4];
+static GLubyte Image[wWIDTH * wHEIGHT * 3];
 
 
 static
 GLboolean
 ReadData() {
-    for (int i = 0; i < wWIDTH * wHEIGHT * 4; i += 4) {
+    for (int i = 0; i < wWIDTH * wHEIGHT * 3; i += 4) {
         Image[i + 0] = 0;
         Image[i + 1] = 0;
         Image[i + 2] = 0;
-        Image[i + 3] = 255;
     }
 
     unsigned char previous = 0;
-    /* for (int i = 0; i < wWIDTH * wHEIGHT; ++i) { */
-    for (int i = 0; i < wWIDTH * wHEIGHT; i += 4) {
+    for (int i = 0; i < wWIDTH * wHEIGHT; i += 3) {
         unsigned char current = 0;
         if (fread(&current, 1, 1, stdin) == 1) {
             if (0 == i) {
@@ -30,7 +28,6 @@ ReadData() {
             Image[idx + 0] = 1 + Image[idx + 0];
             Image[idx + 1] = 1 + Image[idx + 1];
             Image[idx + 2] = 1 + Image[idx + 2];
-            Image[idx + 3] = 255;
             previous = current;
         }
         else
@@ -53,7 +50,7 @@ Display(void) {
         perror("read");
         exit(0);
     }
-    glDrawPixels(wWIDTH, wHEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, Image);
+    glDrawPixels(wWIDTH, wHEIGHT, GL_RGB, GL_UNSIGNED_BYTE, Image);
     /* glDrawPixels(wWIDTH, wHEIGHT, GL_LUMINANCE, GL_UNSIGNED_BYTE, Image); */
 
     glutSwapBuffers();
@@ -90,11 +87,9 @@ Key(unsigned char key, int x, int y) {
 
 int
 main(int argc, char *argv[]) {
-    glutInitWindowSize(2*wWIDTH, 2*wHEIGHT);
     glutInit(&argc, argv);
-
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
-
+    glutInitWindowSize(2 * wWIDTH, 2 * wHEIGHT);
     glutCreateWindow(argv[0]);
 
     printf("GL_VERSION = %s\n", (char *) glGetString(GL_VERSION));
