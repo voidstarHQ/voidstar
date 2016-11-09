@@ -92,8 +92,8 @@ main(int argc, char *argv[]) {
     glutInitWindowSize(2 * wWIDTH, 2 * wHEIGHT);
     glutCreateWindow(argv[0]);
 
-    printf("GL_VERSION = %s\n", (char *) glGetString(GL_VERSION));
-    printf("GL_RENDERER = %s\n", (char *) glGetString(GL_RENDERER));
+    printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
+    printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
     printf("%dx%d\n", wWIDTH, wHEIGHT);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
