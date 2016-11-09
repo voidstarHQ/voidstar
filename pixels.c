@@ -49,12 +49,12 @@ ReadData() {
         Image[i + 0] = 0;
         Image[i + 1] = 0;
         Image[i + 2] = 0;
-        Image[i + 2] = 1;
+        Image[i + 3] = 255;
     }
 
     unsigned char previous = 0;
     /* for (int i = 0; i < wWIDTH * wHEIGHT; ++i) { */
-    for (int i = 0; i < wWIDTH * wHEIGHT; i += 3) {
+    for (int i = 0; i < wWIDTH * wHEIGHT; i += 4) {
         unsigned char current = 0;
         if (fread(&current, 1, 1, stdin) == 1) {
             if (0 == i) {
@@ -65,6 +65,7 @@ ReadData() {
             Image[idx + 0] = 1 + Image[idx + 0];
             Image[idx + 1] = 1 + Image[idx + 1];
             Image[idx + 2] = 1 + Image[idx + 2];
+            Image[idx + 3] = 255;
             previous = current;
         }
         else {
