@@ -89,7 +89,7 @@ int
 main(int argc, char *argv[]) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
-    glutInitWindowSize(2 * wWIDTH, 2 * wHEIGHT);
+    glutInitWindowSize(3 * wWIDTH, 3 * wHEIGHT);
     glutCreateWindow(argv[0]);
 
     printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
