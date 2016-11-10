@@ -60,9 +60,9 @@ content_init(struct content *ctx)
         for (size_t y = 0; y < ctx->height; ++y) {
             for (size_t z = 0; z < ctx->depth; ++z) {
                 size_t tmp = pos;
-                ctx->vertex_buffer[pos++] = (float)x;
-                ctx->vertex_buffer[pos++] = (float)y;
-                ctx->vertex_buffer[pos++] = (float)z;
+                ctx->vertex_buffer[pos++] = (float)x - (float)ctx->width / 2;
+                ctx->vertex_buffer[pos++] = (float)y - (float)ctx->height / 2;
+                ctx->vertex_buffer[pos++] = (float)z - (float)ctx->depth / 2;
                 pos = tmp;
                 ctx->vertex_colors[pos++] = (float)x / (float)ctx->width;
                 ctx->vertex_colors[pos++] = (float)y / (float)ctx->height;
@@ -71,6 +71,10 @@ content_init(struct content *ctx)
         }
     }
 
+    glEnable(GL_VERTEX_ARRAY);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
     glGenBuffers(1, &ctx->vertex_buffer_id);
     glBindBuffer(GL_ARRAY_BUFFER, ctx->vertex_buffer_id);
     glBufferData(GL_ARRAY_BUFFER, ctx->size * sizeof(GLfloat), ctx->vertex_buffer, GL_STATIC_DRAW);
@@ -78,9 +82,6 @@ content_init(struct content *ctx)
     glGenBuffers(1, &ctx->vertex_colors_id);
     glBindBuffer(GL_ARRAY_BUFFER, ctx->vertex_colors_id);
     glBufferData(GL_ARRAY_BUFFER, ctx->size * sizeof(GLfloat), ctx->vertex_colors, GL_STATIC_DRAW);
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
 
     ctx->program_id = LoadShaders( "vertex.glsl", "fragment.glsl" );
 
@@ -98,38 +99,26 @@ display(void) {
     gluPerspective(90.0, 1, 0.1, 500.);
     gluLookAt(
         0, 0, 0,
-        -128, -128, 0,
+        0, 0, 0,
         0, 1, 0
     );
 
+    glUseProgram(ctx->program_id);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, ctx->vertex_buffer_id);
-    glVertexAttribPointer(
-       0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-       3,                  // size
-       GL_FLOAT,           // type
-       GL_FALSE,           // normalized?
-       0,                  // stride
-       (void*)0            // array buffer offset
-    );
-
     glDrawArrays(GL_POINTS, 0, ctx->size / 3);
     glDisableVertexAttribArray(0);
 
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, ctx->vertex_colors_id);
-    glVertexAttribPointer(
-       1,                  // attribute 1. No particular reason for 1, but must match the layout in the shader.
-       3,                  // size
-       GL_FLOAT,           // type
-       GL_FALSE,           // normalized?
-       0,                  // stride
-       (void*)0            // array buffer offset
-    );
-
     glDisableVertexAttribArray(1);
 
-    glUseProgram(ctx->program_id);
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     glutSwapBuffers();
 }
