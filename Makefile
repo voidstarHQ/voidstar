@@ -4,7 +4,8 @@ LDFLAGS := -lGL -lGLU -lm -lglut -lglfw -lGLEW
 CXXFLAGS += $(CFLAGS) --std=c++1y
 
 TARGET := miners
-SRC := pixels.c
+# SRC := pixels.c
+SRC := points.c math_3d.cc ogldev_util.cc
 OBJ := $(SRC:.c=.o)
 
 all: $(TARGET)
