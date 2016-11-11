@@ -35,9 +35,13 @@
 #include "tdogl/Texture.h"
 #include "tdogl/Camera.h"
 
-// constants
-const glm::vec2 SCREEN_SIZE(800, 600);
+typedef struct {
+    size_t screen_w;
+    size_t screen_h;
+    float  screen_aspect;
+} state;
 
+state Ctx;
 // globals
 GLFWwindow* gWindow = NULL;
 double gScrollY = 0.0;
@@ -47,6 +51,13 @@ tdogl::Camera gCamera;
 GLuint gVAO = 0;
 GLuint gVBO = 0;
 GLfloat gDegreesRotated = 0.0f;
+
+static void
+init_state(state* ctx, size_t w, size_t h) {
+    ctx->screen_w = w;
+    ctx->screen_h = h;
+    ctx->screen_aspect = w / h;
+}
 
 
 // loads the vertex shader and fragment shader, and links them to make the global gProgram
@@ -228,21 +239,23 @@ void OnError(int errorCode, const char* msg) {
     throw std::runtime_error(msg);
 }
 
-// the program starts here
-void AppMain() {
+
+void
+AppMain() {
     // initialise GLFW
     glfwSetErrorCallback(OnError);
-    if(!glfwInit())
+    if (!glfwInit())
         throw std::runtime_error("glfwInit failed");
-    
+
     // open a window with GLFW
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    gWindow = glfwCreateWindow((int)SCREEN_SIZE.x, (int)SCREEN_SIZE.y, "OpenGL Tutorial", NULL, NULL);
-    if(!gWindow)
+    init_state(&Ctx, 800, 600);
+    gWindow = glfwCreateWindow(static_cast<int>(Ctx.screen_w), static_cast<int>(Ctx.screen_h), "mine", NULL, NULL);
+    if (!gWindow)
         throw std::runtime_error("glfwCreateWindow failed. Can your hardware handle OpenGL 3.2?");
 
     // GLFW settings
@@ -253,9 +266,9 @@ void AppMain() {
 
     // initialise GLEW
     glewExperimental = GL_TRUE; //stops glew crashing on OSX :-/
-    if(glewInit() != GLEW_OK)
+    if (glewInit() != GLEW_OK)
         throw std::runtime_error("glewInit failed");
-    
+
     // GLEW throws some errors, so discard all the errors so far
     while(glGetError() != GL_NO_ERROR) {}
 
@@ -266,7 +279,7 @@ void AppMain() {
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
 
     // make sure OpenGL version 3.2 API is available
-    if(!GLEW_VERSION_3_2)
+    if (!GLEW_VERSION_3_2)
         throw std::runtime_error("OpenGL 3.2 API is not available.");
 
     // OpenGL settings
@@ -286,29 +299,29 @@ void AppMain() {
 
     // setup gCamera
     gCamera.setPosition(glm::vec3(0,0,4));
-    gCamera.setViewportAspectRatio(SCREEN_SIZE.x / SCREEN_SIZE.y);
+    gCamera.setViewportAspectRatio(Ctx.screen_aspect);
 
     // run while the window is open
     double lastTime = glfwGetTime();
     while(!glfwWindowShouldClose(gWindow)){
         // process pending events
         glfwPollEvents();
-        
+
         // update the scene based on the time elapsed since last update
         double thisTime = glfwGetTime();
         Update((float)(thisTime - lastTime));
         lastTime = thisTime;
-        
+
         // draw one frame
         Render();
 
         // check for errors
         GLenum error = glGetError();
-        if(error != GL_NO_ERROR)
+        if (error != GL_NO_ERROR)
             std::cerr << "OpenGL Error " << error << std::endl;
 
         //exit program if escape key is pressed
-        if(glfwGetKey(gWindow, GLFW_KEY_ESCAPE))
+        if (glfwGetKey(gWindow, GLFW_KEY_ESCAPE))
             glfwSetWindowShouldClose(gWindow, GL_TRUE);
     }
 
@@ -317,13 +330,12 @@ void AppMain() {
 }
 
 
-int main(int argc, char *argv[]) {
-    try {
-        AppMain();
-    } catch (const std::exception& e){
+int
+main(int argc, char *argv[]) {
+    try { AppMain(); }
+    catch (const std::exception& e){
         std::cerr << "ERROR: " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
-
     return EXIT_SUCCESS;
 }
