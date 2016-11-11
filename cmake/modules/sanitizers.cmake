@@ -1,0 +1,31 @@
+# MACRO check_compiler_support
+#------------------------------
+macro (enable_sanitizer_flags sanitize_option)
+    if (${sanitize_option} MATCHES "address")
+        set(XSAN_COMPILE_FLAGS "-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+        set(XSAN_LINKER_FLAGS "-fsanitize=address")
+    elseif (${sanitize_option} MATCHES "thread")
+        set(XSAN_COMPILE_FLAGS "-fsanitize=thread")
+        set(XSAN_LINKER_FLAGS "-fsanitize=thread")
+    elseif (${sanitize_option} MATCHES "memory")
+        set(XSAN_COMPILE_FLAGS "-fsanitize=memory")
+        set(XSAN_LINKER_FLAGS "-fsanitize=memory")
+    elseif (${sanitize_option} MATCHES "leak")
+        set(XSAN_COMPILE_FLAGS "-fsanitize=leak")
+        set(XSAN_LINKER_FLAGS "-fsanitize=leak")
+    elseif (${sanitize_option} MATCHES "undefined")
+        set(XSAN_COMPILE_FLAGS "-fsanitize=undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+        set(XSAN_LINKER_FLAGS "-fsanitize=undefined")
+    else ()
+        message(FATAL_ERROR "Compiler sanitizer option \"${sanitize_option}\" not supported.")
+    endif ()
+endmacro ()
+
+foreach ( CUR_SANITIZER ${COMPILER_SANITIZER} )
+    # lowercase filter
+    string(TOLOWER ${CUR_SANITIZER} CUR_SANITIZER)
+    # check option and enable appropriate flags
+    enable_sanitizer_flags ( ${CUR_SANITIZER} )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${XSAN_COMPILE_FLAGS}" )
+    set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${XSAN_LINKER_FLAGS}")
+endforeach ()
