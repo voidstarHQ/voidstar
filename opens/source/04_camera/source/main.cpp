@@ -38,8 +38,19 @@ typedef struct {
     size_t screen_w;
     size_t screen_h;
     float  screen_aspect;
+
     GLuint vao = 0;
     GLuint vbo = 0;
+
+    size_t width;
+    size_t height;
+    size_t depth;
+    size_t n_points;
+    size_t size;
+
+    GLfloat* vertex_buffer = NULL;
+    GLfloat* vertex_colors = NULL;
+    size_t   vertex_buffer_size;
 } state;
 
 state Ctx;
@@ -55,6 +66,12 @@ init_state(state* ctx, size_t w, size_t h) {
     ctx->screen_w = w;
     ctx->screen_h = h;
     ctx->screen_aspect = w / h;
+    ctx->width = 256;
+    ctx->height = 256;
+    ctx->depth = 256;
+    ctx->n_points = ctx->width * ctx->height * ctx->depth;
+    ctx->vertex_buffer_size = ctx->n_points * 3 * sizeof (GLfloat);
+    ctx->size = ctx->n_points * 4;
 }
 
 
@@ -77,58 +94,23 @@ LoadCube() {
     glGenBuffers(1, &Ctx.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.vbo);
 
-    // Make a cube out of triangles (two triangles per side)
-    GLfloat vertexData[] = {
-        //  X     Y     Z
-        // bottom
-        -1.0f,-1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f, 1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-
-        // top
-        -1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-         1.0f, 1.0f,-1.0f,
-         1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,
-
-        // front
-        -1.0f,-1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-
-        // back
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f,
-         1.0f, 1.0f,-1.0f,
-
-        // left
-        -1.0f,-1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-
-        // right
-         1.0f,-1.0f, 1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f, 1.0f,
-         1.0f, 1.0f,-1.0f,
-         1.0f, 1.0f, 1.0f,
-    };
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+    Ctx.vertex_buffer = new GLfloat[Ctx.vertex_buffer_size];
+    Ctx.vertex_colors = new GLfloat[Ctx.size];
+    size_t pos = 0;
+    for (size_t x = 0; x < Ctx.width; ++x)
+        for (size_t y = 0; y < Ctx.height; ++y)
+            for (size_t z = 0; z < Ctx.depth; ++z) {
+                size_t tmp = pos;
+                Ctx.vertex_buffer[pos++] = (float)x - (float)Ctx.width / 2;
+                Ctx.vertex_buffer[pos++] = (float)y - (float)Ctx.height / 2;
+                Ctx.vertex_buffer[pos++] = (float)z - (float)Ctx.depth / 2;
+                pos = tmp;
+                Ctx.vertex_colors[pos++] = (float)x / (float)Ctx.width;
+                Ctx.vertex_colors[pos++] = (float)y / (float)Ctx.height;
+                Ctx.vertex_colors[pos++] = (float)z / (float)Ctx.depth;
+                Ctx.vertex_colors[pos++] = 1.0f;
+            }
+    glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_buffer, GL_STATIC_DRAW);
 
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(gProgram->attrib("vert"));
@@ -159,7 +141,7 @@ Render() {
     glBindVertexArray(Ctx.vao);
 
     // draw the VAO
-    glDrawArrays(GL_TRIANGLES, 0, 6*2*3);
+    glDrawArrays(GL_POINTS, 0, Ctx.n_points);
 
     // unbind the VAO and the program
     glBindVertexArray(0);
@@ -174,9 +156,10 @@ Render() {
 static void
 Update(float secondsElapsed) {
     //rotate the cube
-    const GLfloat degreesPerSecond = 180.0f;
-    gDegreesRotated += secondsElapsed * degreesPerSecond;
-    while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+    // const GLfloat degreesPerSecond = 180.0f;
+    // gDegreesRotated += secondsElapsed * degreesPerSecond;
+    // while (gDegreesRotated > 360.0f)
+    //     gDegreesRotated -= 360.0f;
 
     //move position of camera based on WASD keys, and XZ keys for up and down
     const float moveSpeed = 2.0; //units per second
