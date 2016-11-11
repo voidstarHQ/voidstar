@@ -103,9 +103,9 @@ LoadBuffers() {
         for (size_t y = 0; y < Ctx.height; ++y)
             for (size_t z = 0; z < Ctx.depth; ++z) {
                 size_t tmp = pos;
-                Ctx.vertex_buffer[pos++] = (float)x - (float)Ctx.width / 2;
-                Ctx.vertex_buffer[pos++] = (float)y - (float)Ctx.height / 2;
-                Ctx.vertex_buffer[pos++] = (float)z - (float)Ctx.depth / 2;
+                Ctx.vertex_buffer[pos++] = ((float)x - (float)Ctx.width / 2) / 100;
+                Ctx.vertex_buffer[pos++] = ((float)y - (float)Ctx.height / 2) / 100;
+                Ctx.vertex_buffer[pos++] = ((float)z - (float)Ctx.depth / 2) / 100;
                 pos = tmp;
                 Ctx.vertex_colors[pos++] = (float)x / (float)Ctx.width;
                 Ctx.vertex_colors[pos++] = (float)y / (float)Ctx.height;
