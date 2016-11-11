@@ -48,6 +48,8 @@ typedef struct {
     GLfloat* vertex_buffer = NULL;
     GLfloat* vertex_colors = NULL;
     size_t   vertex_buffer_size;
+    size_t   vertex_colors_size;
+    GLuint   vertex_colors_id = 0;
 } state;
 
 state Ctx;
@@ -113,6 +115,13 @@ LoadCube() {
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(gProgram->attrib("vert"));
     glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    // make and bind the VBO
+    glGenBuffers(1, &Ctx.vertex_colors_id);
+    glBindBuffer(GL_ARRAY_BUFFER, Ctx.vertex_colors_id);
+    glBufferData(GL_ARRAY_BUFFER, Ctx.size, Ctx.vertex_colors, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(gProgram->attrib("colr"));
+    glVertexAttribPointer(gProgram->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // unbind the VAO
     glBindVertexArray(0);
@@ -203,7 +212,7 @@ static void
 AppMain() {
     glfwSetErrorCallback(OnError);
     if (!glfwInit())
-        throw std::runtime_error("glfwInit failed");
+        throw std::runtime_error("!glfwInit");
 
     // open a window with GLFW
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -212,9 +221,9 @@ AppMain() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     init_state(&Ctx, 800, 600);
-    gWindow = glfwCreateWindow(Ctx.screen_w, Ctx.screen_h, "mine", NULL, NULL);
+    gWindow = glfwCreateWindow(Ctx.screen_w, Ctx.screen_h, "points", NULL, NULL);
     if (!gWindow)
-        throw std::runtime_error("glfwCreateWindow failed. Can your hardware handle OpenGL 3.2?");
+        throw std::runtime_error("!glfwCreateWindow. Can your hardware handle OpenGL 3.2?");
 
     // GLFW settings
     glfwSetInputMode(gWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -224,7 +233,7 @@ AppMain() {
 
     glewExperimental = GL_TRUE; //stops glew crashing on OSX :-/
     if (glewInit() != GLEW_OK)
-        throw std::runtime_error("glewInit failed");
+        throw std::runtime_error("!glewInit");
     // GLEW throws some errors, so discard all the errors so far
     while (glGetError() != GL_NO_ERROR) {}
 
