@@ -18,19 +18,16 @@
 
 #include "platform.hpp"
 
-// third-party libraries
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-// standard C++ libraries
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
 #include <cmath>
 
-// tdogl classes
 #include "tdogl/Program.h"
 #include "tdogl/Camera.h"
 
@@ -61,6 +58,7 @@ tdogl::Program* gProgram = NULL;
 tdogl::Camera gCamera;
 GLfloat gDegreesRotated = 0.0f;
 
+
 static void
 init_state(state* ctx, size_t w, size_t h) {
     ctx->screen_w = w;
@@ -75,11 +73,11 @@ init_state(state* ctx, size_t w, size_t h) {
 }
 
 
-// loads the vertex shader and fragment shader, and links them to make the global gProgram
-static void LoadShaders() {
-    std::vector<tdogl::Shader> shaders;
-    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("vertex-shader.txt"), GL_VERTEX_SHADER));
-    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("fragment-shader.txt"), GL_FRAGMENT_SHADER));
+static void
+LoadShaders() {
+    std::vector<tdogl::Shader> shaders{
+        tdogl::Shader::shaderFromFile(ResourcePath("vertex-shader.txt"), GL_VERTEX_SHADER),
+        tdogl::Shader::shaderFromFile(ResourcePath("fragment-shader.txt"), GL_FRAGMENT_SHADER)};
     gProgram = new tdogl::Program(shaders);
 }
 
@@ -114,7 +112,7 @@ LoadCube() {
 
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(gProgram->attrib("vert"));
-    glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), NULL);
+    glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // unbind the VAO
     glBindVertexArray(0);
@@ -124,20 +122,18 @@ LoadCube() {
 // draws a single frame
 static void
 Render() {
-    // clear everything
-    glClearColor(0, 0, 0, 1); // black
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // bind the program (the shaders)
     gProgram->use();
 
-    // set the "camera" uniform
     gProgram->setUniform("camera", gCamera.matrix());
 
     // set the "model" uniform in the vertex shader, based on the gDegreesRotated global
     gProgram->setUniform("model", glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
 
-    // bind the VAO (the triangle)
+    // bind the VAO
     glBindVertexArray(Ctx.vao);
 
     // draw the VAO
@@ -147,7 +143,6 @@ Render() {
     glBindVertexArray(0);
     gProgram->stopUsing();
 
-    // swap the display buffers (displays what was just drawn)
     glfwSwapBuffers(gWindow);
 }
 
@@ -163,21 +158,18 @@ Update(float secondsElapsed) {
 
     //move position of camera based on WASD keys, and XZ keys for up and down
     const float moveSpeed = 2.0; //units per second
-    if(glfwGetKey(gWindow, 'S')){
+    if (glfwGetKey(gWindow, 'S'))
         gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.forward());
-    } else if(glfwGetKey(gWindow, 'W')){
+    else if (glfwGetKey(gWindow, 'W'))
         gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.forward());
-    }
-    if(glfwGetKey(gWindow, 'A')){
+    if (glfwGetKey(gWindow, 'A'))
         gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.right());
-    } else if(glfwGetKey(gWindow, 'D')){
+    else if(glfwGetKey(gWindow, 'D'))
         gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.right());
-    }
-    if(glfwGetKey(gWindow, 'Z')){
+    if (glfwGetKey(gWindow, 'Z'))
         gCamera.offsetPosition(secondsElapsed * moveSpeed * -glm::vec3(0,1,0));
-    } else if(glfwGetKey(gWindow, 'X')){
+    else if (glfwGetKey(gWindow, 'X'))
         gCamera.offsetPosition(secondsElapsed * moveSpeed * glm::vec3(0,1,0));
-    }
 
     //rotate camera based on mouse movement
     const float mouseSensitivity = 0.1f;
@@ -189,25 +181,26 @@ Update(float secondsElapsed) {
     //increase or decrease field of view based on mouse wheel
     const float zoomSensitivity = -0.2f;
     float fieldOfView = gCamera.fieldOfView() + zoomSensitivity * (float)gScrollY;
-    if(fieldOfView < 5.0f) fieldOfView = 5.0f;
-    if(fieldOfView > 130.0f) fieldOfView = 130.0f;
+    if (fieldOfView < 5.0f) fieldOfView = 5.0f;
+    if (fieldOfView > 130.0f) fieldOfView = 130.0f;
     gCamera.setFieldOfView(fieldOfView);
     gScrollY = 0;
 }
 
 // records how far the y axis has been scrolled
-void OnScroll(GLFWwindow* window, double deltaX, double deltaY) {
+static void
+OnScroll(GLFWwindow* window, double deltaX, double deltaY) {
     gScrollY += deltaY;
 }
 
-void OnError(int errorCode, const char* msg) {
+static void
+OnError(int errorCode, const char* msg) {
     throw std::runtime_error(msg);
 }
 
 
-void
+static void
 AppMain() {
-    // initialise GLFW
     glfwSetErrorCallback(OnError);
     if (!glfwInit())
         throw std::runtime_error("glfwInit failed");
@@ -219,7 +212,7 @@ AppMain() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     init_state(&Ctx, 800, 600);
-    gWindow = glfwCreateWindow(static_cast<int>(Ctx.screen_w), static_cast<int>(Ctx.screen_h), "mine", NULL, NULL);
+    gWindow = glfwCreateWindow(Ctx.screen_w, Ctx.screen_h, "mine", NULL, NULL);
     if (!gWindow)
         throw std::runtime_error("glfwCreateWindow failed. Can your hardware handle OpenGL 3.2?");
 
@@ -229,21 +222,17 @@ AppMain() {
     glfwSetScrollCallback(gWindow, OnScroll);
     glfwMakeContextCurrent(gWindow);
 
-    // initialise GLEW
     glewExperimental = GL_TRUE; //stops glew crashing on OSX :-/
     if (glewInit() != GLEW_OK)
         throw std::runtime_error("glewInit failed");
-
     // GLEW throws some errors, so discard all the errors so far
-    while(glGetError() != GL_NO_ERROR) {}
+    while (glGetError() != GL_NO_ERROR) {}
 
-    // print out some info about the graphics drivers
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
     std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
 
-    // make sure OpenGL version 3.2 API is available
     if (!GLEW_VERSION_3_2)
         throw std::runtime_error("OpenGL 3.2 API is not available.");
 
@@ -256,7 +245,7 @@ AppMain() {
     // load vertex and fragment shaders into opengl
     LoadShaders();
 
-    // create buffer and fill it with the points of the triangle
+    // create buffer and fill it with the points
     LoadCube();
 
     // setup gCamera
@@ -265,7 +254,7 @@ AppMain() {
 
     // run while the window is open
     double lastTime = glfwGetTime();
-    while(!glfwWindowShouldClose(gWindow)){
+    while (!glfwWindowShouldClose(gWindow)) {
         // process pending events
         glfwPollEvents();
 
