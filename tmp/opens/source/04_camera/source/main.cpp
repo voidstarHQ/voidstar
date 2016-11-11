@@ -47,8 +47,8 @@ typedef struct {
     GLfloat* vertex_buffer = NULL;
     GLfloat* vertex_colors = NULL;
     size_t   vertex_buffer_size;
-    size_t   vertex_colors_size;
-    GLuint   vertex_colors_id = 0;
+    size_t   colors_buffer_size;
+    GLuint   colors_buffer_id = 0;
 
     tdogl::Program* program = NULL;
     tdogl::Camera   camera;
@@ -72,6 +72,7 @@ init_state(state* ctx, size_t w, size_t h) {
     ctx->depth = 256;
     ctx->n_points = ctx->width * ctx->height * ctx->depth;
     ctx->vertex_buffer_size = ctx->n_points * 3 * sizeof (GLfloat);
+    ctx->colors_buffer_size = ctx->n_points * 4 * sizeof (GLfloat);
 }
 
 
@@ -95,19 +96,28 @@ LoadBuffers() {
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.vbo);
 
     Ctx.vertex_buffer = new GLfloat[Ctx.vertex_buffer_size];
-    Ctx.vertex_colors = new GLfloat[Ctx.vertex_buffer_size];
-    size_t pos = 0;
+    Ctx.vertex_colors = new GLfloat[Ctx.colors_buffer_size];
+    size_t pos_v = 0;
+    size_t pos_c = 0;
     for (size_t x = 0; x < Ctx.width; ++x) {
         for (size_t y = 0; y < Ctx.height; ++y) {
             for (size_t z = 0; z < Ctx.depth; ++z) {
-                size_t tmp = pos;
-                Ctx.vertex_buffer[pos++] = ((float)x - (float)Ctx.width / 2) / 128;
-                Ctx.vertex_buffer[pos++] = ((float)y - (float)Ctx.height / 2) / 128;
-                Ctx.vertex_buffer[pos++] = ((float)z - (float)Ctx.depth / 2) / 128;
-                pos = tmp;
-                Ctx.vertex_colors[pos++] = (float)x / (float)Ctx.width;
-                Ctx.vertex_colors[pos++] = (float)y / (float)Ctx.height;
-                Ctx.vertex_colors[pos++] = (float)z / (float)Ctx.depth;
+                float vx = ((float)x - (float)Ctx.width / 2) / 128;
+                float vy = ((float)y - (float)Ctx.height / 2) / 128;
+                float vz = ((float)z - (float)Ctx.depth / 2) / 128;
+                Ctx.vertex_buffer[pos_v++] = vx;
+                Ctx.vertex_buffer[pos_v++] = vy;
+                Ctx.vertex_buffer[pos_v++] = vz;
+
+                Ctx.vertex_colors[pos_c++] = (float)x / (float)Ctx.width;
+                Ctx.vertex_colors[pos_c++] = (float)y / (float)Ctx.height;
+                Ctx.vertex_colors[pos_c++] = (float)z / (float)Ctx.depth;
+                float res = std::abs( vx*vx + vy*vy - vz*vz );
+                if ( res >= 0.9f && res <= 1.1f ) {
+                    Ctx.vertex_colors[pos_c++] = 1.0f;
+                } else {
+                    Ctx.vertex_colors[pos_c++] = 0.0f;
+                }
             }
         }
     }
@@ -119,11 +129,11 @@ LoadBuffers() {
     glVertexAttribPointer(Ctx.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // make and bind the VBO
-    glGenBuffers(1, &Ctx.vertex_colors_id);
-    glBindBuffer(GL_ARRAY_BUFFER, Ctx.vertex_colors_id);
+    glGenBuffers(1, &Ctx.colors_buffer_id);
+    glBindBuffer(GL_ARRAY_BUFFER, Ctx.colors_buffer_id);
     glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_colors, GL_STATIC_DRAW);
     glEnableVertexAttribArray(Ctx.program->attrib("colr"));
-    glVertexAttribPointer(Ctx.program->attrib("colr"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(Ctx.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // unbind the VAO
     glBindVertexArray(0);

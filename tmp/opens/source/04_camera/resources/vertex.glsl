@@ -5,8 +5,8 @@ uniform mat4 model;
 
 in vec3 vert;
 
-in vec3 colr;
-out vec3 carryColr;
+in vec4 colr;
+out vec4 carryColr;
 
 void main() {
     // Pass colr through to fragment shader
