@@ -33,7 +33,7 @@ ifeq ($(config),debug)
   TARGET     = $(TARGETDIR)/04_camera-debug
   DEFINES   += -DGLM_FORCE_RADIANS -DDEBUG
   INCLUDES  += -I../../source/common -I../../source/common/thirdparty/glm -I../../source/common/thirdparty/stb_image
-  CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
+  CPPFLAGS  += -MMD -MP -std=c++11 $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall
   CXXFLAGS  += $(CFLAGS) 
   LDFLAGS   += 

@@ -39,6 +39,8 @@ typedef struct {
     size_t screen_w;
     size_t screen_h;
     float  screen_aspect;
+    GLuint vao = 0;
+    GLuint vbo = 0;
 } state;
 
 state Ctx;
@@ -48,8 +50,6 @@ double gScrollY = 0.0;
 tdogl::Texture* gTexture = NULL;
 tdogl::Program* gProgram = NULL;
 tdogl::Camera gCamera;
-GLuint gVAO = 0;
-GLuint gVBO = 0;
 GLfloat gDegreesRotated = 0.0f;
 
 static void
@@ -69,16 +69,16 @@ static void LoadShaders() {
 }
 
 
-// loads a cube into the VAO and VBO globals: gVAO and gVBO
-static void LoadCube() {
+static void
+LoadCube() {
     // make and bind the VAO
-    glGenVertexArrays(1, &gVAO);
-    glBindVertexArray(gVAO);
-    
+    glGenVertexArrays(1, &Ctx.vao);
+    glBindVertexArray(Ctx.vao);
+
     // make and bind the VBO
-    glGenBuffers(1, &gVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-    
+    glGenBuffers(1, &Ctx.vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, Ctx.vbo);
+
     // Make a cube out of triangles (two triangles per side)
     GLfloat vertexData[] = {
         //  X     Y     Z       U     V
@@ -174,7 +174,7 @@ static void Render() {
     gProgram->setUniform("tex", 0); //set to 0 because the texture is bound to GL_TEXTURE0
 
     // bind the VAO (the triangle)
-    glBindVertexArray(gVAO);
+    glBindVertexArray(Ctx.vao);
     
     // draw the VAO
     glDrawArrays(GL_TRIANGLES, 0, 6*2*3);
