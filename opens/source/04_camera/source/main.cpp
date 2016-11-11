@@ -55,12 +55,12 @@ typedef struct {
     tdogl::Camera   camera;
 
     double scroll_y = 0.0;
+    GLfloat degreesRotated = 0.0f;
 } state;
 
 state Ctx;
 // globals
 GLFWwindow* gWindow = NULL;
-GLfloat gDegreesRotated = 0.0f;
 
 
 static void
@@ -141,8 +141,8 @@ Render() {
 
     Ctx.program->setUniform("camera", Ctx.camera.matrix());
 
-    // set the "model" uniform in the vertex shader, based on the gDegreesRotated global
-    Ctx.program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
+    // set the "model" uniform in the vertex shader, based on the degreesRotated global
+    Ctx.program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(Ctx.degreesRotated), glm::vec3(0,1,0)));
 
     // bind the VAO
     glBindVertexArray(Ctx.vao);
@@ -163,9 +163,9 @@ static void
 Update(float secondsElapsed) {
     //rotate the cube
     // const GLfloat degreesPerSecond = 180.0f;
-    // gDegreesRotated += secondsElapsed * degreesPerSecond;
-    // while (gDegreesRotated > 360.0f)
-    //     gDegreesRotated -= 360.0f;
+    // Ctx.degreesRotated += secondsElapsed * degreesPerSecond;
+    // while (Ctx.degreesRotated > 360.0f)
+    //     Ctx.degreesRotated -= 360.0f;
 
     //move position of camera based on WASD keys, and XZ keys for up and down
     const float moveSpeed = 2.0; //units per second
