@@ -53,12 +53,13 @@ typedef struct {
 
     tdogl::Program* program = NULL;
     tdogl::Camera   camera;
+
+    double scroll_y = 0.0;
 } state;
 
 state Ctx;
 // globals
 GLFWwindow* gWindow = NULL;
-double gScrollY = 0.0;
 GLfloat gDegreesRotated = 0.0f;
 
 
@@ -190,17 +191,17 @@ Update(float secondsElapsed) {
 
     //increase or decrease field of view based on mouse wheel
     const float zoomSensitivity = -0.2f;
-    float fieldOfView = Ctx.camera.fieldOfView() + zoomSensitivity * (float)gScrollY;
+    float fieldOfView = Ctx.camera.fieldOfView() + zoomSensitivity * (float)Ctx.scroll_y;
     if (fieldOfView < 5.0f) fieldOfView = 5.0f;
     if (fieldOfView > 130.0f) fieldOfView = 130.0f;
     Ctx.camera.setFieldOfView(fieldOfView);
-    gScrollY = 0;
+    Ctx.scroll_y = 0.0;
 }
 
 // records how far the y axis has been scrolled
 static void
 OnScroll(GLFWwindow* window, double deltaX, double deltaY) {
-    gScrollY += deltaY;
+    Ctx.scroll_y += deltaY;
 }
 
 static void
