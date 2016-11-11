@@ -32,7 +32,6 @@
 
 // tdogl classes
 #include "tdogl/Program.h"
-#include "tdogl/Texture.h"
 #include "tdogl/Camera.h"
 
 typedef struct {
@@ -47,7 +46,6 @@ state Ctx;
 // globals
 GLFWwindow* gWindow = NULL;
 double gScrollY = 0.0;
-tdogl::Texture* gTexture = NULL;
 tdogl::Program* gProgram = NULL;
 tdogl::Camera gCamera;
 GLfloat gDegreesRotated = 0.0f;
@@ -81,75 +79,63 @@ LoadCube() {
 
     // Make a cube out of triangles (two triangles per side)
     GLfloat vertexData[] = {
-        //  X     Y     Z       U     V
+        //  X     Y     Z
         // bottom
-        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
-         1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
-         1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-         1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+        -1.0f,-1.0f,-1.0f,
+         1.0f,-1.0f,-1.0f,
+        -1.0f,-1.0f, 1.0f,
+         1.0f,-1.0f,-1.0f,
+         1.0f,-1.0f, 1.0f,
+        -1.0f,-1.0f, 1.0f,
 
         // top
-        -1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
-        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-         1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
-         1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
-        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+        -1.0f, 1.0f,-1.0f,
+        -1.0f, 1.0f, 1.0f,
+         1.0f, 1.0f,-1.0f,
+         1.0f, 1.0f,-1.0f,
+        -1.0f, 1.0f, 1.0f,
+         1.0f, 1.0f, 1.0f,
 
         // front
-        -1.0f,-1.0f, 1.0f,   1.0f, 0.0f,
-         1.0f,-1.0f, 1.0f,   0.0f, 0.0f,
-        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f,   0.0f, 0.0f,
-         1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+        -1.0f,-1.0f, 1.0f,
+         1.0f,-1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+         1.0f,-1.0f, 1.0f,
+         1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
 
         // back
-        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
-        -1.0f, 1.0f,-1.0f,   0.0f, 1.0f,
-         1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-         1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-        -1.0f, 1.0f,-1.0f,   0.0f, 1.0f,
-         1.0f, 1.0f,-1.0f,   1.0f, 1.0f,
+        -1.0f,-1.0f,-1.0f,
+        -1.0f, 1.0f,-1.0f,
+         1.0f,-1.0f,-1.0f,
+         1.0f,-1.0f,-1.0f,
+        -1.0f, 1.0f,-1.0f,
+         1.0f, 1.0f,-1.0f,
 
         // left
-        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
-        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
-        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+        -1.0f,-1.0f, 1.0f,
+        -1.0f, 1.0f,-1.0f,
+        -1.0f,-1.0f,-1.0f,
+        -1.0f,-1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f,-1.0f,
 
         // right
-         1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
-         1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-         1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
-         1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
-         1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
-         1.0f, 1.0f, 1.0f,   0.0f, 1.0f
+         1.0f,-1.0f, 1.0f,
+         1.0f,-1.0f,-1.0f,
+         1.0f, 1.0f,-1.0f,
+         1.0f,-1.0f, 1.0f,
+         1.0f, 1.0f,-1.0f,
+         1.0f, 1.0f, 1.0f,
     };
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(gProgram->attrib("vert"));
-    glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), NULL);
-
-    // connect the uv coords to the "vertTexCoord" attribute of the vertex shader
-    glEnableVertexAttribArray(gProgram->attrib("vertTexCoord"));
-    glVertexAttribPointer(gProgram->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE,  5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), NULL);
 
     // unbind the VAO
     glBindVertexArray(0);
-}
-
-
-static void
-LoadTexture() {
-    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("wooden-crate.jpg"));
-    bmp.flipVertically();
-    gTexture = new tdogl::Texture(bmp);
 }
 
 
@@ -169,20 +155,14 @@ Render() {
     // set the "model" uniform in the vertex shader, based on the gDegreesRotated global
     gProgram->setUniform("model", glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
 
-    // bind the texture and set the "tex" uniform in the fragment shader
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, gTexture->object());
-    gProgram->setUniform("tex", 0); //set to 0 because the texture is bound to GL_TEXTURE0
-
     // bind the VAO (the triangle)
     glBindVertexArray(Ctx.vao);
 
     // draw the VAO
     glDrawArrays(GL_TRIANGLES, 0, 6*2*3);
 
-    // unbind the VAO, the program and the texture
+    // unbind the VAO and the program
     glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
     gProgram->stopUsing();
 
     // swap the display buffers (displays what was just drawn)
@@ -292,9 +272,6 @@ AppMain() {
 
     // load vertex and fragment shaders into opengl
     LoadShaders();
-
-    // load the texture
-    LoadTexture();
 
     // create buffer and fill it with the points of the triangle
     LoadCube();
