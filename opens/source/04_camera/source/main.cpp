@@ -1,6 +1,6 @@
 /*
  main
- 
+
  Copyright 2012 Thomas Dalling - http://tomdalling.com/
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -135,7 +135,7 @@ LoadCube() {
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(gProgram->attrib("vert"));
     glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), NULL);
-        
+
     // connect the uv coords to the "vertTexCoord" attribute of the vertex shader
     glEnableVertexAttribArray(gProgram->attrib("vertTexCoord"));
     glVertexAttribPointer(gProgram->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE,  5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
@@ -145,8 +145,8 @@ LoadCube() {
 }
 
 
-// loads the file "wooden-crate.jpg" into gTexture
-static void LoadTexture() {
+static void
+LoadTexture() {
     tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("wooden-crate.jpg"));
     bmp.flipVertically();
     gTexture = new tdogl::Texture(bmp);
@@ -154,11 +154,12 @@ static void LoadTexture() {
 
 
 // draws a single frame
-static void Render() {
+static void
+Render() {
     // clear everything
     glClearColor(0, 0, 0, 1); // black
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
     // bind the program (the shaders)
     gProgram->use();
 
@@ -167,7 +168,7 @@ static void Render() {
 
     // set the "model" uniform in the vertex shader, based on the gDegreesRotated global
     gProgram->setUniform("model", glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
-        
+
     // bind the texture and set the "tex" uniform in the fragment shader
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
@@ -175,22 +176,23 @@ static void Render() {
 
     // bind the VAO (the triangle)
     glBindVertexArray(Ctx.vao);
-    
+
     // draw the VAO
     glDrawArrays(GL_TRIANGLES, 0, 6*2*3);
-    
+
     // unbind the VAO, the program and the texture
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
     gProgram->stopUsing();
-    
+
     // swap the display buffers (displays what was just drawn)
     glfwSwapBuffers(gWindow);
 }
 
 
 // update the scene based on the time elapsed since last update
-void Update(float secondsElapsed) {
+static void
+Update(float secondsElapsed) {
     //rotate the cube
     const GLfloat degreesPerSecond = 180.0f;
     gDegreesRotated += secondsElapsed * degreesPerSecond;
