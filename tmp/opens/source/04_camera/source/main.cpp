@@ -43,7 +43,6 @@ typedef struct {
     size_t height;
     size_t depth;
     size_t n_points;
-    size_t size;
 
     GLfloat* vertex_buffer = NULL;
     GLfloat* vertex_colors = NULL;
@@ -73,7 +72,6 @@ init_state(state* ctx, size_t w, size_t h) {
     ctx->depth = 256;
     ctx->n_points = ctx->width * ctx->height * ctx->depth;
     ctx->vertex_buffer_size = ctx->n_points * 3 * sizeof (GLfloat);
-    ctx->size = ctx->n_points * 4;
 }
 
 
@@ -97,21 +95,23 @@ LoadBuffers() {
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.vbo);
 
     Ctx.vertex_buffer = new GLfloat[Ctx.vertex_buffer_size];
-    Ctx.vertex_colors = new GLfloat[Ctx.size];
+    Ctx.vertex_colors = new GLfloat[Ctx.vertex_buffer_size];
     size_t pos = 0;
-    for (size_t x = 0; x < Ctx.width; ++x)
-        for (size_t y = 0; y < Ctx.height; ++y)
+    for (size_t x = 0; x < Ctx.width; ++x) {
+        for (size_t y = 0; y < Ctx.height; ++y) {
             for (size_t z = 0; z < Ctx.depth; ++z) {
                 size_t tmp = pos;
-                Ctx.vertex_buffer[pos++] = ((float)x - (float)Ctx.width / 2) / 100;
-                Ctx.vertex_buffer[pos++] = ((float)y - (float)Ctx.height / 2) / 100;
-                Ctx.vertex_buffer[pos++] = ((float)z - (float)Ctx.depth / 2) / 100;
+                Ctx.vertex_buffer[pos++] = ((float)x - (float)Ctx.width / 2) / 128;
+                Ctx.vertex_buffer[pos++] = ((float)y - (float)Ctx.height / 2) / 128;
+                Ctx.vertex_buffer[pos++] = ((float)z - (float)Ctx.depth / 2) / 128;
                 pos = tmp;
                 Ctx.vertex_colors[pos++] = (float)x / (float)Ctx.width;
                 Ctx.vertex_colors[pos++] = (float)y / (float)Ctx.height;
                 Ctx.vertex_colors[pos++] = (float)z / (float)Ctx.depth;
-                Ctx.vertex_colors[pos++] = 1.0f;
             }
+        }
+    }
+
     glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_buffer, GL_STATIC_DRAW);
 
     // connect the xyz to the "vert" attribute of the vertex shader
@@ -121,9 +121,9 @@ LoadBuffers() {
     // make and bind the VBO
     glGenBuffers(1, &Ctx.vertex_colors_id);
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.vertex_colors_id);
-    glBufferData(GL_ARRAY_BUFFER, Ctx.size, Ctx.vertex_colors, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_colors, GL_STATIC_DRAW);
     glEnableVertexAttribArray(Ctx.program->attrib("colr"));
-    glVertexAttribPointer(Ctx.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(Ctx.program->attrib("colr"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // unbind the VAO
     glBindVertexArray(0);
