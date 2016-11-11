@@ -78,14 +78,14 @@ init_state(state* ctx, size_t w, size_t h) {
 static void
 LoadShaders() {
     std::vector<tdogl::Shader> shaders{
-        tdogl::Shader::shaderFromFile(ResourcePath("vertex-shader.txt"), GL_VERTEX_SHADER),
-        tdogl::Shader::shaderFromFile(ResourcePath("fragment-shader.txt"), GL_FRAGMENT_SHADER)};
+        tdogl::Shader::shaderFromFile(ResourcePath("vertex.glsl"), GL_VERTEX_SHADER),
+        tdogl::Shader::shaderFromFile(ResourcePath("fragment.glsl"), GL_FRAGMENT_SHADER)};
     gProgram = new tdogl::Program(shaders);
 }
 
 
 static void
-LoadCube() {
+LoadBuffers() {
     // make and bind the VAO
     glGenVertexArrays(1, &Ctx.vao);
     glBindVertexArray(Ctx.vao);
@@ -255,7 +255,7 @@ AppMain() {
     LoadShaders();
 
     // create buffer and fill it with the points
-    LoadCube();
+    LoadBuffers();
 
     // setup gCamera
     gCamera.setPosition(glm::vec3(0,0,4));
