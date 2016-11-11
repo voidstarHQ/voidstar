@@ -52,13 +52,13 @@ typedef struct {
     GLuint   vertex_colors_id = 0;
 
     tdogl::Program* program = NULL;
+    tdogl::Camera   camera;
 } state;
 
 state Ctx;
 // globals
 GLFWwindow* gWindow = NULL;
 double gScrollY = 0.0;
-tdogl::Camera gCamera;
 GLfloat gDegreesRotated = 0.0f;
 
 
@@ -138,7 +138,7 @@ Render() {
     // bind the program (the shaders)
     Ctx.program->use();
 
-    Ctx.program->setUniform("camera", gCamera.matrix());
+    Ctx.program->setUniform("camera", Ctx.camera.matrix());
 
     // set the "model" uniform in the vertex shader, based on the gDegreesRotated global
     Ctx.program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
@@ -169,31 +169,31 @@ Update(float secondsElapsed) {
     //move position of camera based on WASD keys, and XZ keys for up and down
     const float moveSpeed = 2.0; //units per second
     if (glfwGetKey(gWindow, 'S'))
-        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.forward());
+        Ctx.camera.offsetPosition(secondsElapsed * moveSpeed * -Ctx.camera.forward());
     else if (glfwGetKey(gWindow, 'W'))
-        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.forward());
+        Ctx.camera.offsetPosition(secondsElapsed * moveSpeed * Ctx.camera.forward());
     if (glfwGetKey(gWindow, 'A'))
-        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.right());
+        Ctx.camera.offsetPosition(secondsElapsed * moveSpeed * -Ctx.camera.right());
     else if(glfwGetKey(gWindow, 'D'))
-        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.right());
+        Ctx.camera.offsetPosition(secondsElapsed * moveSpeed * Ctx.camera.right());
     if (glfwGetKey(gWindow, 'Z'))
-        gCamera.offsetPosition(secondsElapsed * moveSpeed * -glm::vec3(0,1,0));
+        Ctx.camera.offsetPosition(secondsElapsed * moveSpeed * -glm::vec3(0,1,0));
     else if (glfwGetKey(gWindow, 'X'))
-        gCamera.offsetPosition(secondsElapsed * moveSpeed * glm::vec3(0,1,0));
+        Ctx.camera.offsetPosition(secondsElapsed * moveSpeed * glm::vec3(0,1,0));
 
     //rotate camera based on mouse movement
     const float mouseSensitivity = 0.1f;
     double mouseX, mouseY;
     glfwGetCursorPos(gWindow, &mouseX, &mouseY);
-    gCamera.offsetOrientation(mouseSensitivity * (float)mouseY, mouseSensitivity * (float)mouseX);
+    Ctx.camera.offsetOrientation(mouseSensitivity * (float)mouseY, mouseSensitivity * (float)mouseX);
     glfwSetCursorPos(gWindow, 0, 0); //reset the mouse, so it doesn't go out of the window
 
     //increase or decrease field of view based on mouse wheel
     const float zoomSensitivity = -0.2f;
-    float fieldOfView = gCamera.fieldOfView() + zoomSensitivity * (float)gScrollY;
+    float fieldOfView = Ctx.camera.fieldOfView() + zoomSensitivity * (float)gScrollY;
     if (fieldOfView < 5.0f) fieldOfView = 5.0f;
     if (fieldOfView > 130.0f) fieldOfView = 130.0f;
-    gCamera.setFieldOfView(fieldOfView);
+    Ctx.camera.setFieldOfView(fieldOfView);
     gScrollY = 0;
 }
 
@@ -252,17 +252,13 @@ AppMain() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // load vertex and fragment shaders into opengl
     LoadShaders();
 
-    // create buffer and fill it with the points
     LoadBuffers();
 
-    // setup gCamera
-    gCamera.setPosition(glm::vec3(0,0,4));
-    gCamera.setViewportAspectRatio(Ctx.screen_aspect);
+    Ctx.camera.setPosition(glm::vec3(0,0,4));
+    Ctx.camera.setViewportAspectRatio(Ctx.screen_aspect);
 
-    // run while the window is open
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(gWindow)) {
         // process pending events
@@ -273,15 +269,12 @@ AppMain() {
         Update((float)(thisTime - lastTime));
         lastTime = thisTime;
 
-        // draw one frame
         Render();
 
-        // check for errors
         GLenum error = glGetError();
         if (error != GL_NO_ERROR)
             std::cerr << "OpenGL Error " << error << std::endl;
 
-        //exit program if escape key is pressed
         if (glfwGetKey(gWindow, GLFW_KEY_ESCAPE))
             glfwSetWindowShouldClose(gWindow, GL_TRUE);
     }
