@@ -50,13 +50,14 @@ typedef struct {
     size_t   vertex_buffer_size;
     size_t   vertex_colors_size;
     GLuint   vertex_colors_id = 0;
+
+    tdogl::Program* program = NULL;
 } state;
 
 state Ctx;
 // globals
 GLFWwindow* gWindow = NULL;
 double gScrollY = 0.0;
-tdogl::Program* gProgram = NULL;
 tdogl::Camera gCamera;
 GLfloat gDegreesRotated = 0.0f;
 
@@ -80,7 +81,7 @@ LoadShaders() {
     std::vector<tdogl::Shader> shaders{
         tdogl::Shader::shaderFromFile(ResourcePath("vertex.glsl"), GL_VERTEX_SHADER),
         tdogl::Shader::shaderFromFile(ResourcePath("fragment.glsl"), GL_FRAGMENT_SHADER)};
-    gProgram = new tdogl::Program(shaders);
+    Ctx.program = new tdogl::Program(shaders);
 }
 
 
@@ -113,15 +114,15 @@ LoadBuffers() {
     glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_buffer, GL_STATIC_DRAW);
 
     // connect the xyz to the "vert" attribute of the vertex shader
-    glEnableVertexAttribArray(gProgram->attrib("vert"));
-    glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(Ctx.program->attrib("vert"));
+    glVertexAttribPointer(Ctx.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // make and bind the VBO
     glGenBuffers(1, &Ctx.vertex_colors_id);
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.vertex_colors_id);
     glBufferData(GL_ARRAY_BUFFER, Ctx.size, Ctx.vertex_colors, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(gProgram->attrib("colr"));
-    glVertexAttribPointer(gProgram->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(Ctx.program->attrib("colr"));
+    glVertexAttribPointer(Ctx.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // unbind the VAO
     glBindVertexArray(0);
@@ -135,12 +136,12 @@ Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // bind the program (the shaders)
-    gProgram->use();
+    Ctx.program->use();
 
-    gProgram->setUniform("camera", gCamera.matrix());
+    Ctx.program->setUniform("camera", gCamera.matrix());
 
     // set the "model" uniform in the vertex shader, based on the gDegreesRotated global
-    gProgram->setUniform("model", glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
+    Ctx.program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
 
     // bind the VAO
     glBindVertexArray(Ctx.vao);
@@ -150,7 +151,7 @@ Render() {
 
     // unbind the VAO and the program
     glBindVertexArray(0);
-    gProgram->stopUsing();
+    Ctx.program->stopUsing();
 
     glfwSwapBuffers(gWindow);
 }
