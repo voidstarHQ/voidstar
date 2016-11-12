@@ -30,7 +30,13 @@ void GlfwManager::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    window_ = glfwCreateWindow(args_->width, args_->height, "points", NULL, NULL);
+
+    GLFWmonitor *monitor = 0;
+    if (args_->fullscreen) {
+        monitor = glfwGetPrimaryMonitor();
+    }
+
+    window_ = glfwCreateWindow(args_->width, args_->height, "points", monitor, NULL);
     if (!window_)
         throw std::runtime_error("!glfwCreateWindow. Can your hardware handle OpenGL 3.2?");
 
