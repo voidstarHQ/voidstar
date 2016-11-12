@@ -44,12 +44,27 @@ endif()
 #-----------------------------------------------------------------------------
 
 # to add an include path
-# include_directories()
+include_directories(
+    ${PROJECT_SOURCE_DIR}/source/common/
+    ${PROJECT_SOURCE_DIR}/source/common/thirdparty/
+    ${PROJECT_SOURCE_DIR}/source/common/thirdparty/stb_image
+)
 
 set(
     SOURCES
 
-    src/miners.cc
+    platforms/linux/platform_linux.cpp
+
+    source/miners/source/main.cc
+    source/miners/source/Arguments.cc
+    source/miners/source/GlfwManager.cc
+    source/miners/source/Scene.cc
+
+    source/common/tdogl/Bitmap.cpp
+    source/common/tdogl/Camera.cpp
+    source/common/tdogl/Program.cpp
+    source/common/tdogl/Shader.cpp
+    source/common/tdogl/Texture.cpp
 )
 
 # create your executable with
@@ -59,7 +74,7 @@ add_executable(miners ${SOURCES})
 # add_library(my_lib SHARED ${SOURCES})
 
 # you can link both with
-target_link_libraries(miners m GL GLEW glfw2)
+target_link_libraries(miners m GL GLEW glfw)
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING

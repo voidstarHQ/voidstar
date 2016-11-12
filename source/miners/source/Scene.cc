@@ -6,10 +6,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "platform.hpp"
+#include <platform.hpp>
 
-#include "tdogl/Program.h"
-#include "tdogl/Camera.h"
+#include <tdogl/Program.h>
+#include <tdogl/Camera.h>
 
 #include "Scene.hh"
 #include "Manager.hh"

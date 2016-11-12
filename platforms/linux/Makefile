@@ -6,18 +6,18 @@ ifndef config
 endif
 export config
 
-PROJECTS := 04_camera-app
+PROJECTS := miners-app
 
 .PHONY: all clean help $(PROJECTS)
 
 all: $(PROJECTS)
 
-04_camera-app: 
-	@echo "==== Building 04_camera-app ($(config)) ===="
-	@${MAKE} --no-print-directory -C . -f 04_camera-app.make
+miners-app:
+	@echo "==== Building $@ ($(config)) ===="
+	@${MAKE} --no-print-directory -C . -f $@.make
 
 clean:
-	@${MAKE} --no-print-directory -C . -f 04_camera-app.make clean
+	@${MAKE} --no-print-directory -C . -f miners-app.make clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -29,6 +29,6 @@ help:
 	@echo "TARGETS:"
 	@echo "   all (default)"
 	@echo "   clean"
-	@echo "   04_camera-app"
+	@echo "   $(PROJECT)"
 	@echo ""
 	@echo "For more information, see http://industriousone.com/premake/quick-start"

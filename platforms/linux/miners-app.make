@@ -27,10 +27,12 @@ ifndef RESCOMP
   endif
 endif
 
+PROJECT=miners
+
 ifeq ($(config),debug)
-  OBJDIR     = obj/linux/debug/04_camera-app
-  TARGETDIR  = ../../source/04_camera
-  TARGET     = $(TARGETDIR)/04_camera-debug
+  OBJDIR     = obj/linux/debug/miners-app
+  TARGETDIR  = ../../source/miners
+  TARGET     = $(TARGETDIR)/miners-debug
   DEFINES   += -DGLM_FORCE_RADIANS -DDEBUG
   INCLUDES  += -I../../source/common -I../../source/common/thirdparty/glm -I../../source/common/thirdparty/stb_image
   CPPFLAGS  += -MMD -MP -std=c++1y $(DEFINES) $(INCLUDES)
@@ -50,9 +52,9 @@ ifeq ($(config),debug)
 endif
 
 ifeq ($(config),release)
-  OBJDIR     = obj/linux/release/04_camera-app
-  TARGETDIR  = ../../source/04_camera
-  TARGET     = $(TARGETDIR)/04_camera-release
+  OBJDIR     = obj/linux/release/miners-app
+  TARGETDIR  = ../../source/miners
+  TARGET     = $(TARGETDIR)/miners-release
   DEFINES   += -DGLM_FORCE_RADIANS -DNDEBUG
   INCLUDES  += -I../../source/common -I../../source/common/thirdparty/glm -I../../source/common/thirdparty/stb_image
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
@@ -99,7 +101,7 @@ all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
 	@:
 
 $(TARGET): $(GCH) $(OBJECTS) $(LDDEPS) $(RESOURCES)
-	@echo Linking 04_camera-app
+	@echo Linking miners-app
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -120,7 +122,7 @@ else
 endif
 
 clean:
-	@echo Cleaning 04_camera-app
+	@echo Cleaning miners-app
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
@@ -146,31 +148,31 @@ endif
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 endif
 
-$(OBJDIR)/main.o: ../../source/04_camera/source/main.cpp
+$(OBJDIR)/main.o: ../../source/miners/source/main.cc
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/Arguments.o: ../../source/04_camera/source/Arguments.cc
+$(OBJDIR)/Arguments.o: ../../source/miners/source/Arguments.cc
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/Scene.o: ../../source/04_camera/source/Scene.cc
+$(OBJDIR)/Scene.o: ../../source/miners/source/Scene.cc
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/GlfwManager.o: ../../source/04_camera/source/GlfwManager.cc
+$(OBJDIR)/GlfwManager.o: ../../source/miners/source/GlfwManager.cc
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/Camera.o: ../../source/04_camera/source/tdogl/Camera.cpp
+$(OBJDIR)/Camera.o: ../../source/common/tdogl/Camera.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/Bitmap.o: ../../source/04_camera/source/tdogl/Bitmap.cpp
+$(OBJDIR)/Bitmap.o: ../../source/common/tdogl/Bitmap.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/Shader.o: ../../source/04_camera/source/tdogl/Shader.cpp
+$(OBJDIR)/Shader.o: ../../source/common/tdogl/Shader.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/Program.o: ../../source/04_camera/source/tdogl/Program.cpp
+$(OBJDIR)/Program.o: ../../source/common/tdogl/Program.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/Texture.o: ../../source/04_camera/source/tdogl/Texture.cpp
+$(OBJDIR)/Texture.o: ../../source/common/tdogl/Texture.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 $(OBJDIR)/platform_linux.o: platform_linux.cpp
