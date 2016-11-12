@@ -1,0 +1,31 @@
+
+machine:
+  timezone:
+    Europe/London
+  environment:
+    PATH: "/home/ubuntu/cmake-3.6.2-Linux-x86_64/bin:$PATH"
+
+dependencies:
+  cache_directories:
+    - ~/cmake-3.6.2-Linux-x86_64
+  pre:
+    - sudo apt-get update
+    - sudo apt-get install libglew-dev
+    - sudo apt-get install libglm-dev
+    - >
+      if [ ! -d ~/cmake-3.6.2-Linux-x86_64 ]; then
+        echo "No cache - building CMake"
+        cd ~ && wget --quiet https://cmake.org/files/v3.6/cmake-3.6.2-Linux-x86_64.tar.gz && tar -xvf cmake-3.6.2-Linux-x86_64.tar.gz
+      else
+        echo "Cached CMake found"
+      fi
+  post:
+    - cmake --version || true
+    - g++ --version || true
+    - clang++ --version || true
+
+
+test:
+  pre:
+    - ./configure.sh
+    - cd build && make
