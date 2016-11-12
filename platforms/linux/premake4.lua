@@ -2,11 +2,11 @@ function create_project( name )
 	project( name .. "-app" )
 		kind "WindowedApp"
 		language "C++"
-		files { "../../source/" .. name .. "/source/**.cpp", "platform_linux.cpp" }
-		targetdir("../../source/" .. name .. "/")
-		includedirs( "../../source/common/" )
-		includedirs( "../../source/common/thirdparty/glm" )
-		includedirs( "../../source/common/thirdparty/stb_image" )
+		files { "../../src/" .. name .. "/source/**.cpp", "platform_linux.cpp" }
+		targetdir("../../src/" .. name .. "/")
+		includedirs( "../../src/common/" )
+		includedirs( "../../src/common/thirdparty/glm" )
+		includedirs( "../../src/common/thirdparty/stb_image" )
 		defines { "GLM_FORCE_RADIANS" }
 		
 		configuration "windows"

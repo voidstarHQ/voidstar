@@ -45,9 +45,9 @@ endif()
 
 # to add an include path
 include_directories(
-    ${PROJECT_SOURCE_DIR}/source/common/
-    ${PROJECT_SOURCE_DIR}/source/common/thirdparty/
-    ${PROJECT_SOURCE_DIR}/source/common/thirdparty/stb_image
+    ${PROJECT_SOURCE_DIR}/src/common/
+    ${PROJECT_SOURCE_DIR}/src/common/thirdparty/
+    ${PROJECT_SOURCE_DIR}/src/common/thirdparty/stb_image
 )
 
 set(
@@ -55,16 +55,16 @@ set(
 
     platforms/linux/platform_linux.cpp
 
-    source/miners/source/main.cc
-    source/miners/source/Arguments.cc
-    source/miners/source/GlfwManager.cc
-    source/miners/source/Scene.cc
+    src/miners/source/main.cc
+    src/miners/source/Arguments.cc
+    src/miners/source/GlfwManager.cc
+    src/miners/source/Scene.cc
 
-    source/common/tdogl/Bitmap.cpp
-    source/common/tdogl/Camera.cpp
-    source/common/tdogl/Program.cpp
-    source/common/tdogl/Shader.cpp
-    source/common/tdogl/Texture.cpp
+    src/common/tdogl/Bitmap.cpp
+    src/common/tdogl/Camera.cpp
+    src/common/tdogl/Program.cpp
+    src/common/tdogl/Shader.cpp
+    src/common/tdogl/Texture.cpp
 )
 
 # create your executable with
