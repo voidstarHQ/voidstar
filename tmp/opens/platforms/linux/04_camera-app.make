@@ -8,11 +8,11 @@ ifndef verbose
 endif
 
 ifndef CC
-  CC = gcc
+  CC = clang
 endif
 
 ifndef CXX
-  CXX = g++
+  CXX = clang++
 endif
 
 ifndef AR
@@ -33,8 +33,8 @@ ifeq ($(config),debug)
   TARGET     = $(TARGETDIR)/04_camera-debug
   DEFINES   += -DGLM_FORCE_RADIANS -DDEBUG
   INCLUDES  += -I../../source/common -I../../source/common/thirdparty/glm -I../../source/common/thirdparty/stb_image
-  CPPFLAGS  += -MMD -MP -std=c++11 $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall
+  CPPFLAGS  += -MMD -MP -std=c++1y $(DEFINES) $(INCLUDES)
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g3 -Wall -Wextra
   CXXFLAGS  += $(CFLAGS) 
   LDFLAGS   += 
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
@@ -73,6 +73,9 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/main.o \
+	$(OBJDIR)/Arguments.o \
+	$(OBJDIR)/GlfwManager.o \
+	$(OBJDIR)/Scene.o \
 	$(OBJDIR)/Camera.o \
 	$(OBJDIR)/Bitmap.o \
 	$(OBJDIR)/Shader.o \
@@ -144,6 +147,15 @@ endif
 endif
 
 $(OBJDIR)/main.o: ../../source/04_camera/source/main.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+$(OBJDIR)/Arguments.o: ../../source/04_camera/source/Arguments.cc
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+$(OBJDIR)/Scene.o: ../../source/04_camera/source/Scene.cc
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+$(OBJDIR)/GlfwManager.o: ../../source/04_camera/source/GlfwManager.cc
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 $(OBJDIR)/Camera.o: ../../source/04_camera/source/tdogl/Camera.cpp
