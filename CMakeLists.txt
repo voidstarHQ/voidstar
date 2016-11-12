@@ -45,6 +45,7 @@ endif()
 
 # to add an include path
 include_directories(
+    ${PROJECT_SOURCE_DIR}/src/include/
     ${PROJECT_SOURCE_DIR}/src/common/
     ${PROJECT_SOURCE_DIR}/src/common/thirdparty/
     ${PROJECT_SOURCE_DIR}/src/common/thirdparty/stb_image
@@ -53,12 +54,12 @@ include_directories(
 set(
     SOURCES
 
-    platforms/linux/platform_linux.cpp
+    src/miners/main.cc
+    src/miners/Arguments.cc
+    src/miners/GlfwManager.cc
+    src/miners/Scene.cc
 
-    src/miners/source/main.cc
-    src/miners/source/Arguments.cc
-    src/miners/source/GlfwManager.cc
-    src/miners/source/Scene.cc
+    src/common/platform/linux/platform.cpp
 
     src/common/tdogl/Bitmap.cpp
     src/common/tdogl/Camera.cpp
@@ -75,6 +76,9 @@ add_executable(miners ${SOURCES})
 
 # you can link both with
 target_link_libraries(miners m GL GLEW glfw)
+
+add_custom_command(TARGET miners POST_BUILD
+                   COMMAND ln -sf ${PROJECT_SOURCE_DIR}/src/resources .)
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING
