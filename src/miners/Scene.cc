@@ -11,8 +11,8 @@
 #include <tdogl/Program.h>
 #include <tdogl/Camera.h>
 
-#include "Scene.hh"
-#include "Manager.hh"
+#include <Scene.hh>
+#include <Manager.hh>
 
 struct SceneContext {
     GLuint vao = 0;
@@ -122,7 +122,7 @@ void Scene::init()
     resize(manager_->args()->height, manager_->args()->width);
 }
 
-void Scene::load(void *payload)
+void Scene::load(Algorithm *algorithm)
 {
     // OpenGL settings
     glEnable(GL_DEPTH_TEST);

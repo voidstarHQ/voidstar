@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Arguments.hh"
-#include "Scene.hh"
-#include "Events.hh"
+#include <Arguments.hh>
+#include <Scene.hh>
+#include <Events.hh>
 
 class Manager {
 public:
@@ -31,4 +31,7 @@ protected:
     Scene *scene_;
 };
 
+using ManagerFactoryFunc = std::function<Manager*(Arguments*)>;
+
+extern std::map<std::string, ManagerFactoryFunc> managers;
 

@@ -253,7 +253,7 @@ void Bitmap::flipVertically() {
         memcpy(oppositeRow, rowBuffer, rowSize);
     }
     
-    delete rowBuffer;
+    delete[] rowBuffer;
 }
 
 void Bitmap::rotate90CounterClockwise() {

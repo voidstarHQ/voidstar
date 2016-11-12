@@ -1,9 +1,7 @@
-#include <stdexcept>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "GlfwManager.hh"
+#include <GlfwManager.hh>
 
 GlfwManager *GlfwManager::instance_ = 0;
 

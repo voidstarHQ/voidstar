@@ -4,6 +4,8 @@
 
 #include <tdogl/Camera.h>
 
+#include <Algorithm.hh>
+
 class Manager;
 
 class Scene {
@@ -12,7 +14,7 @@ public:
     virtual ~Scene() {}
 
     virtual void init();
-    virtual void load(void *payload);
+    virtual void load(Algorithm *algorithm);
     virtual void unload();
     virtual bool update(float elapsedTime);
     virtual void render();

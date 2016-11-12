@@ -1,9 +1,9 @@
 #pragma once
 
-#include <stdexcept>
 #include <GLFW/glfw3.h>
 
-#include "Manager.hh"
+#include <Types.hh>
+#include <Manager.hh>
 
 class GlfwManager;
 
@@ -30,8 +30,8 @@ public:
     virtual void init();
     virtual void run();
 
-    virtual Events *getEvents(int id=0) { return events_; }
-    virtual Mouse *getMouse(int id=0) { return mouse_; }
+    virtual Events *getEvents(int id=0) { (void)id; return events_; }
+    virtual Mouse *getMouse(int id=0) { (void)id; return mouse_; }
 
     GLFWwindow *window() { return window_; }
 

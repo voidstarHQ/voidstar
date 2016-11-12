@@ -56,8 +56,15 @@ set(
 
     src/miners/main.cc
     src/miners/Arguments.cc
-    src/miners/GlfwManager.cc
+    src/miners/Algorithm.cc
+    src/miners/Manager.cc
     src/miners/Scene.cc
+
+    src/miners/FileLoader.cc
+
+    src/miners/ContiAlgorithm.cc
+
+    src/miners/GlfwManager.cc
 
     src/common/platform/linux/platform.cpp
 
