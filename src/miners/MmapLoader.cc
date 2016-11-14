@@ -4,7 +4,8 @@
 
 #include <MmapLoader.hh>
 
-void MmapFileLoader::load()
+void
+MmapFileLoader::load()
 {
     if (fd_ < 0) {
         fd_ = open(path_.c_str(), O_RDONLY);
@@ -23,7 +24,8 @@ void MmapFileLoader::load()
     data_ = reinterpret_cast<u8*>(base);
 }
 
-void MmapFileLoader::free()
+void
+MmapFileLoader::free()
 {
     munmap(data_, size_);
     offset_ = 0;
@@ -33,12 +35,14 @@ void MmapFileLoader::free()
     // close(fd_)
 }
 
-const u8 *MmapFileLoader::data()
+const u8*
+MmapFileLoader::data()
 {
     return data_;
 }
 
-const u8 *MmapFileLoader::dataChunk(size_t offset, size_t size __unused)
+const u8*
+MmapFileLoader::dataChunk(size_t offset, size_t size __unused)
 {
     return data() + offset;
 }

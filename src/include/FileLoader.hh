@@ -14,8 +14,8 @@ public:
     virtual void load();
     virtual void free();
 
-    virtual const u8 *data();
-    virtual const u8 *dataChunk(size_t pos, size_t size);
+    virtual const u8* data();
+    virtual const u8* dataChunk(size_t pos, size_t size);
 
 protected:
     int fd_;

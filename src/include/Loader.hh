@@ -10,9 +10,9 @@ public:
     virtual void load() = 0;
     virtual void free() = 0;
 
-    virtual const u8 *data() = 0;
-    virtual const u8 *dataChunk(size_t offset, size_t size) = 0;
-    virtual const u8 *nextDataChunk(size_t size) {
+    virtual const u8* data() = 0;
+    virtual const u8* dataChunk(size_t offset, size_t size) = 0;
+    virtual const u8* nextDataChunk(size_t size) {
         auto chunk = dataChunk(offset_, size);
         offset_ += size;
         return chunk;
@@ -39,10 +39,10 @@ public:
     virtual void load() {}
     virtual void free() {}
 
-    virtual const u8 *data() {
+    virtual const u8* data() {
         throw std::runtime_error("Unexpected call");
     }
-    virtual const u8 *dataChunk(size_t offset __unused, size_t size __unused) {
+    virtual const u8* dataChunk(size_t offset __unused, size_t size __unused) {
         throw std::runtime_error("Unexpected call");
     }
 };
