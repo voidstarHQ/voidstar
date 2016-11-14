@@ -11,7 +11,6 @@ public:
 
     virtual void loadScene(Scene *scene) {
         scene_ = scene;
-        scene_->load(NULL);
     }
     virtual void unloadScene() {
         scene_->unload();

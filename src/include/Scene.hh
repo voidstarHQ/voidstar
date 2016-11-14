@@ -14,7 +14,6 @@ public:
     virtual ~Scene() {}
 
     virtual void init() = 0;
-    virtual void load(Algorithm* algorithm) = 0;
     virtual void unload() = 0;
     virtual bool update(float elapsedTime) = 0;
     virtual void render() = 0;

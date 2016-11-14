@@ -2,10 +2,6 @@
 #include <stdexcept>
 
 
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <platform.hpp>
 
 #include <tdogl/Program.h>
@@ -56,19 +52,6 @@ LoadBuffers() {
     glGenBuffers(1, &Ctx.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.vbo);
 
-    Ctx.vertex_buffer = new GLfloat[Ctx.vertex_buffer_size];
-    Ctx.vertex_colors = new GLfloat[Ctx.colors_buffer_size]();
-    size_t pos = 0;
-    for (size_t z = 0; z < Ctx.depth; ++z)
-        for (size_t y = 0; y < Ctx.height; ++y)
-            for (size_t x = 0; x < Ctx.width; ++x) {
-                Ctx.vertex_buffer[pos++] = ((float)x - (float)Ctx.width  / 2.0f) / 128;
-                Ctx.vertex_buffer[pos++] = ((float)y - (float)Ctx.height / 2.0f) / 128;
-                Ctx.vertex_buffer[pos++] = ((float)z - (float)Ctx.depth  / 2.0f) / 128;
-                // Ctx.vertex_buffer[pos++] = static_cast<float>(x);
-                // Ctx.vertex_buffer[pos++] = static_cast<float>(y);
-                // Ctx.vertex_buffer[pos++] = static_cast<float>(z);
-            }
     glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_buffer, GL_STATIC_DRAW);
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(Ctx.program->attrib("vert"));
@@ -78,25 +61,6 @@ LoadBuffers() {
     glGenBuffers(1, &Ctx.colors_buffer_id);
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.colors_buffer_id);
 
-    const size_t chunk = 1024 * 5;
-    unsigned char read[chunk];
-    if (fread(read, 1, chunk, stdin) == chunk) {
-        unsigned char x = read[0];
-        unsigned char y = read[1];
-        for (size_t i = 2; i < chunk; ++i) {
-            unsigned char z = read[i];
-            size_t idx = 4 * (x + y * Ctx.height + z * Ctx.depth * Ctx.height);
-            Ctx.vertex_colors[idx + 0] = 1.0f;
-            Ctx.vertex_colors[idx + 1] = 1.0f;
-            Ctx.vertex_colors[idx + 2] = 1.0f;
-            // float opacity = Ctx.vertex_colors[idx + 3];
-            // Ctx.vertex_colors[idx + 3] = std::min(1.0f, 1.0f/255.0f + opacity);
-            Ctx.vertex_colors[idx + 3] = 1.0f;
-            x = y;
-            y = z;
-        }
-    }
-    std::cout << "done reading" << std::endl;
     glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_colors, GL_STATIC_DRAW);
     glEnableVertexAttribArray(Ctx.program->attrib("colr"));
     glVertexAttribPointer(Ctx.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -127,9 +91,9 @@ void Scene3D::init()
     resize(manager_->args()->height, manager_->args()->width);
 }
 
-void Scene3D::load(Algorithm *algorithm)
+void
+Scene3D::load(Algorithm3D* algorithm)
 {
-    // OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glEnable(GL_BLEND);
@@ -143,16 +107,15 @@ void Scene3D::load(Algorithm *algorithm)
     Ctx.colors_buffer_size = Ctx.n_points * 4 * sizeof (GLfloat);
 
     LoadShaders();
+    vertices_ = new GLfloat[Ctx.vertex_buffer_size];
+    colors_   = new GLfloat[Ctx.colors_buffer_size]();
+    algorithm->apply(vertices_, colors_, Ctx.width, Ctx.height, Ctx.depth)
+        || std::cerr << "!apply" << std::endl;
     LoadBuffers();
 
-    camera_.setPosition(glm::vec3(0,0,4));
+    camera_.setPosition(glm::vec3(0, 0, 4));
     camera_.setViewportAspectRatio(aspect_ratio_);
     camera_.setNearAndFarPlanes(0.1, 100.);
-}
-
-void Scene3D::unload()
-{
-    // TODO:
 }
 
 bool Scene3D::update(float elapsedTime)
@@ -190,14 +153,15 @@ bool Scene3D::update(float elapsedTime)
     //increase or decrease field of view based on mouse wheel
     float fieldOfView = camera_.fieldOfView() +
                         mouse->zoomSensitivity * mouse->scrollY;
-    if (fieldOfView < 5.0f) fieldOfView = 5.0f;
-    if (fieldOfView > 130.0f) fieldOfView = 130.0f;
+    fieldOfView = std::min(5.0f, fieldOfView);
+    fieldOfView = std::max(130.0f, fieldOfView);
     camera_.setFieldOfView(fieldOfView);
     mouse->scrollY = 0.0;
     return true;
 }
 
-void Scene3D::render()
+void
+Scene3D::render()
 {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -207,7 +171,7 @@ void Scene3D::render()
 
     Ctx.program->setUniform("camera", camera_.matrix());
 
-    // set the "model" uniform in the vertex shader, based on the degreesRotated global
+    // set the "model" uniform in the vertex shader, based on degreesRotated
     Ctx.program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(Ctx.degreesRotated), glm::vec3(0,1,0)));
 
     // bind the VAO

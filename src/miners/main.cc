@@ -28,19 +28,19 @@ int main(int argc, char* argv[])
     }
     loader->load();
 
-    //auto *algorithm = algorithms[args->algo]();
-    //algorithm->use(loader);
+    auto* algorithm = algorithms[args->algo]();
+    algorithm->use(loader);
 
     auto* manager = managers[args->manager](args);
     try {
         manager->init();
-        Scene* scene = NULL;
-        if (args->scene == "3d")
-            scene = new Scene3D(manager);
-        scene->init();
-        //scene->load(algorithm);
-        manager->loadScene(scene);
-        manager->run();
+        if (args->scene == "3d") {
+            auto* scene = new Scene3D(manager);
+            scene->init();
+            scene->load(reinterpret_cast<Algorithm3D*>(algorithm));
+            manager->loadScene(scene);
+            manager->run();
+        }
     } catch (const std::exception& e) {
         std::cerr << "ERROR: " << e.what() << std::endl;
         return EXIT_FAILURE;
