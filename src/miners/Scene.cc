@@ -57,34 +57,19 @@ LoadBuffers() {
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.vbo);
 
     Ctx.vertex_buffer = new GLfloat[Ctx.vertex_buffer_size];
-    Ctx.vertex_colors = new GLfloat[Ctx.colors_buffer_size];
-    size_t pos_v = 0;
-    size_t pos_c = 0;
-    for (size_t x = 0; x < Ctx.width; ++x) {
-        for (size_t y = 0; y < Ctx.height; ++y) {
-            for (size_t z = 0; z < Ctx.depth; ++z) {
-                float vx = ((float)x - (float)Ctx.width / 2) / 64;
-                float vy = ((float)y - (float)Ctx.height / 2) / 64;
-                float vz = ((float)z - (float)Ctx.depth / 2) / 64;
-                Ctx.vertex_buffer[pos_v++] = vx;
-                Ctx.vertex_buffer[pos_v++] = vy;
-                Ctx.vertex_buffer[pos_v++] = vz;
-
-                Ctx.vertex_colors[pos_c++] = (float)x / (float)Ctx.width;
-                Ctx.vertex_colors[pos_c++] = (float)y / (float)Ctx.height;
-                Ctx.vertex_colors[pos_c++] = (float)z / (float)Ctx.depth;
-                //float res = std::abs(vx*vx + vy*vy - vz*vz);
-                //if (res <= 0.9f || res >= 1.1f) {
-                Ctx.vertex_colors[pos_c++] = 1.0f;
-                //} else {
-                //    Ctx.vertex_colors[pos_c++] = 0.0f;
-                //}
+    Ctx.vertex_colors = new GLfloat[Ctx.colors_buffer_size]();
+    size_t pos = 0;
+    for (size_t z = 0; z < Ctx.depth; ++z)
+        for (size_t y = 0; y < Ctx.height; ++y)
+            for (size_t x = 0; x < Ctx.width; ++x) {
+                Ctx.vertex_buffer[pos++] = ((float)x - (float)Ctx.width  / 2.0f) / 128;
+                Ctx.vertex_buffer[pos++] = ((float)y - (float)Ctx.height / 2.0f) / 128;
+                Ctx.vertex_buffer[pos++] = ((float)z - (float)Ctx.depth  / 2.0f) / 128;
+                // Ctx.vertex_buffer[pos++] = static_cast<float>(x);
+                // Ctx.vertex_buffer[pos++] = static_cast<float>(y);
+                // Ctx.vertex_buffer[pos++] = static_cast<float>(z);
             }
-        }
-    }
-
     glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_buffer, GL_STATIC_DRAW);
-
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(Ctx.program->attrib("vert"));
     glVertexAttribPointer(Ctx.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -92,6 +77,24 @@ LoadBuffers() {
     // make and bind the VBO
     glGenBuffers(1, &Ctx.colors_buffer_id);
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.colors_buffer_id);
+
+    const size_t chunk = 1024 * 10;
+    unsigned char read[chunk];
+    if (fread(read, 1, chunk, stdin) == chunk) {
+        unsigned char x = read[0];
+        for (size_t i = 1; i < chunk; ++i) {
+            unsigned char y = read[i];
+            size_t idx = 4 * (x + y * Ctx.height);
+            Ctx.vertex_colors[idx + 0] = 1.0f;
+            Ctx.vertex_colors[idx + 1] = 1.0f;
+            Ctx.vertex_colors[idx + 2] = 1.0f;
+            // float opacity = Ctx.vertex_colors[idx + 3];
+            // Ctx.vertex_colors[idx + 3] = std::min(1.0f, 1.0f/255.0f + opacity);
+            Ctx.vertex_colors[idx + 3] = 1.0f;
+            x = y;
+        }
+    }
+    std::cout << "done reading" << std::endl;
     glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_colors, GL_STATIC_DRAW);
     glEnableVertexAttribArray(Ctx.program->attrib("colr"));
     glVertexAttribPointer(Ctx.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -130,9 +133,9 @@ void Scene::load(Algorithm *algorithm)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Ctx.width = 128;
-    Ctx.height = 128;
-    Ctx.depth = 128;
+    Ctx.width = 256;
+    Ctx.height = 256;
+    Ctx.depth = 1;
     Ctx.n_points = Ctx.width * Ctx.height * Ctx.depth;
     Ctx.vertex_buffer_size = Ctx.n_points * 3 * sizeof (GLfloat);
     Ctx.colors_buffer_size = Ctx.n_points * 4 * sizeof (GLfloat);
