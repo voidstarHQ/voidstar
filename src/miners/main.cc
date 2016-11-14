@@ -6,6 +6,7 @@
 #include <Arguments.hh>
 #include <Algorithm.hh>
 #include <FileLoader.hh>
+#include <MmapLoader.hh>
 #include <Manager.hh>
 #include <Scene.hh>
 
@@ -22,7 +23,7 @@ int main(int argc, char *argv[])
     } else if (args->input == "-") {
         loader = new FileLoader(0);
     } else {
-        loader = new FileLoader(args->input);
+        loader = new MmapFileLoader(args->input);
     }
     loader->load();
 

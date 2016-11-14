@@ -13,25 +13,26 @@ void FileLoader::load()
         }
     }
 
-   auto size = is_.tellg();
-   data_.reserve(size);
+   size_ = is_.tellg();
+   data_.reserve(size_);
    is_.seekg(0);
-   is_.read(&data_[0], size);
+   is_.read(&data_[0], size_);
 }
 
 void FileLoader::free()
 {
     data_.reserve(0);
     is_.close();
+    size_ = 0;
 }
 
-const std::string& FileLoader::dataAll()
+const u8 *FileLoader::data()
 {
-    return data_;
+    return reinterpret_cast<const u8*>(data_.data());
 }
 
-const std::string& FileLoader::dataChunk(size_t size __unused)
+const u8 *FileLoader::dataChunk(size_t offset, size_t size)
 {
-    throw std::runtime_error("Unsupported operation");
+    return data() + offset;
 }
 

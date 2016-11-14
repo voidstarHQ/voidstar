@@ -61,6 +61,7 @@ set(
     src/miners/Scene.cc
 
     src/miners/FileLoader.cc
+    src/miners/MmapLoader.cc
 
     src/miners/ContiAlgorithm.cc
 
