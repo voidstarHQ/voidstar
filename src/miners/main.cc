@@ -9,15 +9,16 @@
 #include <MmapLoader.hh>
 #include <Manager.hh>
 #include <Scene.hh>
+#include <Scene3D.hh>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    auto *args = parseArgs(argc, argv);
+    auto* args = parseArgs(argc, argv);
     if (!args) {
         return 0;
     }
 
-    Loader *loader;
+    Loader* loader = NULL;
     if (args->input.empty()) {
         loader = new NullLoader();
     } else if (args->input == "-") {
@@ -30,10 +31,12 @@ int main(int argc, char *argv[])
     //auto *algorithm = algorithms[args->algo]();
     //algorithm->use(loader);
 
-    auto *manager = managers[args->manager](args);
+    auto* manager = managers[args->manager](args);
     try {
         manager->init();
-        auto scene = new Scene(manager);
+        Scene* scene = NULL;
+        if (args->scene == "3d")
+            scene = new Scene3D(manager);
         scene->init();
         //scene->load(algorithm);
         manager->loadScene(scene);

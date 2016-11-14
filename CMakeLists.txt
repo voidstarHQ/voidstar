@@ -58,7 +58,8 @@ set(
     src/miners/Arguments.cc
     src/miners/Algorithm.cc
     src/miners/Manager.cc
-    src/miners/Scene.cc
+
+    src/miners/Scene3D.cc
 
     src/miners/FileLoader.cc
     src/miners/MmapLoader.cc

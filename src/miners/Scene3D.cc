@@ -11,7 +11,7 @@
 #include <tdogl/Program.h>
 #include <tdogl/Camera.h>
 
-#include <Scene.hh>
+#include <Scene3D.hh>
 #include <Manager.hh>
 
 struct SceneContext {
@@ -106,7 +106,7 @@ LoadBuffers() {
 }
 
 
-void Scene::init()
+void Scene3D::init()
 {
     glewExperimental = GL_TRUE; //stops glew crashing on OSX :-/
     if (glewInit() != GLEW_OK)
@@ -127,7 +127,7 @@ void Scene::init()
     resize(manager_->args()->height, manager_->args()->width);
 }
 
-void Scene::load(Algorithm *algorithm)
+void Scene3D::load(Algorithm *algorithm)
 {
     // OpenGL settings
     glEnable(GL_DEPTH_TEST);
@@ -150,12 +150,12 @@ void Scene::load(Algorithm *algorithm)
     camera_.setNearAndFarPlanes(0.1, 100.);
 }
 
-void Scene::unload()
+void Scene3D::unload()
 {
     // TODO:
 }
 
-bool Scene::update(float elapsedTime)
+bool Scene3D::update(float elapsedTime)
 {
     //rotate the cube
     // const GLfloat degreesPerSecond = 180.0f;
@@ -197,7 +197,7 @@ bool Scene::update(float elapsedTime)
     return true;
 }
 
-void Scene::render()
+void Scene3D::render()
 {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -221,7 +221,7 @@ void Scene::render()
     Ctx.program->stopUsing();
 }
 
-void Scene::processErrors(bool quiet)
+void Scene3D::processErrors(bool quiet)
 {
     while (true) {
         GLenum error = glGetError();

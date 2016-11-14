@@ -9,9 +9,9 @@
 class Algorithm {
 public:
     virtual ~Algorithm() {}
-    virtual void use(Loader *loader) { loader_ = loader; }
+    virtual void use(Loader* loader) { loader_ = loader; }
 protected:
-    Loader *loader_;
+    Loader* loader_;
 };
 
 using AlgorithmFactoryFunc = std::function<Algorithm*()>;
