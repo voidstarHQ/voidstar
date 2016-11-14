@@ -78,13 +78,14 @@ LoadBuffers() {
     glGenBuffers(1, &Ctx.colors_buffer_id);
     glBindBuffer(GL_ARRAY_BUFFER, Ctx.colors_buffer_id);
 
-    const size_t chunk = 1024 * 10;
+    const size_t chunk = 1024 * 5;
     unsigned char read[chunk];
     if (fread(read, 1, chunk, stdin) == chunk) {
         unsigned char x = read[0];
-        for (size_t i = 1; i < chunk; ++i) {
-            unsigned char y = read[i];
-            size_t idx = 4 * (x + y * Ctx.height);
+        unsigned char y = read[1];
+        for (size_t i = 2; i < chunk; ++i) {
+            unsigned char z = read[i];
+            size_t idx = 4 * (x + y * Ctx.height + z * Ctx.depth * Ctx.height);
             Ctx.vertex_colors[idx + 0] = 1.0f;
             Ctx.vertex_colors[idx + 1] = 1.0f;
             Ctx.vertex_colors[idx + 2] = 1.0f;
@@ -92,6 +93,7 @@ LoadBuffers() {
             // Ctx.vertex_colors[idx + 3] = std::min(1.0f, 1.0f/255.0f + opacity);
             Ctx.vertex_colors[idx + 3] = 1.0f;
             x = y;
+            y = z;
         }
     }
     std::cout << "done reading" << std::endl;
@@ -135,7 +137,7 @@ void Scene::load(Algorithm *algorithm)
 
     Ctx.width = 256;
     Ctx.height = 256;
-    Ctx.depth = 1;
+    Ctx.depth = 256;
     Ctx.n_points = Ctx.width * Ctx.height * Ctx.depth;
     Ctx.vertex_buffer_size = Ctx.n_points * 3 * sizeof (GLfloat);
     Ctx.colors_buffer_size = Ctx.n_points * 4 * sizeof (GLfloat);
