@@ -60,12 +60,14 @@ set(
     src/miners/Manager.cc
 
     src/miners/Scene3D.cc
+    src/miners/Scene2D.cc
 
     src/miners/FileLoader.cc
     src/miners/MmapLoader.cc
 
     src/miners/ContiAlgorithm3D.cc
     src/miners/Algorithm2DFourColors.cc
+    src/miners/Algorithm2DGrayscale.cc
 
     src/miners/GlfwManager.cc
 
