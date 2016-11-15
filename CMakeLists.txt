@@ -65,6 +65,7 @@ set(
     src/miners/MmapLoader.cc
 
     src/miners/ContiAlgorithm3D.cc
+    src/miners/Algorithm2DFourColors.cc
 
     src/miners/GlfwManager.cc
 
