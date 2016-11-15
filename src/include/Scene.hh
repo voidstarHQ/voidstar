@@ -2,6 +2,10 @@
 
 #include <cstddef>
 
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <tdogl/Camera.h>
 
 #include <Algorithm.hh>
@@ -14,7 +18,6 @@ public:
     virtual ~Scene() {}
 
     virtual void init() = 0;
-    virtual void unload() = 0;
     virtual bool update(float elapsedTime) = 0;
     virtual void render() = 0;
     virtual void processErrors(bool quiet=false) = 0;

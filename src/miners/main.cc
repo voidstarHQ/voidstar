@@ -12,7 +12,8 @@
 #include <Scene2D.hh>
 #include <Scene3D.hh>
 
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
     auto* args = parseArgs(argc, argv);
     if (!args) {
@@ -39,13 +40,13 @@ int main(int argc, char* argv[])
             auto* scene = new Scene3D(manager);
             scene->init();
             scene->load(reinterpret_cast<Algorithm3D*>(algorithm));
-            manager->loadScene(scene);
+            manager->loadScene(reinterpret_cast<Scene*>(scene));
             manager->run();
         } else if (args->scene == "2d") {
             auto* scene = new Scene2D(manager);
             scene->init();
             scene->load(reinterpret_cast<Algorithm2D*>(algorithm));
-            manager->loadScene(scene);
+            manager->loadScene(reinterpret_cast<Scene*>(scene));
             manager->run();
         }
     } catch (const std::exception& e) {

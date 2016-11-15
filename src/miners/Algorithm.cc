@@ -8,4 +8,3 @@ std::map<std::string, AlgorithmFactoryFunc> algorithms = {
     { "4col", []() { return new Algorithm2DFourColors(); } },
     { "gray", []() { return new Algorithm2DGrayscale(); } },
 };
-

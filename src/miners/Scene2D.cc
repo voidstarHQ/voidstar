@@ -3,72 +3,49 @@
 
 #include <platform.hpp>
 
-#include <tdogl/Program.h>
-#include <tdogl/Camera.h>
-
 #include <Scene2D.hh>
 #include <Manager.hh>
 
-struct SceneContext {
-    GLuint vao = 0;
-    GLuint vbo = 0;
-
-    size_t width;
-    size_t height;
-    size_t n_points;
-
-    GLfloat* vertex_buffer = NULL;
-    GLfloat* vertex_colors = NULL;
-    size_t   vertex_buffer_size;
-    size_t   colors_buffer_size;
-    GLuint   colors_buffer_id = 0;
-
-    GLfloat degreesRotated = 0.0f;
-    tdogl::Program* program = NULL;
-};
-
-// TODO remove this
-SceneContext Ctx;
-
-static void
-LoadShaders() {
-    std::vector<tdogl::Shader> shaders{
+void
+Scene2D::load_shaders() {
+    const std::vector<tdogl::Shader> shaders{
         tdogl::Shader::shaderFromFile(ResourcePath("vertex.glsl"), GL_VERTEX_SHADER),
         tdogl::Shader::shaderFromFile(ResourcePath("fragment.glsl"), GL_FRAGMENT_SHADER)
     };
-    Ctx.program = new tdogl::Program(shaders);
+    ctx_.program = new tdogl::Program(shaders);
 }
 
 
-static void
-LoadBuffers() {
+void
+Scene2D::load_buffers() {
     // make and bind the VAO
-    glGenVertexArrays(1, &Ctx.vao);
-    glBindVertexArray(Ctx.vao);
+    glGenVertexArrays(1, &ctx_.vao);
+    glBindVertexArray(ctx_.vao);
 
     // make and bind the VBO
-    glGenBuffers(1, &Ctx.vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, Ctx.vbo);
+    glGenBuffers(1, &ctx_.vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, ctx_.vbo);
 
-    glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_buffer, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, ctx_.vertices_size, ctx_.vertices, GL_STATIC_DRAW);
     // connect the xyz to the "vert" attribute of the vertex shader
-    glEnableVertexAttribArray(Ctx.program->attrib("vert"));
-    glVertexAttribPointer(Ctx.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(ctx_.program->attrib("vert"));
+    glVertexAttribPointer(ctx_.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // make and bind the VBO
-    glGenBuffers(1, &Ctx.colors_buffer_id);
-    glBindBuffer(GL_ARRAY_BUFFER, Ctx.colors_buffer_id);
+    glGenBuffers(1, &ctx_.colors_id);
+    glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
 
-    glBufferData(GL_ARRAY_BUFFER, Ctx.vertex_buffer_size, Ctx.vertex_colors, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(Ctx.program->attrib("colr"));
-    glVertexAttribPointer(Ctx.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBufferData(GL_ARRAY_BUFFER, ctx_.vertices_size, ctx_.colors, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(ctx_.program->attrib("colr"));
+    glVertexAttribPointer(ctx_.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // unbind the VAO
     glBindVertexArray(0);
 }
 
 
-void Scene2D::init()
+void
+Scene2D::init()
 {
     glewExperimental = GL_TRUE; //stops glew crashing on OSX :-/
     if (glewInit() != GLEW_OK)
@@ -97,31 +74,24 @@ Scene2D::load(Algorithm2D* algorithm)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Ctx.width = 256;
-    Ctx.height = 256;
-    Ctx.n_points = Ctx.width * Ctx.height;
-    Ctx.vertex_buffer_size = Ctx.n_points * 3 * sizeof (GLfloat);
-    Ctx.colors_buffer_size = Ctx.n_points * 4 * sizeof (GLfloat);
-
-    LoadShaders();
-    vertices_ = new GLfloat[Ctx.vertex_buffer_size];
-    colors_   = new GLfloat[Ctx.colors_buffer_size]();
-    algorithm->apply(vertices_, colors_, Ctx.width, Ctx.height)
+    load_shaders();
+    algorithm->apply(ctx_.vertices, ctx_.colors, ctx_.width, ctx_.height)
         || std::cerr << "!apply" << std::endl;
-    LoadBuffers();
+    load_buffers();
 
     camera_.setPosition(glm::vec3(0, 0, 4));
     camera_.setViewportAspectRatio(aspect_ratio_);
     camera_.setNearAndFarPlanes(0.1, 100.);
 }
 
-bool Scene2D::update(float elapsedTime)
+bool
+Scene2D::update(float elapsedTime)
 {
     //rotate the cube
     // const GLfloat degreesPerSecond = 180.0f;
-    // Ctx.degreesRotated += elapsedTime * degreesPerSecond;
-    // while (Ctx.degreesRotated > 360.0f)
-    //     Ctx.degreesRotated -= 360.0f;
+    // ctx_.degreesRotated += elapsedTime * degreesPerSecond;
+    // while (ctx_.degreesRotated > 360.0f)
+    //     ctx_.degreesRotated -= 360.0f;
 
     auto events = manager_->getEvents();
 
@@ -164,25 +134,26 @@ Scene2D::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // bind the program (the shaders)
-    Ctx.program->use();
+    ctx_.program->use();
 
-    Ctx.program->setUniform("camera", camera_.matrix());
+    ctx_.program->setUniform("camera", camera_.matrix());
 
     // set the "model" uniform in the vertex shader, based on degreesRotated
-    Ctx.program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(Ctx.degreesRotated), glm::vec3(0,1,0)));
+    ctx_.program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(ctx_.degreesRotated), glm::vec3(0,1,0)));
 
     // bind the VAO
-    glBindVertexArray(Ctx.vao);
+    glBindVertexArray(ctx_.vao);
 
     // draw the VAO
-    glDrawArrays(GL_POINTS, 0, Ctx.n_points);
+    glDrawArrays(GL_POINTS, 0, ctx_.n_points);
 
     // unbind the VAO and the program
     glBindVertexArray(0);
-    Ctx.program->stopUsing();
+    ctx_.program->stopUsing();
 }
 
-void Scene2D::processErrors(bool quiet)
+void
+Scene2D::processErrors(bool quiet)
 {
     while (true) {
         GLenum error = glGetError();

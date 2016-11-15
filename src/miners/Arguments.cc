@@ -5,7 +5,9 @@
 #include <Manager.hh>
 #include <Algorithm.hh>
 
-static void usage(const char *prgname) {
+static
+void
+usage(const char *prgname) {
     std::cout << "usage: " << prgname << " [OPTIONS] file" << std::endl;
     std::cout << std::endl;
     std::cout << " -l --list         list backends" << std::endl;
@@ -21,7 +23,9 @@ static void usage(const char *prgname) {
     std::cout << std::endl;
 }
 
-static void listComponents()
+static
+void
+listComponents()
 {
     std::cout << "list of UIs:" << std::endl << std::endl;
     for (const auto &pair : managers) {
@@ -35,7 +39,8 @@ static void listComponents()
     std::cout << std::endl;
 }
 
-Arguments *parseArgs(int argc, char **argv)
+Arguments*
+parseArgs(int argc, char **argv)
 {
     static const char *short_options = ":a:fhlu:x:y:";
     static const struct option long_options[] = {
@@ -128,4 +133,3 @@ Arguments *parseArgs(int argc, char **argv)
 
     return args;
 }
-

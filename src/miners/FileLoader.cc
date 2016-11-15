@@ -36,4 +36,3 @@ FileLoader::dataChunk(size_t offset, size_t size __unused)
 {
     return data() + offset;
 }
-
