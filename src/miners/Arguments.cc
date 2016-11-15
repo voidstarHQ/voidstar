@@ -42,7 +42,7 @@ listComponents()
 Arguments*
 parseArgs(int argc, char **argv)
 {
-    static const char *short_options = ":a:fhlu:x:y:";
+    static const char *short_options = ":a:s:fhlu:x:y:";
     static const struct option long_options[] = {
         { "algorithm",  1, 0, 'a' },
         { "scene",      1, 0, 's' },
