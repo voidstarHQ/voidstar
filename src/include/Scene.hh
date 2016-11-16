@@ -2,6 +2,10 @@
 
 #include <cstddef>
 
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <tdogl/Camera.h>
 
 #include <Algorithm.hh>
@@ -10,15 +14,13 @@ class Manager;
 
 class Scene {
 public:
-    Scene(Manager *manager) : manager_ (manager) {}
+    Scene(Manager* manager) : manager_(manager) {}
     virtual ~Scene() {}
 
-    virtual void init();
-    virtual void load(Algorithm *algorithm);
-    virtual void unload();
-    virtual bool update(float elapsedTime);
-    virtual void render();
-    virtual void processErrors(bool quiet=false);
+    virtual void init() = 0;
+    virtual bool update(float elapsedTime) = 0;
+    virtual void render() = 0;
+    virtual void processErrors(bool quiet=false) = 0;
 
     virtual void resize(size_t width, size_t height) {
         width_ = width;
@@ -27,11 +29,10 @@ public:
     }
 
 protected:
-    Manager *manager_;
+    Manager* manager_;
     tdogl::Camera camera_;
 
     size_t width_;
     size_t height_;
     float aspect_ratio_;
 };
-

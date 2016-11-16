@@ -31,7 +31,7 @@ void GlfwManager::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWmonitor *monitor = 0;
+    GLFWmonitor* monitor = 0;
     if (args_->fullscreen) {
         monitor = glfwGetPrimaryMonitor();
     }

@@ -5,22 +5,27 @@
 #include <Manager.hh>
 #include <Algorithm.hh>
 
-static void usage(const char *prgname) {
+static
+void
+usage(const char *prgname) {
     std::cout << "usage: " << prgname << " [OPTIONS] file" << std::endl;
     std::cout << std::endl;
     std::cout << " -l --list         list backends" << std::endl;
     std::cout << " -u --ui           choose ui mode" << std::endl;
     std::cout << " -a --algorithm    algorithm to apply" << std::endl;
+    std::cout << " -s --scene        type of scene to draw" << std::endl;
     std::cout << std::endl;
-    std::cout << " -w --width        window width" << std::endl;
-    std::cout << " -h --height       window height" << std::endl;
+    std::cout << " -x --width        window width" << std::endl;
+    std::cout << " -y --height       window height" << std::endl;
     std::cout << " -f --fullscreen   window fullscreen" << std::endl;
     std::cout << std::endl;
     std::cout << " -h, --help        this help" << std::endl;
     std::cout << std::endl;
 }
 
-static void listComponents()
+static
+void
+listComponents()
 {
     std::cout << "list of UIs:" << std::endl << std::endl;
     for (const auto &pair : managers) {
@@ -34,17 +39,19 @@ static void listComponents()
     std::cout << std::endl;
 }
 
-Arguments *parseArgs(int argc, char **argv)
+Arguments*
+parseArgs(int argc, char **argv)
 {
-    static const char *short_options = ":a:fhlu:x:y:";
+    static const char *short_options = ":a:s:fhlu:x:y:";
     static const struct option long_options[] = {
         { "algorithm",  1, 0, 'a' },
+        { "scene",      1, 0, 's' },
         { "fullscreen", 0, 0, 'f' },
-        { "height",     1, 0, 'x' },
+        { "height",     1, 0, 'y' },
         { "help",       0, 0, 'h' },
         { "list",       0, 0, 'l' },
         { "ui",         1, 0, 'u' },
-        { "width",      1, 0, 'y' },
+        { "width",      1, 0, 'x' },
         { 0,            0, 0,  0  }
     };
 
@@ -55,7 +62,8 @@ Arguments *parseArgs(int argc, char **argv)
     int opt_index;
 
     auto args = new Arguments();
-    args->algo = "codi";
+    args->algo = "conti";
+    args->scene = "3d";
     args->manager = "glfw";
     args->width = 800;
     args->height = 600;
@@ -65,6 +73,9 @@ Arguments *parseArgs(int argc, char **argv)
         switch (c) {
         case 'a':
             args->algo = optarg;
+            break;
+        case 's':
+            args->scene = optarg;
             break;
         case 'f':
             args->fullscreen = true;
@@ -122,4 +133,3 @@ Arguments *parseArgs(int argc, char **argv)
 
     return args;
 }
-
