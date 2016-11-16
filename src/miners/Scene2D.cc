@@ -55,11 +55,6 @@ Scene2D::init()
     //while (glGetError() != GL_NO_ERROR) {}
     processErrors();
 
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-
     if (!GLEW_VERSION_3_2)
         throw std::runtime_error("OpenGL 3.2 API is not available.");
 

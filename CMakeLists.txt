@@ -17,13 +17,15 @@ project(ProjectName CXX)
 #-----------------------------------------------------------------------------
 # find your dependencies here !
 # ==> use cmake --help-module-list
-# ==> and cmake --help-module FindBoost to known which variables are setted
+# ==> and cmake --help-module FindBoost to known which variables are set.
 # find_package(Boost COMPONENTS filesystem threads)
 # include_directories(${Boost_INCLUDE_DIRS})
-find_package(OpenGL)
-include_directories(${OpenGL_INCLUDE_DIRS})
+find_package(OpenGL REQUIRED)
+include_directories(${OpenGL_INCLUDE_DIR})
 find_package(GLEW)
 include_directories(${GLEW_INCLUDE_DIRS})
+find_package(glfw3 3.2 REQUIRED)
+include_directories(${GLFW3_INCLUDE_DIRS})
 
 #-----------------------------------------------------------------------------
 #                           BUILD TYPES & FLAGS
@@ -91,7 +93,12 @@ add_executable(miners ${SOURCES})
 # add_library(my_lib SHARED ${SOURCES})
 
 # you can link both with
-target_link_libraries(miners m GL GLEW glfw)
+target_link_libraries(miners
+  m
+  ${OPENGL_gl_LIBRARY}
+  ${GLEW_LIBRARIES}
+  glfw
+)
 
 add_custom_command(TARGET miners POST_BUILD
                    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/src/resources .)

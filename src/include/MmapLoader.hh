@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <Loader.hh>
 
 class MmapFileLoader : public Loader {

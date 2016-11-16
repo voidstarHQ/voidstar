@@ -3,22 +3,23 @@
 
 #include <GlfwManager.hh>
 
-GlfwManager *GlfwManager::instance_ = 0;
+GlfwManager* GlfwManager::instance_ = 0;
 
 // records how far the y axis has been scrolled
-static void
+void
 OnScroll(GLFWwindow* window, double deltaX, double deltaY) {
     auto mouse = GlfwManager::instance()->getMouse();
     mouse->scrollY += deltaY;
     mouse->scrollX += deltaX;
 }
 
-static void
+void
 OnError(int errorCode, const char* msg) {
     throw std::runtime_error(msg);
 }
 
-void GlfwManager::init()
+void
+GlfwManager::init()
 {
     glfwSetErrorCallback(OnError);
     if (!glfwInit())
@@ -31,7 +32,7 @@ void GlfwManager::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWmonitor* monitor = 0;
+    GLFWmonitor* monitor = NULL;
     if (args_->fullscreen) {
         monitor = glfwGetPrimaryMonitor();
     }
@@ -50,7 +51,8 @@ void GlfwManager::init()
     events_ = new GlfwEvents();
 }
 
-void GlfwManager::run()
+void
+GlfwManager::run()
 {
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(window_)) {
@@ -76,14 +78,17 @@ void GlfwManager::run()
     glfwTerminate();
 }
 
-bool GlfwEvents::keyPressed(int key) {
+bool
+GlfwEvents::keyPressed(int key) {
     return glfwGetKey(GlfwManager::instance()->window(), key);
 }
 
-void GlfwMouse::getCursorPos() {
+void
+GlfwMouse::getCursorPos() {
     glfwGetCursorPos(GlfwManager::instance()->window(), &x, &y);
 }
 
-void GlfwMouse::setCursorPos() {
+void
+GlfwMouse::setCursorPos() {
     glfwSetCursorPos(GlfwManager::instance()->window(), x, y);
 }
