@@ -1,4 +1,4 @@
-# Miners
+# Miners [![CircleCI](https://circleci.com/bb/fenollp/miners/tree/master.svg?style=svg)](https://circleci.com/bb/fenollp/miners/tree/master)
 
 Browse data using Corti's 2D projector.
 

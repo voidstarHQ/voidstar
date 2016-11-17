@@ -14,21 +14,6 @@ __file="$(basename $__file_path)"
 __build_dir="build"
 
 #------------------------------------------------------------------------------
-#                               USAGE
-#------------------------------------------------------------------------------
-usage ()
-{
-    echo "./$__file [-h] [-c] [-p] [-b] [-s]"
-    echo
-    echo "  -h      Display help"
-    echo "  -c      Change compiler (g++)"
-    echo "  -p      Change install prefix (/usr/local)"
-    echo "  -b      Change build type (DEBUG)"
-    echo "  -s      Enable compiler sanitizers flag ()"
-    echo
-    exit 1
-}
-#------------------------------------------------------------------------------
 #                               SCRIPT LOGIC
 #------------------------------------------------------------------------------
 
@@ -38,14 +23,34 @@ mkdir -p "$__dir/$__build_dir"
 # parsing option
 OPTIND=1
 compilers=(clang++ g++)
-build_types=(Debug Release)
+build_types=(DEBUG RELEASE)
 sanitizers=(address thread memory leak undefined)
 
 # default values
 compiler_answer=1
+for (( i=$(($compiler_answer - 1)); i<=$((${#compilers[@]} - 1)); i++ )); do
+    which "${compilers[$i]}" >/dev/null && compiler_answer=$(($i + 1)) && break
+done
 prefix_answer="/usr/local"
 build_type_answer=1
 sanitizer_answer=1
+
+#------------------------------------------------------------------------------
+#                               USAGE
+#------------------------------------------------------------------------------
+usage ()
+{
+    echo "./$__file [-h] [-c] [-p] [-b] [-s]"
+    echo
+    echo "  -h      Display help"
+    echo "  -c      Change compiler (${compilers[$(($compiler_answer - 1))]})"
+    echo "  -p      Change install prefix ($prefix_answer)"
+    echo "  -b      Change build type (${build_types[$(($build_type_answer - 1))]})"
+    echo "  -s      Enable compiler sanitizers flag ()"
+    echo
+    exit 1
+}
+
 # getopt loop
 while getopts ":cpbsh" opt ; do
     case $opt in
@@ -127,7 +132,7 @@ done
 #################
 cd "$__dir/$__build_dir" && \
     cmake .. \
-    -DCMAKE_CXX_COMPILER="/usr/bin/${compilers[$(($compiler_answer - 1 ))]}" \
-    -DCMAKEbuild_dir_TYPE="`echo ${build_types[$(( $build_type_answer - 1 ))]} | tr '[a-z]' '[A-Z]'`" \
+    -DCMAKE_CXX_COMPILER="$(which "${compilers[$(($compiler_answer - 1))]}")" \
+    -DCMAKE_BUILD_TYPE="$(echo ${build_types[$(($build_type_answer - 1))]} | tr '[a-z]' '[A-Z]')" \
     -DCMAKE_INSTALL_PREFIX="$prefix_answer" \
     -DCOMPILER_SANITIZER="$selected_sanitizers"

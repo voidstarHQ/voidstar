@@ -30,9 +30,13 @@ include_directories(${GLEW_INCLUDE_DIRS})
 #-----------------------------------------------------------------------------
 
 include(sanitizers)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++1y -fdiagnostics-color")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Werror -O2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++1y")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
+else(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
+endif()
 
 # strip binary in release mode
 if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
@@ -45,14 +49,14 @@ endif()
 
 # to add an include path
 include_directories(
-    ${PROJECT_SOURCE_DIR}/src/include/
-    ${PROJECT_SOURCE_DIR}/src/common/
-    ${PROJECT_SOURCE_DIR}/src/common/thirdparty/
+    ${PROJECT_SOURCE_DIR}/src/include
+    ${PROJECT_SOURCE_DIR}/src/common
+    ${PROJECT_SOURCE_DIR}/src/common/thirdparty
     ${PROJECT_SOURCE_DIR}/src/common/thirdparty/stb_image
+    ${PROJECT_SOURCE_DIR}/src/common/thirdparty/glfw/include
 )
 
-set(
-    SOURCES
+set(SOURCES
 
     src/miners/main.cc
     src/miners/Arguments.cc

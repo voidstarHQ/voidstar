@@ -3,6 +3,8 @@
 #include <cstddef>
 
 #include <GL/glew.h>
+#define GLM_FORCE_RADIANS
+// functions taking degrees as a parameter are deprecated
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
