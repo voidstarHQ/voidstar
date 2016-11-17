@@ -49,10 +49,11 @@ endif()
 
 # to add an include path
 include_directories(
-    ${PROJECT_SOURCE_DIR}/src/include/
-    ${PROJECT_SOURCE_DIR}/src/common/
-    ${PROJECT_SOURCE_DIR}/src/common/thirdparty/
+    ${PROJECT_SOURCE_DIR}/src/include
+    ${PROJECT_SOURCE_DIR}/src/common
+    ${PROJECT_SOURCE_DIR}/src/common/thirdparty
     ${PROJECT_SOURCE_DIR}/src/common/thirdparty/stb_image
+    ${PROJECT_SOURCE_DIR}/src/common/thirdparty/glfw/include
 )
 
 set(SOURCES

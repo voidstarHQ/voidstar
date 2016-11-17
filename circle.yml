@@ -1,23 +1,32 @@
-
 machine:
   timezone:
     Europe/London
   environment:
-    PATH: "/home/ubuntu/cmake-3.6.2-Linux-x86_64/bin:$PATH"
+    PATH: "/home/ubuntu/cmake/bin:$PATH"
 
 dependencies:
   cache_directories:
-    - ~/cmake-3.6.2-Linux-x86_64
+    - ~/cmake
+    - ~/glfw3
   pre:
     - sudo apt-get update
+    - >
+      if [ ! -d ~/cmake ]; then
+        CMK_VSN=3.7.0
+        cd ~ && wget --quiet https://cmake.org/files/v3.7/cmake-$CMK_VSN-Linux-x86_64.tar.gz && tar -xvf cmake-$CMK_VSN-Linux-x86_64.tar.gz && mv cmake-$CMK_VSN-Linux-x86_64 cmake
+      else
+        echo Cached CMake found
+      fi
+    - ls -lha ~/cmake/bin
+    - echo $PATH
     - sudo apt-get install libglew-dev
     - sudo apt-get install libglm-dev
-    - >
-      if [ ! -d ~/cmake-3.6.2-Linux-x86_64 ]; then
-        echo "No cache - building CMake"
-        cd ~ && wget --quiet https://cmake.org/files/v3.6/cmake-3.6.2-Linux-x86_64.tar.gz && tar -xvf cmake-3.6.2-Linux-x86_64.tar.gz
+    - sudo apt-get install xorg-dev libgl1-mesa-dev
+    - |
+      if [ ! -d ~/glfw3 ]; then
+        git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3 && mkdir ~/glfw3/build && cd ~/glfw3/build && cmake -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF .. && cmake --build . && sudo make install
       else
-        echo "Cached CMake found"
+        echo Cached libglfw3 found
       fi
   post:
     - cmake --version || true
