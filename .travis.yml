@@ -1,0 +1,19 @@
+sudo: false
+
+language: cpp
+
+compiler:
+  - clang
+
+os:
+  - osx
+
+before_script:
+  - set -e
+  - cmake --version || true
+  - $CC --version || true
+  - $CXX --version || true
+
+script:
+  - ./configure
+  - cd build && make
