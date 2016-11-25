@@ -6,14 +6,14 @@
 GlfwManager* GlfwManager::instance_ = 0;
 
 // records how far the y axis has been scrolled
-void
+static void
 OnScroll(GLFWwindow* window, double deltaX, double deltaY) {
     auto mouse = GlfwManager::instance()->getMouse();
     mouse->scrollY += deltaY;
     mouse->scrollX += deltaX;
 }
 
-void
+static void
 OnError(int errorCode, const char* msg) {
     throw std::runtime_error(msg);
 }
