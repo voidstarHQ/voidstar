@@ -21,3 +21,6 @@ before_script:
 script:
   - ./configure
   - cd build && make
+
+after_script:
+  - set +e
