@@ -1,13 +1,10 @@
 machine:
-  timezone:
-    Europe/London
   environment:
     PATH: "/home/ubuntu/cmake/bin:$PATH"
 
 dependencies:
   cache_directories:
     - ~/cmake
-    - ~/glfw3
   pre:
     - sudo apt-get update
     - >
@@ -22,17 +19,11 @@ dependencies:
     - sudo apt-get install libglew-dev
     - sudo apt-get install libglm-dev
     - sudo apt-get install xorg-dev libgl1-mesa-dev
-    - |
-      if [ ! -d ~/glfw3 ]; then
-        git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3 && mkdir ~/glfw3/build && cd ~/glfw3/build && cmake -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF .. && cmake --build . && sudo make install
-      else
-        echo Cached libglfw3 found
-      fi
+    - git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3 && mkdir ~/glfw3/build && cd ~/glfw3/build && cmake -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF .. && cmake --build . && sudo make install
   post:
     - cmake --version || true
     - g++ --version || true
     - clang++ --version || true
-
 
 test:
   pre:

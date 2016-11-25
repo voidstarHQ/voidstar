@@ -17,13 +17,15 @@ project(ProjectName CXX)
 #-----------------------------------------------------------------------------
 # find your dependencies here !
 # ==> use cmake --help-module-list
-# ==> and cmake --help-module FindBoost to known which variables are setted
+# ==> and cmake --help-module FindBoost to known which variables are set.
 # find_package(Boost COMPONENTS filesystem threads)
 # include_directories(${Boost_INCLUDE_DIRS})
-find_package(OpenGL)
-include_directories(${OpenGL_INCLUDE_DIRS})
-find_package(GLEW)
+find_package(OpenGL REQUIRED)
+include_directories(${OpenGL_INCLUDE_DIR})
+find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
+find_package(glfw3 3.2 REQUIRED)
+include_directories(${GLFW3_INCLUDE_DIRS})
 
 #-----------------------------------------------------------------------------
 #                           BUILD TYPES & FLAGS
@@ -57,6 +59,7 @@ include_directories(
 )
 
 set(SOURCES
+    src/common/platform/platform.cc
 
     src/miners/main.cc
     src/miners/Arguments.cc
@@ -75,8 +78,6 @@ set(SOURCES
 
     src/miners/GlfwManager.cc
 
-    src/common/platform/linux/platform.cpp
-
     src/common/tdogl/Bitmap.cpp
     src/common/tdogl/Camera.cpp
     src/common/tdogl/Program.cpp
@@ -84,14 +85,28 @@ set(SOURCES
     src/common/tdogl/Texture.cpp
 )
 
+if(APPLE)
+    #set(GUI_TYPE MACOSX_BUNDLE)
+    include_directories(/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/)
+    find_library(COREFOUNDATION_LIBRARY CoreFoundation)
+    mark_as_advanced(COREFOUNDATION_LIBRARY)
+    set(EXTRA_LIBS ${COREFOUNDATION_LIBRARY})
+endif(APPLE)
+
 # create your executable with
-add_executable(miners ${SOURCES})
+add_executable(miners ${GUI_TYPE} ${SOURCES})
 
 # create a library with
 # add_library(my_lib SHARED ${SOURCES})
 
 # you can link both with
-target_link_libraries(miners m GL GLEW glfw)
+target_link_libraries(miners
+  m
+  ${OPENGL_gl_LIBRARY}
+  ${GLEW_LIBRARIES}
+  glfw
+  ${EXTRA_LIBS}
+)
 
 add_custom_command(TARGET miners POST_BUILD
                    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/src/resources .)
