@@ -27,5 +27,5 @@ dependencies:
 
 test:
   pre:
-    - ./configure.sh
+    - ./configure
     - cd build && make
