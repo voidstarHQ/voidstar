@@ -17,7 +17,6 @@ make && cat /dev/urandom | ./miners
 * `libglfw-dev` v3. https://github.com/shurcooL-legacy/reusable-commands/blob/ed33ae496f36aaea735a1d183f77e833c92a9f3d/go-gl_glfw3_install.sh#L19-L32
 * `libglm-dev`
 * `libglu-dev`
-* `freeglut3`
 * `libglew-dev`
 
 ### OSX
