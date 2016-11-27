@@ -130,7 +130,7 @@ Scene3D::update(float elapsedTime)
 void
 Scene3D::render()
 {
-    glClearColor(0, 0, 0, 1);
+    glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // bind the program (the shaders)
