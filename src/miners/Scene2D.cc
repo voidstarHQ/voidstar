@@ -87,12 +87,6 @@ Scene2D::load(Algorithm2D* algorithm)
 bool
 Scene2D::update(float elapsedTime)
 {
-    //rotate the cube
-    // const GLfloat degreesPerSecond = 180.0f;
-    // ctx_.degreesRotated += elapsedTime * degreesPerSecond;
-    // while (ctx_.degreesRotated > 360.0f)
-    //     ctx_.degreesRotated -= 360.0f;
-
     auto events = manager_->getEvents();
 
     //move position of camera based on WASD keys, and XZ keys for up and down

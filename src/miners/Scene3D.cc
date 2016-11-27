@@ -47,7 +47,7 @@ Scene3D::load_buffers() {
 void
 Scene3D::init()
 {
-    glewExperimental = GL_TRUE; //stops glew crashing on OSX :-/
+    glewExperimental = GL_TRUE; //stops glew from crashing on OSX :-/
     if (glewInit() != GLEW_OK)
         throw std::runtime_error("!glewInit");
 
@@ -88,10 +88,10 @@ bool
 Scene3D::update(float elapsedTime)
 {
     //rotate the cube
-    // const GLfloat degreesPerSecond = 180.0f;
-    // ctx_.degreesRotated += elapsedTime * degreesPerSecond;
-    // while (ctx_.degreesRotated > 360.0f)
-    //     ctx_.degreesRotated -= 360.0f;
+    GLfloat degreesPerSecond = 10.0f;
+    ctx_.degreesRotated += elapsedTime * degreesPerSecond;
+    while (ctx_.degreesRotated > 360.0f)
+        ctx_.degreesRotated -= 360.0f;
 
     auto events = manager_->getEvents();
 
@@ -117,12 +117,6 @@ Scene3D::update(float elapsedTime)
     //reset the mouse, so it doesn't go out of the window
     mouse->setCursorPos(0, 0);
 
-    //increase or decrease field of view based on mouse wheel
-    float fieldOfView = camera_.fieldOfView() +
-                        mouse->zoomSensitivity * mouse->scrollY;
-    fieldOfView = std::min(5.0f, fieldOfView);
-    fieldOfView = std::max(130.0f, fieldOfView);
-    camera_.setFieldOfView(fieldOfView);
     mouse->scrollY = 0.0;
     return true;
 }
