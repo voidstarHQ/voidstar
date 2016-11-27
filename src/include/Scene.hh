@@ -27,7 +27,7 @@ public:
     virtual void resize(size_t width, size_t height) {
         width_ = width;
         height_ = height;
-        aspect_ratio_ = (float)width / (float)height;
+        aspect_ratio_ = width / height;
     }
 
 protected:

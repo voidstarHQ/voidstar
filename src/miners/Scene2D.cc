@@ -63,7 +63,7 @@ Scene2D::init()
     if (!GLEW_VERSION_3_2)
         throw std::runtime_error("OpenGL 3.2 API is not available.");
 
-    resize(manager_->args()->height, manager_->args()->width);
+    resize(manager_->args()->width, manager_->args()->height);
 }
 
 void
