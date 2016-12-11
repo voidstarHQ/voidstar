@@ -6,7 +6,7 @@
 
 class Manager {
 public:
-    Manager(Arguments* args) : args_(args) {}
+    Manager(Arguments* args) : fullscreen_(false), args_(args) {}
     virtual ~Manager() {}
 
     virtual void loadScene(Scene* scene) {
@@ -19,9 +19,12 @@ public:
     virtual Events* getEvents(int id=0) = 0;
     virtual Mouse* getMouse(int id=0) = 0;
 
+    virtual void toggleFullscreen() = 0;
+
     Arguments* args() { return args_; }
 
 protected:
+    bool fullscreen_;
     Arguments* args_;
     Scene* scene_;
 };
