@@ -103,6 +103,8 @@ Scene2D::update(float elapsedTime)
         camera_.offsetPosition(elapsedTime * moveSpeed * -glm::vec3(0,1,0));
     else if (events->keyPressed('X'))
         camera_.offsetPosition(elapsedTime * moveSpeed * glm::vec3(0,1,0));
+    else if (events->keyPressed('F'))
+        this->manager_->toggleFullscreen();
 
     auto mouse = manager_->getMouse();
     mouse->getCursorPos();
