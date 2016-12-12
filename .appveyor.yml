@@ -11,11 +11,15 @@ configuration:
 os: Visual Studio 2015
 
 before_build:
+  - set -e
   - nuget install glew.v140
   - nuget install glm
   - nuget install glfw
+  - cmake --version || true
+  - g++ --version || true
+  - clang++ --version || true
 
 build_script:
-  - ./configure
+  - bash ./configure
   - cd build
   - make
