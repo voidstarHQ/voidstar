@@ -1,4 +1,21 @@
+shallow_clone: true
+
+platform:
+  - x64
+  - x86
+
+configuration:
+  - Debug
+  - Release
+
+os: Visual Studio 2015
+
+before_script:
+  - nuget install glew.v140
+  - nuget install glm
+  - nuget install glfw
+
 build_script:
-    - ./configure
-    - cd build
-    - make
+  - ./configure
+  - cd build
+  - make
