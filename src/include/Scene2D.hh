@@ -14,7 +14,7 @@ struct Scene2DContext {
           colors_size(n_points * 4 * sizeof (GLfloat)),
           colors_id(0),
           vertices(new GLfloat[vertices_size]),
-          colors(new GLfloat[colors_size]()),
+          colors(new GLfloat[colors_size]),
           degreesRotated(0.0f), program(NULL)
         {}
     ~Scene2DContext() {
