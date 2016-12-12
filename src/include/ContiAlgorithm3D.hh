@@ -7,7 +7,7 @@ public:
     ContiAlgorithm3D() {}
     virtual ~ContiAlgorithm3D() {}
 
-    virtual bool apply(GLfloat* vertices, GLfloat* colors,
+    virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth);
 };
 

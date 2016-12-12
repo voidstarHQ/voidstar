@@ -30,6 +30,7 @@ struct Scene3DContext {
     size_t  depth;
     size_t  n_points;
 
+    VertIndices selected;
     size_t   vertices_size;
     size_t   colors_size;
     GLuint   colors_id;
