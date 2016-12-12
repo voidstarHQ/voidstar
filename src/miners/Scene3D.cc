@@ -75,7 +75,7 @@ Scene3D::load(Algorithm3D* algorithm)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     load_shaders();
-    algorithm->apply(ctx_.vertices, ctx_.colors, ctx_.width, ctx_.height, ctx_.depth)
+    algorithm->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
     load_buffers();
 
@@ -138,8 +138,8 @@ Scene3D::render()
     // bind the VAO
     glBindVertexArray(ctx_.vao);
 
-    // draw the VAO
-    glDrawArrays(GL_POINTS, 0, ctx_.n_points);
+    // draw only the VAO's points we colored
+    glDrawElements(GL_POINTS, ctx_.selected.size(), GL_UNSIGNED_INT, ctx_.selected.data());
 
     // unbind the VAO and the program
     glBindVertexArray(0);
