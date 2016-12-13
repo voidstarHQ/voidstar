@@ -72,7 +72,7 @@ set(SOURCES
     src/miners/FileLoader.cc
     src/miners/MmapLoader.cc
 
-    src/miners/ContiAlgorithm3D.cc
+    src/miners/Algorithm3DContiBnW.cc
     src/miners/Algorithm2DFourColors.cc
     src/miners/Algorithm2DGrayscale.cc
 

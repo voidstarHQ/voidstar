@@ -2,10 +2,10 @@
 
 #include <Algorithm3D.hh>
 
-class ContiAlgorithm3D : public Algorithm3D {
+class Algorithm3DContiBnW : public Algorithm3D {
 public:
-    ContiAlgorithm3D() {}
-    virtual ~ContiAlgorithm3D() {}
+    Algorithm3DContiBnW() {}
+    virtual ~Algorithm3DContiBnW() {}
 
     virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth);

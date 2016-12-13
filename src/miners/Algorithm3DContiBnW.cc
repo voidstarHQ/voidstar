@@ -1,9 +1,9 @@
 #include <iostream>
-#include <ContiAlgorithm3D.hh>
+#include <Algorithm3DContiBnW.hh>
 
 bool
-ContiAlgorithm3D::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
-                      size_t width, size_t height, size_t depth) {
+Algorithm3DContiBnW::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+                           size_t width, size_t height, size_t depth) {
     size_t pos = 0;
     for (size_t z = 0; z < depth; ++z)
         for (size_t y = 0; y < height; ++y)
@@ -13,9 +13,9 @@ ContiAlgorithm3D::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selecte
                 vertices[pos++] = ((float)z - (float)depth  / 2.0f) / 128;
             }
 
-    const size_t chunk_size = 1024 * 5;
+    const size_t chunk_size = 1024 * 100;
     const u8* read = loader_->dataChunk(0, chunk_size);
-    std::cerr << "done reading" << std::endl;
+    std::cerr << "read " << chunk_size << " bytes!" << std::endl;
     u8 x = read[0];
     u8 y = read[1];
 
