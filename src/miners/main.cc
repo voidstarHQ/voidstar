@@ -39,13 +39,13 @@ main(int argc, char* argv[])
         if (args->scene == "3d") {
             auto* scene = new Scene3D(manager);
             scene->init();
-            scene->load(reinterpret_cast<Algorithm3D*>(algorithm));
+            scene->load(reinterpret_cast<Algo3DCube*>(algorithm));
             manager->loadScene(reinterpret_cast<Scene*>(scene));
             manager->run();
         } else if (args->scene == "2d") {
             auto* scene = new Scene2D(manager);
             scene->init();
-            scene->load(reinterpret_cast<Algorithm2D*>(algorithm));
+            scene->load(reinterpret_cast<Algo2D*>(algorithm));
             manager->loadScene(reinterpret_cast<Scene*>(scene));
             manager->run();
         }

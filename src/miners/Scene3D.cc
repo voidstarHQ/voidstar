@@ -67,7 +67,7 @@ Scene3D::init()
 }
 
 void
-Scene3D::load(Algorithm3D* algorithm)
+Scene3D::load(Algo3DCube* algorithm)
 {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);

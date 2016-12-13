@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Algorithm3D.hh>
+#include <Algo3DCube.hh>
 
-class Algorithm3DContiRainbow : public Algorithm3D {
+class Algo3DCubeContiRainbow : public Algo3DCube {
 public:
-    Algorithm3DContiRainbow() {}
-    virtual ~Algorithm3DContiRainbow() {}
+    Algo3DCubeContiRainbow() {}
+    virtual ~Algo3DCubeContiRainbow() {}
 
     virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth);

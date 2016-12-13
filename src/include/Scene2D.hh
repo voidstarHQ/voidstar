@@ -3,7 +3,7 @@
 #include <tdogl/Program.h>
 
 #include <Scene.hh>
-#include <Algorithm2D.hh>
+#include <Algo2D.hh>
 
 struct Scene2DContext {
     Scene2DContext(size_t w, size_t h)
@@ -45,7 +45,7 @@ public:
     virtual ~Scene2D() {}
 
     virtual void init();
-    virtual void load(Algorithm2D* algorithm);
+    virtual void load(Algo2D* algorithm);
     virtual bool update(float elapsedTime);
     virtual void render();
     virtual void processErrors(bool quiet=false);

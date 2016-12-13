@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Algorithm3D.hh>
+#include <Algo3DCube.hh>
 
-class Algorithm3DContiFrebet : public Algorithm3D {
+class Algo3DCubeContiFrebet : public Algo3DCube {
 public:
-    Algorithm3DContiFrebet() {}
-    virtual ~Algorithm3DContiFrebet() {}
+    Algo3DCubeContiFrebet() {}
+    virtual ~Algo3DCubeContiFrebet() {}
 
     virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth);

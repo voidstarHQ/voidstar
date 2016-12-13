@@ -1,9 +1,9 @@
 #include <iostream>
-#include <Algorithm3DContiBnW.hh>
+#include <Algo3DCubeContiFrebet.hh>
 
 bool
-Algorithm3DContiBnW::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
-                           size_t width, size_t height, size_t depth) {
+Algo3DCubeContiFrebet::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+                             size_t width, size_t height, size_t depth) {
     size_t pos = 0;
     for (size_t z = 0; z < depth; ++z)
         for (size_t y = 0; y < height; ++y)
@@ -23,9 +23,9 @@ Algorithm3DContiBnW::apply(GLfloat* vertices, GLfloat* colors, VertIndices& sele
         u8 z = read[i];
         size_t id = x + y * height + z * depth * height;
         size_t idx = 4 * id;
-        colors[idx + 0] = 1.0f;
-        colors[idx + 1] = 1.0f;
-        colors[idx + 2] = 1.0f;
+        colors[idx + 0] = static_cast<float>(read[i+1]) / 255.0f;
+        colors[idx + 1] = static_cast<float>(read[i+2]) / 255.0f;
+        colors[idx + 2] = static_cast<float>(read[i+3]) / 255.0f;
         float opacity = colors[idx + 3];
         if (opacity < 1.0f/255.0f)
             selected.push_back(id);

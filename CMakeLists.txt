@@ -72,11 +72,11 @@ set(SOURCES
     src/miners/FileLoader.cc
     src/miners/MmapLoader.cc
 
-    src/miners/Algorithm3DContiBnW.cc
-    src/miners/Algorithm3DContiRainbow.cc
-    src/miners/Algorithm3DContiFrebet.cc
-    src/miners/Algorithm2DFourColors.cc
-    src/miners/Algorithm2DGrayscale.cc
+    src/miners/Algo3DCubeContiBnW.cc
+    src/miners/Algo3DCubeContiRainbow.cc
+    src/miners/Algo3DCubeContiFrebet.cc
+    src/miners/Algo2DFourColors.cc
+    src/miners/Algo2DGrayscale.cc
 
     src/miners/GlfwManager.cc
 
