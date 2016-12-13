@@ -6,9 +6,9 @@
 
 typedef std::vector<unsigned int> VertIndices;
 
-class Algorithm3D : public Algorithm {
+class Algo3DCube : public Algorithm {
 public:
-    virtual ~Algorithm3D() {}
+    virtual ~Algo3DCube() {}
 
     virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth) = 0;

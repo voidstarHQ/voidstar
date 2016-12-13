@@ -67,7 +67,7 @@ Scene2D::init()
 }
 
 void
-Scene2D::load(Algorithm2D* algorithm)
+Scene2D::load(Algo2D* algorithm)
 {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);

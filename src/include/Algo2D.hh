@@ -2,9 +2,9 @@
 
 #include <Algorithm.hh>
 
-class Algorithm2D : public Algorithm {
+class Algo2D : public Algorithm {
 public:
-    virtual ~Algorithm2D() {}
+    virtual ~Algo2D() {}
 
     virtual bool apply(GLfloat* vertices, GLfloat* colors,
                        size_t width, size_t height) = 0;

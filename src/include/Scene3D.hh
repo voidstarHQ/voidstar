@@ -3,7 +3,7 @@
 #include <tdogl/Program.h>
 
 #include <Scene.hh>
-#include <Algorithm3D.hh>
+#include <Algo3DCube.hh>
 
 struct Scene3DContext {
     Scene3DContext(size_t w, size_t h, size_t d)
@@ -47,7 +47,7 @@ public:
     virtual ~Scene3D() {}
 
     virtual void init();
-    virtual void load(Algorithm3D* algorithm);
+    virtual void load(Algo3DCube* algorithm);
     virtual bool update(float elapsedTime);
     virtual void render();
     virtual void processErrors(bool quiet=false);
