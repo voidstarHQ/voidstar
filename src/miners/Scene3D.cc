@@ -67,7 +67,7 @@ Scene3D::init()
 }
 
 void
-Scene3D::load(Algo3DCube* algorithm)
+Scene3D::load(Algo3D* algorithm)
 {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -87,7 +87,7 @@ Scene3D::load(Algo3DCube* algorithm)
 bool
 Scene3D::update(float elapsedTime)
 {
-    //rotate the cube
+    //rotate the volume
     GLfloat degreesPerSecond = 10.0f;
     ctx_.degreesRotated += elapsedTime * degreesPerSecond;
     while (ctx_.degreesRotated > 360.0f)

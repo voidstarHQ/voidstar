@@ -2,11 +2,9 @@
 
 #include <vector>
 
-#include <Algorithm.hh>
+#include <Algo3D.hh>
 
-typedef std::vector<unsigned int> VertIndices;
-
-class Algo3DCube : public Algorithm {
+class Algo3DCube : public Algo3D {
 public:
     virtual ~Algo3DCube() {}
 
