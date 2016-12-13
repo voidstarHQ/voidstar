@@ -5,6 +5,7 @@
 
 std::map<std::string, AlgorithmFactoryFunc> algorithms = {
     { "contibnw", []() { return new Algorithm3DContiBnW(); } },
+    { "contirb", []() { return new Algorithm3DContiRainbow(); } },
     { "4col", []() { return new Algorithm2DFourColors(); } },
     { "gray", []() { return new Algorithm2DGrayscale(); } },
 };
