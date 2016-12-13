@@ -62,7 +62,7 @@ parseArgs(int argc, char **argv)
     int opt_index;
 
     auto args = new Arguments();
-    args->algo = "contibnw";
+    args->algo = "conti";
     args->scene = "3d";
     args->manager = "glfw";
     args->width = 800;
