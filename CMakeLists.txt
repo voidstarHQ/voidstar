@@ -73,6 +73,8 @@ set(SOURCES
     src/miners/MmapLoader.cc
 
     src/miners/Algorithm3DContiBnW.cc
+    src/miners/Algorithm3DContiRainbow.cc
+    src/miners/Algorithm3DContiFrebet.cc
     src/miners/Algorithm2DFourColors.cc
     src/miners/Algorithm2DGrayscale.cc
 
