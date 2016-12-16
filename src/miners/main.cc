@@ -8,6 +8,7 @@
 #include <FileLoader.hh>
 #include <MmapLoader.hh>
 #include <Manager.hh>
+#include <Range.hh>
 #include <Scene.hh>
 #include <Scene2D.hh>
 #include <Scene3D.hh>
@@ -28,8 +29,10 @@ main(int argc, char* argv[])
     }
     loader->load();
 
+    auto* range = DataRange::create(args->range_begin, args->range_end);
+
     auto* algorithm = algorithms[args->algo]();
-    algorithm->use(loader);
+    algorithm->use(loader, range);
 
     auto* manager = managers[args->manager](args);
     try {
