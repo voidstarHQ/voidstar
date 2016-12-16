@@ -21,12 +21,10 @@ main(int argc, char* argv[])
     }
 
     Loader* loader = NULL;
-    if (args->input.empty()) {
-        loader = new NullLoader();
-    } else if (args->input == "-") {
+    if (args->input[0] == "-") {
         loader = new FileLoader(0);
     } else {
-        loader = new MmapFileLoader(args->input);
+        loader = new MmapFileLoader(args->input[0]);
     }
     loader->load();
 
