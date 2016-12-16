@@ -18,6 +18,5 @@ public:
 protected:
     int fd_;
     std::string path_;
-    size_t size_;
     u8 *data_;
 };

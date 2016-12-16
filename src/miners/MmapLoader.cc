@@ -42,7 +42,9 @@ MmapFileLoader::data()
 }
 
 const u8*
-MmapFileLoader::dataChunk(size_t offset, size_t size __unused)
+MmapFileLoader::dataChunk(size_t offset, size_t size)
 {
+    if (size_ < offset + size)
+        throw std::out_of_range("Trying to read data out of bound");
     return data() + offset;
 }

@@ -19,6 +19,9 @@ usage(const char *prgname) {
     std::cout << " -y --height       window height" << std::endl;
     std::cout << " -f --fullscreen   window fullscreen" << std::endl;
     std::cout << std::endl;
+    std::cout << " -b --begin        begin offset for the range" << std::endl;
+    std::cout << " -e --end          end offset for the range" << std::endl;
+    std::cout << std::endl;
     std::cout << " -h, --help        this help" << std::endl;
     std::cout << std::endl;
 }
@@ -42,14 +45,16 @@ listComponents()
 Arguments*
 parseArgs(int argc, char **argv)
 {
-    static const char *short_options = ":a:s:fhlu:x:y:";
+    static const char *short_options = ":a:b:e:fhls:u:x:y:";
     static const struct option long_options[] = {
         { "algorithm",  1, 0, 'a' },
-        { "scene",      1, 0, 's' },
+        { "begin",      1, 0, 'b' },
+        { "end",        1, 0, 'e' },
         { "fullscreen", 0, 0, 'f' },
         { "height",     1, 0, 'y' },
         { "help",       0, 0, 'h' },
         { "list",       0, 0, 'l' },
+        { "scene",      1, 0, 's' },
         { "ui",         1, 0, 'u' },
         { "width",      1, 0, 'x' },
         { 0,            0, 0,  0  }
@@ -67,6 +72,8 @@ parseArgs(int argc, char **argv)
     args->manager = "glfw";
     args->width = 800;
     args->height = 600;
+    args->range_begin = 0;
+    args->range_end = 0;
     args->fullscreen = false;
 
     while ((c = getopt_long(argc, argv, short_options, long_options, &opt_index)) != -1) {
@@ -74,8 +81,11 @@ parseArgs(int argc, char **argv)
         case 'a':
             args->algo = optarg;
             break;
-        case 's':
-            args->scene = optarg;
+        case 'b':
+            args->range_begin = std::stoll(optarg);
+            break;
+        case 'e':
+            args->range_end = std::stoll(optarg);
             break;
         case 'f':
             args->fullscreen = true;
@@ -85,6 +95,9 @@ parseArgs(int argc, char **argv)
             break;
         case 'l':
             list = true;
+            break;
+        case 's':
+            args->scene = optarg;
             break;
         case 'u':
             args->manager = optarg;
@@ -115,6 +128,11 @@ parseArgs(int argc, char **argv)
     if (list) {
         listComponents();
         return 0;
+    }
+
+    if (args->range_end != 0 && args->range_begin >= args->range_end) {
+        std::cerr << "range end must be greater than beginning" << std::endl;
+        errors += 1;
     }
 
     if (end || errors) {

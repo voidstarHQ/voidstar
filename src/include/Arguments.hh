@@ -10,6 +10,8 @@ struct Arguments {
     std::string manager;
     size_t width;
     size_t height;
+    size_t range_begin;
+    size_t range_end;
     bool fullscreen;
 };
 
