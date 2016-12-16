@@ -89,9 +89,11 @@ Scene3D::update(float elapsedTime)
 {
     //rotate the volume
     GLfloat degreesPerSecond = 10.0f;
-    ctx_.degreesRotated += elapsedTime * degreesPerSecond;
-    while (ctx_.degreesRotated > 360.0f)
-        ctx_.degreesRotated -= 360.0f;
+    if (ctx_.rotationEnabled) {
+        ctx_.degreesRotated += elapsedTime * degreesPerSecond;
+        while (ctx_.degreesRotated > 360.0f)
+            ctx_.degreesRotated -= 360.0f;
+    }
 
     auto events = manager_->getEvents();
 
@@ -109,8 +111,12 @@ Scene3D::update(float elapsedTime)
         camera_.offsetPosition(elapsedTime * moveSpeed * -glm::vec3(0,1,0));
     else if (events->keyPressed('X'))
         camera_.offsetPosition(elapsedTime * moveSpeed * glm::vec3(0,1,0));
-    else if (events->keyPressed('F'))
+
+    if (events->keyPressed('F'))
         this->manager_->toggleFullscreen();
+    if (events->keyPressed(' '))
+        ctx_.rotationEnabled = !ctx_.rotationEnabled;
+
 
     auto mouse = manager_->getMouse();
     mouse->getCursorPos();

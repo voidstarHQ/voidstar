@@ -38,6 +38,7 @@ struct Scene3DContext {
     GLfloat* colors;
 
     GLfloat degreesRotated;
+    bool rotationEnabled;
     tdogl::Program* program;
 };
 
