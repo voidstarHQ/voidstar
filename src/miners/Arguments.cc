@@ -127,8 +127,14 @@ parseArgs(int argc, char **argv)
     }
 
     for (int i = optind; i < argc; ++i) {
-        args->input = argv[i];
-        std::cout << "using input " << args->input << std::endl;
+        args->input.push_back(argv[i]);
+    }
+
+    if (!args->input.size()) {
+        std::cerr << "missing file to process" << std::endl;
+        usage(argv[0]);
+        delete args;
+        return 0;
     }
 
     return args;
