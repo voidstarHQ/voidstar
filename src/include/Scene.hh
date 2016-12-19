@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <iostream>
 
 #include <GL/glew.h>
 #define GLM_FORCE_RADIANS
@@ -23,20 +24,21 @@ public:
     virtual void init() = 0;
     virtual bool update(float elapsedTime) = 0;
     virtual void render() = 0;
-    virtual void load(Algorithm *algo);
+    virtual void load(Algorithm* algo);
     virtual void unload();
     virtual void reload();
 
-    // TODO: this should be part of the manager and not the Scene
-    //       instead the Manager should propagate the values to the Scene
     virtual void resize(size_t width, size_t height) {
         width_ = width;
         height_ = height;
-        aspect_ratio_ = width / height;
+        aspect_ratio_ = static_cast<float>(width) / static_cast<float>(height);
+        std::cout << "aspect: " << aspect_ratio_
+                  << " (" << width_ << 'x' << height_ << ')' << std::endl;
+        camera_.setViewportAspectRatio(aspect_ratio_);
     }
 
-    Algorithm *algorithm() { return algo_; }
-    static Scene *forAlgo(Manager *manager, Algorithm *algo);
+    Algorithm* algorithm() { return algo_; }
+    static Scene* forAlgo(Manager *manager, Algorithm* algo);
 
 protected:
     Manager* manager_;

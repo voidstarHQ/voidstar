@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include <GLFW/glfw3.h>
 
 #include <Types.hh>
@@ -18,6 +20,7 @@ public:
     virtual void getCursorPos();
     virtual void setCursorPos();
 };
+
 
 class GlfwManager : public Manager {
 public:
@@ -49,13 +52,19 @@ public:
 
     void
     toggleFullscreen() {
+        int w, h;
         fullscreen_ = !fullscreen_;
         if (!fullscreen_) {
             const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            glfwSetWindowSize(window_, mode->width, mode->height);
             glfwSetWindowPos(window_, 0, 0);
-        } else
-            glfwSetWindowSize(window_, args_->width, args_->height);
+            w = mode->width;
+            h = mode->height;
+        } else {
+            w = static_cast<int>(args_->width);
+            h = static_cast<int>(args_->height);
+        }
+        std::cout << "glfwSetWindowSize " << w << 'x' << h << std::endl;
+        glfwSetWindowSize(window_, w, h);
     }
 
 protected:
