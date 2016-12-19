@@ -110,17 +110,17 @@ Scene3D::update(float elapsedTime)
 
     //move position of camera based on WASD keys, and XZ keys for up and down
     const float moveSpeed = 2.0; //units per second
-    if (events->keyPressed('S'))
+    if (events->keyDown('S'))
         camera_.offsetPosition(elapsedTime * moveSpeed * -camera_.forward());
-    else if (events->keyPressed('W'))
+    else if (events->keyDown('W'))
         camera_.offsetPosition(elapsedTime * moveSpeed * camera_.forward());
-    if (events->keyPressed('A'))
+    if (events->keyDown('A'))
         camera_.offsetPosition(elapsedTime * moveSpeed * -camera_.right());
-    else if(events->keyPressed('D'))
+    else if(events->keyDown('D'))
         camera_.offsetPosition(elapsedTime * moveSpeed * camera_.right());
-    if (events->keyPressed('Z'))
+    if (events->keyDown('Z'))
         camera_.offsetPosition(elapsedTime * moveSpeed * -glm::vec3(0,1,0));
-    else if (events->keyPressed('X'))
+    else if (events->keyDown('X'))
         camera_.offsetPosition(elapsedTime * moveSpeed * glm::vec3(0,1,0));
     if (events->keyPressed(' '))
         ctx_.rotationEnabled = !ctx_.rotationEnabled;
