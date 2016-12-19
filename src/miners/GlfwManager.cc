@@ -9,6 +9,14 @@ GlfwManager* GlfwManager::instance_ = 0;
 #define get_manager_ptr(Window) \
     reinterpret_cast<GlfwManager*>(glfwGetWindowUserPointer(Window))
 
+void
+onFramebufferResize(GLFWwindow* window, int width, int height) {
+    std::cout << "cb__framebuffer_size" << std::endl;
+    glViewport(0, 0, width, height);
+    auto* scene = get_manager_ptr(window)->scene();
+    scene->resize(width, height);
+}
+
 // records how far the y axis has been scrolled
 static void
 OnScroll(GLFWwindow* window, double deltaX, double deltaY) {
@@ -46,6 +54,7 @@ GlfwManager::init()
         throw std::runtime_error("!glfwCreateWindow. Can your hardware handle OpenGL 3.2?");
 
     glfwSetWindowUserPointer(window_, this);
+    glfwSetFramebufferSizeCallback(window_, onFramebufferResize);
 
     // GLFW settings
     glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
