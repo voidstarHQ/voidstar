@@ -93,6 +93,19 @@ Scene3D::load(Algorithm* algorithm)
     camera_.setPosition(glm::vec3(0, 0, 4));
     camera_.setViewportAspectRatio(aspect_ratio_);
     camera_.setNearAndFarPlanes(0.1, 100.);
+
+    // white ambient light at half intensity (rgba)
+    GLfloat LightAmbient[]  = { 0.5f, 0.5f, 0.5f, 1.0f };
+    // super bright, full intensity diffuse light.
+    GLfloat LightDiffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+    // position of light (x, y, z, (position of light))
+    GLfloat LightPosition[] = { 0.0f, 2.0f, 0.0f, 1.0f };
+    // set up light number 1.
+    glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  // add lighting (ambient)
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);  // add lighting (diffuse).
+    glLightfv(GL_LIGHT1, GL_POSITION,LightPosition); // set light position
+    glEnable(GL_LIGHT1);                             // turn light 1 on
+    glEnable(GL_LIGHTING);
 }
 
 bool
