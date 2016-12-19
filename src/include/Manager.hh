@@ -34,7 +34,7 @@ protected:
     Scene* scene_;
 };
 
-Manager * createManager(const std::string str, Arguments *args);
+Manager* createManager(const std::string& str, Arguments* args);
 
 using ManagerFactoryFunc = std::function<Manager*(Arguments*)>;
 extern const std::map<const std::string, ManagerFactoryFunc> managers;

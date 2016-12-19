@@ -4,7 +4,7 @@
 #include <GlfwManager.hh>
 
 void
-Manager::loadScene(Scene *scene)
+Manager::loadScene(Scene* scene)
 {
     // XXX delete scene prior to creating a new one
     if (scene_) {
@@ -49,8 +49,8 @@ Manager::loadFile(size_t index)
     }
 }
 
-Manager *
-createManager(const std::string str, Arguments *args)
+Manager*
+createManager(const std::string& str, Arguments* args)
 {
     auto it = managers.find(str);
     if (it == managers.end()) {
