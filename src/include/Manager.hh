@@ -22,7 +22,7 @@ public:
     void loadNextFile() { loadFile((fileIndex_ + 1) % args_->input.size()); }
     void loadPrevFile() { loadFile((fileIndex_ - 1) % args_->input.size()); }
 
-    virtual void toggleFullscreen() = 0;
+    virtual void toggleFullscreen(size_t& width, size_t& height) = 0;
 
     Arguments* args() { return args_; }
     Scene* scene() { return scene_; }
