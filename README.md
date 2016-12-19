@@ -1,13 +1,12 @@
 # Miners [![CircleCI](https://circleci.com/gh/fenollp/miners/tree/master.svg?style=svg)](https://circleci.com/gh/fenollp/miners/tree/master) [![TravisCI build status](https://travis-ci.org/fenollp/miners.svg?branch=master)](https://travis-ci.org/fenollp/miners)
 
-Browse data using Corti's 2D projector.
+Browse data using Corti's 2D projector as well as 3D variants.
 
 ## Usage
 
 ```shell
-make && cat /dev/urandom | ./miners
-# `cat` any file you have ;)
-# Spam ENTER to progress through the file
+./configure && cd build && make
+./miners miners
 ```
 
 ## Requirements
