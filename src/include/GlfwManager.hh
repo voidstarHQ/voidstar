@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <bitset>
 
 #include <GLFW/glfw3.h>
 
@@ -9,10 +10,43 @@
 
 class GlfwManager;
 
-class GlfwEvents : public Events {
+struct GlfwModifiers {
+    int shift:1;
+    int ctrl:1;
+    int alt:1;
+    int super:1;
+} __attribute__((packed));
+
+struct GlfwKeyboardState {
+    std::bitset<512> keys;
+    union {
+        int rawmods;
+        GlfwModifiers mods;
+    };
+
+    void copy(const GlfwKeyboardState* state) {
+        keys = state->keys;
+        rawmods = state->rawmods;
+    }
+};
+
+class GlfwKeyboardEvents : public Events {
 public:
+    GlfwKeyboardEvents();
+    virtual ~GlfwKeyboardEvents();
+
     virtual bool keyPressed(int key);
     virtual bool keyReleased(int key);
+    virtual bool keyDown(int key);
+    virtual bool keyUp(int key);
+
+    virtual void update();
+
+    void process(int key, int scancode, int action, int mods);
+
+//protected:
+    GlfwKeyboardState *current_;
+    GlfwKeyboardState *previous_;
 };
 
 class GlfwMouse : public Mouse {
@@ -69,6 +103,6 @@ public:
 protected:
     static GlfwManager* instance_;
     GLFWwindow* window_;
-    GlfwEvents* events_;
+    GlfwKeyboardEvents* events_;
     GlfwMouse* mouse_;
 };

@@ -19,21 +19,38 @@ onFramebufferResize(GLFWwindow* window, int width, int height) {
 
 // records how far the y axis has been scrolled
 static void
-OnScroll(GLFWwindow* window, double deltaX, double deltaY) {
+onScroll(GLFWwindow* window, double deltaX, double deltaY) {
     auto* mouse = get_manager_ptr(window)->getMouse();
     mouse->scrollY += deltaY;
     mouse->scrollX += deltaX;
 }
 
 static void
-OnError(int errorCode __unused, const char* msg) {
+onError(int errorCode __unused, const char* msg) {
     throw std::runtime_error(msg);
+}
+
+static void
+onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    auto* events = get_manager_ptr(window)->getEvents();
+    auto* ev = reinterpret_cast<GlfwKeyboardEvents*>(events);
+    ev->process(key, scancode, action, mods);
+
+    /*if (action == GLFW_PRESS)
+        std::cout << "pressed: ";
+    else if (action == GLFW_RELEASE)
+        std::cout << "released: ";
+    else if (action == GLFW_REPEAT)
+        std::cout << "repeat: ";
+    else
+        std::cout << "wtf: ";
+    std::cout << "key " << key << " (" << scancode << ", " << mods << ")" << std::endl;*/
 }
 
 void
 GlfwManager::init()
 {
-    glfwSetErrorCallback(OnError);
+    glfwSetErrorCallback(onError);
     if (!glfwInit())
         throw std::runtime_error("!glfwInit");
 
@@ -55,16 +72,17 @@ GlfwManager::init()
 
     glfwSetWindowUserPointer(window_, this);
     glfwSetFramebufferSizeCallback(window_, onFramebufferResize);
+    glfwSetKeyCallback(window_, onKeyEvent);
 
     // GLFW settings
     glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSetCursorPos(window_, 0, 0);
-    glfwSetScrollCallback(window_, OnScroll);
+    glfwSetScrollCallback(window_, onScroll);
     glfwMakeContextCurrent(window_);
 
     mouse_ = new GlfwMouse();
-    events_ = new GlfwEvents();
+    events_ = new GlfwKeyboardEvents();
 
     glInit();
 }
@@ -107,7 +125,7 @@ GlfwManager::run()
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(window_)) {
         // process pending events
-        glfwPollEvents();
+        events_->update();
 
         // update the scene based on the time elapsed since last update
         double thisTime = glfwGetTime();
@@ -135,20 +153,41 @@ GlfwManager::run()
     glfwTerminate();
 }
 
-bool
-GlfwEvents::keyPressed(int key) {
-    auto value = glfwGetKey(GlfwManager::instance()->window(), key);
-    if (value == GLFW_KEY_UNKNOWN)
-        throw std::runtime_error("Unknown key pressed");
-    return value == GLFW_PRESS;
+GlfwKeyboardEvents::GlfwKeyboardEvents() {
+    current_ = new GlfwKeyboardState{};
+    previous_ = new GlfwKeyboardState{};
 }
 
-bool
-GlfwEvents::keyReleased(int key) {
-    auto value = glfwGetKey(GlfwManager::instance()->window(), key);
-    if (value == GLFW_KEY_UNKNOWN)
-        throw std::runtime_error("Unknown key released");
-    return value == GLFW_RELEASE;
+GlfwKeyboardEvents::~GlfwKeyboardEvents() {
+    delete current_;
+    delete previous_;
+}
+
+bool GlfwKeyboardEvents::keyDown(int key) {
+    return current_->keys[key];
+}
+
+bool GlfwKeyboardEvents::keyUp(int key) {
+    return !current_->keys[key];
+}
+
+bool GlfwKeyboardEvents::keyPressed(int key) {
+    return current_->keys[key] && !previous_->keys[key];
+}
+
+bool GlfwKeyboardEvents::keyReleased(int key) {
+    return !current_->keys[key] && previous_->keys[key];
+}
+
+void GlfwKeyboardEvents::update() {
+    previous_->copy(current_);
+    glfwPollEvents();
+}
+
+void GlfwKeyboardEvents::process(int key, int scancode, int action, int mods) {
+    (void)scancode;
+    current_->keys[key] = (action == GLFW_RELEASE) ? 0 : 1;
+    current_->rawmods = mods;
 }
 
 void
