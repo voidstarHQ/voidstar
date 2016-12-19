@@ -21,7 +21,6 @@ public:
     virtual void setCursorPos();
 };
 
-
 class GlfwManager : public Manager {
 public:
     GlfwManager(Arguments* args) : Manager(args) {

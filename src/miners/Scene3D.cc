@@ -87,6 +87,7 @@ Scene3D::load(Algorithm* algorithm)
     load_shaders();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
+    std::cout << "#points: " << ctx_.selected.size() << std::endl;
     load_buffers();
 
     camera_.setPosition(glm::vec3(0, 0, 4));
@@ -121,10 +122,8 @@ Scene3D::update(float elapsedTime)
         camera_.offsetPosition(elapsedTime * moveSpeed * -glm::vec3(0,1,0));
     else if (events->keyPressed('X'))
         camera_.offsetPosition(elapsedTime * moveSpeed * glm::vec3(0,1,0));
-
     if (events->keyPressed(' '))
         ctx_.rotationEnabled = !ctx_.rotationEnabled;
-
 
     auto mouse = manager_->getMouse();
     mouse->getCursorPos();
