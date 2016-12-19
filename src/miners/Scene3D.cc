@@ -23,21 +23,21 @@ Scene3D::load_buffers() {
     glBindVertexArray(ctx_.vao);
 
     // make and bind the VBO
-    glGenBuffers(1, &ctx_.vbo);
+glGenBuffers(1, &ctx_.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.vbo);
 
     glBufferData(GL_ARRAY_BUFFER, ctx_.vertices_size, ctx_.vertices, GL_STATIC_DRAW);
     // connect the xyz to the "vert" attribute of the vertex shader
-    glEnableVertexAttribArray(ctx_.program->attrib("vert"));
     glVertexAttribPointer(ctx_.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(ctx_.program->attrib("vert"));
 
     // make and bind the VBO
     glGenBuffers(1, &ctx_.colors_id);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
 
     glBufferData(GL_ARRAY_BUFFER, ctx_.colors_size, ctx_.colors, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(ctx_.program->attrib("colr"));
     glVertexAttribPointer(ctx_.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(ctx_.program->attrib("colr"));
 
     // unbind the VAO
     glBindVertexArray(0);
@@ -47,35 +47,45 @@ Scene3D::load_buffers() {
 void
 Scene3D::init()
 {
-    glewExperimental = GL_TRUE; //stops glew from crashing on OSX :-/
-    if (glewInit() != GLEW_OK)
-        throw std::runtime_error("!glewInit");
-
-    // GLEW throws some errors, so discard all the errors so far
-    //while (glGetError() != GL_NO_ERROR) {}
-    processErrors();
-
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-
-    if (!GLEW_VERSION_3_2)
-        throw std::runtime_error("OpenGL 3.2 API is not available.");
-
     resize(manager_->args()->width, manager_->args()->height);
 }
 
 void
-Scene3D::load(Algo3D* algorithm)
+Scene3D::unload()
 {
+    if (ctx_.program) {
+        delete ctx_.program;
+        glDeleteBuffers(1, &ctx_.vbo);
+        glDeleteBuffers(1, &ctx_.colors_id);
+        glDeleteVertexArrays(1, &ctx_.vao);
+    }
+}
+
+void
+Scene3D::reload()
+{
+    auto* algo = reinterpret_cast<Algo3D*>(algo_);
+    algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
+        || std::cerr << "!apply" << std::endl;
+    glBindVertexArray(ctx_.vao);
+    glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
+    glBufferData(GL_ARRAY_BUFFER, ctx_.colors_size, ctx_.colors, GL_STATIC_DRAW);
+    glBindVertexArray(0);
+}
+
+void
+Scene3D::load(Algorithm* algorithm)
+{
+    Scene::load(algorithm);
+    auto* algo = reinterpret_cast<Algo3D*>(algorithm);
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     load_shaders();
-    algorithm->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
+    algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
     load_buffers();
 
@@ -112,8 +122,6 @@ Scene3D::update(float elapsedTime)
     else if (events->keyPressed('X'))
         camera_.offsetPosition(elapsedTime * moveSpeed * glm::vec3(0,1,0));
 
-    if (events->keyPressed('F'))
-        this->manager_->toggleFullscreen();
     if (events->keyPressed(' '))
         ctx_.rotationEnabled = !ctx_.rotationEnabled;
 
@@ -152,16 +160,4 @@ Scene3D::render()
     // unbind the VAO and the program
     glBindVertexArray(0);
     ctx_.program->stopUsing();
-}
-
-void
-Scene3D::processErrors(bool quiet)
-{
-    while (true) {
-        GLenum error = glGetError();
-        if (error == GL_NO_ERROR)
-            break;
-        if (!quiet)
-            std::cerr << "OpenGL Error " << error << std::endl;
-    }
 }

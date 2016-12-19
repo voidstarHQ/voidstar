@@ -13,7 +13,6 @@ usage(const char *prgname) {
     std::cout << " -l --list         list backends" << std::endl;
     std::cout << " -u --ui           choose ui mode" << std::endl;
     std::cout << " -a --algorithm    algorithm to apply" << std::endl;
-    std::cout << " -s --scene        type of scene to draw" << std::endl;
     std::cout << std::endl;
     std::cout << " -x --width        window width" << std::endl;
     std::cout << " -y --height       window height" << std::endl;
@@ -45,7 +44,7 @@ listComponents()
 Arguments*
 parseArgs(int argc, char **argv)
 {
-    static const char *short_options = ":a:b:e:fhls:u:x:y:";
+    static const char *short_options = ":a:b:e:fhlu:x:y:";
     static const struct option long_options[] = {
         { "algorithm",  1, 0, 'a' },
         { "begin",      1, 0, 'b' },
@@ -54,7 +53,6 @@ parseArgs(int argc, char **argv)
         { "height",     1, 0, 'y' },
         { "help",       0, 0, 'h' },
         { "list",       0, 0, 'l' },
-        { "scene",      1, 0, 's' },
         { "ui",         1, 0, 'u' },
         { "width",      1, 0, 'x' },
         { 0,            0, 0,  0  }
@@ -68,7 +66,6 @@ parseArgs(int argc, char **argv)
 
     auto args = new Arguments();
     args->algo = "conti";
-    args->scene = "3d";
     args->manager = "glfw";
     args->width = 800;
     args->height = 600;
@@ -95,9 +92,6 @@ parseArgs(int argc, char **argv)
             break;
         case 'l':
             list = true;
-            break;
-        case 's':
-            args->scene = optarg;
             break;
         case 'u':
             args->manager = optarg;

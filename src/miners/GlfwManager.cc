@@ -1,14 +1,18 @@
+#include <iostream>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <GlfwManager.hh>
 
 GlfwManager* GlfwManager::instance_ = 0;
+#define get_manager_ptr(Window) \
+    reinterpret_cast<GlfwManager*>(glfwGetWindowUserPointer(Window))
 
 // records how far the y axis has been scrolled
 static void
-OnScroll(GLFWwindow* window __unused, double deltaX, double deltaY) {
-    auto mouse = GlfwManager::instance()->getMouse();
+OnScroll(GLFWwindow* window, double deltaX, double deltaY) {
+    auto* mouse = get_manager_ptr(window)->getMouse();
     mouse->scrollY += deltaY;
     mouse->scrollX += deltaX;
 }
@@ -41,14 +45,51 @@ GlfwManager::init()
     if (!window_)
         throw std::runtime_error("!glfwCreateWindow. Can your hardware handle OpenGL 3.2?");
 
+    glfwSetWindowUserPointer(window_, this);
+
     // GLFW settings
     glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSetCursorPos(window_, 0, 0);
     glfwSetScrollCallback(window_, OnScroll);
     glfwMakeContextCurrent(window_);
 
     mouse_ = new GlfwMouse();
     events_ = new GlfwEvents();
+
+    glInit();
+}
+
+void
+GlfwManager::glInit()
+{
+    glewExperimental = GL_TRUE; //stops glew from crashing on OSX :-/
+    if (glewInit() != GLEW_OK)
+        throw std::runtime_error("!glewInit");
+
+    // GLEW throws some errors, so discard all the errors so far
+    //while (glGetError() != GL_NO_ERROR) {}
+    glProcessErrors();
+
+    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+
+    if (!GLEW_VERSION_3_2)
+        throw std::runtime_error("OpenGL 3.2 API is not available.");
+}
+
+void
+GlfwManager::glProcessErrors(bool quiet)
+{
+    while (true) {
+        GLenum error = glGetError();
+        if (error == GL_NO_ERROR)
+            break;
+        if (!quiet)
+            std::cerr << "OpenGL Error " << error << std::endl;
+    }
 }
 
 void
@@ -70,17 +111,27 @@ GlfwManager::run()
             glfwSwapBuffers(window_);
         }
 
-        scene_->processErrors();
+        glProcessErrors();
 
-        if (glfwGetKey(window_, GLFW_KEY_ESCAPE))
+        if (events_->keyPressed(GLFW_KEY_ESCAPE))
             glfwSetWindowShouldClose(window_, GL_TRUE);
+        if (events_->keyPressed('F'))
+            toggleFullscreen();
+
+        if (events_->keyPressed('H'))
+            loadPrevFile();
+        if (events_->keyPressed('L'))
+            loadNextFile();
     }
     glfwTerminate();
 }
 
 bool
 GlfwEvents::keyPressed(int key) {
-    return glfwGetKey(GlfwManager::instance()->window(), key);
+    auto value = glfwGetKey(GlfwManager::instance()->window(), key);
+    if (value == GLFW_KEY_UNKNOWN)
+        throw std::runtime_error("Unknown key");
+    return value == GLFW_PRESS;
 }
 
 void

@@ -9,18 +9,23 @@
 #include <Loader.hh>
 #include <Range.hh>
 
+// XXX moved here as a placeholder due to circular dependency #badDesign
+enum SceneType {
+    SCENE_UNDEFINED,
+    SCENE_2D,
+    SCENE_3D,
+};
+
 class Algorithm {
 public:
+    Algorithm(size_t min_size = 0, size_t max_size = 0)
+        : min_data_size_(min_size), max_data_size_(max_size), loader_(0),
+          range_(0) {}
     virtual ~Algorithm() {}
-    virtual void use(Loader *loader, DataRange *range = 0) {
-        loader_ = loader;
-        if (loader_->size() < min_data_size_)
-            throw std::range_error("this algorithm needs more data");
-        range_ = range;
-        if (!range_) {
-            range_ = new DataRange{0, loader_->size()};
-        }
-    }
+
+    virtual SceneType sceneType() const = 0;
+    virtual void use(Loader *loader, DataRange *range = 0);
+
     const u8 *loadDataRange(const DataRange& range, size_t& size);
 
     inline const u8 *loadDataRange(size_t& size) {
@@ -36,6 +41,7 @@ protected:
     DataRange* range_;
 };
 
-using AlgorithmFactoryFunc = std::function<Algorithm*()>;
+Algorithm * createAlgorithm(const std::string str);
 
-extern std::map<std::string, AlgorithmFactoryFunc> algorithms;
+using AlgorithmFactoryFunc = std::function<Algorithm*()>;
+extern const std::map<const std::string, AlgorithmFactoryFunc> algorithms;

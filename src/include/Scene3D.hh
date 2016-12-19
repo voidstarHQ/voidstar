@@ -15,11 +15,12 @@ struct Scene3DContext {
           colors_id(0),
           vertices(new GLfloat[vertices_size]),
           colors(new GLfloat[colors_size]),
-          degreesRotated(0.0f), program(NULL)
+          degreesRotated(0.0f), rotationEnabled(false), program(NULL)
         {}
     ~Scene3DContext() {
         delete[] vertices;
         delete[] colors;
+        delete program;
     }
 
     GLuint vao;
@@ -44,14 +45,15 @@ struct Scene3DContext {
 
 class Scene3D : public Scene {
 public:
-    Scene3D(Manager* manager) : Scene(manager), ctx_(256, 256, 256) {}
-    virtual ~Scene3D() {}
+    Scene3D(Manager* manager) : Scene(manager, SCENE_3D), ctx_(256, 256, 256) {}
+    virtual ~Scene3D() { unload(); }
 
     virtual void init();
-    virtual void load(Algo3D* algorithm);
+    virtual void load(Algorithm* algo);
+    virtual void unload();
+    virtual void reload();
     virtual bool update(float elapsedTime);
     virtual void render();
-    virtual void processErrors(bool quiet=false);
 private:
     void load_shaders();
     void load_buffers();

@@ -7,7 +7,7 @@ class MmapFileLoader : public Loader {
 public:
     MmapFileLoader(int fd) : Loader(true), fd_(fd) {}
     MmapFileLoader(std::string path) : Loader(false), fd_(-1), path_(path) {}
-    virtual ~MmapFileLoader() {}
+    virtual ~MmapFileLoader() { if (data_) free(); }
 
     virtual void load();
     virtual void free();

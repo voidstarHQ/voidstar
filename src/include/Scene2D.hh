@@ -20,6 +20,7 @@ struct Scene2DContext {
     ~Scene2DContext() {
         delete[] vertices;
         delete[] colors;
+        delete program;
     }
 
     GLuint vao;
@@ -41,14 +42,13 @@ struct Scene2DContext {
 
 class Scene2D : public Scene {
 public:
-    Scene2D(Manager* manager) : Scene(manager), ctx_(256, 256) {}
+    Scene2D(Manager* manager) : Scene(manager, SCENE_2D), ctx_(256, 256) {}
     virtual ~Scene2D() {}
 
     virtual void init();
-    virtual void load(Algo2D* algorithm);
+    virtual void load(Algorithm* algo);
     virtual bool update(float elapsedTime);
     virtual void render();
-    virtual void processErrors(bool quiet=false);
 private:
     void load_shaders();
     void load_buffers();

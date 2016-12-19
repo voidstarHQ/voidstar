@@ -21,39 +21,14 @@ main(int argc, char* argv[])
         return 0;
     }
 
-    Loader* loader = NULL;
-    if (args->input[0] == "-") {
-        loader = new FileLoader(0);
-    } else {
-        loader = new MmapFileLoader(args->input[0]);
+    auto* manager = createManager(args->manager, args);
+    if (!manager) {
+        std::cerr << "unknown manager " << args->manager << std::endl;
+        return 1;
     }
-    loader->load();
+    manager->init();
+    manager->loadFile(0);
+    manager->run();
 
-    auto* range = DataRange::create(args->range_begin, args->range_end);
-
-    auto* algorithm = algorithms[args->algo]();
-    algorithm->use(loader, range);
-
-    auto* manager = managers[args->manager](args);
-    try {
-        manager->init();
-        if (args->scene == "3d") {
-            auto* scene = new Scene3D(manager);
-            scene->init();
-            scene->load(reinterpret_cast<Algo3D*>(algorithm));
-            manager->loadScene(reinterpret_cast<Scene*>(scene));
-            manager->run();
-        } else if (args->scene == "2d") {
-            auto* scene = new Scene2D(manager);
-            scene->init();
-            scene->load(reinterpret_cast<Algo2D*>(algorithm));
-            manager->loadScene(reinterpret_cast<Scene*>(scene));
-            manager->run();
-        }
-    } catch (const std::exception& e) {
-        std::cerr << "ERROR: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
+    return 0;
 }

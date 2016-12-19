@@ -43,39 +43,25 @@ Scene2D::load_buffers() {
     glBindVertexArray(0);
 }
 
-
 void
 Scene2D::init()
 {
-    glewExperimental = GL_TRUE; //stops glew crashing on OSX :-/
-    if (glewInit() != GLEW_OK)
-        throw std::runtime_error("!glewInit");
-
-    // GLEW throws some errors, so discard all the errors so far
-    //while (glGetError() != GL_NO_ERROR) {}
-    processErrors();
-
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-
-    if (!GLEW_VERSION_3_2)
-        throw std::runtime_error("OpenGL 3.2 API is not available.");
-
     resize(manager_->args()->width, manager_->args()->height);
 }
 
 void
-Scene2D::load(Algo2D* algorithm)
+Scene2D::load(Algorithm* algorithm)
 {
+    Scene::load(algorithm);
+    auto* algo = reinterpret_cast<Algo2D*>(algorithm);
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     load_shaders();
-    algorithm->apply(ctx_.vertices, ctx_.colors, ctx_.width, ctx_.height)
+    algo->apply(ctx_.vertices, ctx_.colors, ctx_.width, ctx_.height)
         || std::cerr << "!apply" << std::endl;
     load_buffers();
 
@@ -103,8 +89,6 @@ Scene2D::update(float elapsedTime)
         camera_.offsetPosition(elapsedTime * moveSpeed * -glm::vec3(0,1,0));
     else if (events->keyPressed('X'))
         camera_.offsetPosition(elapsedTime * moveSpeed * glm::vec3(0,1,0));
-    else if (events->keyPressed('F'))
-        this->manager_->toggleFullscreen();
 
     auto mouse = manager_->getMouse();
     mouse->getCursorPos();
@@ -146,16 +130,4 @@ Scene2D::render()
     // unbind the VAO and the program
     glBindVertexArray(0);
     ctx_.program->stopUsing();
-}
-
-void
-Scene2D::processErrors(bool quiet)
-{
-    while (true) {
-        GLenum error = glGetError();
-        if (error == GL_NO_ERROR)
-            break;
-        if (!quiet)
-            std::cerr << "OpenGL Error " << error << std::endl;
-    }
 }

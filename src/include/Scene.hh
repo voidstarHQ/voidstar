@@ -16,22 +16,32 @@ class Manager;
 
 class Scene {
 public:
-    Scene(Manager* manager) : manager_(manager) {}
+    Scene(Manager* manager, SceneType type)
+        : manager_(manager), type_(type), algo_(0) {}
     virtual ~Scene() {}
 
     virtual void init() = 0;
     virtual bool update(float elapsedTime) = 0;
     virtual void render() = 0;
-    virtual void processErrors(bool quiet=false) = 0;
+    virtual void load(Algorithm *algo);
+    virtual void unload();
+    virtual void reload();
 
+    // TODO: this should be part of the manager and not the Scene
+    //       instead the Manager should propagate the values to the Scene
     virtual void resize(size_t width, size_t height) {
         width_ = width;
         height_ = height;
         aspect_ratio_ = width / height;
     }
 
+    Algorithm *algorithm() { return algo_; }
+    static Scene *forAlgo(Manager *manager, Algorithm *algo);
+
 protected:
     Manager* manager_;
+    SceneType type_;
+    Algorithm* algo_;
     tdogl::Camera camera_;
 
     size_t width_;
