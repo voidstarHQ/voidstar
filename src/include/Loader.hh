@@ -47,3 +47,4 @@ public:
     }
 };
 
+Loader* loaderFromUri(const std::string& uri);

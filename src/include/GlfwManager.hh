@@ -35,6 +35,10 @@ public:
 
     GLFWwindow* window() { return window_; }
 
+    // TODO: move these in an OpenGl backend
+    void glInit();
+    void glProcessErrors(bool quiet=false);
+
     static GlfwManager*
     instance() {
         if (!instance_)
