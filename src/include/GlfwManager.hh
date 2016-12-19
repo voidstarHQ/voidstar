@@ -10,6 +10,7 @@ class GlfwManager;
 class GlfwEvents : public Events {
 public:
     virtual bool keyPressed(int key);
+    virtual bool keyReleased(int key);
 };
 
 class GlfwMouse : public Mouse {

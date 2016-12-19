@@ -130,8 +130,16 @@ bool
 GlfwEvents::keyPressed(int key) {
     auto value = glfwGetKey(GlfwManager::instance()->window(), key);
     if (value == GLFW_KEY_UNKNOWN)
-        throw std::runtime_error("Unknown key");
+        throw std::runtime_error("Unknown key pressed");
     return value == GLFW_PRESS;
+}
+
+bool
+GlfwEvents::keyReleased(int key) {
+    auto value = glfwGetKey(GlfwManager::instance()->window(), key);
+    if (value == GLFW_KEY_UNKNOWN)
+        throw std::runtime_error("Unknown key released");
+    return value == GLFW_RELEASE;
 }
 
 void
