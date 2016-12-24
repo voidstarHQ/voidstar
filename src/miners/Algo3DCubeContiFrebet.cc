@@ -1,4 +1,3 @@
-#include <iostream>
 #include <Algo3DCubeContiFrebet.hh>
 
 bool

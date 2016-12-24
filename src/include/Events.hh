@@ -32,4 +32,3 @@ struct Mouse {
     double scrollY;
     double zoomSensitivity = -0.2f;
 };
-
