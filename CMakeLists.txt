@@ -74,6 +74,7 @@ set(SOURCES
 
     src/miners/Algo2DFourColors.cc
     src/miners/Algo2DGrayscale.cc
+    src/miners/Algo3DCubeFull.cc
     src/miners/Algo3DCubeContiBnW.cc
     src/miners/Algo3DCubeContiRainbow.cc
     src/miners/Algo3DCubeContiFrebet.cc

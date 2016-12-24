@@ -12,7 +12,8 @@ public:
                        size_t width, size_t height, size_t depth) = 0;
 
 protected:
-    void make_vertices(GLfloat* vertices, size_t width, size_t height, size_t depth) {
+    size_t
+    make_vertices(GLfloat* vertices, size_t width, size_t height, size_t depth) {
         float w = static_cast<float>(width) / 2;
         float h = static_cast<float>(height) / 2;
         float d = static_cast<float>(depth) / 2;
@@ -25,5 +26,7 @@ protected:
                     vertices[pos++] = (static_cast<float>(y) - h) / 128;
                     vertices[pos++] = (static_cast<float>(z) - d) / 128;
                 }
+
+        return pos / 3;
     }
 };

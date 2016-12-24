@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <Algorithm.hh>
+#include <Algo3DCubeFull.hh>
 #include <Algo3DCubeContiBnW.hh>
 #include <Algo3DCubeContiRainbow.hh>
 #include <Algo3DCubeContiFrebet.hh>
@@ -53,6 +54,7 @@ createAlgorithm(const std::string str)
 using AlgorithmFactoryFunc = std::function<Algorithm*()>;
 
 const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
+    { "cube", []() { return new Algo3DCubeFull(); } },
     { "contibnw", []() { return new Algo3DCubeContiBnW(); } },
     { "contirb", []() { return new Algo3DCubeContiRainbow(); } },
     { "conti", []() { return new Algo3DCubeContiFrebet(); } },
