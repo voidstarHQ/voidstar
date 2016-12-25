@@ -2,20 +2,23 @@
 
 struct RGBColor {
     float r, g, b;
-    float c2c(u8 c) { return static_cast<float>(c) / 255; }
+    inline float c2c(u8 c) { return static_cast<float>(c) / 255; }
+    inline bool is_printable(u8 byte) {
+        return (0x09 <= byte && byte <= 0x0d)
+            || (0x20 <= byte && byte <= 0x7e);
+    }
     RGBColor(u8 byte) {
         if (0x00 == byte) {
-            r = 1.0f; g = 1.0f; b = 1.0f;
+            r = 0; g = 0; b = 0;
         }
         else if (0xff == byte) {
-            r = 0.0f; g = 0.0f; b = 0.0f;
+            r = 1; g = 1; b = 1;
         }
-        else if ((0x09 <= byte && byte <= 0x0d) ||
-                 (0x20 <= byte && byte <= 0x7e)) {
-            r = c2c(0x37); g = c2c(0x7e); b = c2c(0xb8);
+        else if (is_printable(byte)) {
+            r = c2c(55); g = c2c(126); b = c2c(184);
         }
         else {
-            r = c2c(0xe4); g = c2c(0x1a); b = c2c(0x1c);
+            r = c2c(228); g = c2c(26); b = c2c(28);
         }
     }
 };
