@@ -9,7 +9,7 @@ void main() {
     // Pass colr through to fragment shader
     carryColr = colr;
 
-    gl_PointSize = 5;
+    gl_PointSize = 4;
 
     // Apply all matrix transformations to vert
     gl_Position = vec4(vert, 0, 1);

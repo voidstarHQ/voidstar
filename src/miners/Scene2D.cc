@@ -12,32 +12,32 @@ Scene2D::load_shaders() {
         tdogl::Shader::shaderFromFile(ResourcePath("vertex_2d.glsl"), GL_VERTEX_SHADER),
         tdogl::Shader::shaderFromFile(ResourcePath("fragment.glsl"), GL_FRAGMENT_SHADER)
     };
-    ctx_.program = new tdogl::Program(shaders);
+    program_ = new tdogl::Program(shaders);
 }
 
 
 void
 Scene2D::load_buffers() {
     // make and bind the VAO
-    glGenVertexArrays(1, &ctx_.vao);
-    glBindVertexArray(ctx_.vao);
+    glGenVertexArrays(1, &vao_);
+    glBindVertexArray(vao_);
 
     // make and bind the VBO
-    glGenBuffers(1, &ctx_.vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, ctx_.vbo);
+    glGenBuffers(1, &vbo_);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_);
 
-    glBufferData(GL_ARRAY_BUFFER, ctx_.vertices_size, ctx_.vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices_size_, vertices_, GL_STATIC_DRAW);
     // connect the xyz to the "vert" attribute of the vertex shader
-    glEnableVertexAttribArray(ctx_.program->attrib("vert"));
-    glVertexAttribPointer(ctx_.program->attrib("vert"), 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(program_->attrib("vert"));
+    glVertexAttribPointer(program_->attrib("vert"), 2, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // make and bind the VBO
-    glGenBuffers(1, &ctx_.colors_id);
-    glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
+    glGenBuffers(1, &colors_id_);
+    glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
 
-    glBufferData(GL_ARRAY_BUFFER, ctx_.vertices_size, ctx_.colors, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(ctx_.program->attrib("colr"));
-    glVertexAttribPointer(ctx_.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBufferData(GL_ARRAY_BUFFER, vertices_size_, colors_, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(program_->attrib("colr"));
+    glVertexAttribPointer(program_->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // unbind the VAO
     glBindVertexArray(0);
@@ -60,7 +60,7 @@ Scene2D::load(Algorithm* algorithm)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     load_shaders();
-    algo->apply(ctx_.vertices, ctx_.colors, ctx_.width, ctx_.height)
+    algo->apply(vertices_, colors_, width_, height_)
         || std::cerr << "!apply" << std::endl;
     load_buffers();
 }
@@ -78,15 +78,15 @@ Scene2D::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // bind the program (the shaders)
-    ctx_.program->use();
+    program_->use();
 
     // bind the VAO
-    glBindVertexArray(ctx_.vao);
+    glBindVertexArray(vao_);
 
     // draw the VAO
-    glDrawArrays(GL_POINTS, 0, ctx_.n_points);
+    glDrawArrays(GL_POINTS, 0, n_points_);
 
     // unbind the VAO and the program
     glBindVertexArray(0);
-    ctx_.program->stopUsing();
+    program_->stopUsing();
 }
