@@ -11,7 +11,6 @@ GlfwManager* GlfwManager::instance_ = 0;
 
 void
 onFramebufferResize(GLFWwindow* window, int width, int height) {
-    std::cout << "cb__framebuffer_size" << std::endl;
     glViewport(0, 0, width, height);
     auto* scene = get_manager_ptr(window)->scene();
     scene->resize(width, height);
