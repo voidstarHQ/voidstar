@@ -5,7 +5,7 @@
 
 #include <GlfwManager.hh>
 
-GlfwManager* GlfwManager::instance_ = 0;
+GlfwManager* GlfwManager::instance_ = NULL;
 #define get_manager_ptr(Window) \
     reinterpret_cast<GlfwManager*>(glfwGetWindowUserPointer(Window))
 

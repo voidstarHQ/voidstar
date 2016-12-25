@@ -31,11 +31,11 @@ Manager::loadFile(size_t index)
     fileIndex_ = index;
     // TODO: remove previous loader instance from scene.
     //       properly define who owns the variable and its longevity
-    auto *loader = loaderFromUri(args_->input[index]);
+    auto* loader = loaderFromUri(args_->input[index]);
     loader->load();
     auto* range = DataRange::create(args_->range_begin, args_->range_end);
 
-    Algorithm* algo = 0;
+    Algorithm* algo = NULL;
     if (scene_) {
         algo = scene_->algorithm();
         algo->use(loader, range);
@@ -54,11 +54,11 @@ createManager(const std::string& str, Arguments* args)
 {
     auto it = managers.find(str);
     if (it == managers.end()) {
-        return 0;
+        return NULL;
     }
     return it->second(args);
 }
 
 const std::map<const std::string, ManagerFactoryFunc> managers = {
-    { "glfw", [](Arguments *args) { return new GlfwManager(args); } },
+    { "glfw", [](Arguments* args) { return new GlfwManager(args); } },
 };
