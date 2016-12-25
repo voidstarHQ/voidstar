@@ -1,11 +1,12 @@
 #include <iostream>
 
 #include <Algorithm.hh>
+#include <Algo2DEntropy.hh>
+#include <Algo2DFourColors.hh>
+#include <Algo2DGrayscale.hh>
 #include <Algo3DCubeContiBnW.hh>
 #include <Algo3DCubeContiRainbow.hh>
 #include <Algo3DCubeContiFrebet.hh>
-#include <Algo2DFourColors.hh>
-#include <Algo2DGrayscale.hh>
 
 void Algorithm::use(Loader *loader, DataRange *range)
 {
@@ -53,9 +54,10 @@ createAlgorithm(const std::string str)
 using AlgorithmFactoryFunc = std::function<Algorithm*()>;
 
 const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
+    { "entropy", []() { return new Algo2DEntropy(); } },
+    { "4col", []() { return new Algo2DFourColors(); } },
+    { "gray", []() { return new Algo2DGrayscale(); } },
     { "contibnw", []() { return new Algo3DCubeContiBnW(); } },
     { "contirb", []() { return new Algo3DCubeContiRainbow(); } },
     { "conti", []() { return new Algo3DCubeContiFrebet(); } },
-    { "4col", []() { return new Algo2DFourColors(); } },
-    { "gray", []() { return new Algo2DGrayscale(); } },
 };

@@ -72,6 +72,7 @@ set(SOURCES
     src/miners/FileLoader.cc
     src/miners/MmapLoader.cc
 
+    src/miners/Algo2DEntropy.cc
     src/miners/Algo2DFourColors.cc
     src/miners/Algo2DGrayscale.cc
     src/miners/Algo3DCubeContiBnW.cc
