@@ -10,7 +10,7 @@ struct Scene2DContext {
         : vao(0), vbo(0),
           width(w), height(h),
           n_points(width * height),
-          vertices_size(n_points * 3 * sizeof (GLfloat)),
+          vertices_size(n_points * 2 * sizeof (GLfloat)),
           colors_size(n_points * 4 * sizeof (GLfloat)),
           colors_id(0),
           vertices(new GLfloat[vertices_size]),
