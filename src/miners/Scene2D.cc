@@ -66,7 +66,7 @@ Scene2D::load(Algorithm* algorithm)
 }
 
 bool
-Scene2D::update(float elapsedTime)
+Scene2D::update(float elapsedTime __unused)
 {
     return true;
 }
