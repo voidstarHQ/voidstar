@@ -19,8 +19,8 @@ protected:
         size_t pos = 0;
         for (size_t y = 0; y < height; ++y)
             for (size_t x = 0; x < width; ++x) {
-                vertices[pos++] = (static_cast<float>(x) - w) / 128;
-                vertices[pos++] = (static_cast<float>(y) - h) / 128;
+                vertices[pos++] = (static_cast<float>(x) - w) / w;
+                vertices[pos++] = (static_cast<float>(y) - h) / h;
             }
         return pos / 2;
     }
