@@ -61,7 +61,6 @@ using AlgorithmFactoryFunc = std::function<Algorithm*()>;
 const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
     { "entropy", []() { return new Algo2DEntropy(); } },
     { "4col", []() { return new Algo2DFourColors(); } },
-    { "4col", []() { return new Algo2DFourColors(); } },
     { "gray", []() { return new Algo2DGrayscale(); } },
     { "cube", []() { return new Algo3DCubeFull(); } },
     { "contibnw", []() { return new Algo3DCubeContiBnW(); } },
