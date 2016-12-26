@@ -1,8 +1,8 @@
-#include <Algo3DCubeContiFrebet.hh>
+#include <Algo3DSphereContiFrebet.hh>
 
 bool
-Algo3DCubeContiFrebet::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
-                             size_t width, size_t height, size_t depth) {
+Algo3DSphereContiFrebet::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+                               size_t width, size_t height, size_t depth) {
     make_vertices(vertices, width, height, depth);
 
     size_t size;
@@ -13,6 +13,12 @@ Algo3DCubeContiFrebet::apply(GLfloat* vertices, GLfloat* colors, VertIndices& se
     for (size_t i = 2; i < size; ++i) {
         u8 z = data[i];
         size_t id = x + y * height + z * depth * height;
+        // float r = std::sqrt(std::pow(static_cast<float>(x), 2.0f) +
+        //                     std::pow(static_cast<float>(y), 2.0f) +
+        //                     std::pow(static_cast<float>(z), 2.0f));
+        // float theta = std::acos(static_cast<float>(z) / r);
+        // float phi   = std::atan(static_cast<float>(y) / static_cast<float>(x));
+        // size_t id = r + theta * height + phi * depth * height;
         size_t idx = 4 * id;
         colors[idx + 0] = static_cast<float>(data[i+1]) / 255.0f;
         colors[idx + 1] = static_cast<float>(data[i+2]) / 255.0f;

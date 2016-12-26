@@ -2,10 +2,10 @@
 
 #include <Algo3DCube.hh>
 
-class Algo3DCubeContiBnW : public Algo3DCube {
+class Algo3DCubeFull : public Algo3DCube {
 public:
-    Algo3DCubeContiBnW() {}
-    virtual ~Algo3DCubeContiBnW() {}
+    Algo3DCubeFull() {}
+    virtual ~Algo3DCubeFull() {}
 
     virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth);

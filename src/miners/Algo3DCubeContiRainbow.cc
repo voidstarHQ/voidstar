@@ -1,5 +1,3 @@
-#include <iostream>
-#include <algorithm>
 #include <Algo3DCubeContiRainbow.hh>
 
 bool

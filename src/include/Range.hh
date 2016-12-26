@@ -12,4 +12,3 @@ struct DataRange {
         return new DataRange{begin, end};
     }
 };
-
