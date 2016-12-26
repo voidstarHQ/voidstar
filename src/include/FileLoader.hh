@@ -23,4 +23,3 @@ protected:
     std::ifstream is_;
     std::string data_;
 };
-

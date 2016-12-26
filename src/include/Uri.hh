@@ -62,4 +62,3 @@ Uri<T> Uri<T>::parse(const T& uri)
 
     return result;
 }
-

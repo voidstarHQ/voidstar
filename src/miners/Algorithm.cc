@@ -4,9 +4,14 @@
 #include <Algo2DEntropy.hh>
 #include <Algo2DFourColors.hh>
 #include <Algo2DGrayscale.hh>
+#include <Algo3DCubeFull.hh>
 #include <Algo3DCubeContiBnW.hh>
 #include <Algo3DCubeContiRainbow.hh>
 #include <Algo3DCubeContiFrebet.hh>
+#include <Algo3DSphereFull.hh>
+#include <Algo3DSphereContiBnW.hh>
+#include <Algo3DSphereContiRainbow.hh>
+#include <Algo3DSphereContiFrebet.hh>
 
 void Algorithm::use(Loader *loader, DataRange *range)
 {
@@ -56,8 +61,14 @@ using AlgorithmFactoryFunc = std::function<Algorithm*()>;
 const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
     { "entropy", []() { return new Algo2DEntropy(); } },
     { "4col", []() { return new Algo2DFourColors(); } },
+    { "4col", []() { return new Algo2DFourColors(); } },
     { "gray", []() { return new Algo2DGrayscale(); } },
+    { "cube", []() { return new Algo3DCubeFull(); } },
     { "contibnw", []() { return new Algo3DCubeContiBnW(); } },
     { "contirb", []() { return new Algo3DCubeContiRainbow(); } },
     { "conti", []() { return new Algo3DCubeContiFrebet(); } },
+    { "sphere", []() { return new Algo3DSphereFull(); } },
+    { "sphere_bnw", []() { return new Algo3DSphereContiBnW(); } },
+    { "sphere_rb", []() { return new Algo3DSphereContiRainbow(); } },
+    { "sphere_frebet", []() { return new Algo3DSphereContiFrebet(); } },
 };

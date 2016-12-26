@@ -10,4 +10,3 @@ public:
     virtual bool apply(GLfloat* vertices, GLfloat* colors,
                        size_t width, size_t height);
 };
-

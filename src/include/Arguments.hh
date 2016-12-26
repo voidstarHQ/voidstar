@@ -14,4 +14,4 @@ struct Arguments {
     bool fullscreen;
 };
 
-Arguments *parseArgs(int argc, char **argv);
+Arguments* parseArgs(int argc, char **argv);

@@ -18,5 +18,5 @@ public:
 protected:
     int fd_;
     std::string path_;
-    u8 *data_;
+    u8* data_;
 };

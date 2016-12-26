@@ -1,8 +1,8 @@
-#include <Algo3DCubeContiBnW.hh>
+#include <Algo3DSphereContiBnW.hh>
 
 bool
-Algo3DCubeContiBnW::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
-                          size_t width, size_t height, size_t depth) {
+Algo3DSphereContiBnW::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+                            size_t width, size_t height, size_t depth) {
     make_vertices(vertices, width, height, depth);
 
     size_t size;

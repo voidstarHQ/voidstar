@@ -1,8 +1,8 @@
-#include <Algo3DCubeContiBnW.hh>
+#include <Algo3DSphereContiRainbow.hh>
 
 bool
-Algo3DCubeContiBnW::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
-                          size_t width, size_t height, size_t depth) {
+Algo3DSphereContiRainbow::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+                                size_t width, size_t height, size_t depth) {
     make_vertices(vertices, width, height, depth);
 
     size_t size;
@@ -14,9 +14,9 @@ Algo3DCubeContiBnW::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selec
         u8 z = data[i];
         size_t id = x + y * height + z * depth * height;
         size_t idx = 4 * id;
-        colors[idx + 0] = 1.0f;
-        colors[idx + 1] = 1.0f;
-        colors[idx + 2] = 1.0f;
+        colors[idx + 0] = static_cast<float>(x) / 255.0f;
+        colors[idx + 1] = static_cast<float>(y) / 255.0f;
+        colors[idx + 2] = static_cast<float>(z) / 255.0f;
         float opacity = colors[idx + 3];
         if (opacity < 1.0f/255.0f)
             selected.push_back(id);
