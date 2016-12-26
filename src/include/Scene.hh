@@ -38,7 +38,7 @@ public:
     }
 
     Algorithm* algorithm() { return algo_; }
-    static Scene* forAlgo(Manager *manager, Algorithm* algo);
+    static Scene* forAlgo(Manager* manager, Algorithm* algo);
 
 protected:
     Manager* manager_;

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <Algorithm.hh>
+#include <Algo2DEntropy.hh>
 #include <Algo2DFourColors.hh>
 #include <Algo2DGrayscale.hh>
 #include <Algo3DCubeFull.hh>
@@ -58,6 +59,8 @@ createAlgorithm(const std::string str)
 using AlgorithmFactoryFunc = std::function<Algorithm*()>;
 
 const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
+    { "entropy", []() { return new Algo2DEntropy(); } },
+    { "4col", []() { return new Algo2DFourColors(); } },
     { "4col", []() { return new Algo2DFourColors(); } },
     { "gray", []() { return new Algo2DGrayscale(); } },
     { "cube", []() { return new Algo3DCubeFull(); } },

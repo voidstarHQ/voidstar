@@ -5,13 +5,12 @@
 
 #include <GlfwManager.hh>
 
-GlfwManager* GlfwManager::instance_ = 0;
+GlfwManager* GlfwManager::instance_ = NULL;
 #define get_manager_ptr(Window) \
     reinterpret_cast<GlfwManager*>(glfwGetWindowUserPointer(Window))
 
 void
 onFramebufferResize(GLFWwindow* window, int width, int height) {
-    std::cout << "cb__framebuffer_size" << std::endl;
     glViewport(0, 0, width, height);
     auto* scene = get_manager_ptr(window)->scene();
     scene->resize(width, height);

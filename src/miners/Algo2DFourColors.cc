@@ -2,21 +2,24 @@
 
 struct RGBColor {
     float r, g, b;
-    float c2c(u8 c) { return (float)c / 255.0f; }
+    inline float c2c(u8 c) { return static_cast<float>(c) / 255; }
+    inline bool is_printable(u8 byte) {
+        return (0x09 <= byte && byte <= 0x0d)
+            || (0x20 <= byte && byte <= 0x7e);
+    }
     RGBColor(u8 byte) {
         if (0x00 == byte) {
-            r = 1.0f; g = 1.0f; b = 1.0f;
-            return;
+            r = 0; g = 0; b = 0;
         }
-        if (0xff == byte) {
-            r = 0.0f; g = 0.0f; b = 0.0f;
-            return;
+        else if (0xff == byte) {
+            r = 1; g = 1; b = 1;
         }
-        if (0x20 <= byte && byte <= 0x7e) {
-            r = c2c(0x37); g = c2c(0x7e); b = c2c(0xb8);
-            return;
+        else if (is_printable(byte)) {
+            r = c2c(55); g = c2c(126); b = c2c(184);
         }
-        r = c2c(0xe4); g = c2c(0x1a); b = c2c(0x1c);
+        else {
+            r = c2c(228); g = c2c(26); b = c2c(28);
+        }
     }
 };
 
@@ -24,22 +27,17 @@ struct RGBColor {
 bool
 Algo2DFourColors::apply(GLfloat* vertices, GLfloat* colors,
                         size_t width, size_t height) {
-    size_t pos_v = 0;
-    for (size_t y = 0; y < height; ++y)
-        for (size_t x = 0; x < width; ++x) {
-            vertices[pos_v++] = ((float)x - (float)width  / 2.0f) / 128;
-            vertices[pos_v++] = ((float)y - (float)height / 2.0f) / 128;
-        }
+    make_vertices(vertices, width, height);
 
     const size_t chunk_size = width * height;
     const u8* read = loader_->dataChunk(0, chunk_size);
-    size_t pos_c = 0;
+    size_t pos = 0;
     for (size_t i = 0; i < chunk_size; ++i) {
         auto c = RGBColor(read[i]);
-        colors[pos_c++] = c.r;
-        colors[pos_c++] = c.g;
-        colors[pos_c++] = c.b;
-        colors[pos_c++] = 1.0f;
+        colors[pos++] = c.r;
+        colors[pos++] = c.g;
+        colors[pos++] = c.b;
+        colors[pos++] = 1.0f;
     }
 
     return true;
