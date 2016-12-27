@@ -4,7 +4,7 @@
 #include <Scene2D.hh>
 #include <Scene3D.hh>
 
-void Scene::load(Algorithm *algo)
+void Scene::load(Algorithm* algo)
 {
     if (type_ != algo->sceneType())
         throw std::runtime_error("Invalid algo for scene");
@@ -23,15 +23,15 @@ void Scene::reload()
 {
 }
 
-#define SCENE(Body) [](Manager *manager) -> Scene * { Body }
+#define SCENE(Body) [](Manager* manager) -> Scene* { Body }
 using SceneFactoryFunc = std::function<Scene*(Manager*)>;
 std::map<SceneType, SceneFactoryFunc> scenes = {
     { SCENE_2D, SCENE( return new Scene2D(manager); ) },
     { SCENE_3D, SCENE( return new Scene3D(manager); ) },
 };
 
-Scene *
-Scene::forAlgo(Manager *manager, Algorithm *algo)
+Scene*
+Scene::forAlgo(Manager* manager, Algorithm* algo)
 {
     auto it = scenes.find(algo->sceneType());
     if (it == scenes.end()) {

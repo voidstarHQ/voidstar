@@ -42,7 +42,7 @@ Algorithm::loadDataRange(const DataRange& range, size_t& size)
         size = std::min<size_t>(range.size(), max_data_size_);
     else
         size = range.size();
-    std::cerr << "data " << size << " bytes!" << std::endl;
+    std::cerr << "read " << size << " bytes" << std::endl;
     return loader_->dataChunk(range.begin, size);
 }
 
