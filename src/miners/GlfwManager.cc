@@ -74,7 +74,6 @@ GlfwManager::init()
     glfwSetKeyCallback(window_, onKeyEvent);
 
     // GLFW settings
-    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSetCursorPos(window_, 0, 0);
     glfwSetScrollCallback(window_, onScroll);
@@ -121,6 +120,9 @@ GlfwManager::glProcessErrors(bool quiet)
 void
 GlfwManager::run()
 {
+    if (scene_->type() == SCENE_3D)
+        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(window_)) {
         // process pending events
