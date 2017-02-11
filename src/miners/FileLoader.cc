@@ -11,10 +11,10 @@ FileLoader::load()
     if (!is_.good())
         throw std::invalid_argument("Failed to open file");
 
-   size_ = is_.tellg();
-   data_.reserve(size_);
-   is_.seekg(0);
-   is_.read(&data_[0], size_);
+    size_ = is_.tellg();
+    data_.reserve(size_);
+    is_.seekg(0);
+    is_.read(&data_[0], size_);
 }
 
 void

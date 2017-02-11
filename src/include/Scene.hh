@@ -37,6 +37,7 @@ public:
         camera_.setViewportAspectRatio(aspect_ratio_);
     }
 
+    inline SceneType type() const { return type_; }
     Algorithm* algorithm() { return algo_; }
     static Scene* forAlgo(Manager* manager, Algorithm* algo);
 

@@ -13,8 +13,8 @@ public:
 protected:
     size_t
     make_vertices(GLfloat* vertices, size_t width, size_t height) {
-        float w = static_cast<float>(width) / 2;
-        float h = static_cast<float>(height) / 2;
+        const float w = static_cast<float>(width) / 2;
+        const float h = static_cast<float>(height) / 2;
 
         size_t pos = 0;
         for (size_t y = 0; y < height; ++y)

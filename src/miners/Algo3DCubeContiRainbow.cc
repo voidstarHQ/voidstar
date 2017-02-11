@@ -12,7 +12,7 @@ Algo3DCubeContiRainbow::apply(GLfloat* vertices, GLfloat* colors, VertIndices& s
 
     for (size_t i = 2; i < size; ++i) {
         u8 z = data[i];
-        size_t id = x + y * height + z * depth * height;
+        size_t id = (y * width + x) * depth + z;
         size_t idx = 4 * id;
         colors[idx + 0] = static_cast<float>(x) / 255.0f;
         colors[idx + 1] = static_cast<float>(y) / 255.0f;

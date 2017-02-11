@@ -42,7 +42,7 @@ Algorithm::loadDataRange(const DataRange& range, size_t& size)
         size = std::min<size_t>(range.size(), max_data_size_);
     else
         size = range.size();
-    std::cerr << "data " << size << " bytes!" << std::endl;
+    std::cerr << "read " << size << " bytes" << std::endl;
     return loader_->dataChunk(range.begin, size);
 }
 
@@ -60,7 +60,6 @@ using AlgorithmFactoryFunc = std::function<Algorithm*()>;
 
 const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
     { "entropy", []() { return new Algo2DEntropy(); } },
-    { "4col", []() { return new Algo2DFourColors(); } },
     { "4col", []() { return new Algo2DFourColors(); } },
     { "gray", []() { return new Algo2DGrayscale(); } },
     { "cube", []() { return new Algo3DCubeFull(); } },
