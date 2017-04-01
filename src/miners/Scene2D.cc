@@ -50,6 +50,32 @@ Scene2D::init()
 }
 
 void
+Scene2D::unload()
+{
+    if (program_) {
+        delete program_;
+        glDeleteBuffers(1, &vbo_);
+        glDeleteBuffers(1, &colors_id_);
+        glDeleteVertexArrays(1, &vao_);
+    }
+    delete[] colors_;
+    delete[] vertices_;
+}
+
+void
+Scene2D::reload()
+{
+    auto* algo = reinterpret_cast<Algo2D*>(algo_);
+    reset_points();
+    algo->apply(vertices_, colors_, width_, height_)
+        || std::cerr << "!apply" << std::endl;
+    glBindVertexArray(vao_);
+    glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
+    glBufferData(GL_ARRAY_BUFFER, colors_size_, colors_, GL_STATIC_DRAW);
+    glBindVertexArray(0);
+}
+
+void
 Scene2D::load(Algorithm* algorithm)
 {
     Scene::load(algorithm);

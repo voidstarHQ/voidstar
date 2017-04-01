@@ -19,19 +19,24 @@ public:
           colors_(new GLfloat[colors_size_]),
           program_(NULL)
         {}
-    virtual ~Scene2D() {
-        delete[] vertices_;
-        delete[] colors_;
-        delete program_;
-    }
+    virtual ~Scene2D() { unload(); }
 
     virtual void init();
     virtual void load(Algorithm* algo);
+    virtual void unload();
+    virtual void reload();
     virtual bool update(float elapsedTime);
     virtual void render();
 private:
     void load_shaders();
     void load_buffers();
+    void reset_points() {
+        delete[] colors_;
+        colors_ = new GLfloat[colors_size_];
+        delete[] vertices_;
+        vertices_ = new GLfloat[vertices_size_];
+    }
+
 protected:
     GLuint vao_;
     GLuint vbo_;
