@@ -51,13 +51,13 @@ Algo3DCubeEntropy::apply(GLfloat* vertices, GLfloat* colors, VertIndices& select
                          size_t width, size_t height, size_t depth) {
     make_vertices(vertices, width, height, depth);
 
-    const size_t chunk_size = width * height;
+    const size_t chunk_size = width * height * 2;
     const u8* read = loader_->dataChunk(0, chunk_size);
     size_t pos = 0;
     for (size_t i = 0; i < chunk_size; ++i) {
         auto e = entropy(read, chunk_size, i, 32, 256);
         float r = (e > 0.5f) ? curve(e - 0.5f) : 0.0f;
-        if (r < 1.0f/255.0f)
+        if (r > 0.0f)
             selected.push_back(pos / 4);
         float b = std::pow(e, 2);
         colors[pos++] = r;

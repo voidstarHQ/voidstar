@@ -10,6 +10,7 @@
 #include <Algo3DCubeContiBnW.hh>
 #include <Algo3DCubeContiRainbow.hh>
 #include <Algo3DCubeContiFrebet.hh>
+#include <Algo3DCubeEntropy.hh>
 #include <Algo3DSphereFull.hh>
 #include <Algo3DSphereContiBnW.hh>
 #include <Algo3DSphereContiRainbow.hh>
@@ -64,10 +65,13 @@ const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
     { "entropy", []() { return new Algo2DEntropy(); } },
     { "4col", []() { return new Algo2DFourColors(); } },
     { "gray", []() { return new Algo2DGrayscale(); } },
+
     { "cube", []() { return new Algo3DCubeFull(); } },
     { "contibnw", []() { return new Algo3DCubeContiBnW(); } },
     { "contirb", []() { return new Algo3DCubeContiRainbow(); } },
     { "conti", []() { return new Algo3DCubeContiFrebet(); } },
+    { "cube_entropy", []() { return new Algo3DCubeEntropy(); } },
+
     { "sphere", []() { return new Algo3DSphereFull(); } },
     { "sphere_bnw", []() { return new Algo3DSphereContiBnW(); } },
     { "sphere_rb", []() { return new Algo3DSphereContiRainbow(); } },

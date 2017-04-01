@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <iostream>
 
 #include <MmapLoader.hh>
 
@@ -44,6 +45,7 @@ MmapFileLoader::data()
 const u8*
 MmapFileLoader::dataChunk(size_t offset, size_t size)
 {
+    std::cout << size_ << " >= " << offset + size << std::endl;
     if (size_ < offset + size)
         throw std::out_of_range("Trying to read data out of bound");
     return data() + offset;
