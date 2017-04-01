@@ -23,7 +23,7 @@ Scene3D::load_buffers() {
     glBindVertexArray(ctx_.vao);
 
     // make and bind the VBO
-glGenBuffers(1, &ctx_.vbo);
+    glGenBuffers(1, &ctx_.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.vbo);
 
     glBufferData(GL_ARRAY_BUFFER, ctx_.vertices_size, ctx_.vertices, GL_STATIC_DRAW);
@@ -65,8 +65,11 @@ void
 Scene3D::reload()
 {
     auto* algo = reinterpret_cast<Algo3D*>(algo_);
+    ctx_.reset_points();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
+    std::cout << "#points: " << ctx_.selected.size() << std::endl;
+    load_buffers();
     glBindVertexArray(ctx_.vao);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
     glBufferData(GL_ARRAY_BUFFER, ctx_.colors_size, ctx_.colors, GL_STATIC_DRAW);

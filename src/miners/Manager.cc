@@ -40,8 +40,6 @@ Manager::loadFile(size_t index)
         algo = scene_->algorithm();
         algo->use(loader, range);
         scene_->reload();
-        //scene_->unload();
-        //scene_->load(algo);
     } else {
         algo = createAlgorithm(args_->algo);
         algo->use(loader, range);

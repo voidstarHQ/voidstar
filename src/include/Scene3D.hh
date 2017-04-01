@@ -23,6 +23,14 @@ struct Scene3DContext {
         delete program;
     }
 
+    void reset_points() {
+        delete[] colors;
+        colors = new GLfloat[colors_size];
+        delete[] vertices;
+        vertices = new GLfloat[vertices_size];
+        selected.clear();
+    }
+
     GLuint vao;
     GLuint vbo;
 
