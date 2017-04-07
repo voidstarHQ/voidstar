@@ -156,8 +156,12 @@ Scene3D::render()
     // bind the VAO
     glBindVertexArray(ctx_.vao);
 
+#ifdef __APPLE__
+    glDrawArrays(GL_POINTS, 0, ctx_.n_points);
+#else
     // draw only the VAO's points we colored
     glDrawElements(GL_POINTS, ctx_.selected.size(), GL_UNSIGNED_INT, ctx_.selected.data());
+#endif
 
     // unbind the VAO and the program
     glBindVertexArray(0);
