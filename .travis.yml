@@ -20,7 +20,20 @@ before_script:
 
 script:
   - ./configure
-  - cd build && make
+  - pushd build && make && popd
 
 after_script:
   - set +e
+
+before_deploy: mv -v build/miners "build/miners-$TRAVIS_OS_NAME-$(basename $CC)-$(git describe --abbrev --dirty --always --tags)"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: cu/xvTwEXo4SD9BUb84dRSBCu8NB5KaHEFhERVlwGd9feKllpRpo1Vaflwzmoa/JEpdq5cgIV4b4f8OUtmPHlCeHq0nq6l7+Sl0p0yW0juSH0rDvJgJTde+Rma70RKVjz4mgtgLHa/PKNBHbdPl3kmVQ/aUZtF1qYN6ObiS+a+gIFQcUX0IQfJhBHRLxmc94ozW/9FxXzz0zhENeE8PWAMhAWdmxHnlYQPBuWw6EYsbzhD5s1lkywzBNprJ+XTqtc7dgTUUwZ7UkkhpQ4RrfRzjJUpKb2pjDo+8WZhsCjYnQRTCquKF4eoDM2barD/KuzRx/W+pD+eLZG7NLlm4t592mVwO+p9py330+UgS8JdNl+GJfq9QrK23Uo6FMaG/SoHO1qFd5J5RHdFO0QhCKj/BxSirayc0Jv4e04X7a8ssasIX19KpINiZO/kQZAhioumm7UXLo6cKn1nzPbPkZJ7efvKkauSMCkQgd/UZ07P3ZxgEYn9eU3KLohNq1HFxCoBsCwSXSqSkUAVRA0QAgJBUCeD/ZCuRi5icgbi7AT/OeiP0YXoi1o6aGqMIp5AQ3ysSOosJRuwSjbeZ1YgxonqVYATH1jJPg0fzyPASLGIx90UN8MmBxe/CXk0gNOrf3TTYYgdWErwB1lRcbb0fZvYfu/FDb3vp2tQjTrM/Q+qY=
+  skip_cleanup: true
+  overwrite: true
+  file_glob: true
+  file: build/miners-*
+  on:
+    tags: true
