@@ -29,3 +29,10 @@ test:
   pre:
     - ./configure
     - cd build && make
+
+deployment:
+  release:
+    tag: /.*/
+    owner: fenollp
+    commands:
+      - ./deploy_master.sh
