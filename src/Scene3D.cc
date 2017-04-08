@@ -64,9 +64,6 @@ Scene3D::unload()
         glDeleteBuffers(1, &ctx_.elements);
         glDeleteBuffers(1, &ctx_.colors_id);
         glDeleteVertexArrays(1, &ctx_.vao);
-        // delete[] ctx_.vertices;
-        // delete[] ctx_.colors;
-        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 }
 
