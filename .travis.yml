@@ -21,6 +21,9 @@ before_script:
 script:
   - ./configure
   - pushd build && make && popd
+  - git clean -xdff
+  - ./configure -b RELEASE
+  - pushd build && make -j && popd
 
 after_script:
   - set +e
