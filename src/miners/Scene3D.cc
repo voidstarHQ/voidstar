@@ -31,6 +31,10 @@ Scene3D::load_buffers() {
     glVertexAttribPointer(ctx_.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(ctx_.program->attrib("vert"));
 
+    glGenBuffers(1, &ctx_.elements);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ctx_.elements);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ctx_.selected.size(), ctx_.selected.data(), GL_STATIC_DRAW);
+
     // make and bind the VBO
     glGenBuffers(1, &ctx_.colors_id);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
@@ -156,10 +160,10 @@ Scene3D::render()
     // bind the VAO
     glBindVertexArray(ctx_.vao);
 
-#ifdef __APPLE__
-    glDrawArrays(GL_POINTS, 0, ctx_.n_points);
-#else
     // draw only the VAO's points we colored
+#ifdef __APPLE__
+    glDrawRangeElements(GL_POINTS, ctx_.selected.front(), ctx_.selected.back(), ctx_.selected.size(), GL_UNSIGNED_INT, 0);
+#else
     glDrawElements(GL_POINTS, ctx_.selected.size(), GL_UNSIGNED_INT, ctx_.selected.data());
 #endif
 
