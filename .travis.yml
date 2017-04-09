@@ -8,7 +8,7 @@ os:
   - osx
   - linux
 
-dist: precise
+dist: trusty
 
 before_script:
   - set -e
