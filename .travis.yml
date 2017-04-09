@@ -19,7 +19,7 @@ before_script:
   - $CXX --version || true
 
 script:
-  - ./configure
+  - ./configure -b DEBUG
   - pushd build && make && popd
   - git clean -xdff
   - ./configure -b RELEASE
