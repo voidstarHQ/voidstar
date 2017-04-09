@@ -163,8 +163,8 @@ Scene3D::render()
 
     // draw only the VAO's points we colored
 #ifdef __APPLE__
-    // glDrawRangeElements(GL_POINTS, ctx_.selected.front(), ctx_.selected.back(), ctx_.selected.size(), GL_UNSIGNED_INT, 0);
-    glDrawElements(GL_POINTS, ctx_.selected.size(), GL_UNSIGNED_INT, 0);
+    auto mM = std::minmax_element(ctx_.selected.begin(), ctx_.selected.end());
+    glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, ctx_.selected.size(), GL_UNSIGNED_INT, 0);
 #else
     glDrawElements(GL_POINTS, ctx_.selected.size(), GL_UNSIGNED_INT, ctx_.selected.data());
 #endif
