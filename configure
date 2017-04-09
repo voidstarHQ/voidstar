@@ -129,7 +129,7 @@ shift $((OPTIND - 1))
 #################
 cd "$__dir/$__build_dir" && \
     cmake .. \
-    -DCMAKE_CXX_COMPILER="$(which "$compiler")" \
-    -DCMAKE_BUILD_TYPE="$build_type" \
-    -DCMAKE_INSTALL_PREFIX="$prefix" \
-    -DCOMPILER_SANITIZER="$selected_sanitizers"
+          -DCMAKE_CXX_COMPILER="$(which "$compiler")" \
+          -DCMAKE_BUILD_TYPE="$build_type" \
+          -DCMAKE_INSTALL_PREFIX="$prefix" \
+          -DCOMPILER_SANITIZER="$selected_sanitizers"
