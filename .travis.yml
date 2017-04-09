@@ -4,6 +4,7 @@ language: cpp
 
 compiler:
   - clang
+  - gcc
 
 os:
   - osx
@@ -21,11 +22,10 @@ script:
   - pushd build && make && popd
   - ./configure -c "$(basename $CXX)" -b RELEASE
   - pushd build && make -j && popd
+  - mv -v build/miners "build/miners-$TRAVIS_OS_NAME-$(basename $CC)-$(git describe --abbrev --dirty --always --tags)"
 
 after_script:
   - set +e
-
-before_deploy: mv -v build/miners "build/miners-$TRAVIS_OS_NAME-$(basename $CC)-$(git describe --abbrev --dirty --always --tags)"
 
 deploy:
   provider: releases
