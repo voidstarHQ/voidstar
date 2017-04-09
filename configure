@@ -1,5 +1,4 @@
-#!/bin/bash -x
-
+#!/bin/bash
 
 #------------------------------------------------------------------------------
 #                               QUALITY
@@ -68,62 +67,65 @@ function match() {
     MATCHED="$selected"
 }
 
-while getopts ":cpbsh" opt; do
-    case $opt in
-        'h') usage && exit 0 ;;
+until [[ "$1" == '' ]]; do
+    while getopts ':cpbs:h:' opt; do
+        case $opt in
+            'h') usage && exit 0 ;;
 
-        'c')
-            match $opt "$2" compilers[@]
-            compiler="$MATCHED"
-            # better to remove the build dir and recreate it
-            # when changing the compiler
-            rm -rf "$__dir/$__build_dir"
-            mkdir -p "$__dir/$__build_dir"
-            ;;
+            'c')
+                match $opt "$2" compilers[@]
+                compiler="$MATCHED"
+                # better to remove the build dir and recreate it
+                # when changing the compiler
+                rm -rf "$__dir/$__build_dir"
+                mkdir -p "$__dir/$__build_dir"
+                ;;
 
-        'p')
-            new_prefix="$2"
-            if [[ ! -d "$new_prefix" ]]; then
-                echo "Unmatched -$opt '$new_prefix':"
-                echo -e "\tPath is not a directory"
-                exit 2
-            fi
-            prefix="$new_prefix"
-            ;;
+            'p')
+                new_prefix="$2"
+                if [[ ! -d "$new_prefix" ]]; then
+                    echo "Unmatched -$opt '$new_prefix':"
+                    echo -e "\tPath is not a directory"
+                    exit 2
+                fi
+                prefix="$new_prefix"
+                ;;
 
-        'b')
-            match $opt "$2" build_types[@]
-            build_type="$MATCHED"
-            ;;
+            'b')
+                match $opt "$2" build_types[@]
+                build_type="$MATCHED"
+                ;;
 
-        's')
-            dialog --backtitle "Compiler sanitizers configuration" \
-                --checklist "Choose the sanitizer you want to use:" 0 0 10 \
-                1 "${sanitizers[0]}" on \
-                2 "${sanitizers[1]}" off \
-                3 "${sanitizers[2]}" off \
-                4 "${sanitizers[3]}" off \
-                5 "${sanitizers[4]}" off \
-                2>/tmp/$$_dialog.ans
+            's')
+                dialog --backtitle "Compiler sanitizers configuration" \
+                       --checklist "Choose the sanitizer you want to use:" 0 0 10 \
+                       1 "${sanitizers[0]}" on \
+                       2 "${sanitizers[1]}" off \
+                       3 "${sanitizers[2]}" off \
+                       4 "${sanitizers[3]}" off \
+                       5 "${sanitizers[4]}" off \
+                       2>/tmp/$$_dialog.ans
 
-            sanitizer_answer=$(cat /tmp/$$_dialog.ans && rm -f /tmp/$$_dialog.ans)
-            selected_sanitizers=()
-            if [ "$sanitizer_answer" = "" ]; then
-                echo "Project Configuration Cancelled."
-                exit 1
-            else
-                for i in $sanitizer_answer; do
-                    idx=$(( $i - 1 ))
-                    # push to array
-                    selected_sanitizers+="${sanitizers[$idx]} "
-                done
-                # make CMake list struct
-                selected_sanitizers=$( echo "${selected_sanitizers[@]% }" | sed -e 's/ /;/g')
-            fi
-            ;;
-    esac
+                sanitizer_answer=$(cat /tmp/$$_dialog.ans && rm -f /tmp/$$_dialog.ans)
+                selected_sanitizers=()
+                if [ "$sanitizer_answer" = "" ]; then
+                    echo "Project Configuration Cancelled."
+                    exit 1
+                else
+                    for i in $sanitizer_answer; do
+                        idx=$(( $i - 1 ))
+                        # push to array
+                        selected_sanitizers+="${sanitizers[$idx]} "
+                    done
+                    # make CMake list struct
+                    selected_sanitizers=$( echo "${selected_sanitizers[@]% }" | sed -e 's/ /;/g')
+                fi
+                ;;
+        esac
+        shift 2
+        OPTIND=1
+    done
 done
-shift $((OPTIND - 1))
 
 # CMAKE
 #################
