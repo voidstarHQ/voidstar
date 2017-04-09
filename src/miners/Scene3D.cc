@@ -60,6 +60,7 @@ Scene3D::unload()
     if (ctx_.program) {
         delete ctx_.program;
         glDeleteBuffers(1, &ctx_.vbo);
+        glDeleteBuffers(1, &ctx_.elements);
         glDeleteBuffers(1, &ctx_.colors_id);
         glDeleteVertexArrays(1, &ctx_.vao);
     }
