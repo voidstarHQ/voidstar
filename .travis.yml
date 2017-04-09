@@ -28,6 +28,7 @@ before_script:
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]] && [[ "$(basename "$CC")" == 'clang' ]]; then export CXXFLAGS='-stdlib=libc++'; fi
 
 script:
   - ./configure -c "$(basename $CXX)" -b DEBUG
