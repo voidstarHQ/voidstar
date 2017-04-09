@@ -24,7 +24,7 @@ before_script:
   - set -e
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glew glm glfw3; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3 && mkdir ~/glfw3/build && pushd ~/glfw3/build && cmake -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF .. && cmake --build . && sudo make install && popd; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3 && mkdir ~/glfw3/build && pushd ~/glfw3/build && cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF .. && cmake --build . && sudo make install && popd; fi
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
@@ -41,7 +41,8 @@ after_script:
   - set +e
 
 after_success:
-  - if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]]; then
+  - |
+    if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]]; then
       MAJOR='v0'
       minor="$(($(git describe --tags | cut -d. -f2) + 1))"
       tag=$MAJOR-$minor-$TRAVIS_BUILD_NUMBER
