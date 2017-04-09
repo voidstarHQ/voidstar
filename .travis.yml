@@ -11,17 +11,15 @@ os:
 before_script:
   - set -e
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glew; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glm; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glfw3; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glew glm glfw3; fi
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
 
 script:
-  - ./configure -b DEBUG
+  - ./configure -c "$(basename $CXX)" -b DEBUG
   - pushd build && make && popd
-  - ./configure -b RELEASE
+  - ./configure -c "$(basename $CXX)" -b RELEASE
   - pushd build && make -j && popd
 
 after_script:
