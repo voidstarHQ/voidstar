@@ -27,9 +27,9 @@ dependencies:
 
 test:
   pre:
-    - ./configure -c g++ -b DEBUG
+    - ./configure -b DEBUG
     - pushd build && make && popd
-    - ./configure -c g++ -b RELEASE
+    - ./configure -b RELEASE
     - pushd build && make && popd
 
 deployment:

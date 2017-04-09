@@ -27,7 +27,10 @@ build_types=(DEBUG RELEASE)
 sanitizers=(address thread memory leak undefined)
 
 # default values
-compiler="${compilers[0]}"
+compiler=''
+for comp in "${compilers[@]}"; do
+    which "$comp" >/dev/null && compiler="$comp" && break
+done
 prefix="/usr/local"
 build_type="${build_types[0]}"
 sanitizer_answer=1
