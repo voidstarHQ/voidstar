@@ -27,12 +27,9 @@ build_types=(DEBUG RELEASE)
 sanitizers=(address thread memory leak undefined)
 
 # default values
-compiler_answer=1
-for (( i=$(($compiler_answer - 1)); i<=$((${#compilers[@]} - 1)); i++ )); do
-    which "${compilers[$i]}" >/dev/null && compiler_answer=$(($i + 1)) && break
-done
-prefix_answer="/usr/local"
-build_type_answer=1
+compiler="${compilers[0]}"
+prefix="/usr/local"
+build_type="${build_types[0]}"
 sanitizer_answer=1
 
 #------------------------------------------------------------------------------
@@ -40,64 +37,63 @@ sanitizer_answer=1
 #------------------------------------------------------------------------------
 usage ()
 {
-    echo "./$__file [-h] [-c] [-p] [-b] [-s]"
+    echo "./$__file [-h] [-c compiler] [-p prefix] [-b build_type] [-s sanitizers]"
     echo
-    echo "  -h      Display help"
-    echo "  -c      Change compiler (${compilers[$(($compiler_answer - 1))]})"
-    echo "  -p      Change install prefix ($prefix_answer)"
-    echo "  -b      Change build type (${build_types[$(($build_type_answer - 1))]})"
-    echo "  -s      Enable compiler sanitizers flag ()"
+    echo "  -h      This help"
+    echo "  -c      Select compiler (($compiler) ${compilers[@]})"
+    echo "  -p      Select install prefix ($prefix)"
+    echo "  -b      Select build type (($build_type) ${build_types[@]})"
+    echo "  -s      Enable compiler sanitizers flag (${sanitizers[@]})"
     echo
-    exit 1
 }
 
-# getopt loop
-while getopts ":cpbsh" opt ; do
+MATCHED=''
+function match() {
+    local opt="$1"
+    local OPTARG="$2"
+    declare -a range=("${!3}")
+    local selected=''
+    for value in "${range[@]}"; do
+        [[ "$value" == "$OPTARG" ]] && selected="$value" && break
+    done
+    if [[ "$selected" == '' ]]; then
+        usage
+        echo "Unmatched -$opt '$OPTARG'. Try one of:"
+        printf '\t%s\n' "${range[@]}"
+        exit 1
+    fi
+    MATCHED="$selected"
+}
+
+while getopts ":cpbsh" opt; do
     case $opt in
-        "c")
-            dialog --backtitle "Compiler configuration" \
-                --radiolist "Choose your compiler" 0 0 10 \
-                1 "${compilers[0]}" on \
-                2 "${compilers[1]}" off \
-                2>/tmp/$$_dialog.ans
+        'h') usage && exit 0 ;;
 
-            compiler_answer=$(cat /tmp/$$_dialog.ans && rm -f /tmp/$$_dialog.ans)
-            if [ "$compiler_answer" -eq 0 ]; then
-                echo "Project Configuration Cancelled."
-                exit 1
-            else
-                # better to remove the build dir and recreate it
-                # when changing the compiler
-                rm -rf "$__dir/$__build_dir"
-                mkdir -p "$__dir/$__build_dir"
-            fi
+        'c')
+            match $opt "$2" compilers[@]
+            compiler="$MATCHED"
+            # better to remove the build dir and recreate it
+            # when changing the compiler
+            rm -rf "$__dir/$__build_dir"
+            mkdir -p "$__dir/$__build_dir"
             ;;
-        "p")
-            dialog --backtitle "Installation prefix configuration" \
-                --inputbox "Set the install prefix" 0 0 \
-                "/usr/local" \
-                2>/tmp/$$_dialog.ans
 
-            prefix_answer=$(cat /tmp/$$_dialog.ans && rm -f /tmp/$$_dialog.ans)
-            if [ "$prefix_answer" -eq 0 ]; then
-                echo "Project Configuration Cancelled."
-                exit 1
+        'p')
+            new_prefix="$2"
+            if [[ ! -d "$new_prefix" ]]; then
+                echo "Unmatched -$opt '$new_prefix':"
+                echo -e "\tPath is not a directory"
+                exit 2
             fi
+            prefix="$new_prefix"
             ;;
-        "b")
-            dialog --backtitle "Build type configuration" \
-                --radiolist "Set the build type" 0 0 10 \
-                1 "${build_types[0]}" on \
-                2 "${build_types[1]}" off \
-                2>/tmp/$$_dialog.ans
 
-            build_type_answer=$(cat /tmp/$$_dialog.ans && rm -f /tmp/$$_dialog.ans)
-            if [ "$build_type_answer" -eq 0 ]; then
-                echo "Project Configuration Cancelled."
-                exit 1
-            fi
+        'b')
+            match $opt "$2" build_types[@]
+            build_type="$MATCHED"
             ;;
-        "s")
+
+        's')
             dialog --backtitle "Compiler sanitizers configuration" \
                 --checklist "Choose the sanitizer you want to use:" 0 0 10 \
                 1 "${sanitizers[0]}" on \
@@ -122,17 +118,15 @@ while getopts ":cpbsh" opt ; do
                 selected_sanitizers=$( echo "${selected_sanitizers[@]% }" | sed -e 's/ /;/g')
             fi
             ;;
-        "h")
-            usage
-            ;;
     esac
 done
+shift $((OPTIND - 1))
 
 # CMAKE
 #################
 cd "$__dir/$__build_dir" && \
     cmake .. \
-    -DCMAKE_CXX_COMPILER="$(which "${compilers[$(($compiler_answer - 1))]}")" \
-    -DCMAKE_BUILD_TYPE="$(echo ${build_types[$(($build_type_answer - 1))]} | tr '[a-z]' '[A-Z]')" \
-    -DCMAKE_INSTALL_PREFIX="$prefix_answer" \
+    -DCMAKE_CXX_COMPILER="$(which "$compiler")" \
+    -DCMAKE_BUILD_TYPE="$build_type" \
+    -DCMAKE_INSTALL_PREFIX="$prefix" \
     -DCOMPILER_SANITIZER="$selected_sanitizers"
