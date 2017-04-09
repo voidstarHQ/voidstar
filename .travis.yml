@@ -8,6 +8,8 @@ os:
   - osx
   - linux
 
+dist: precise
+
 before_script:
   - set -e
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew update; fi
