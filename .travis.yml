@@ -13,7 +13,10 @@ before_script:
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glew glm glfw3; fi
   - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then sudo apt-get update; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then sudo apt-get install libglew-dev libglm-dev libglfw3; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then sudo apt-get install libglew-dev libglm-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then aptitude search glfw; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then sudo apt-get install xorg-dev libgl1-mesa-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3 && mkdir ~/glfw3/build && cd ~/glfw3/build && cmake -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF .. && cmake --build . && sudo make install; fi
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
