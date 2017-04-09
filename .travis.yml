@@ -40,6 +40,17 @@ script:
 after_script:
   - set +e
 
+after_success:
+  - if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]]; then
+      MAJOR='v0'
+      minor="$(($(git describe --tags | cut -d. -f2) + 1))"
+      tag=$MAJOR-$minor-$TRAVIS_BUILD_NUMBER
+      git config --global user.email 'builds@travis-ci.com'
+      git config --global user.name 'Travis CI'
+      git tag -a $tag -m $tag
+      git push --quiet https://$GITHUBKEY@github.com/$TRAVIS_REPO_SLUG $tag > /dev/null 2>&1
+    fi
+
 deploy:
   provider: releases
   api_key:
