@@ -1,5 +1,3 @@
-sudo: false
-
 language: cpp
 
 compiler:
@@ -8,11 +6,14 @@ compiler:
 
 os:
   - osx
+  - linux
 
 before_script:
   - set -e
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glew glm glfw3; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then sudo apt update; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then sudo apt install libglew-dev libglm-dev libglfw3; fi
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
