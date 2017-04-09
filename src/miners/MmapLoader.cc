@@ -17,7 +17,7 @@ MmapFileLoader::load()
     lseek(fd_, 0, SEEK_SET);
 
     auto base = mmap(0, size_, PROT_READ, MAP_PRIVATE, fd_, 0);
-    if (base < 0) {
+    if (nullptr == base) {
         close(fd_);
         throw std::runtime_error("Failed to map data");
     }

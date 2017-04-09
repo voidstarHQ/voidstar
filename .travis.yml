@@ -1,26 +1,52 @@
-sudo: false
-
 language: cpp
 
 compiler:
   - clang
+  - gcc
 
 os:
   - osx
+  - linux
+
+dist: trusty
+addons:
+  apt:
+    packages:
+      - libglew-dev
+      - libglm-dev
+      - xorg-dev
+      - libgl1-mesa-dev
+      - libc++-dev
+cache:
+  apt: true
 
 before_script:
   - set -e
   - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glew; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glm; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glfw3; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glew glm glfw3; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3 && mkdir ~/glfw3/build && pushd ~/glfw3/build && cmake -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF .. && cmake --build . && sudo make install && popd; fi
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]] && [[ "$(basename "$CC")" == 'clang' ]]; then export CXXFLAGS='-stdlib=libc++'; fi
 
 script:
-  - ./configure
-  - cd build && make
+  - ./configure -c "$(basename $CXX)" -b DEBUG
+  - pushd build && make && popd
+  - ./configure -c "$(basename $CXX)" -b RELEASE
+  - pushd build && make -j && popd
+  - mv -v build/miners "build/miners-$TRAVIS_OS_NAME-$(basename $CC)-$(git describe --abbrev --dirty --always --tags)"
 
 after_script:
   - set +e
+
+deploy:
+  provider: releases
+  api_key:
+    secure: cu/xvTwEXo4SD9BUb84dRSBCu8NB5KaHEFhERVlwGd9feKllpRpo1Vaflwzmoa/JEpdq5cgIV4b4f8OUtmPHlCeHq0nq6l7+Sl0p0yW0juSH0rDvJgJTde+Rma70RKVjz4mgtgLHa/PKNBHbdPl3kmVQ/aUZtF1qYN6ObiS+a+gIFQcUX0IQfJhBHRLxmc94ozW/9FxXzz0zhENeE8PWAMhAWdmxHnlYQPBuWw6EYsbzhD5s1lkywzBNprJ+XTqtc7dgTUUwZ7UkkhpQ4RrfRzjJUpKb2pjDo+8WZhsCjYnQRTCquKF4eoDM2barD/KuzRx/W+pD+eLZG7NLlm4t592mVwO+p9py330+UgS8JdNl+GJfq9QrK23Uo6FMaG/SoHO1qFd5J5RHdFO0QhCKj/BxSirayc0Jv4e04X7a8ssasIX19KpINiZO/kQZAhioumm7UXLo6cKn1nzPbPkZJ7efvKkauSMCkQgd/UZ07P3ZxgEYn9eU3KLohNq1HFxCoBsCwSXSqSkUAVRA0QAgJBUCeD/ZCuRi5icgbi7AT/OeiP0YXoi1o6aGqMIp5AQ3ysSOosJRuwSjbeZ1YgxonqVYATH1jJPg0fzyPASLGIx90UN8MmBxe/CXk0gNOrf3TTYYgdWErwB1lRcbb0fZvYfu/FDb3vp2tQjTrM/Q+qY=
+  skip_cleanup: true
+  overwrite: true
+  file_glob: true
+  file: build/miners-*
+  on:
+    tags: true
