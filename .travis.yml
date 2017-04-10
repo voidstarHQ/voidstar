@@ -46,10 +46,12 @@ before_script:
 script:
   - ./configure -c "$(basename $CXX)" -b DEBUG
   - pushd build && make && popd
-  - ./build/miners -h
+  - ./build/miners --help
+  - ./build/miners -l
   - ./configure -c "$(basename $CXX)" -b RELEASE
-  - pushd build && make -j && popd
+  - pushd build && make VERBOSE=1 -j && popd
   - ./build/miners -h
+  - ./build/miners --list
   - mv -v build/miners "build/miners-$TRAVIS_OS_NAME-$(basename $CC)-$(git describe --abbrev --dirty --always --tags)"
 
 after_script:

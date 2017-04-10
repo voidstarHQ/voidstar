@@ -56,7 +56,6 @@ endif()
 include_directories(
     ${PROJECT_SOURCE_DIR}/src/include
     ${PROJECT_SOURCE_DIR}/src/common
-    # ${PROJECT_SOURCE_DIR}/src/common/thirdparty/glfw/include
 )
 
 set(SOURCES
