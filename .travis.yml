@@ -33,9 +33,9 @@ before_script:
         git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3
         mkdir ~/glfw3/build
         pushd ~/glfw3/build
-        cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
+        cmake -DCMAKE_INSTALL_PREFIX=/usr/local/opt -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
         cmake --build .
-        sudo make install
+        make install
         popd
         ;;
     esac
