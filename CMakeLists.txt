@@ -110,7 +110,7 @@ target_link_libraries(miners
   m
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARIES}
-  glfw
+  ${GLFW_STATIC_LIBRARIES}
   ${EXTRA_LIBS}
 )
 

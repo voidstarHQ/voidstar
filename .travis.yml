@@ -23,20 +23,21 @@ cache:
 before_script:
   - set -e
   - |
-    if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then
-      brew update
-      brew install glew glm glfw3
-    else
-      git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3
-      mkdir ~/glfw3/build
-      pushd ~/glfw3/build
-      cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF ..
-      cmake --build .
-      make
-      ls -lha ..
-      find .. -name libglfw3.a
-      popd
-    fi
+    case "$TRAVIS_OS_NAME" in
+      'osx')
+        brew update
+        brew install glew glm glfw3
+        ;;
+      'linux')
+        git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3
+        mkdir ~/glfw3/build
+        pushd ~/glfw3/build
+        cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
+        cmake --build .
+        sudo make install
+        popd
+        ;;
+    esac
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
