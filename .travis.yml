@@ -67,10 +67,13 @@ after_success:
       MAJOR='v0'
       minor="$(($(git describe --tags | cut -d. -f2) + 1))"
       tag=$MAJOR-$minor-$TRAVIS_BUILD_NUMBER
-      git config --global user.email 'builds@travis-ci.com'
-      git config --global user.name 'Travis CI'
-      git tag -a $tag -m $tag
-      git push --quiet https://$GITHUBKEY@github.com/$TRAVIS_REPO_SLUG $tag > /dev/null 2>&1
+      git config --global user.email 'pierrefenoll+travis-miners@gmail.com'
+      git config --global user.name 'Autotag'
+      git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
+      git tag -a $tag -m $tag $TRAVIS_COMMIT
+      eval `ssh-agent -s`
+      ssh-add travis-miners
+      git push --tags
     fi
 
 deploy:
