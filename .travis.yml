@@ -71,6 +71,7 @@ after_success:
       git config --global user.name 'Autotag'
       git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
       git tag -a $tag -m $tag $TRAVIS_COMMIT
+      chmod 600 travis-miners
       eval `ssh-agent -s`
       ssh-add travis-miners
       git push --tags
