@@ -20,11 +20,28 @@ addons:
 cache:
   apt: true
 
+before_install:
+- openssl aes-256-cbc -K $encrypted_b87f4dd04cd0_key -iv $encrypted_b87f4dd04cd0_iv -in travis-miners.enc -out travis-miners -d
+
 before_script:
   - set -e
-  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'osx' ]]; then brew install glew glm glfw3; fi
-  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3 && mkdir ~/glfw3/build && pushd ~/glfw3/build && cmake -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF .. && cmake --build . && sudo make install && popd; fi
+  - |
+    case "$TRAVIS_OS_NAME" in
+      'osx')
+        brew update
+        brew install glew glm
+        brew install glfw3 --without-shared-library
+        ;;
+      'linux')
+        git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3
+        mkdir ~/glfw3/build
+        pushd ~/glfw3/build
+        cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
+        cmake --build .
+        sudo make install
+        popd
+        ;;
+    esac
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
@@ -33,12 +50,32 @@ before_script:
 script:
   - ./configure -c "$(basename $CXX)" -b DEBUG
   - pushd build && make && popd
+  - ./build/miners --help
+  - ./build/miners -l
   - ./configure -c "$(basename $CXX)" -b RELEASE
-  - pushd build && make -j && popd
+  - pushd build && make VERBOSE=1 -j && popd
+  - ./build/miners -h
+  - ./build/miners --list
   - mv -v build/miners "build/miners-$TRAVIS_OS_NAME-$(basename $CC)-$(git describe --abbrev --dirty --always --tags)"
 
 after_script:
   - set +e
+
+after_success:
+  - |
+    if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]]; then
+      minor="$(($(git describe --tags | cut -d. -f2) + 1))"
+      tag=v0.$minor.$TRAVIS_BUILD_ID
+      git config --global user.email 'pierrefenoll+travis-miners@gmail.com'
+      git config --global user.name 'Autotag'
+      git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
+      git tag -a $tag -m $tag $TRAVIS_COMMIT
+      chmod 600 travis-miners
+      eval `ssh-agent -s`
+      ssh-add travis-miners
+      echo Racing to tag $tag
+      if git push --tags; then echo Tagged!; fi
+    fi
 
 deploy:
   provider: releases
