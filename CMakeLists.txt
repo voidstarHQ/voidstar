@@ -27,8 +27,6 @@ include_directories(${GLEW_INCLUDE_DIRS})
 find_package(PkgConfig REQUIRED)
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
-message(STATUS "GLFW_STATIC_LDFLAGS = ${GLFW_STATIC_LDFLAGS}")
-# set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GLFW_STATIC_LDFLAGS}")
 
 #-----------------------------------------------------------------------------
 #                           BUILD TYPES & FLAGS

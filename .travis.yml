@@ -26,7 +26,8 @@ before_script:
     case "$TRAVIS_OS_NAME" in
       'osx')
         brew update
-        brew install glew glm glfw3
+        brew install glew glm
+        brew install glfw3 --without-shared-library
         ;;
       'linux')
         git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3
