@@ -63,10 +63,9 @@ after_script:
 
 after_success:
   - |
-    if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]]; then
-      MAJOR='v0'
+    if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]]; then
       minor="$(($(git describe --tags | cut -d. -f2) + 1))"
-      tag=$MAJOR-$minor-$TRAVIS_BUILD_NUMBER
+      tag=v0.$minor.$TRAVIS_BUILD_ID
       git config --global user.email 'pierrefenoll+travis-miners@gmail.com'
       git config --global user.name 'Autotag'
       git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
@@ -74,7 +73,8 @@ after_success:
       chmod 600 travis-miners
       eval `ssh-agent -s`
       ssh-add travis-miners
-      git push --tags
+      echo Racing to tag $tag
+      if git push --tags; then echo Tagged!; fi
     fi
 
 deploy:
