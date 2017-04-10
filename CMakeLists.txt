@@ -24,8 +24,11 @@ find_package(OpenGL REQUIRED)
 include_directories(${OpenGL_INCLUDE_DIR})
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
-find_package(glfw3 3.2 REQUIRED)
-include_directories(${GLFW3_INCLUDE_DIRS})
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLFW REQUIRED glfw3)
+include_directories(${GLFW_INCLUDE_DIRS})
+message(STATUS "GLFW_STATIC_LDFLAGS = ${GLFW_STATIC_LDFLAGS}")
+# set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GLFW_STATIC_LDFLAGS}")
 
 #-----------------------------------------------------------------------------
 #                           BUILD TYPES & FLAGS
@@ -53,7 +56,7 @@ endif()
 include_directories(
     ${PROJECT_SOURCE_DIR}/src/include
     ${PROJECT_SOURCE_DIR}/src/common
-    ${PROJECT_SOURCE_DIR}/src/common/thirdparty/glfw/include
+    # ${PROJECT_SOURCE_DIR}/src/common/thirdparty/glfw/include
 )
 
 set(SOURCES
@@ -110,9 +113,11 @@ target_link_libraries(miners
   m
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARIES}
-  ${GLFW_STATIC_LIBRARIES}
+  ${GLFW_STATIC_LIBRARIES} # This needs manual addition of ${GLFW_STATIC_LDFLAGS}
   ${EXTRA_LIBS}
 )
+string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
+set_property(TARGET miners APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
 
 add_custom_command(TARGET miners POST_BUILD
                    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/src/resources .)
