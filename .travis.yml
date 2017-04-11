@@ -21,10 +21,10 @@ cache:
   apt: true
 
 before_install:
-- openssl aes-256-cbc -K $encrypted_b87f4dd04cd0_key -iv $encrypted_b87f4dd04cd0_iv -in travis-miners.enc -out travis-miners -d
-
-before_script:
   - set -e
+  - openssl aes-256-cbc -K $encrypted_b87f4dd04cd0_key -iv $encrypted_b87f4dd04cd0_iv -in travis-miners.enc -out travis-miners -d
+
+install:
   - |
     case "$TRAVIS_OS_NAME" in
       'osx')
@@ -42,6 +42,8 @@ before_script:
         popd
         ;;
     esac
+
+before_script:
   - cmake --version || true
   - $CC --version || true
   - $CXX --version || true
