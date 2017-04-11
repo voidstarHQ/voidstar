@@ -35,15 +35,15 @@ onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
     auto* ev = reinterpret_cast<GlfwKeyboardEvents*>(events);
     ev->process(key, scancode, action, mods);
 
-    /*if (action == GLFW_PRESS)
-        std::cout << "pressed: ";
-    else if (action == GLFW_RELEASE)
-        std::cout << "released: ";
-    else if (action == GLFW_REPEAT)
-        std::cout << "repeat: ";
-    else
-        std::cout << "wtf: ";
-    std::cout << "key " << key << " (" << scancode << ", " << mods << ")" << std::endl;*/
+    // if (action == GLFW_PRESS)
+    //     std::cout << "pressed: ";
+    // else if (action == GLFW_RELEASE)
+    //     std::cout << "released: ";
+    // else if (action == GLFW_REPEAT)
+    //     std::cout << "repeat: ";
+    // else
+    //     std::cout << "wtf: ";
+    // std::cout << "key " << key << " (" << scancode << ", " << mods << ")" << std::endl;
 }
 
 void
@@ -94,10 +94,10 @@ GlfwManager::glInit() {
     // GLEW throws some errors, so discard all the errors so far
     glProcessErrors(true);
 
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl
+              << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl
+              << "Vendor: " << glGetString(GL_VENDOR) << std::endl
+              << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
 
     if (!GLEW_VERSION_3_2)
         throw std::runtime_error("OpenGL 3.2 API is not available.");

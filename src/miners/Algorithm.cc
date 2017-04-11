@@ -13,7 +13,17 @@
 #include <Algo3DSphereContiRainbow.hh>
 #include <Algo3DSphereContiFrebet.hh>
 
-void Algorithm::use(Loader *loader, DataRange *range)
+std::ostream&
+size2str(size_t size) {
+    std::string str = std::to_string(size);
+    int pos = str.length() - 3;
+    while (pos > 0) {
+        str.insert(pos, ",");
+        pos -= 3;
+    }
+}
+
+void Algorithm::use(Loader* loader, DataRange* range)
 {
     // XXX this might be problematic in the future
     // XXX delete loader prior to creating a new one (same for range)
@@ -35,18 +45,18 @@ void Algorithm::use(Loader *loader, DataRange *range)
     }
 }
 
-const u8 *
+const u8*
 Algorithm::loadDataRange(const DataRange& range, size_t& size)
 {
     if (max_data_size_)
         size = std::min<size_t>(range.size(), max_data_size_);
     else
         size = range.size();
-    std::cerr << "read " << size << " bytes" << std::endl;
+    std::cerr << "read " << size2str(size) << " bytes" << std::endl;
     return loader_->dataChunk(range.begin, size);
 }
 
-Algorithm *
+Algorithm*
 createAlgorithm(const std::string str)
 {
     auto it = algorithms.find(str);
