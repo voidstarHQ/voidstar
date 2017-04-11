@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <algorithm>
 
 #include <platform.hpp>
 
@@ -33,7 +34,7 @@ Scene3D::load_buffers() {
 
     glGenBuffers(1, &ctx_.elements);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ctx_.elements);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ctx_.selected.size(), ctx_.selected.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(decltype(ctx_.selected)::value_type) * ctx_.selected.size(), ctx_.selected.data(), GL_STATIC_DRAW);
 
     // make and bind the VBO
     glGenBuffers(1, &ctx_.colors_id);
@@ -164,12 +165,8 @@ Scene3D::render()
     glBindVertexArray(ctx_.vao);
 
     // draw only the VAO's points we colored
-#ifdef __APPLE__
     auto mM = std::minmax_element(ctx_.selected.begin(), ctx_.selected.end());
-    glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, ctx_.selected.size(), GL_UNSIGNED_INT, 0);
-#else
-    glDrawElements(GL_POINTS, ctx_.selected.size(), GL_UNSIGNED_INT, ctx_.selected.data());
-#endif
+    glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, ctx_.selected.size(), GL_UNSIGNED_INT, NULL);
 
     // unbind the VAO and the program
     glBindVertexArray(0);

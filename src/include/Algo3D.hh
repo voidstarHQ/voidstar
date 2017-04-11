@@ -4,7 +4,7 @@
 
 #include <Algorithm.hh>
 
-using VertIndices = std::vector<unsigned int>;
+using VertIndices = std::vector<GLuint>;
 
 class Algo3D : public Algorithm {
 public:
