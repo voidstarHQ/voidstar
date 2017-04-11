@@ -68,10 +68,11 @@ after_success:
     if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]]; then
       minor="$(($(git describe --tags | cut -d. -f2) + 1))"
       tag=v0.$minor.$TRAVIS_BUILD_ID
+      msg="$(git log -1 --pretty=%B | head -n 1)"
       git config --global user.email 'pierrefenoll+travis-miners@gmail.com'
       git config --global user.name 'Autotag'
       git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
-      git tag -a $tag -m $tag $TRAVIS_COMMIT
+      git tag -a $tag -m "$msg" $TRAVIS_COMMIT
       chmod 600 travis-miners
       eval `ssh-agent -s`
       ssh-add travis-miners
