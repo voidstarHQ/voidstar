@@ -74,6 +74,7 @@ Scene3D::reload()
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
     std::cout << "#points: " << ctx_.selected.size() << std::endl;
+    ctx_.selected.shrink_to_fit();
     load_buffers();
     glBindVertexArray(ctx_.vao);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
@@ -96,6 +97,7 @@ Scene3D::load(Algorithm* algorithm)
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
     std::cout << "#points: " << ctx_.selected.size() << std::endl;
+    ctx_.selected.shrink_to_fit();
     load_buffers();
 
     camera_.setPosition(glm::vec3(0, 0, 4));

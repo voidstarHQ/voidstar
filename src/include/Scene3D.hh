@@ -16,7 +16,10 @@ struct Scene3DContext {
           vertices(new GLfloat[vertices_size]),
           colors(new GLfloat[colors_size]),
           degreesRotated(0.0f), rotationEnabled(false), program(NULL)
-        {}
+        {
+            // selected.reserve(n_points);
+        }
+
     ~Scene3DContext() {
         delete[] vertices;
         delete[] colors;
