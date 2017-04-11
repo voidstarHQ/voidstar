@@ -86,15 +86,13 @@ GlfwManager::init()
 }
 
 void
-GlfwManager::glInit()
-{
+GlfwManager::glInit() {
     glewExperimental = GL_TRUE; //stops glew from crashing on OSX :-/
     if (glewInit() != GLEW_OK)
         throw std::runtime_error("!glewInit");
 
     // GLEW throws some errors, so discard all the errors so far
-    //while (glGetError() != GL_NO_ERROR) {}
-    glProcessErrors();
+    glProcessErrors(true);
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
@@ -106,8 +104,7 @@ GlfwManager::glInit()
 }
 
 void
-GlfwManager::glProcessErrors(bool quiet)
-{
+GlfwManager::glProcessErrors(bool quiet) {
     while (true) {
         GLenum error = glGetError();
         if (error == GL_NO_ERROR)
@@ -118,8 +115,7 @@ GlfwManager::glProcessErrors(bool quiet)
 }
 
 void
-GlfwManager::run()
-{
+GlfwManager::run() {
     if (scene_->type() == SCENE_3D)
         glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
