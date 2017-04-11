@@ -7,7 +7,7 @@
 
 struct Scene3DContext {
     Scene3DContext(size_t w, size_t h, size_t d)
-        : vao(0), vbo(0),
+        : vao(0), vbo(0), elements(0),
           width(w), height(h), depth(d),
           n_points(width * height * depth),
           vertices_size(n_points * 3 * sizeof (GLfloat)),
@@ -16,7 +16,10 @@ struct Scene3DContext {
           vertices(new GLfloat[vertices_size]),
           colors(new GLfloat[colors_size]),
           degreesRotated(0.0f), rotationEnabled(false), program(NULL)
-        {}
+        {
+            // selected.reserve(n_points);
+        }
+
     ~Scene3DContext() {
         delete[] vertices;
         delete[] colors;
@@ -33,6 +36,7 @@ struct Scene3DContext {
 
     GLuint vao;
     GLuint vbo;
+    GLuint elements;
 
     size_t  width;
     size_t  height;

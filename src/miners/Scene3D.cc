@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <algorithm>
 
 #include <platform.hpp>
 
@@ -31,6 +32,10 @@ Scene3D::load_buffers() {
     glVertexAttribPointer(ctx_.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(ctx_.program->attrib("vert"));
 
+    glGenBuffers(1, &ctx_.elements);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ctx_.elements);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(decltype(ctx_.selected)::value_type) * ctx_.selected.size(), ctx_.selected.data(), GL_STATIC_DRAW);
+
     // make and bind the VBO
     glGenBuffers(1, &ctx_.colors_id);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
@@ -56,6 +61,7 @@ Scene3D::unload()
     if (ctx_.program) {
         delete ctx_.program;
         glDeleteBuffers(1, &ctx_.vbo);
+        glDeleteBuffers(1, &ctx_.elements);
         glDeleteBuffers(1, &ctx_.colors_id);
         glDeleteVertexArrays(1, &ctx_.vao);
     }
@@ -69,6 +75,7 @@ Scene3D::reload()
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
     std::cout << "#points: " << ctx_.selected.size() << std::endl;
+    ctx_.selected.shrink_to_fit();
     load_buffers();
     glBindVertexArray(ctx_.vao);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
@@ -91,6 +98,7 @@ Scene3D::load(Algorithm* algorithm)
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
     std::cout << "#points: " << ctx_.selected.size() << std::endl;
+    ctx_.selected.shrink_to_fit();
     load_buffers();
 
     camera_.setPosition(glm::vec3(0, 0, 4));
@@ -157,7 +165,8 @@ Scene3D::render()
     glBindVertexArray(ctx_.vao);
 
     // draw only the VAO's points we colored
-    glDrawElements(GL_POINTS, ctx_.selected.size(), GL_UNSIGNED_INT, ctx_.selected.data());
+    auto mM = std::minmax_element(ctx_.selected.begin(), ctx_.selected.end());
+    glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, ctx_.selected.size(), GL_UNSIGNED_INT, NULL);
 
     // unbind the VAO and the program
     glBindVertexArray(0);
