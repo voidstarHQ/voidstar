@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <platform.hpp>
+
 #include <Algorithm.hh>
 #include <Algo2DEntropy.hh>
 #include <Algo2DFourColors.hh>
@@ -12,16 +14,6 @@
 #include <Algo3DSphereContiBnW.hh>
 #include <Algo3DSphereContiRainbow.hh>
 #include <Algo3DSphereContiFrebet.hh>
-
-std::ostream&
-size2str(size_t size) {
-    std::string str = std::to_string(size);
-    int pos = str.length() - 3;
-    while (pos > 0) {
-        str.insert(pos, ",");
-        pos -= 3;
-    }
-}
 
 void Algorithm::use(Loader* loader, DataRange* range)
 {

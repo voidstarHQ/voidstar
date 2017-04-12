@@ -9,3 +9,5 @@
 #include <string>
 
 std::string ResourcePath(std::string fileName);
+
+std::string size2str(size_t size);
