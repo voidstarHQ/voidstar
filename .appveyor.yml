@@ -1,3 +1,7 @@
+version: "{build}"
+
+os: Visual Studio 2017
+
 shallow_clone: true
 
 platform:
@@ -8,12 +12,11 @@ configuration:
   - Debug
   - Release
 
-os: Visual Studio 2015
-
 before_build:
-  - nuget install glew
-  - nuget install glm
-  - nuget install glfw
+  # - nuget install glew
+  # - nuget install glm
+  # - nuget install glfw
+  - nuget restore
   - cmake --version || true
   - g++ --version || true
   - clang++ --version || true
@@ -22,3 +25,5 @@ build_script:
   - bash ./configure
   - cd build
   - make
+
+test: off
