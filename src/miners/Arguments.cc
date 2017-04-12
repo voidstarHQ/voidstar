@@ -8,21 +8,21 @@
 static
 void
 usage(const char *prgname) {
-    std::cout << "usage: " << prgname << " [OPTIONS] file" << std::endl;
-    std::cout << std::endl;
-    std::cout << " -l --list         list backends" << std::endl;
-    std::cout << " -u --ui           choose ui mode" << std::endl;
-    std::cout << " -a --algorithm    algorithm to apply" << std::endl;
-    std::cout << std::endl;
-    std::cout << " -x --width        window width" << std::endl;
-    std::cout << " -y --height       window height" << std::endl;
-    std::cout << " -f --fullscreen   window fullscreen" << std::endl;
-    std::cout << std::endl;
-    std::cout << " -b --begin        begin offset for the range" << std::endl;
-    std::cout << " -e --end          end offset for the range" << std::endl;
-    std::cout << std::endl;
-    std::cout << " -h, --help        this help" << std::endl;
-    std::cout << std::endl;
+    std::cout << "usage: " << prgname << " [OPTIONS] file" << std::endl
+              << std::endl
+              << " -l --list         list backends" << std::endl
+              << " -u --ui           choose ui mode" << std::endl
+              << " -a --algorithm    algorithm to apply" << std::endl
+              << std::endl
+              << " -x --width        window width" << std::endl
+              << " -y --height       window height" << std::endl
+              << " -f --fullscreen   window fullscreen" << std::endl
+              << std::endl
+              << " -b --begin        begin offset for the range" << std::endl
+              << " -e --end          end offset for the range" << std::endl
+              << std::endl
+              << " -h, --help        this help" << std::endl
+              << std::endl;
 }
 
 static
@@ -33,8 +33,8 @@ listComponents()
     for (const auto &pair : managers) {
         std::cout << " - " << pair.first << std::endl;
     }
-    std::cout << std::endl;
-    std::cout << "list of algorithms:" << std::endl << std::endl;
+    std::cout << std::endl
+              << "list of algorithms:" << std::endl << std::endl;
     for (const auto &pair : algorithms) {
         std::cout << " - " << pair.first << std::endl;
     }

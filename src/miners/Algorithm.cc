@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <platform.hpp>
+
 #include <Algorithm.hh>
 #include <Algo2DEntropy.hh>
 #include <Algo2DFourColors.hh>
@@ -13,7 +15,7 @@
 #include <Algo3DSphereContiRainbow.hh>
 #include <Algo3DSphereContiFrebet.hh>
 
-void Algorithm::use(Loader *loader, DataRange *range)
+void Algorithm::use(Loader* loader, DataRange* range)
 {
     // XXX this might be problematic in the future
     // XXX delete loader prior to creating a new one (same for range)
@@ -35,18 +37,18 @@ void Algorithm::use(Loader *loader, DataRange *range)
     }
 }
 
-const u8 *
+const u8*
 Algorithm::loadDataRange(const DataRange& range, size_t& size)
 {
     if (max_data_size_)
         size = std::min<size_t>(range.size(), max_data_size_);
     else
         size = range.size();
-    std::cerr << "read " << size << " bytes" << std::endl;
+    std::cerr << "read " << size2str(size) << " bytes" << std::endl;
     return loader_->dataChunk(range.begin, size);
 }
 
-Algorithm *
+Algorithm*
 createAlgorithm(const std::string str)
 {
     auto it = algorithms.find(str);
