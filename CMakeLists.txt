@@ -56,7 +56,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/src/resources)
 include_directories(
     ${PROJECT_SOURCE_DIR}/src/include
     ${PROJECT_SOURCE_DIR}/src/common
-    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/src/resources
 )
 
 set(SOURCES

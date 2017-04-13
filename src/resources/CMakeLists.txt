@@ -6,6 +6,6 @@ add_custom_command(
   COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/pack_GLSLs.sh ${CMAKE_CURRENT_BINARY_DIR}/shaders.hh
 )
 
-set(GENERATED_HEADER_DIR ${CMAKE_CURRENT_BINARY_DIR})
+set(GENERATED_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 # set_target_properties(<target> PROPERTIES INCLUDE_DIRECTORIES ${GENERATED_HEADER_DIR)
 add_custom_target(shaders_out DEPENDS shaders.hh)
