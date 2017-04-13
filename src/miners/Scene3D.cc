@@ -10,7 +10,7 @@
 void
 Scene3D::load_shaders() {
     const std::vector<tdogl::Shader> shaders{
-        tdogl::Shader(shader__vertex, GL_VERTEX_SHADER),
+        tdogl::Shader(shader__vertex_3d, GL_VERTEX_SHADER),
         tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)
     };
     ctx_.program = new tdogl::Program(shaders);
