@@ -18,7 +18,7 @@ pack_GLSL() {
 }
 
 echo '#pragma once' >"$hh"
-# echo '#include <string>' >"$hh"
+echo '#include <string>' >>"$hh"
 for glsl in "$hh_dir"/*.glsl; do
     pack_GLSL "$glsl"
 done
