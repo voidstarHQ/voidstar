@@ -1,5 +1,6 @@
 add_custom_command(
-  OUTPUT shaders.hh cache-buster.hh
+  OUTPUT shaders.hh
+  # cache-buster.hh
   COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/pack_GLSLs.sh ${CMAKE_CURRENT_BINARY_DIR}/shaders.hh
 )
 
