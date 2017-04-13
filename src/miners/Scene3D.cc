@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <algorithm>
 
+#include <shaders.hh>
 #include <platform.hpp>
 
 #include <Scene3D.hh>
