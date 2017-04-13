@@ -11,7 +11,7 @@ pack_GLSL() {
     local glsl="$1"
     local name="$(basename "$glsl" .glsl)"
     echo >>"$hh"
-    echo "std::string shader__${name} = R\"(\\" >>"$hh"
+    echo "static const std::string shader__${name} = R\"(\\" >>"$hh"
     cat "$glsl" >>"$hh"
     echo ')";' >>"$hh"
     echo >>"$hh"

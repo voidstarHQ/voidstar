@@ -3,7 +3,6 @@
 #include <algorithm>
 
 #include <shaders.hh>
-#include <platform.hpp>
 
 #include <Scene3D.hh>
 #include <Manager.hh>
@@ -11,8 +10,8 @@
 void
 Scene3D::load_shaders() {
     const std::vector<tdogl::Shader> shaders{
-        tdogl::Shader::shaderFromFile(ResourcePath("vertex.glsl"), GL_VERTEX_SHADER),
-        tdogl::Shader::shaderFromFile(ResourcePath("fragment.glsl"), GL_FRAGMENT_SHADER)
+        tdogl::Shader(shader__vertex, GL_VERTEX_SHADER),
+        tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)
     };
     ctx_.program = new tdogl::Program(shaders);
 }
