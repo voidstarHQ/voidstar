@@ -60,8 +60,6 @@ include_directories(
 )
 
 set(SOURCES
-    src/common/platform/platform.cc
-
     src/miners/main.cc
     src/miners/Arguments.cc
     src/miners/Algorithm.cc
