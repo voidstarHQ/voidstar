@@ -75,7 +75,7 @@ Scene3D::reload()
     ctx_.reset_points();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
-    std::cout << "#points: " << size2str(ctx_.selected.size()) << std::endl;
+    std::cout << "#points: " << Manager::size2str(ctx_.selected.size()) << std::endl;
     ctx_.selected.shrink_to_fit();
     load_buffers();
     glBindVertexArray(ctx_.vao);
@@ -98,7 +98,7 @@ Scene3D::load(Algorithm* algorithm)
     load_shaders();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
-    std::cout << "#points: " << size2str(ctx_.selected.size()) << std::endl;
+    std::cout << "#points: " << Manager::size2str(ctx_.selected.size()) << std::endl;
     ctx_.selected.shrink_to_fit();
     load_buffers();
 
