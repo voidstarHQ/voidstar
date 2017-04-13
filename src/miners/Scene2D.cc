@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include <platform.hpp>
+#include <shaders.hh>
 
 #include <Scene2D.hh>
 #include <Manager.hh>
@@ -9,8 +9,8 @@
 void
 Scene2D::load_shaders() {
     const std::vector<tdogl::Shader> shaders{
-        tdogl::Shader::shaderFromFile(ResourcePath("vertex_2d.glsl"), GL_VERTEX_SHADER),
-        tdogl::Shader::shaderFromFile(ResourcePath("fragment.glsl"), GL_FRAGMENT_SHADER)
+        tdogl::Shader(shader__vertex_2d, GL_VERTEX_SHADER),
+        tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)
     };
     program_ = new tdogl::Program(shaders);
 }

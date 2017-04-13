@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include <platform.hpp>
+#include <shaders.hh>
 
 #include <Scene3D.hh>
 #include <Manager.hh>
@@ -10,8 +10,8 @@
 void
 Scene3D::load_shaders() {
     const std::vector<tdogl::Shader> shaders{
-        tdogl::Shader::shaderFromFile(ResourcePath("vertex.glsl"), GL_VERTEX_SHADER),
-        tdogl::Shader::shaderFromFile(ResourcePath("fragment.glsl"), GL_FRAGMENT_SHADER)
+        tdogl::Shader(shader__vertex_3d, GL_VERTEX_SHADER),
+        tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)
     };
     ctx_.program = new tdogl::Program(shaders);
 }
@@ -74,7 +74,7 @@ Scene3D::reload()
     ctx_.reset_points();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
-    std::cout << "#points: " << size2str(ctx_.selected.size()) << std::endl;
+    std::cout << "#points: " << Manager::size2str(ctx_.selected.size()) << std::endl;
     ctx_.selected.shrink_to_fit();
     load_buffers();
     glBindVertexArray(ctx_.vao);
@@ -97,7 +97,7 @@ Scene3D::load(Algorithm* algorithm)
     load_shaders();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
-    std::cout << "#points: " << size2str(ctx_.selected.size()) << std::endl;
+    std::cout << "#points: " << Manager::size2str(ctx_.selected.size()) << std::endl;
     ctx_.selected.shrink_to_fit();
     load_buffers();
 

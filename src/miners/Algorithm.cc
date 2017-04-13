@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <platform.hpp>
+#include <Manager.hh>
 
 #include <Algorithm.hh>
 #include <Algo2DEntropy.hh>
@@ -44,7 +44,7 @@ Algorithm::loadDataRange(const DataRange& range, size_t& size)
         size = std::min<size_t>(range.size(), max_data_size_);
     else
         size = range.size();
-    std::cerr << "read " << size2str(size) << " bytes" << std::endl;
+    std::cerr << "read " << Manager::size2str(size) << " bytes" << std::endl;
     return loader_->dataChunk(range.begin, size);
 }
 

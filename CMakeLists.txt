@@ -50,15 +50,16 @@ endif()
 #                               SOURCES
 #-----------------------------------------------------------------------------
 
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/resources)
+
 # to add an include path
 include_directories(
     ${PROJECT_SOURCE_DIR}/src/include
     ${PROJECT_SOURCE_DIR}/src/common
+    ${CMAKE_CURRENT_BINARY_DIR}/src/resources
 )
 
 set(SOURCES
-    src/common/platform/platform.cc
-
     src/miners/main.cc
     src/miners/Arguments.cc
     src/miners/Algorithm.cc
@@ -102,6 +103,8 @@ endif(APPLE)
 # create your executable with
 add_executable(miners ${GUI_TYPE} ${SOURCES})
 
+add_dependencies(miners shaders_out)
+
 # create a library with
 # add_library(my_lib SHARED ${SOURCES})
 
@@ -115,9 +118,6 @@ target_link_libraries(miners
 )
 string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
 set_property(TARGET miners APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
-
-add_custom_command(TARGET miners POST_BUILD
-                   COMMAND ln -sf ${PROJECT_SOURCE_DIR}/src/resources .)
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING
