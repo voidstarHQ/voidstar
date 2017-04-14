@@ -1,4 +1,4 @@
-# Miners [![TravisCI build status](https://travis-ci.org/fenollp/miners.svg?branch=master)](https://travis-ci.org/fenollp/miners)
+# VoidStar [![TravisCI build status](https://travis-ci.org/fenollp/voidstar.svg?branch=master)](https://travis-ci.org/fenollp/voidstar)
 
 Browse data using Corti's 2D projector as well as 3D variants.
 
@@ -6,18 +6,17 @@ Browse data using Corti's 2D projector as well as 3D variants.
 
 ```shell
 ./configure && cd build && make
-./miners miners
+./voidstar voidstar
 ```
 
 ## Requirements
 
 * A C compiler
 * `cmake`
-* `libglfw-dev` v3. https://github.com/shurcooL-legacy/reusable-commands/blob/ed33ae496f36aaea735a1d183f77e833c92a9f3d/go-gl_glfw3_install.sh#L19-L32
+* `libglfw-dev` v3
 * `libglm-dev`
-* `libglu-dev`
 * `libglew-dev`
 
 ### OSX
 
-* `brew install homebrew/versions/glfw3`
+* `brew install glfw3 --without-shared-library`

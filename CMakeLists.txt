@@ -60,32 +60,32 @@ include_directories(
 )
 
 set(SOURCES
-    src/miners/main.cc
-    src/miners/Arguments.cc
-    src/miners/Algorithm.cc
-    src/miners/Manager.cc
-    src/miners/Loader.cc
-    src/miners/Scene.cc
+    src/main.cc
+    src/Arguments.cc
+    src/Algorithm.cc
+    src/Manager.cc
+    src/Loader.cc
+    src/Scene.cc
 
-    src/miners/Scene3D.cc
-    src/miners/Scene2D.cc
+    src/Scene3D.cc
+    src/Scene2D.cc
 
-    src/miners/FileLoader.cc
-    src/miners/MmapLoader.cc
+    src/FileLoader.cc
+    src/MmapLoader.cc
 
-    src/miners/Algo2DEntropy.cc
-    src/miners/Algo2DFourColors.cc
-    src/miners/Algo2DGrayscale.cc
-    src/miners/Algo3DCubeFull.cc
-    src/miners/Algo3DCubeContiBnW.cc
-    src/miners/Algo3DCubeContiRainbow.cc
-    src/miners/Algo3DCubeContiFrebet.cc
-    src/miners/Algo3DSphereFull.cc
-    src/miners/Algo3DSphereContiBnW.cc
-    src/miners/Algo3DSphereContiRainbow.cc
-    src/miners/Algo3DSphereContiFrebet.cc
+    src/Algo2DEntropy.cc
+    src/Algo2DFourColors.cc
+    src/Algo2DGrayscale.cc
+    src/Algo3DCubeFull.cc
+    src/Algo3DCubeContiBnW.cc
+    src/Algo3DCubeContiRainbow.cc
+    src/Algo3DCubeContiFrebet.cc
+    src/Algo3DSphereFull.cc
+    src/Algo3DSphereContiBnW.cc
+    src/Algo3DSphereContiRainbow.cc
+    src/Algo3DSphereContiFrebet.cc
 
-    src/miners/GlfwManager.cc
+    src/GlfwManager.cc
 
     src/common/tdogl/Camera.cpp
     src/common/tdogl/Program.cpp
@@ -101,15 +101,15 @@ if(APPLE)
 endif(APPLE)
 
 # create your executable with
-add_executable(miners ${GUI_TYPE} ${SOURCES})
+add_executable(voidstar ${GUI_TYPE} ${SOURCES})
 
-add_dependencies(miners shaders_out)
+add_dependencies(voidstar shaders_out)
 
 # create a library with
 # add_library(my_lib SHARED ${SOURCES})
 
 # you can link both with
-target_link_libraries(miners
+target_link_libraries(voidstar
   m
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARIES}
@@ -117,7 +117,7 @@ target_link_libraries(miners
   ${EXTRA_LIBS}
 )
 string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
-set_property(TARGET miners APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
+set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING

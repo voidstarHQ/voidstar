@@ -33,12 +33,15 @@ install:
         brew install glfw3 --without-shared-library
         ;;
       'linux')
-        git clone --branch=latest https://github.com/glfw/glfw.git ~/glfw3
-        mkdir ~/glfw3/build
-        pushd ~/glfw3/build
+        git clone https://github.com/glfw/glfw.git ~/glfw3
+        pushd ~/glfw3
+        git checkout 3.2.1
+        mkdir build
+        pushd build
         cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
         cmake --build .
         sudo make install
+        popd
         popd
         ;;
     esac
@@ -52,13 +55,13 @@ before_script:
 script:
   - ./configure -c "$(basename $CXX)" -b DEBUG
   - pushd build && make && popd
-  - ./build/miners --help
-  - ./build/miners -l
+  - ./build/voidstar --help
+  - ./build/voidstar -l
   - ./configure -c "$(basename $CXX)" -b RELEASE
   - pushd build && make VERBOSE=1 -j && popd
-  - ./build/miners -h
-  - ./build/miners --list
-  - mv -v build/miners "build/miners-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
+  - ./build/voidstar -h
+  - ./build/voidstar --list
+  - mv -v build/voidstar "build/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
 
 after_script:
   - set +e
@@ -66,17 +69,22 @@ after_script:
 after_success:
   - |
     if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]]; then
-      minor="$(($(git describe --tags | cut -d. -f2) + 1))"
-      tag=v0.$minor.$TRAVIS_BUILD_ID
+      major=v1
+      minor="$(git describe --tags | grep $major | cut -d. -f2) + 1))"
+      tag=$major.$minor.$TRAVIS_BUILD_ID
+      echo Tag: $tag
       msg="$(git log -1 --pretty=%B | head -n 1)"
-      git config --global user.email 'pierrefenoll+travis-miners@gmail.com'
+      echo "Message: $msg"
+      echo Commit: $TRAVIS_COMMIT
+      if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && exit; fi
+      git config --global user.email 'pierrefenoll+travis-voidstar@gmail.com'
       git config --global user.name 'Autotag'
       git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
       git tag -a $tag -m "$msg" $TRAVIS_COMMIT
       chmod 600 travis-miners
       eval `ssh-agent -s`
       ssh-add travis-miners
-      echo Racing to tag $tag
+      echo Tagging $TRAVIS_COMMIT with $tag
       if git push --tags; then echo Tagged!; fi
     fi
 
@@ -87,6 +95,6 @@ deploy:
   skip_cleanup: true
   overwrite: true
   file_glob: true
-  file: build/miners-*
+  file: build/voidstar-*
   on:
     tags: true

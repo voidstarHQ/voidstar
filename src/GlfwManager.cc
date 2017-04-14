@@ -65,7 +65,7 @@ GlfwManager::init()
         monitor = glfwGetPrimaryMonitor();
     }
 
-    window_ = glfwCreateWindow(args_->width, args_->height, "miners", monitor, NULL);
+    window_ = glfwCreateWindow(args_->width, args_->height, "void*", monitor, NULL);
     if (!window_)
         throw std::runtime_error("!glfwCreateWindow. Can your hardware handle OpenGL 3.2?");
 
