@@ -60,32 +60,32 @@ include_directories(
 )
 
 set(SOURCES
-    src/miners/main.cc
-    src/miners/Arguments.cc
-    src/miners/Algorithm.cc
-    src/miners/Manager.cc
-    src/miners/Loader.cc
-    src/miners/Scene.cc
+    src/main.cc
+    src/Arguments.cc
+    src/Algorithm.cc
+    src/Manager.cc
+    src/Loader.cc
+    src/Scene.cc
 
-    src/miners/Scene3D.cc
-    src/miners/Scene2D.cc
+    src/Scene3D.cc
+    src/Scene2D.cc
 
-    src/miners/FileLoader.cc
-    src/miners/MmapLoader.cc
+    src/FileLoader.cc
+    src/MmapLoader.cc
 
-    src/miners/Algo2DEntropy.cc
-    src/miners/Algo2DFourColors.cc
-    src/miners/Algo2DGrayscale.cc
-    src/miners/Algo3DCubeFull.cc
-    src/miners/Algo3DCubeContiBnW.cc
-    src/miners/Algo3DCubeContiRainbow.cc
-    src/miners/Algo3DCubeContiFrebet.cc
-    src/miners/Algo3DSphereFull.cc
-    src/miners/Algo3DSphereContiBnW.cc
-    src/miners/Algo3DSphereContiRainbow.cc
-    src/miners/Algo3DSphereContiFrebet.cc
+    src/Algo2DEntropy.cc
+    src/Algo2DFourColors.cc
+    src/Algo2DGrayscale.cc
+    src/Algo3DCubeFull.cc
+    src/Algo3DCubeContiBnW.cc
+    src/Algo3DCubeContiRainbow.cc
+    src/Algo3DCubeContiFrebet.cc
+    src/Algo3DSphereFull.cc
+    src/Algo3DSphereContiBnW.cc
+    src/Algo3DSphereContiRainbow.cc
+    src/Algo3DSphereContiFrebet.cc
 
-    src/miners/GlfwManager.cc
+    src/GlfwManager.cc
 
     src/common/tdogl/Camera.cpp
     src/common/tdogl/Program.cpp
