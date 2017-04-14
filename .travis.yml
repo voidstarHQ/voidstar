@@ -55,13 +55,13 @@ before_script:
 script:
   - ./configure -c "$(basename $CXX)" -b DEBUG
   - pushd build && make && popd
-  - ./build/miners --help
-  - ./build/miners -l
+  - ./build/voidstar --help
+  - ./build/voidstar -l
   - ./configure -c "$(basename $CXX)" -b RELEASE
   - pushd build && make VERBOSE=1 -j && popd
-  - ./build/miners -h
-  - ./build/miners --list
-  - mv -v build/miners "build/miners-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
+  - ./build/voidstar -h
+  - ./build/voidstar --list
+  - mv -v build/voidstar "build/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
 
 after_script:
   - set +e
@@ -77,7 +77,7 @@ after_success:
       echo "Message: $msg"
       echo Commit: $TRAVIS_COMMIT
       if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && exit; fi
-      git config --global user.email 'pierrefenoll+travis-miners@gmail.com'
+      git config --global user.email 'pierrefenoll+travis-voidstar@gmail.com'
       git config --global user.name 'Autotag'
       git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
       git tag -a $tag -m "$msg" $TRAVIS_COMMIT
@@ -95,6 +95,6 @@ deploy:
   skip_cleanup: true
   overwrite: true
   file_glob: true
-  file: build/miners-*
+  file: build/voidstar-*
   on:
     tags: true

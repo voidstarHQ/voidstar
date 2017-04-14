@@ -101,15 +101,15 @@ if(APPLE)
 endif(APPLE)
 
 # create your executable with
-add_executable(miners ${GUI_TYPE} ${SOURCES})
+add_executable(voidstar ${GUI_TYPE} ${SOURCES})
 
-add_dependencies(miners shaders_out)
+add_dependencies(voidstar shaders_out)
 
 # create a library with
 # add_library(my_lib SHARED ${SOURCES})
 
 # you can link both with
-target_link_libraries(miners
+target_link_libraries(voidstar
   m
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARIES}
@@ -117,7 +117,7 @@ target_link_libraries(miners
   ${EXTRA_LIBS}
 )
 string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
-set_property(TARGET miners APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
+set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING
