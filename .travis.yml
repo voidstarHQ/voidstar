@@ -72,7 +72,11 @@ after_success:
       major=v1
       minor="$(git describe --tags | grep $major | cut -d. -f2) + 1))"
       tag=$major.$minor.$TRAVIS_BUILD_ID
+      echo Tag: $tag
       msg="$(git log -1 --pretty=%B | head -n 1)"
+      echo "Message: $msg"
+      echo Commit: $TRAVIS_COMMIT
+      if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && exit; fi
       git config --global user.email 'pierrefenoll+travis-miners@gmail.com'
       git config --global user.name 'Autotag'
       git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
@@ -80,7 +84,7 @@ after_success:
       chmod 600 travis-miners
       eval `ssh-agent -s`
       ssh-add travis-miners
-      echo Racing to tag $tag
+      echo Tagging $TRAVIS_COMMIT with $tag
       if git push --tags; then echo Tagged!; fi
     fi
 
