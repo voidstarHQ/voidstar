@@ -66,8 +66,9 @@ after_script:
 after_success:
   - |
     if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]]; then
-      minor="$(($(git describe --tags | cut -d. -f2) + 1))"
-      tag=v0.$minor.$TRAVIS_BUILD_ID
+      major=v1
+      minor="$(git describe --tags | grep $major | cut -d. -f2) + 1))"
+      tag=$major.$minor.$TRAVIS_BUILD_ID
       msg="$(git log -1 --pretty=%B | head -n 1)"
       git config --global user.email 'pierrefenoll+travis-miners@gmail.com'
       git config --global user.name 'Autotag'
