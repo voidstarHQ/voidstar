@@ -24,8 +24,8 @@ Scene::reload() {
 #define SCENE(Body) [](std::shared_ptr<Manager> manager) -> std::shared_ptr<Scene> { Body }
 using SceneFactoryFunc = std::function<std::shared_ptr<Scene>(std::shared_ptr<Manager>)>;
 std::map<SceneType, SceneFactoryFunc> scenes = {
-    {SCENE_2D, SCENE( return std::make_shared<Scene2D>(manager); )},
-    {SCENE_3D, SCENE( return std::make_shared<Scene3D>(manager); )},
+    {SCENE_2D, SCENE( return std::make_shared<Scene2D>(); )},
+    {SCENE_3D, SCENE( return std::make_shared<Scene3D>(); )},
 };
 
 std::shared_ptr<Scene>
@@ -35,7 +35,7 @@ Scene::forAlgo(std::shared_ptr<Manager> manager, Algorithm* algo) {
         throw std::runtime_error("Unknown scene type for algorithm");
     }
     auto scene = it->second(manager);
-    scene->init();
+    scene->init(manager->args());
     scene->load(algo);
     return scene;
 }

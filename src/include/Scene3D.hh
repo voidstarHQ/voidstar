@@ -57,14 +57,16 @@ struct Scene3DContext {
 
 class Scene3D : public Scene {
 public:
-    Scene3D(std::shared_ptr<Manager> manager) : Scene(manager, SCENE_3D), ctx_(256, 256, 256) {}
+    Scene3D()
+        : Scene(SCENE_3D), ctx_(256, 256, 256)
+        {}
     virtual ~Scene3D() { unload(); }
 
-    virtual void init();
+    virtual void init(std::shared_ptr<Arguments> args);
     virtual void load(Algorithm* algo);
     virtual void unload();
     virtual void reload();
-    virtual bool update(float elapsedTime);
+    virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
     virtual void render();
 private:
     void load_shaders();

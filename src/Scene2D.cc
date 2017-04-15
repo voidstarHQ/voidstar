@@ -1,9 +1,7 @@
 #include <stdexcept>
 
 #include <shaders.hh>
-
 #include <Scene2D.hh>
-#include <Manager.hh>
 
 void
 Scene2D::load_shaders() {
@@ -43,8 +41,8 @@ Scene2D::load_buffers() {
 }
 
 void
-Scene2D::init() {
-    resize(manager_->args()->width, manager_->args()->height);
+Scene2D::init(std::shared_ptr<Arguments> args) {
+    resize(args->width, args->height);
 }
 
 void
@@ -87,7 +85,7 @@ Scene2D::load(Algorithm* algorithm) {
 }
 
 bool
-Scene2D::update(float elapsedTime __unused) {
+Scene2D::update(std::shared_ptr<Manager> manager, float elapsedTime __unused) {
     return true;
 }
 

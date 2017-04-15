@@ -2,9 +2,7 @@
 #include <algorithm>
 
 #include <shaders.hh>
-
 #include <Scene3D.hh>
-#include <Manager.hh>
 
 void
 Scene3D::load_shaders() {
@@ -49,8 +47,8 @@ Scene3D::load_buffers() {
 
 
 void
-Scene3D::init() {
-    resize(manager_->args()->width, manager_->args()->height);
+Scene3D::init(std::shared_ptr<Arguments> args) {
+    resize(args->width, args->height);
 }
 
 void
@@ -102,7 +100,7 @@ Scene3D::load(Algorithm* algorithm) {
 }
 
 bool
-Scene3D::update(float elapsedTime) {
+Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
     //rotate the volume
     GLfloat degreesPerSecond = 10.0f;
     if (ctx_.rotationEnabled) {
@@ -111,7 +109,7 @@ Scene3D::update(float elapsedTime) {
             ctx_.degreesRotated -= 360.0f;
     }
 
-    auto events = manager_->getEvents();
+    auto events = manager->getEvents();
 
     //move position of camera based on WASD keys, and XZ keys for up and down
     const float moveSpeed = 2.0; //units per second
@@ -130,7 +128,7 @@ Scene3D::update(float elapsedTime) {
     if (events->keyPressed(' '))
         ctx_.rotationEnabled = !ctx_.rotationEnabled;
 
-    auto mouse = manager_->getMouse();
+    auto mouse = manager->getMouse();
     mouse->getCursorPos();
     camera_.offsetOrientation(mouse->sensitivity * mouse->y,
                               mouse->sensitivity * mouse->x);

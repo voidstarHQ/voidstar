@@ -10,7 +10,7 @@ Manager::loadScene(std::shared_ptr<Scene> scene) {
         std::cout << "deleting scene" << std::endl;
     }
     scene_ = scene;
-    scene->init();
+    scene->init(args_);
 }
 
 void
@@ -39,7 +39,8 @@ Manager::loadFile(size_t index) {
     } else {
         algo = createAlgorithm(args_->algo);
         algo->use(loader, range);
-        loadScene(Scene::forAlgo(this, algo));
+        auto self = static_cast<std::shared_ptr<Manager>>(this);
+        loadScene(Scene::forAlgo(self, algo));
     }
 }
 

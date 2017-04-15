@@ -61,7 +61,8 @@ public:
     GlfwManager(std::shared_ptr<Arguments> args) : Manager(args) {
         if (instance_)
             throw std::runtime_error("GlfwManager was previously instanciated");
-        instance_ = this;
+        auto self = static_cast<std::shared_ptr<GlfwManager>>(this);
+        instance_ = self;
     }
     virtual ~GlfwManager() {}
 
@@ -77,7 +78,7 @@ public:
     void glInit();
     void glProcessErrors(bool quiet=false);
 
-    static GlfwManager*
+    static std::shared_ptr<GlfwManager>
     instance() {
         if (!instance_)
             throw std::runtime_error("GlfwManager wasn't previously instanciated");
@@ -102,7 +103,7 @@ public:
     }
 
 protected:
-    static GlfwManager* instance_;
+    static std::shared_ptr<GlfwManager> instance_;
     GLFWwindow* window_;
     GlfwKeyboardEvents* events_;
     GlfwMouse* mouse_;

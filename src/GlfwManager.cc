@@ -3,9 +3,11 @@
 
 #include <GlfwManager.hh>
 
-GlfwManager* GlfwManager::instance_ = NULL;
+std::shared_ptr<GlfwManager> GlfwManager::instance_;// = NULL;
+
 #define get_manager_ptr(Window) \
-    reinterpret_cast<GlfwManager*>(glfwGetWindowUserPointer(Window))
+    GlfwManager::instance()
+    // reinterpret_cast<std::shared_ptr<GlfwManager>>(glfwGetWindowUserPointer(Window))
 
 void
 onFramebufferResize(GLFWwindow* window, int width, int height) {
@@ -124,7 +126,8 @@ GlfwManager::run() {
         // update the scene based on the time elapsed since last update
         double thisTime = glfwGetTime();
         float elapsedTime = thisTime - lastTime;
-        bool redraw = scene_->update(elapsedTime);
+        // auto self = get_manager_ptr(window);
+        bool redraw = scene_->update(instance_, elapsedTime);
         lastTime = thisTime;
 
         if (redraw) {

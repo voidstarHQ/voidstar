@@ -6,6 +6,8 @@
 #include <Scene.hh>
 #include <Events.hh>
 
+class Scene;
+
 class Manager {
 public:
     Manager(std::shared_ptr<Arguments> args)

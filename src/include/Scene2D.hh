@@ -7,8 +7,8 @@
 
 class Scene2D : public Scene {
 public:
-    Scene2D(std::shared_ptr<Manager> manager)
-        : Scene(manager, SCENE_2D),
+    Scene2D()
+        : Scene(SCENE_2D),
           vao_(0), vbo_(0),
           width_(256), height_(256),
           n_points_(width_ * height_),
@@ -21,11 +21,11 @@ public:
         {}
     virtual ~Scene2D() { unload(); }
 
-    virtual void init();
+    virtual void init(std::shared_ptr<Arguments> args);
     virtual void load(Algorithm* algo);
     virtual void unload();
     virtual void reload();
-    virtual bool update(float elapsedTime);
+    virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
     virtual void render();
 private:
     void load_shaders();

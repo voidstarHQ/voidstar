@@ -13,17 +13,20 @@
 #include <tdogl/Camera.h>
 
 #include <Algorithm.hh>
+#include <Arguments.hh>
+#include <Manager.hh>
 
 class Manager;
 
 class Scene {
 public:
-    Scene(std::shared_ptr<Manager> manager, SceneType type)
-        : manager_(manager), type_(type), algo_(0) {}
+    Scene(SceneType type)
+        : type_(type), algo_(0)
+        {}
     virtual ~Scene() {}
 
-    virtual void init() = 0;
-    virtual bool update(float elapsedTime) = 0;
+    virtual void init(std::shared_ptr<Arguments> args) = 0;
+    virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime) = 0;
     virtual void render() = 0;
     virtual void load(Algorithm* algo);
     virtual void unload();
@@ -43,7 +46,6 @@ public:
     static std::shared_ptr<Scene> forAlgo(std::shared_ptr<Manager> manager, Algorithm* algo);
 
 protected:
-    std::weak_ptr<Manager> manager_;
     SceneType type_;
     Algorithm* algo_;
     tdogl::Camera camera_;
