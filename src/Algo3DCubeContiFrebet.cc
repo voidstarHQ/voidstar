@@ -10,7 +10,7 @@ Algo3DCubeContiFrebet::apply(GLfloat* vertices, GLfloat* colors, VertIndices& se
     u8 x = data[0];
     u8 y = data[1];
 
-    for (size_t i = 2; i < size; ++i) {
+    for (size_t i = 2; i+3 < size; ++i) {
         u8 z = data[i];
         size_t id = (y * width + x) * depth + z;
         size_t idx = 4 * id;
