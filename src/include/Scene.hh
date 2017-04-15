@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <memory>
 #include <iostream>
 
 #include <GL/glew.h>
@@ -17,7 +18,7 @@ class Manager;
 
 class Scene {
 public:
-    Scene(Manager* manager, SceneType type)
+    Scene(std::shared_ptr<Manager> manager, SceneType type)
         : manager_(manager), type_(type), algo_(0) {}
     virtual ~Scene() {}
 
@@ -39,10 +40,10 @@ public:
 
     inline SceneType type() const { return type_; }
     Algorithm* algorithm() { return algo_; }
-    static Scene* forAlgo(Manager* manager, Algorithm* algo);
+    static std::shared_ptr<Scene> forAlgo(std::shared_ptr<Manager> manager, Algorithm* algo);
 
 protected:
-    Manager* manager_;
+    std::weak_ptr<Manager> manager_;
     SceneType type_;
     Algorithm* algo_;
     tdogl::Camera camera_;

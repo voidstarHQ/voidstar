@@ -1,4 +1,3 @@
-#include <iostream>
 #include <stdexcept>
 
 #include <shaders.hh>
@@ -44,14 +43,12 @@ Scene2D::load_buffers() {
 }
 
 void
-Scene2D::init()
-{
+Scene2D::init() {
     resize(manager_->args()->width, manager_->args()->height);
 }
 
 void
-Scene2D::unload()
-{
+Scene2D::unload() {
     if (program_) {
         delete program_;
         glDeleteBuffers(1, &vbo_);
@@ -63,8 +60,7 @@ Scene2D::unload()
 }
 
 void
-Scene2D::reload()
-{
+Scene2D::reload() {
     auto* algo = reinterpret_cast<Algo2D*>(algo_);
     reset_points();
     algo->apply(vertices_, colors_, width_, height_)
@@ -76,8 +72,7 @@ Scene2D::reload()
 }
 
 void
-Scene2D::load(Algorithm* algorithm)
-{
+Scene2D::load(Algorithm* algorithm) {
     Scene::load(algorithm);
     auto* algo = reinterpret_cast<Algo2D*>(algorithm);
 
@@ -92,14 +87,12 @@ Scene2D::load(Algorithm* algorithm)
 }
 
 bool
-Scene2D::update(float elapsedTime __unused)
-{
+Scene2D::update(float elapsedTime __unused) {
     return true;
 }
 
 void
-Scene2D::render()
-{
+Scene2D::render() {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 

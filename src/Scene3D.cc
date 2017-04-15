@@ -1,4 +1,3 @@
-#include <iostream>
 #include <stdexcept>
 #include <algorithm>
 
@@ -50,14 +49,12 @@ Scene3D::load_buffers() {
 
 
 void
-Scene3D::init()
-{
+Scene3D::init() {
     resize(manager_->args()->width, manager_->args()->height);
 }
 
 void
-Scene3D::unload()
-{
+Scene3D::unload() {
     if (ctx_.program) {
         delete ctx_.program;
         glDeleteBuffers(1, &ctx_.vbo);
@@ -68,8 +65,7 @@ Scene3D::unload()
 }
 
 void
-Scene3D::reload()
-{
+Scene3D::reload() {
     auto* algo = reinterpret_cast<Algo3D*>(algo_);
     ctx_.reset_points();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
@@ -84,8 +80,7 @@ Scene3D::reload()
 }
 
 void
-Scene3D::load(Algorithm* algorithm)
-{
+Scene3D::load(Algorithm* algorithm) {
     Scene::load(algorithm);
     auto* algo = reinterpret_cast<Algo3D*>(algorithm);
 
@@ -107,8 +102,7 @@ Scene3D::load(Algorithm* algorithm)
 }
 
 bool
-Scene3D::update(float elapsedTime)
-{
+Scene3D::update(float elapsedTime) {
     //rotate the volume
     GLfloat degreesPerSecond = 10.0f;
     if (ctx_.rotationEnabled) {
@@ -148,8 +142,7 @@ Scene3D::update(float elapsedTime)
 }
 
 void
-Scene3D::render()
-{
+Scene3D::render() {
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

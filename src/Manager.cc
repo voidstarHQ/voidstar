@@ -4,11 +4,10 @@
 #include <GlfwManager.hh>
 
 void
-Manager::loadScene(Scene* scene) {
+Manager::loadScene(std::shared_ptr<Scene> scene) {
     // XXX delete scene prior to creating a new one
     if (scene_) {
         std::cout << "deleting scene" << std::endl;
-        delete scene_;
     }
     scene_ = scene;
     scene->init();

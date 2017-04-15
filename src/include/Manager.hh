@@ -12,7 +12,7 @@ public:
         : fullscreen_(false), args_(args), fileIndex_(0), scene_(0) {}
     virtual ~Manager() {}
 
-    virtual void loadScene(Scene* scene);
+    virtual void loadScene(std::shared_ptr<Scene> scene);
     virtual void init() = 0;
     virtual void run() = 0;
 
@@ -27,7 +27,7 @@ public:
     virtual void toggleFullscreen() = 0;
 
     std::shared_ptr<Arguments> args() { return args_; }
-    Scene* scene() { return scene_; }
+    std::shared_ptr<Scene> scene() { return scene_; }
 
 public:
     static std::string  /// 991337 --> "991,337"
@@ -45,7 +45,7 @@ protected:
     bool fullscreen_;
     std::shared_ptr<Arguments> args_;
     size_t fileIndex_;
-    Scene* scene_;
+    std::shared_ptr<Scene> scene_;
 };
 
 std::shared_ptr<Manager> createManager(const std::string& str, std::shared_ptr<Arguments> args);

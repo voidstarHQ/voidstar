@@ -7,7 +7,7 @@
 
 class Scene2D : public Scene {
 public:
-    Scene2D(Manager* manager)
+    Scene2D(std::shared_ptr<Manager> manager)
         : Scene(manager, SCENE_2D),
           vao_(0), vbo_(0),
           width_(256), height_(256),

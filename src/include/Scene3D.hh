@@ -57,7 +57,7 @@ struct Scene3DContext {
 
 class Scene3D : public Scene {
 public:
-    Scene3D(Manager* manager) : Scene(manager, SCENE_3D), ctx_(256, 256, 256) {}
+    Scene3D(std::shared_ptr<Manager> manager) : Scene(manager, SCENE_3D), ctx_(256, 256, 256) {}
     virtual ~Scene3D() { unload(); }
 
     virtual void init();
