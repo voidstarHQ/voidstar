@@ -30,10 +30,10 @@ Algo2DFourColors::apply(GLfloat* vertices, GLfloat* colors,
     make_vertices(vertices, width, height);
 
     const size_t chunk_size = width * height;
-    const u8* read = loader_->dataChunk(0, chunk_size);
+    const u8* data = loader_->dataChunk(0, chunk_size);
     size_t pos = 0;
     for (size_t i = 0; i < chunk_size; ++i) {
-        auto c = RGBColor(read[i]);
+        auto c = RGBColor(data[i]);
         colors[pos++] = c.r;
         colors[pos++] = c.g;
         colors[pos++] = c.b;

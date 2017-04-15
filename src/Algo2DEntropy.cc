@@ -52,10 +52,10 @@ Algo2DEntropy::apply(GLfloat* vertices, GLfloat* colors,
     make_vertices(vertices, width, height);
 
     const size_t chunk_size = width * height;
-    const u8* read = loader_->dataChunk(0, chunk_size);
+    const u8* data = loader_->dataChunk(0, chunk_size);
     size_t pos = 0;
     for (size_t i = 0; i < chunk_size; ++i) {
-        auto e = entropy(read, chunk_size, i, 32, 256);
+        auto e = entropy(data, chunk_size, i, 32, 256);
         float r = (e > 0.5f) ? curve(e - 0.5f) : 0.0f;
         float b = std::pow(e, 2);
         colors[pos++] = r;
