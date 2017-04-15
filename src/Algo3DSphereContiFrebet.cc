@@ -10,7 +10,7 @@ Algo3DSphereContiFrebet::apply(GLfloat* vertices, GLfloat* colors, VertIndices& 
     u8 x = data[0];
     u8 y = data[1];
 
-    for (size_t i = 2; i < size; ++i) {
+    for (size_t i = 2; i+3 < size; ++i) {
         u8 z = data[i];
         size_t id = x + y * height + z * depth * height;
         // float r = std::sqrt(std::pow(static_cast<float>(x), 2.0f) +
