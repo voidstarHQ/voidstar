@@ -5,9 +5,8 @@
 #include <Manager.hh>
 #include <Algorithm.hh>
 
-static
-void
-usage(const char *prgname) {
+static void
+usage(const char* prgname) {
     std::cout << "usage: " << prgname << " [OPTIONS] file" << std::endl
               << std::endl
               << " -l --list         list backends" << std::endl
@@ -25,10 +24,8 @@ usage(const char *prgname) {
               << std::endl;
 }
 
-static
-void
-listComponents()
-{
+static void
+listComponents() {
     std::cout << "list of UIs:" << std::endl << std::endl;
     for (const auto &pair : managers) {
         std::cout << " - " << pair.first << std::endl;

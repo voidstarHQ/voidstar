@@ -4,8 +4,7 @@
 #include <GlfwManager.hh>
 
 void
-Manager::loadScene(Scene* scene)
-{
+Manager::loadScene(Scene* scene) {
     // XXX delete scene prior to creating a new one
     if (scene_) {
         std::cout << "deleting scene" << std::endl;
@@ -16,15 +15,13 @@ Manager::loadScene(Scene* scene)
 }
 
 void
-Manager::loadFile(const std::string& filename)
-{
+Manager::loadFile(const std::string& filename) {
     args_->input.push_back(filename);
     loadFile(args_->input.size() - 1);
 }
 
 void
-Manager::loadFile(size_t index)
-{
+Manager::loadFile(size_t index) {
     if (fileIndex_ == index && scene_)
         return;
 
@@ -48,8 +45,7 @@ Manager::loadFile(size_t index)
 }
 
 Manager*
-createManager(const std::string& str, Arguments* args)
-{
+createManager(const std::string& str, Arguments* args) {
     auto it = managers.find(str);
     if (it == managers.end()) {
         return NULL;

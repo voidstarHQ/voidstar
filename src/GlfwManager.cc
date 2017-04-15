@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -47,8 +45,7 @@ onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
 }
 
 void
-GlfwManager::init()
-{
+GlfwManager::init() {
     glfwSetErrorCallback(onError);
     if (!glfwInit())
         throw std::runtime_error("!glfwInit");
