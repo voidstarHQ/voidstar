@@ -70,7 +70,7 @@ after_success:
   - |
     if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]]; then
       major=v1
-      minor="$(git describe --tags | grep $major | cut -d. -f2) + 1))"
+      minor="$(($(git describe --tags | grep $major | cut -d. -f2) + 1))"
       tag=$major.$minor.$TRAVIS_BUILD_ID
       echo Tag: $tag
       msg="$(git log -1 --pretty=%B | head -n 1)"
