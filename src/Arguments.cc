@@ -38,10 +38,9 @@ listComponents() {
     std::cout << std::endl;
 }
 
-Arguments*
-parseArgs(int argc, char **argv)
-{
-    static const char *short_options = ":a:b:e:fhlu:x:y:";
+std::shared_ptr<Arguments>
+parseArgs(int argc, char **argv) {
+    static auto short_options = ":a:b:e:fhlu:x:y:";
     static const struct option long_options[] = {
         { "algorithm",  1, 0, 'a' },
         { "begin",      1, 0, 'b' },
@@ -61,7 +60,7 @@ parseArgs(int argc, char **argv)
     int errors = 0;
     int opt_index;
 
-    auto args = new Arguments();
+    auto args = std::make_shared<Arguments>();
     args->algo = "conti";
     args->manager = "glfw";
     args->width = 800;
@@ -131,8 +130,7 @@ parseArgs(int argc, char **argv)
         if (errors) {
             exit(1);
         }
-        delete args;
-        return 0;
+        return NULL;
     }
 
     for (int i = optind; i < argc; ++i) {
@@ -142,8 +140,7 @@ parseArgs(int argc, char **argv)
     if (!args->input.size()) {
         std::cerr << "missing file to process" << std::endl;
         usage(argv[0]);
-        delete args;
-        return 0;
+        return NULL;
     }
 
     return args;

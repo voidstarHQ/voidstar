@@ -10,14 +10,14 @@ GlfwManager* GlfwManager::instance_ = NULL;
 void
 onFramebufferResize(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
-    auto* scene = get_manager_ptr(window)->scene();
+    auto scene = get_manager_ptr(window)->scene();
     scene->resize(width, height);
 }
 
 // records how far the y axis has been scrolled
 static void
 onScroll(GLFWwindow* window, double deltaX, double deltaY) {
-    auto* mouse = get_manager_ptr(window)->getMouse();
+    auto mouse = get_manager_ptr(window)->getMouse();
     mouse->scrollY += deltaY;
     mouse->scrollX += deltaX;
 }

@@ -1,12 +1,14 @@
 #pragma once
 
+#include <memory>
+
 #include <Arguments.hh>
 #include <Scene.hh>
 #include <Events.hh>
 
 class Manager {
 public:
-    Manager(Arguments* args)
+    Manager(std::shared_ptr<Arguments> args)
         : fullscreen_(false), args_(args), fileIndex_(0), scene_(0) {}
     virtual ~Manager() {}
 
@@ -24,7 +26,7 @@ public:
 
     virtual void toggleFullscreen() = 0;
 
-    Arguments* args() { return args_; }
+    std::shared_ptr<Arguments> args() { return args_; }
     Scene* scene() { return scene_; }
 
 public:
@@ -41,12 +43,12 @@ public:
 
 protected:
     bool fullscreen_;
-    Arguments* args_;
+    std::shared_ptr<Arguments> args_;
     size_t fileIndex_;
     Scene* scene_;
 };
 
-Manager* createManager(const std::string& str, Arguments* args);
+std::shared_ptr<Manager> createManager(const std::string& str, std::shared_ptr<Arguments> args);
 
-using ManagerFactoryFunc = std::function<Manager*(Arguments*)>;
+using ManagerFactoryFunc = std::function<std::shared_ptr<Manager>(std::shared_ptr<Arguments>)>;
 extern const std::map<const std::string, ManagerFactoryFunc> managers;

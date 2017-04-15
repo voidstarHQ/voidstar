@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 struct Arguments {
     std::string algo;
@@ -14,4 +15,4 @@ struct Arguments {
     bool fullscreen;
 };
 
-Arguments* parseArgs(int argc, char **argv);
+std::shared_ptr<Arguments> parseArgs(int argc, char **argv);

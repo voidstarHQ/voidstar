@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <bitset>
+#include <memory>
 
 #include <GLFW/glfw3.h>
 
@@ -57,7 +58,7 @@ public:
 
 class GlfwManager : public Manager {
 public:
-    GlfwManager(Arguments* args) : Manager(args) {
+    GlfwManager(std::shared_ptr<Arguments> args) : Manager(args) {
         if (instance_)
             throw std::runtime_error("GlfwManager was previously instanciated");
         instance_ = this;

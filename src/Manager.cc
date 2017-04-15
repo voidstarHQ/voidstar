@@ -44,8 +44,8 @@ Manager::loadFile(size_t index) {
     }
 }
 
-Manager*
-createManager(const std::string& str, Arguments* args) {
+std::shared_ptr<Manager>
+createManager(const std::string& str, std::shared_ptr<Arguments> args) {
     auto it = managers.find(str);
     if (it == managers.end()) {
         return NULL;
@@ -54,5 +54,5 @@ createManager(const std::string& str, Arguments* args) {
 }
 
 const std::map<const std::string, ManagerFactoryFunc> managers = {
-    { "glfw", [](Arguments* args) { return new GlfwManager(args); } },
+    { "glfw", [](std::shared_ptr<Arguments> args) { return std::make_shared<GlfwManager>(args); } },
 };
