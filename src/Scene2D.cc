@@ -56,20 +56,20 @@ Scene2D::unload() {
 
 void
 Scene2D::reload() {
-    auto algo = reinterpret_cast<std::shared_ptr<Algo2D>>(algo_);
+    auto algo = std::static_pointer_cast<Algo2D>(algo_);
     reset_points();
     algo->apply(vertices_, colors_, width_, height_)
         || std::cerr << "!apply" << std::endl;
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-    glBufferData(GL_ARRAY_BUFFER, colors_size_, colors_.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, colors_.size(), colors_.data(), GL_STATIC_DRAW);
     glBindVertexArray(0);
 }
 
 void
 Scene2D::load(std::shared_ptr<Algorithm> algorithm) {
     Scene::load(algorithm);
-    auto algo = reinterpret_cast<std::shared_ptr<Algo2D>>(algorithm);
+    auto algo = std::static_pointer_cast<Algo2D>(algorithm);
 
     glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_BLEND);

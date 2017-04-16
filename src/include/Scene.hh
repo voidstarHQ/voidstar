@@ -54,5 +54,3 @@ protected:
     size_t height_;
     float aspect_ratio_;
 };
-
-using Floats = std::vector<GLfloat>;

@@ -64,7 +64,7 @@ Scene3D::unload() {
 
 void
 Scene3D::reload() {
-    auto algo = reinterpret_cast<std::shared_ptr<Algo3D>>(algo_);
+    auto algo = std::static_pointer_cast<Algo3D>(algo_);
     ctx_.reset_points();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
@@ -80,7 +80,7 @@ Scene3D::reload() {
 void
 Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     Scene::load(algorithm);
-    auto algo = reinterpret_cast<std::shared_ptr<Algo3D>>(algorithm);
+    auto algo = std::static_pointer_cast<Algo3D>(algorithm);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
