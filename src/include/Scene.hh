@@ -43,7 +43,7 @@ public:
 
     inline SceneType type() const { return type_; }
     std::shared_ptr<Algorithm> algorithm() { return algo_; }
-    static std::shared_ptr<Scene> forAlgo(std::shared_ptr<Manager> manager, std::shared_ptr<Algorithm> algo);
+    static std::shared_ptr<Scene> with_algo(std::shared_ptr<Arguments> args, std::shared_ptr<Algorithm> algo);
 
 protected:
     SceneType type_;

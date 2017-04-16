@@ -3,6 +3,9 @@
 #include <Types.hh>
 
 struct DataRange {
+    DataRange(size_t b, size_t e)
+        : begin(b), end(e)
+        {}
     size_t begin;
     size_t end;
     size_t size() const { return end - begin; }

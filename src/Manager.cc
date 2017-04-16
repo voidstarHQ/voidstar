@@ -31,16 +31,14 @@ Manager::loadFile(size_t index) {
     loader->load();
     auto range = DataRange::create(args_->range_begin, args_->range_end);
 
-    auto algo = std::make_shared<Algorithm>();
     if (scene_) {
-        algo = scene_->algorithm();
+        auto algo = scene_->algorithm();
         algo->use(loader, range);
         scene_->reload();
     } else {
-        algo = createAlgorithm(args_->algo);
+        auto algo = createAlgorithm(args_->algo);
         algo->use(loader, range);
-        auto self = static_cast<std::shared_ptr<Manager>>(this);
-        loadScene(Scene::forAlgo(self, algo));
+        loadScene(Scene::with_algo(args_, algo));
     }
 }
 
