@@ -23,7 +23,7 @@ Scene2D::load_buffers() {
     glGenBuffers(1, &vbo_);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_);
 
-    glBufferData(GL_ARRAY_BUFFER, vertices_size_, vertices_, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices_.size(), vertices_.data(), GL_STATIC_DRAW);
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(program_->attrib("vert"));
     glVertexAttribPointer(program_->attrib("vert"), 2, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -32,7 +32,7 @@ Scene2D::load_buffers() {
     glGenBuffers(1, &colors_id_);
     glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
 
-    glBufferData(GL_ARRAY_BUFFER, vertices_size_, colors_, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, colors_.size(), colors_.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(program_->attrib("colr"));
     glVertexAttribPointer(program_->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
 
@@ -62,7 +62,7 @@ Scene2D::reload() {
         || std::cerr << "!apply" << std::endl;
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-    glBufferData(GL_ARRAY_BUFFER, colors_size_, colors_, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, colors_size_, colors_.data(), GL_STATIC_DRAW);
     glBindVertexArray(0);
 }
 

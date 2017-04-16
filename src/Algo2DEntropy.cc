@@ -47,7 +47,7 @@ curve (float v) {
 }
 
 bool
-Algo2DEntropy::apply(std::unique_ptr<GLfloat[]> vertices, std::unique_ptr<GLfloat[]> colors,
+Algo2DEntropy::apply(Floats& vertices, Floats& colors,
                      size_t width, size_t height) {
     make_vertices(vertices, width, height);
 

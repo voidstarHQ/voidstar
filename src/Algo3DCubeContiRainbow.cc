@@ -1,8 +1,7 @@
 #include <Algo3DCubeContiRainbow.hh>
 
 bool
-Algo3DCubeContiRainbow::apply(std::unique_ptr<GLfloat[]> vertices, std::unique_ptr<GLfloat[]> colors,
-                              VertIndices& selected,
+Algo3DCubeContiRainbow::apply(Floats& vertices, Floats& colors, VertIndices& selected,
                               size_t width, size_t height, size_t depth) {
     make_vertices(vertices, width, height, depth);
 

@@ -1,8 +1,7 @@
 #include <Algo3DCubeFull.hh>
 
 bool
-Algo3DCubeFull::apply(std::unique_ptr<GLfloat[]> vertices, std::unique_ptr<GLfloat[]> colors,
-                      VertIndices& selected,
+Algo3DCubeFull::apply(Floats& vertices, Floats& colors, VertIndices& selected,
                       size_t width, size_t height, size_t depth) {
     auto nb_verts = make_vertices(vertices, width, height, depth);
 
