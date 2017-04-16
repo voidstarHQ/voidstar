@@ -15,8 +15,8 @@
 #include <Algo3DSphereContiRainbow.hh>
 #include <Algo3DSphereContiFrebet.hh>
 
-void Algorithm::use(Loader* loader, DataRange* range)
-{
+void
+Algorithm::use(std::shared_ptr<Loader> loader, std::shared_ptr<DataRange> range) {
     // XXX this might be problematic in the future
     // XXX delete loader prior to creating a new one (same for range)
     if (loader_ && loader != loader_) {
@@ -38,8 +38,7 @@ void Algorithm::use(Loader* loader, DataRange* range)
 }
 
 const u8*
-Algorithm::loadDataRange(const DataRange& range, size_t& size)
-{
+Algorithm::loadDataRange(const DataRange& range, size_t& size) {
     if (max_data_size_)
         size = std::min<size_t>(range.size(), max_data_size_);
     else
@@ -48,9 +47,8 @@ Algorithm::loadDataRange(const DataRange& range, size_t& size)
     return loader_->dataChunk(range.begin, size);
 }
 
-Algorithm*
-createAlgorithm(const std::string str)
-{
+std::shared_ptr<Algorithm>
+createAlgorithm(const std::string str) {
     auto it = algorithms.find(str);
     if (it == algorithms.end()) {
         return 0;
@@ -58,7 +56,7 @@ createAlgorithm(const std::string str)
     return it->second();
 }
 
-using AlgorithmFactoryFunc = std::function<Algorithm*()>;
+using AlgorithmFactoryFunc = std::function<std::shared_ptr<Algorithm>()>;
 
 const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
     { "entropy", []() { return new Algo2DEntropy(); } },

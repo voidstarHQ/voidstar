@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 #include <map>
+#include <memory>
 
 #include <GL/glew.h>
 
@@ -24,24 +25,24 @@ public:
     virtual ~Algorithm() {}
 
     virtual SceneType sceneType() const = 0;
-    virtual void use(Loader* loader, DataRange* range=NULL);
+    virtual void use(std::shared_ptr<Loader> loader, std::shared_ptr<DataRange> range=NULL);
 
     const u8* loadDataRange(const DataRange& range, size_t& size);
 
     inline const u8* loadDataRange(size_t& size) {
         return loadDataRange(*range_, size);
     }
-    inline DataRange* range() { return range_; }
-    inline Loader* loader() { return loader_; }
+    inline std::shared_ptr<DataRange> range() { return range_; }
+    inline std::shared_ptr<Loader> loader() { return loader_; }
 
 protected:
     size_t min_data_size_;
     size_t max_data_size_;
-    Loader* loader_;
-    DataRange* range_;
+    std::shared_ptr<Loader> loader_;
+    std::shared_ptr<DataRange> range_;
 };
 
-Algorithm* createAlgorithm(const std::string str);
+std::shared_ptr<Algorithm> createAlgorithm(const std::string str);
 
-using AlgorithmFactoryFunc = std::function<Algorithm*()>;
+using AlgorithmFactoryFunc = std::function<std::shared_ptr<Algorithm>()>;
 extern const std::map<const std::string, AlgorithmFactoryFunc> algorithms;

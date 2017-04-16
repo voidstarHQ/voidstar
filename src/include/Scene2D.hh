@@ -15,14 +15,14 @@ public:
           vertices_size_(n_points_ * 2 * sizeof (GLfloat)),
           colors_size_(n_points_ * 4 * sizeof (GLfloat)),
           colors_id_(0),
-          vertices_(new GLfloat[vertices_size_]),
-          colors_(new GLfloat[colors_size_]),
+          vertices_(std::make_shared<GLfloat>(vertices_size_)),
+          colors_(std::make_shared<GLfloat>(colors_size_)),
           program_(NULL)
         {}
     virtual ~Scene2D() { unload(); }
 
     virtual void init(std::shared_ptr<Arguments> args);
-    virtual void load(Algorithm* algo);
+    virtual void load(std::shared_ptr<Algorithm> algo);
     virtual void unload();
     virtual void reload();
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
@@ -48,8 +48,8 @@ protected:
     size_t   vertices_size_;
     size_t   colors_size_;
     GLuint   colors_id_;
-    GLfloat* vertices_;
-    GLfloat* colors_;
+    std::shared_ptr<GLfloat> vertices_;
+    std::shared_ptr<GLfloat> colors_;
 
-    tdogl::Program* program_;
+    std::shared_ptr<tdogl::Program> program_;
 };

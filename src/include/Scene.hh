@@ -28,7 +28,7 @@ public:
     virtual void init(std::shared_ptr<Arguments> args) = 0;
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime) = 0;
     virtual void render() = 0;
-    virtual void load(Algorithm* algo);
+    virtual void load(std::shared_ptr<Algorithm> algo);
     virtual void unload();
     virtual void reload();
 
@@ -42,12 +42,12 @@ public:
     }
 
     inline SceneType type() const { return type_; }
-    Algorithm* algorithm() { return algo_; }
-    static std::shared_ptr<Scene> forAlgo(std::shared_ptr<Manager> manager, Algorithm* algo);
+    std::shared_ptr<Algorithm> algorithm() { return algo_; }
+    static std::shared_ptr<Scene> forAlgo(std::shared_ptr<Manager> manager, std::shared_ptr<Algorithm> algo);
 
 protected:
     SceneType type_;
-    Algorithm* algo_;
+    std::shared_ptr<Algorithm> algo_;
     tdogl::Camera camera_;
 
     size_t width_;

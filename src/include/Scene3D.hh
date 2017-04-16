@@ -13,12 +13,10 @@ struct Scene3DContext {
           vertices_size(n_points * 3 * sizeof (GLfloat)),
           colors_size(n_points * 4 * sizeof (GLfloat)),
           colors_id(0),
-          vertices(new GLfloat[vertices_size]),
-          colors(new GLfloat[colors_size]),
+          vertices(std::make_shared<GLfloat>(vertices_size)),
+          colors(std::make_shared<GLfloat>(colors_size)),
           degreesRotated(0.0f), rotationEnabled(false), program(NULL)
-        {
-            // selected.reserve(n_points);
-        }
+        {}
 
     ~Scene3DContext() {
         delete[] vertices;
@@ -47,12 +45,12 @@ struct Scene3DContext {
     size_t   vertices_size;
     size_t   colors_size;
     GLuint   colors_id;
-    GLfloat* vertices;
-    GLfloat* colors;
+    std::shared_ptr<GLfloat> vertices;
+    std::shared_ptr<GLfloat> colors;
 
     GLfloat degreesRotated;
     bool rotationEnabled;
-    tdogl::Program* program;
+    std::shared_ptr<tdogl::Program> program;
 };
 
 class Scene3D : public Scene {
@@ -63,7 +61,7 @@ public:
     virtual ~Scene3D() { unload(); }
 
     virtual void init(std::shared_ptr<Arguments> args);
-    virtual void load(Algorithm* algo);
+    virtual void load(std::shared_ptr<Algorithm> algo);
     virtual void unload();
     virtual void reload();
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);

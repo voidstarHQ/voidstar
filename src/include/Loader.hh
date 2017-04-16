@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <Types.hh>
 
 class Loader {
@@ -47,4 +49,4 @@ public:
     }
 };
 
-Loader* loaderFromUri(const std::string& uri);
+std::shared_ptr<Loader> loaderFromUri(const std::string& uri);

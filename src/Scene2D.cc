@@ -59,7 +59,7 @@ Scene2D::unload() {
 
 void
 Scene2D::reload() {
-    auto* algo = reinterpret_cast<Algo2D*>(algo_);
+    auto algo = reinterpret_cast<std::shared_ptr<Algo2D>>(algo_);
     reset_points();
     algo->apply(vertices_, colors_, width_, height_)
         || std::cerr << "!apply" << std::endl;
@@ -70,9 +70,9 @@ Scene2D::reload() {
 }
 
 void
-Scene2D::load(Algorithm* algorithm) {
+Scene2D::load(std::shared_ptr<Algorithm> algorithm) {
     Scene::load(algorithm);
-    auto* algo = reinterpret_cast<Algo2D*>(algorithm);
+    auto algo = reinterpret_cast<std::shared_ptr<Algo2D>>(algorithm);
 
     glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_BLEND);

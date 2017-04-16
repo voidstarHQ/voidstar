@@ -27,11 +27,11 @@ Manager::loadFile(size_t index) {
     fileIndex_ = index;
     // TODO: remove previous loader instance from scene.
     //       properly define who owns the variable and its longevity
-    auto* loader = loaderFromUri(args_->input[index]);
+    auto loader = loaderFromUri(args_->input[index]);
     loader->load();
-    auto* range = DataRange::create(args_->range_begin, args_->range_end);
+    auto range = DataRange::create(args_->range_begin, args_->range_end);
 
-    Algorithm* algo = NULL;
+    auto algo = std::make_shared<Algorithm>();
     if (scene_) {
         algo = scene_->algorithm();
         algo->use(loader, range);

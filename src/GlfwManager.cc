@@ -31,8 +31,8 @@ onError(int errorCode __unused, const char* msg) {
 
 static void
 onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    auto* events = get_manager_ptr(window)->getEvents();
-    auto* ev = reinterpret_cast<GlfwKeyboardEvents*>(events);
+    auto events = get_manager_ptr(window)->getEvents();
+    auto ev = reinterpret_cast<GlfwKeyboardEvents*>(events);
     ev->process(key, scancode, action, mods);
 
     // if (action == GLFW_PRESS)

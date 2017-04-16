@@ -3,7 +3,7 @@
 #include <Scene3D.hh>
 
 void
-Scene::load(Algorithm* algo) {
+Scene::load(std::shared_ptr<Algorithm> algo) {
     if (type_ != algo->sceneType())
         throw std::runtime_error("Invalid algo for scene");
     if (algo_ && algo_ != algo) {
@@ -29,7 +29,7 @@ std::map<SceneType, SceneFactoryFunc> scenes = {
 };
 
 std::shared_ptr<Scene>
-Scene::forAlgo(std::shared_ptr<Manager> manager, Algorithm* algo) {
+Scene::forAlgo(std::shared_ptr<Manager> manager, std::shared_ptr<Algorithm> algo) {
     auto it = scenes.find(algo->sceneType());
     if (it == scenes.end()) {
         throw std::runtime_error("Unknown scene type for algorithm");

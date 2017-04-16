@@ -69,8 +69,8 @@ public:
     virtual void init();
     virtual void run();
 
-    virtual Events* getEvents(int id=0) { (void)id; return events_; }
-    virtual Mouse* getMouse(int id=0) { (void)id; return mouse_; }
+    virtual std::shared_ptr<Events> getEvents(int id=0) { (void)id; return events_; }
+    virtual std::shared_ptr<Mouse> getMouse(int id=0) { (void)id; return mouse_; }
 
     GLFWwindow* window() { return window_; }
 

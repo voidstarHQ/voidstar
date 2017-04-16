@@ -31,7 +31,8 @@ Scene3D::load_buffers() {
 
     glGenBuffers(1, &ctx_.elements);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ctx_.elements);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(decltype(ctx_.selected)::value_type) * ctx_.selected.size(), ctx_.selected.data(), GL_STATIC_DRAW);
+    auto n_selected = sizeof(decltype(ctx_.selected)::value_type) * ctx_.selected.size();
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, n_selected, ctx_.selected.data(), GL_STATIC_DRAW);
 
     // make and bind the VBO
     glGenBuffers(1, &ctx_.colors_id);
@@ -64,7 +65,7 @@ Scene3D::unload() {
 
 void
 Scene3D::reload() {
-    auto* algo = reinterpret_cast<Algo3D*>(algo_);
+    auto algo = reinterpret_cast<std::shared_ptr<Algo3D>>(algo_);
     ctx_.reset_points();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
@@ -78,9 +79,9 @@ Scene3D::reload() {
 }
 
 void
-Scene3D::load(Algorithm* algorithm) {
+Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     Scene::load(algorithm);
-    auto* algo = reinterpret_cast<Algo3D*>(algorithm);
+    auto algo = reinterpret_cast<std::shared_ptr<Algo3D>>(algorithm);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -130,8 +131,7 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
 
     auto mouse = manager->getMouse();
     mouse->getCursorPos();
-    camera_.offsetOrientation(mouse->sensitivity * mouse->y,
-                              mouse->sensitivity * mouse->x);
+    camera_.offsetOrientation(mouse->sensitivity * mouse->y, mouse->sensitivity * mouse->x);
     //reset the mouse, so it doesn't go out of the window
     mouse->setCursorPos(0, 0);
 

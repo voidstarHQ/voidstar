@@ -7,12 +7,12 @@ public:
     virtual ~Algo2D() {}
 
     virtual SceneType sceneType() const { return SCENE_2D; }
-    virtual bool apply(GLfloat* vertices, GLfloat* colors,
+    virtual bool apply(std::shared_ptr<GLfloat> vertices, std::shared_ptr<GLfloat> colors,
                        size_t width, size_t height) = 0;
 
 protected:
     size_t
-    make_vertices(GLfloat* vertices, size_t width, size_t height) {
+    make_vertices(std::shared_ptr<GLfloat> vertices, size_t width, size_t height) {
         const float w = static_cast<float>(width) / 2;
         const float h = static_cast<float>(height) / 2;
 

@@ -7,9 +7,9 @@
 #include <FileLoader.hh>
 #include <MmapLoader.hh>
 
-using LoaderFactoryFunc = std::function<Loader*(const std::string&)>;
+using LoaderFactoryFunc = std::function<std::shared_ptr<Loader>(const std::string&)>;
 
-#define LOADER(Body) [](std::string uri) -> Loader* { Body }
+#define LOADER(Body) [](std::string uri) -> std::shared_ptr<Loader> { Body }
 std::vector<std::pair<std::string, LoaderFactoryFunc>> loaders = {
     { "file", LOADER( return new FileLoader(uri); ) },
     { "", LOADER(
@@ -18,8 +18,8 @@ std::vector<std::pair<std::string, LoaderFactoryFunc>> loaders = {
     ) },
 };
 
-Loader *loaderFromUri(const std::string& uri)
-{
+std::shared_ptr<Loader>
+loaderFromUri(const std::string& uri) {
     auto data = Uri<>::parse(uri);
     for (const auto& pair : loaders) {
         auto& scheme = pair.first;
@@ -30,4 +30,3 @@ Loader *loaderFromUri(const std::string& uri)
     }
     throw std::runtime_error("No loader for file " + uri);
 }
-

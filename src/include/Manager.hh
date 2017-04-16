@@ -18,8 +18,8 @@ public:
     virtual void init() = 0;
     virtual void run() = 0;
 
-    virtual Events* getEvents(int id=0) = 0;
-    virtual Mouse* getMouse(int id=0) = 0;
+    virtual std::shared_ptr<Events> getEvents(int id=0) = 0;
+    virtual std::shared_ptr<Mouse> getMouse(int id=0) = 0;
 
     void loadFile(size_t index);
     void loadFile(const std::string& filename);
