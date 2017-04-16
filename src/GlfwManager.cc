@@ -5,19 +5,17 @@
 
 std::shared_ptr<GlfwManager> GlfwManager::instance_;
 
-#define get_manager_ptr(_Window) GlfwManager::instance()
-
 void
-onFramebufferResize(GLFWwindow* window, int width, int height) {
+onFramebufferResize(GLFWwindow* window __unused, int width, int height) {
     glViewport(0, 0, width, height);
-    auto scene = get_manager_ptr(window)->scene();
+    auto scene = GlfwManager::instance()->scene();
     scene->resize(width, height);
 }
 
 // records how far the y axis has been scrolled
 static void
-onScroll(GLFWwindow* window, double deltaX, double deltaY) {
-    auto mouse = get_manager_ptr(window)->getMouse();
+onScroll(GLFWwindow* window __unused, double deltaX, double deltaY) {
+    auto mouse = GlfwManager::instance()->getMouse();
     mouse->scrollY += deltaY;
     mouse->scrollX += deltaX;
 }
@@ -28,8 +26,8 @@ onError(int errorCode __unused, const char* msg) {
 }
 
 static void
-onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    auto events = get_manager_ptr(window)->getEvents();
+onKeyEvent(GLFWwindow* window __unused, int key, int scancode, int action, int mods) {
+    auto events = GlfwManager::instance()->getEvents();
     auto ev = std::static_pointer_cast<GlfwKeyboardEvents>(events);
     ev->process(key, scancode, action, mods);
 
@@ -62,7 +60,7 @@ GlfwManager::init() {
         monitor = glfwGetPrimaryMonitor();
     }
 
-    window_ = glfwCreateWindow(args_->width, args_->height, "void*", monitor, NULL);
+    window_ = glfwCreateWindow(args_->width, args_->height, args_->name.c_str(), monitor, NULL);
     if (!window_)
         throw std::runtime_error("!glfwCreateWindow. Can your hardware handle OpenGL 3.2?");
 
@@ -124,8 +122,7 @@ GlfwManager::run() {
         // update the scene based on the time elapsed since last update
         double thisTime = glfwGetTime();
         float elapsedTime = thisTime - lastTime;
-        // auto self = get_manager_ptr(window);
-        bool redraw = scene_->update(instance_, elapsedTime);
+        bool redraw = scene_->update(GlfwManager::instance(), elapsedTime);
         lastTime = thisTime;
 
         if (redraw) {

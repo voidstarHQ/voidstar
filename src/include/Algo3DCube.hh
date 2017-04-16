@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include <Algo3D.hh>
 
 class Algo3DCube : public Algo3D {
@@ -27,6 +25,6 @@ protected:
                     vertices[pos++] = (static_cast<float>(z) - d) / d;
                 }
 
-        return pos / 3;
+        return vertices.size() / 3;
     }
 };

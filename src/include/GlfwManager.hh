@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <bitset>
 #include <memory>
 
@@ -57,26 +56,33 @@ public:
 };
 
 class GlfwManager : public Manager {
+// private:
 public:
-    GlfwManager(std::shared_ptr<Arguments> args) : Manager(args) {
-        if (instance_)
-            throw std::runtime_error("GlfwManager was previously instanciated");
-        auto self = static_cast<std::shared_ptr<GlfwManager>>(this);
-        instance_ = self;
-    }
+    GlfwManager(std::shared_ptr<Arguments> args)
+        : Manager(args)
+        {}
+public:
     virtual ~GlfwManager() {}
 
     virtual void init();
     virtual void run();
 
-    virtual std::shared_ptr<Events> getEvents(int id=0) { (void)id; return events_; }
-    virtual std::shared_ptr<Mouse> getMouse(int id=0) { (void)id; return mouse_; }
+    virtual std::shared_ptr<Events> getEvents() { return events_; }
+    virtual std::shared_ptr<Mouse> getMouse() { return mouse_; }
 
     GLFWwindow* window() { return window_; }
 
     // TODO: move these in an OpenGl backend
     void glInit();
     void glProcessErrors(bool quiet=false);
+
+    static std::shared_ptr<GlfwManager>
+    instance(std::shared_ptr<Arguments> args) {
+        if (instance_ || !args)
+            throw std::runtime_error("Bad call to instance of GlfwManager");
+        instance_ = std::make_shared<GlfwManager>(args);
+        return instance_;
+    }
 
     static std::shared_ptr<GlfwManager>
     instance() {
@@ -89,16 +95,15 @@ public:
     toggleFullscreen() {
         int w, h;
         fullscreen_ = !fullscreen_;
-        if (!fullscreen_) {
+        if (fullscreen_) {
+            w = static_cast<int>(args_->width);
+            h = static_cast<int>(args_->height);
+        } else {
             const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
             glfwSetWindowPos(window_, 0, 0);
             w = mode->width;
             h = mode->height;
-        } else {
-            w = static_cast<int>(args_->width);
-            h = static_cast<int>(args_->height);
         }
-        std::cout << "glfwSetWindowSize " << w << 'x' << h << std::endl;
         glfwSetWindowSize(window_, w, h);
     }
 

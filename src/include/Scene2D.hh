@@ -9,14 +9,11 @@ class Scene2D : public Scene {
 public:
     Scene2D()
         : Scene(SCENE_2D),
-          vao_(0), vbo_(0),
+          vao_(0), vbo_(0), colors_id_(0),
           width_(256), height_(256),
           n_points_(width_ * height_),
-          colors_id_(0)
-        {
-            vertices_.reserve(2 * n_points_);
-            colors_.reserve(4 * n_points_);
-        }
+          vertices_(3 * n_points_), colors_(4 * n_points_)
+        {}
     virtual ~Scene2D() { unload(); }
 
     virtual void init(std::shared_ptr<Arguments> args);
@@ -25,23 +22,24 @@ public:
     virtual void reload();
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
     virtual void render();
+
 private:
     void load_shaders();
     void load_buffers();
     void reset_points() {
-        vertices_ = Floats(vertices_.size());
-        colors_ = Floats(colors_.size());
+        vertices_ = Floats(3 * n_points_);
+        colors_ = Floats(4 * n_points_);
     }
 
 protected:
     GLuint vao_;
     GLuint vbo_;
+    GLuint colors_id_;
 
     size_t  width_;
     size_t  height_;
     size_t  n_points_;
 
-    GLuint colors_id_;
     Floats vertices_;
     Floats colors_;
 

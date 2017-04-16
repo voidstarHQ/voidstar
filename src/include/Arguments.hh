@@ -5,8 +5,9 @@
 #include <memory>
 
 struct Arguments {
-    std::string algo;
     std::vector<std::string> input;
+    std::string name;
+    std::string algo;
     std::string manager;
     size_t width;
     size_t height;
@@ -15,4 +16,4 @@ struct Arguments {
     bool fullscreen;
 };
 
-std::shared_ptr<Arguments> parseArgs(int argc, char **argv);
+std::shared_ptr<Arguments> parseArgs(int argc, char *argv[]);

@@ -18,6 +18,8 @@ enum SceneType {
     SCENE_3D,
 };
 
+using Floats = std::vector<GLfloat>;
+
 class Algorithm {
 public:
     Algorithm(size_t min_size=0, size_t max_size=0)
@@ -36,6 +38,11 @@ public:
     inline std::shared_ptr<DataRange> range() { return range_; }
     inline std::shared_ptr<Loader> loader() { return loader_; }
 
+    static size_t
+    vsize(const Floats& v) {
+        return sizeof (GLfloat) * v.size();
+    }
+
 protected:
     size_t min_data_size_;
     size_t max_data_size_;
@@ -47,5 +54,3 @@ std::shared_ptr<Algorithm> createAlgorithm(const std::string str);
 
 using AlgorithmFactoryFunc = std::function<std::shared_ptr<Algorithm>()>;
 extern const std::map<const std::string, AlgorithmFactoryFunc> algorithms;
-
-using Floats = std::vector<GLfloat>;

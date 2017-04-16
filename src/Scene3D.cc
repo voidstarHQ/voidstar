@@ -23,22 +23,20 @@ Scene3D::load_buffers() {
     // make and bind the VBO
     glGenBuffers(1, &ctx_.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.vbo);
-
-    glBufferData(GL_ARRAY_BUFFER, ctx_.vertices.size() * sizeof (GLfloat), ctx_.vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(ctx_.vertices), ctx_.vertices.data(), GL_STATIC_DRAW);
     // connect the xyz to the "vert" attribute of the vertex shader
     glVertexAttribPointer(ctx_.program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(ctx_.program->attrib("vert"));
 
     glGenBuffers(1, &ctx_.elements);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ctx_.elements);
-    auto n_selected = sizeof(decltype(ctx_.selected)::value_type) * ctx_.selected.size();
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, n_selected, ctx_.selected.data(), GL_STATIC_DRAW);
+    auto size_selected = sizeof (decltype(ctx_.selected)::value_type) * ctx_.selected.size();
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, ctx_.selected.data(), GL_STATIC_DRAW);
 
     // make and bind the VBO
     glGenBuffers(1, &ctx_.colors_id);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
-
-    glBufferData(GL_ARRAY_BUFFER, ctx_.colors.size() * sizeof (GLfloat), ctx_.colors.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(ctx_.colors), ctx_.colors.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(ctx_.program->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(ctx_.program->attrib("colr"));
 
@@ -149,7 +147,8 @@ Scene3D::render() {
     ctx_.program->setUniform("camera", camera_.matrix());
 
     // set the "model" uniform in the vertex shader, based on degreesRotated
-    ctx_.program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(ctx_.degreesRotated), glm::vec3(0,1,0)));
+    auto rotated = glm::rotate(glm::mat4(), glm::radians(ctx_.degreesRotated), glm::vec3(0,1,0));
+    ctx_.program->setUniform("model", rotated);
 
     // bind the VAO
     glBindVertexArray(ctx_.vao);

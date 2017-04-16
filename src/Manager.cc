@@ -51,6 +51,7 @@ createManager(const std::string& str, std::shared_ptr<Arguments> args) {
     return it->second(args);
 }
 
+#define MANAGER(Body) [](std::shared_ptr<Arguments> args) { Body }
 const std::map<const std::string, ManagerFactoryFunc> managers = {
-    { "glfw", [](std::shared_ptr<Arguments> args) { return std::make_shared<GlfwManager>(args); } },
+    {"glfw", MANAGER( return GlfwManager::instance(args); )},
 };

@@ -39,19 +39,19 @@ listComponents() {
 }
 
 std::shared_ptr<Arguments>
-parseArgs(int argc, char **argv) {
+parseArgs(int argc, char *argv[]) {
     static auto short_options = ":a:b:e:fhlu:x:y:";
     static const struct option long_options[] = {
-        { "algorithm",  1, 0, 'a' },
-        { "begin",      1, 0, 'b' },
-        { "end",        1, 0, 'e' },
-        { "fullscreen", 0, 0, 'f' },
-        { "height",     1, 0, 'y' },
-        { "help",       0, 0, 'h' },
-        { "list",       0, 0, 'l' },
-        { "ui",         1, 0, 'u' },
-        { "width",      1, 0, 'x' },
-        { 0,            0, 0,  0  }
+        {"algorithm",  1, 0, 'a'},
+        {"begin",      1, 0, 'b'},
+        {"end",        1, 0, 'e'},
+        {"fullscreen", 0, 0, 'f'},
+        {"height",     1, 0, 'y'},
+        {"help",       0, 0, 'h'},
+        {"list",       0, 0, 'l'},
+        {"ui",         1, 0, 'u'},
+        {"width",      1, 0, 'x'},
+        {0,            0, 0,  0 }
     };
 
     bool list = false;
@@ -61,6 +61,7 @@ parseArgs(int argc, char **argv) {
     int opt_index;
 
     auto args = std::make_shared<Arguments>();
+    args->name = "void*";
     args->algo = "conti";
     args->manager = "glfw";
     args->width = 800;
