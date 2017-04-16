@@ -3,21 +3,9 @@
 
 #include <GlfwManager.hh>
 
-std::shared_ptr<GlfwManager> GlfwManager::instance_;// = NULL;
+std::shared_ptr<GlfwManager> GlfwManager::instance_;
 
-// static std::shared_ptr<GlfwManager>
-// get_manager_ptr(GLFWwindow* window) {
-//     GlfwManager* m = glfwGetWindowUserPointer(window);
-//     return std::static_pointer_cast<GlfwManager>(m);
-// }
-
-#define get_manager_ptr(Window)                                         \
-    GlfwManager::instance()
-//     do {                                                                \
-//     GlfwManager* m = glfwGetWindowUserPointer(Window);                  \
-//     std::static_pointer_cast<GlfwManager>()
-//     } while (false)
-    // reinterpret_cast<std::shared_ptr<GlfwManager>>(glfwGetWindowUserPointer(Window))
+#define get_manager_ptr(_Window) GlfwManager::instance()
 
 void
 onFramebufferResize(GLFWwindow* window, int width, int height) {
