@@ -11,7 +11,7 @@ public:
     virtual ~Algo3D() {}
 
     virtual SceneType sceneType() const { return SCENE_3D; }
-    virtual bool apply(std::shared_ptr<GLfloat> vertices, std::shared_ptr<GLfloat> colors,
+    virtual bool apply(std::unique_ptr<GLfloat[]> vertices, std::unique_ptr<GLfloat[]> colors,
                        VertIndices& selected,
                        size_t width, size_t height, size_t depth) = 0;
 };

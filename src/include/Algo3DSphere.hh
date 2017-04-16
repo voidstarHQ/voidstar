@@ -9,13 +9,13 @@ class Algo3DSphere : public Algo3D {
 public:
     virtual ~Algo3DSphere() {}
 
-    virtual bool apply(std::shared_ptr<GLfloat> vertices, std::shared_ptr<GLfloat> colors,
+    virtual bool apply(std::unique_ptr<GLfloat[]> vertices, std::unique_ptr<GLfloat[]> colors,
                        VertIndices& selected,
                        size_t width, size_t height, size_t depth) = 0;
 
 protected:
     size_t
-    make_vertices(std::shared_ptr<GLfloat> vertices, size_t width, size_t height, size_t depth) {
+    make_vertices(std::unique_ptr<GLfloat[]> vertices, size_t width, size_t height, size_t depth) {
         const float w = static_cast<float>(width) / 2;
         const float h = static_cast<float>(height) / 2;
         const float d = static_cast<float>(depth) / 2;

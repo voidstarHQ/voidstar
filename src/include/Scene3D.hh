@@ -13,15 +13,15 @@ struct Scene3DContext {
           vertices_size(n_points * 3 * sizeof (GLfloat)),
           colors_size(n_points * 4 * sizeof (GLfloat)),
           colors_id(0),
-          vertices(std::make_shared<GLfloat>(vertices_size)),
-          colors(std::make_shared<GLfloat>(colors_size)),
+          vertices(std::make_unique<GLfloat[]>(vertices_size)),
+          colors(std::make_unique<GLfloat[]>(colors_size)),
           degreesRotated(0.0f), rotationEnabled(false), program(NULL)
         {}
     ~Scene3DContext() {}
 
     void reset_points() {
-        colors = std::make_shared<GLfloat>(colors_size);
-        vertices = std::make_shared<GLfloat>(vertices_size);
+        colors = std::make_unique<GLfloat[]>(colors_size);
+        vertices = std::make_unique<GLfloat[]>(vertices_size);
         selected.clear();
     }
 
@@ -38,8 +38,8 @@ struct Scene3DContext {
     size_t   vertices_size;
     size_t   colors_size;
     GLuint   colors_id;
-    std::shared_ptr<GLfloat> vertices;
-    std::shared_ptr<GLfloat> colors;
+    std::unique_ptr<GLfloat[]> vertices;
+    std::unique_ptr<GLfloat[]> colors;
 
     GLfloat degreesRotated;
     bool rotationEnabled;

@@ -1,7 +1,7 @@
 #include <Algo3DSphereContiFrebet.hh>
 
 bool
-Algo3DSphereContiFrebet::apply(std::shared_ptr<GLfloat> vertices, std::shared_ptr<GLfloat> colors,
+Algo3DSphereContiFrebet::apply(std::unique_ptr<GLfloat[]> vertices, std::unique_ptr<GLfloat[]> colors,
                                VertIndices& selected,
                                size_t width, size_t height, size_t depth) {
     make_vertices(vertices, width, height, depth);
