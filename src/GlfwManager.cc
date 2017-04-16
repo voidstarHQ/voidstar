@@ -5,8 +5,18 @@
 
 std::shared_ptr<GlfwManager> GlfwManager::instance_;// = NULL;
 
-#define get_manager_ptr(Window) \
+// static std::shared_ptr<GlfwManager>
+// get_manager_ptr(GLFWwindow* window) {
+//     GlfwManager* m = glfwGetWindowUserPointer(window);
+//     return std::static_pointer_cast<GlfwManager>(m);
+// }
+
+#define get_manager_ptr(Window)                                         \
     GlfwManager::instance()
+//     do {                                                                \
+//     GlfwManager* m = glfwGetWindowUserPointer(Window);                  \
+//     std::static_pointer_cast<GlfwManager>()
+//     } while (false)
     // reinterpret_cast<std::shared_ptr<GlfwManager>>(glfwGetWindowUserPointer(Window))
 
 void
@@ -32,7 +42,7 @@ onError(int errorCode __unused, const char* msg) {
 static void
 onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
     auto events = get_manager_ptr(window)->getEvents();
-    auto ev = reinterpret_cast<std::shared_ptr<GlfwKeyboardEvents>>(events);
+    auto ev = std::static_pointer_cast<GlfwKeyboardEvents>(events);
     ev->process(key, scancode, action, mods);
 
     // if (action == GLFW_PRESS)

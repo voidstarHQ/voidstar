@@ -82,7 +82,7 @@ Scene2D::load(std::shared_ptr<Algorithm> algorithm) {
 }
 
 bool
-Scene2D::update(std::shared_ptr<Manager> manager, float elapsedTime __unused) {
+Scene2D::update(std::shared_ptr<Manager> manager __unused, float elapsedTime __unused) {
     return true;
 }
 
