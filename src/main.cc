@@ -14,8 +14,7 @@
 #include <Scene3D.hh>
 
 int
-main(int argc, char* argv[])
-{
+main(int argc, char* argv[]) {
     auto args = parseArgs(argc, argv);
     if (!args) {
         return 0;

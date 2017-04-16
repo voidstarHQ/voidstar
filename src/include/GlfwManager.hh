@@ -25,7 +25,7 @@ struct GlfwKeyboardState {
         GlfwModifiers mods;
     };
 
-    void copy(const GlfwKeyboardState* state) {
+    void copy(const std::shared_ptr<GlfwKeyboardState> state) {
         keys = state->keys;
         rawmods = state->rawmods;
     }
@@ -46,8 +46,8 @@ public:
     void process(int key, int scancode, int action, int mods);
 
 //protected:
-    GlfwKeyboardState *current_;
-    GlfwKeyboardState *previous_;
+    std::shared_ptr<GlfwKeyboardState> current_;
+    std::shared_ptr<GlfwKeyboardState> previous_;
 };
 
 class GlfwMouse : public Mouse {
@@ -105,6 +105,6 @@ public:
 protected:
     static std::shared_ptr<GlfwManager> instance_;
     GLFWwindow* window_;
-    GlfwKeyboardEvents* events_;
-    GlfwMouse* mouse_;
+    std::shared_ptr<GlfwKeyboardEvents> events_;
+    std::shared_ptr<GlfwMouse> mouse_;
 };

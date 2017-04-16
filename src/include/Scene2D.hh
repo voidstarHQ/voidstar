@@ -31,10 +31,8 @@ private:
     void load_shaders();
     void load_buffers();
     void reset_points() {
-        delete[] colors_;
-        colors_ = new GLfloat[colors_size_];
-        delete[] vertices_;
-        vertices_ = new GLfloat[vertices_size_];
+        colors_ = std::make_shared<GLfloat>(colors_size_);
+        vertices_ = std::make_shared<GLfloat>(vertices_size_);
     }
 
 protected:

@@ -9,6 +9,6 @@ struct DataRange {
     static std::shared_ptr<DataRange> create(size_t begin, size_t end) {
         if (begin == 0 && end == 0)
             return NULL;
-        return new DataRange{begin, end};
+        return std::make_shared<DataRange>(begin, end);
     }
 };

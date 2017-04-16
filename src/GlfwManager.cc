@@ -32,7 +32,7 @@ onError(int errorCode __unused, const char* msg) {
 static void
 onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
     auto events = get_manager_ptr(window)->getEvents();
-    auto ev = reinterpret_cast<GlfwKeyboardEvents*>(events);
+    auto ev = reinterpret_cast<std::shared_ptr<GlfwKeyboardEvents>>(events);
     ev->process(key, scancode, action, mods);
 
     // if (action == GLFW_PRESS)
@@ -78,8 +78,8 @@ GlfwManager::init() {
     glfwSetScrollCallback(window_, onScroll);
     glfwMakeContextCurrent(window_);
 
-    mouse_ = new GlfwMouse();
-    events_ = new GlfwKeyboardEvents();
+    mouse_ = std::make_shared<GlfwMouse>();
+    events_ = std::make_shared<GlfwKeyboardEvents>();
 
     glInit();
 }
@@ -151,13 +151,11 @@ GlfwManager::run() {
 }
 
 GlfwKeyboardEvents::GlfwKeyboardEvents() {
-    current_ = new GlfwKeyboardState{};
-    previous_ = new GlfwKeyboardState{};
+    current_ = std::make_shared<GlfwKeyboardState>();
+    previous_ = std::make_shared<GlfwKeyboardState>();
 }
 
 GlfwKeyboardEvents::~GlfwKeyboardEvents() {
-    delete current_;
-    delete previous_;
 }
 
 bool GlfwKeyboardEvents::keyDown(int key) {

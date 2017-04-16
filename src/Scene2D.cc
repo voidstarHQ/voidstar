@@ -9,7 +9,7 @@ Scene2D::load_shaders() {
         tdogl::Shader(shader__vertex_2d, GL_VERTEX_SHADER),
         tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)
     };
-    program_ = new tdogl::Program(shaders);
+    program_ = std::make_shared<tdogl::Program>(shaders);
 }
 
 
@@ -48,13 +48,10 @@ Scene2D::init(std::shared_ptr<Arguments> args) {
 void
 Scene2D::unload() {
     if (program_) {
-        delete program_;
         glDeleteBuffers(1, &vbo_);
         glDeleteBuffers(1, &colors_id_);
         glDeleteVertexArrays(1, &vao_);
     }
-    delete[] colors_;
-    delete[] vertices_;
 }
 
 void

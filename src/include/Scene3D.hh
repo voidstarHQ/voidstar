@@ -17,18 +17,11 @@ struct Scene3DContext {
           colors(std::make_shared<GLfloat>(colors_size)),
           degreesRotated(0.0f), rotationEnabled(false), program(NULL)
         {}
-
-    ~Scene3DContext() {
-        delete[] vertices;
-        delete[] colors;
-        delete program;
-    }
+    ~Scene3DContext() {}
 
     void reset_points() {
-        delete[] colors;
-        colors = new GLfloat[colors_size];
-        delete[] vertices;
-        vertices = new GLfloat[vertices_size];
+        colors = std::make_shared<GLfloat>(colors_size);
+        vertices = std::make_shared<GLfloat>(vertices_size);
         selected.clear();
     }
 

@@ -10,7 +10,7 @@ Scene3D::load_shaders() {
         tdogl::Shader(shader__vertex_3d, GL_VERTEX_SHADER),
         tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)
     };
-    ctx_.program = new tdogl::Program(shaders);
+    ctx_.program = std::make_shared<tdogl::Program>(shaders);
 }
 
 
@@ -55,7 +55,6 @@ Scene3D::init(std::shared_ptr<Arguments> args) {
 void
 Scene3D::unload() {
     if (ctx_.program) {
-        delete ctx_.program;
         glDeleteBuffers(1, &ctx_.vbo);
         glDeleteBuffers(1, &ctx_.elements);
         glDeleteBuffers(1, &ctx_.colors_id);

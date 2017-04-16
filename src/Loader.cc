@@ -11,11 +11,11 @@ using LoaderFactoryFunc = std::function<std::shared_ptr<Loader>(const std::strin
 
 #define LOADER(Body) [](std::string uri) -> std::shared_ptr<Loader> { Body }
 std::vector<std::pair<std::string, LoaderFactoryFunc>> loaders = {
-    { "file", LOADER( return new FileLoader(uri); ) },
-    { "", LOADER(
-        if (uri == "-") return new FileLoader(0);
-        else return new MmapFileLoader(uri);
-    ) },
+    {"file", LOADER( return std::make_shared<FileLoader>(uri); )},
+    {"", LOADER(
+            if (uri == "-") return std::make_shared<FileLoader>(0);
+            else return std::make_shared<MmapFileLoader>(uri);
+    )},
 };
 
 std::shared_ptr<Loader>
