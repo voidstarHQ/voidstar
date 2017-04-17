@@ -4,6 +4,8 @@ Browse data using Corti's 2D projector as well as 3D variants.
 
 [![Sorry for potato quality](https://i.vimeocdn.com/video/622736893.webp?mw=480&mh=270)](https://vimeo.com/207613754)
 
+[More info, references & inspiration](https://github.com/fenollp/minepi)
+
 ## Usage
 
 ```shell
