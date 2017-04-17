@@ -10,7 +10,7 @@ Browse data using Corti's 2D projector as well as 3D variants.
 
 ```shell
 ./configure -d RELEASE && cd build && make
-./voidstar ../data/*
+./voidstar --fullscreen ../data/*
 # Press H and L to switch between files
 # Use AWSDZX and your mouse to move in the 3D space
 ```
