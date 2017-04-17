@@ -12,7 +12,6 @@ Scene2D::load_shaders() {
     program_ = std::make_shared<tdogl::Program>(shaders);
 }
 
-
 void
 Scene2D::load_buffers() {
     // make and bind the VAO
@@ -61,7 +60,7 @@ Scene2D::reload() {
         || std::cerr << "!apply" << std::endl;
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-    glBufferData(GL_ARRAY_BUFFER, colors_.size(), colors_.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), colors_.data(), GL_STATIC_DRAW);
     glBindVertexArray(0);
 }
 

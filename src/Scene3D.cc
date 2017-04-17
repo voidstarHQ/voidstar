@@ -13,7 +13,6 @@ Scene3D::load_shaders() {
     ctx_.program = std::make_shared<tdogl::Program>(shaders);
 }
 
-
 void
 Scene3D::load_buffers() {
     // make and bind the VAO
@@ -44,7 +43,6 @@ Scene3D::load_buffers() {
     glBindVertexArray(0);
 }
 
-
 void
 Scene3D::init(std::shared_ptr<Arguments> args) {
     resize(args->width, args->height);
@@ -71,7 +69,7 @@ Scene3D::reload() {
     load_buffers();
     glBindVertexArray(ctx_.vao);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
-    glBufferData(GL_ARRAY_BUFFER, ctx_.colors.size() * sizeof (GLfloat), ctx_.colors.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(ctx_.colors), ctx_.colors.data(), GL_STATIC_DRAW);
     glBindVertexArray(0);
 }
 
