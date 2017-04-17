@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <memory>
 #include <iostream>
 
 #include <GL/glew.h>
@@ -12,19 +13,22 @@
 #include <tdogl/Camera.h>
 
 #include <Algorithm.hh>
+#include <Arguments.hh>
+#include <Manager.hh>
 
 class Manager;
 
 class Scene {
 public:
-    Scene(Manager* manager, SceneType type)
-        : manager_(manager), type_(type), algo_(0) {}
+    Scene(SceneType type)
+        : type_(type), algo_(0)
+        {}
     virtual ~Scene() {}
 
-    virtual void init() = 0;
-    virtual bool update(float elapsedTime) = 0;
+    virtual void init(std::shared_ptr<Arguments> args) = 0;
+    virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime) = 0;
     virtual void render() = 0;
-    virtual void load(Algorithm* algo);
+    virtual void load(std::shared_ptr<Algorithm> algo);
     virtual void unload();
     virtual void reload();
 
@@ -38,13 +42,12 @@ public:
     }
 
     inline SceneType type() const { return type_; }
-    Algorithm* algorithm() { return algo_; }
-    static Scene* forAlgo(Manager* manager, Algorithm* algo);
+    std::shared_ptr<Algorithm> algorithm() { return algo_; }
+    static std::shared_ptr<Scene> with_algo(std::shared_ptr<Arguments> args, std::shared_ptr<Algorithm> algo);
 
 protected:
-    Manager* manager_;
     SceneType type_;
-    Algorithm* algo_;
+    std::shared_ptr<Algorithm> algo_;
     tdogl::Camera camera_;
 
     size_t width_;

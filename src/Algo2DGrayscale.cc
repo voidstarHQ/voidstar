@@ -1,7 +1,7 @@
 #include <Algo2DGrayscale.hh>
 
 bool
-Algo2DGrayscale::apply(GLfloat* vertices, GLfloat* colors,
+Algo2DGrayscale::apply(Floats& vertices, Floats& colors,
                        size_t width, size_t height) {
     make_vertices(vertices, width, height);
 

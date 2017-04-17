@@ -4,8 +4,7 @@
 #include <algorithm>
 
 template<class T = std::string>
-struct Uri
-{
+struct Uri {
     T queryString;
     T path;
     T protocol;
@@ -16,8 +15,8 @@ struct Uri
 };
 
 template<class T>
-Uri<T> Uri<T>::parse(const T& uri)
-{
+Uri<T>
+Uri<T>::parse(const T& uri) {
     Uri<T> result;
 
     if (uri.length() == 0)

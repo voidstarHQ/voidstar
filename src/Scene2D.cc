@@ -1,10 +1,7 @@
-#include <iostream>
 #include <stdexcept>
 
 #include <shaders.hh>
-
 #include <Scene2D.hh>
-#include <Manager.hh>
 
 void
 Scene2D::load_shaders() {
@@ -12,9 +9,8 @@ Scene2D::load_shaders() {
         tdogl::Shader(shader__vertex_2d, GL_VERTEX_SHADER),
         tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)
     };
-    program_ = new tdogl::Program(shaders);
+    program_ = std::make_shared<tdogl::Program>(shaders);
 }
-
 
 void
 Scene2D::load_buffers() {
@@ -25,8 +21,7 @@ Scene2D::load_buffers() {
     // make and bind the VBO
     glGenBuffers(1, &vbo_);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-
-    glBufferData(GL_ARRAY_BUFFER, vertices_size_, vertices_, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(vertices_), vertices_.data(), GL_STATIC_DRAW);
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(program_->attrib("vert"));
     glVertexAttribPointer(program_->attrib("vert"), 2, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -35,7 +30,7 @@ Scene2D::load_buffers() {
     glGenBuffers(1, &colors_id_);
     glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
 
-    glBufferData(GL_ARRAY_BUFFER, vertices_size_, colors_, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), colors_.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(program_->attrib("colr"));
     glVertexAttribPointer(program_->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
 
@@ -44,42 +39,35 @@ Scene2D::load_buffers() {
 }
 
 void
-Scene2D::init()
-{
-    resize(manager_->args()->width, manager_->args()->height);
+Scene2D::init(std::shared_ptr<Arguments> args) {
+    resize(args->width, args->height);
 }
 
 void
-Scene2D::unload()
-{
+Scene2D::unload() {
     if (program_) {
-        delete program_;
         glDeleteBuffers(1, &vbo_);
         glDeleteBuffers(1, &colors_id_);
         glDeleteVertexArrays(1, &vao_);
     }
-    delete[] colors_;
-    delete[] vertices_;
 }
 
 void
-Scene2D::reload()
-{
-    auto* algo = reinterpret_cast<Algo2D*>(algo_);
+Scene2D::reload() {
+    auto algo = std::static_pointer_cast<Algo2D>(algo_);
     reset_points();
     algo->apply(vertices_, colors_, width_, height_)
         || std::cerr << "!apply" << std::endl;
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-    glBufferData(GL_ARRAY_BUFFER, colors_size_, colors_, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), colors_.data(), GL_STATIC_DRAW);
     glBindVertexArray(0);
 }
 
 void
-Scene2D::load(Algorithm* algorithm)
-{
+Scene2D::load(std::shared_ptr<Algorithm> algorithm) {
     Scene::load(algorithm);
-    auto* algo = reinterpret_cast<Algo2D*>(algorithm);
+    auto algo = std::static_pointer_cast<Algo2D>(algorithm);
 
     glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_BLEND);
@@ -92,14 +80,12 @@ Scene2D::load(Algorithm* algorithm)
 }
 
 bool
-Scene2D::update(float elapsedTime __unused)
-{
+Scene2D::update(std::shared_ptr<Manager> manager __unused, float elapsedTime __unused) {
     return true;
 }
 
 void
-Scene2D::render()
-{
+Scene2D::render() {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 

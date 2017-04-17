@@ -7,12 +7,12 @@ public:
     virtual ~Algo2D() {}
 
     virtual SceneType sceneType() const { return SCENE_2D; }
-    virtual bool apply(GLfloat* vertices, GLfloat* colors,
+    virtual bool apply(Floats& vertices, Floats& colors,
                        size_t width, size_t height) = 0;
 
 protected:
     size_t
-    make_vertices(GLfloat* vertices, size_t width, size_t height) {
+    make_vertices(Floats& vertices, size_t width, size_t height) {
         const float w = static_cast<float>(width) / 2;
         const float h = static_cast<float>(height) / 2;
 
@@ -22,6 +22,6 @@ protected:
                 vertices[pos++] = (static_cast<float>(x) - w) / w;
                 vertices[pos++] = (static_cast<float>(y) - h) / h;
             }
-        return pos / 2;
+        return vertices.size() / 2;
     }
 };

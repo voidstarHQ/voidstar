@@ -25,7 +25,7 @@ struct RGBColor {
 
 
 bool
-Algo2DFourColors::apply(GLfloat* vertices, GLfloat* colors,
+Algo2DFourColors::apply(Floats& vertices, Floats& colors,
                         size_t width, size_t height) {
     make_vertices(vertices, width, height);
 

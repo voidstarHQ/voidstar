@@ -7,6 +7,6 @@ public:
     Algo3DCubeFull() {}
     virtual ~Algo3DCubeFull() {}
 
-    virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+    virtual bool apply(Floats& vertices, Floats& colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth);
 };

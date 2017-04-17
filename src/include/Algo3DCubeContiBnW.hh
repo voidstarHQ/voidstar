@@ -7,6 +7,6 @@ public:
     Algo3DCubeContiBnW() {}
     virtual ~Algo3DCubeContiBnW() {}
 
-    virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+    virtual bool apply(Floats& vertices, Floats& colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth);
 };

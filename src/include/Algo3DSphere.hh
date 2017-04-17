@@ -9,12 +9,12 @@ class Algo3DSphere : public Algo3D {
 public:
     virtual ~Algo3DSphere() {}
 
-    virtual bool apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+    virtual bool apply(Floats& vertices, Floats& colors, VertIndices& selected,
                        size_t width, size_t height, size_t depth) = 0;
 
 protected:
     size_t
-    make_vertices(GLfloat* vertices, size_t width, size_t height, size_t depth) {
+    make_vertices(Floats& vertices, size_t width, size_t height, size_t depth) {
         const float w = static_cast<float>(width) / 2;
         const float h = static_cast<float>(height) / 2;
         const float d = static_cast<float>(depth) / 2;
@@ -35,6 +35,6 @@ protected:
                     vertices[pos++] = r * std::cos(theta) / d;
                 }
 
-        return pos / 3;
+        return vertices.size() / 3;
     }
 };

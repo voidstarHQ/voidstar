@@ -5,9 +5,8 @@
 #include <Manager.hh>
 #include <Algorithm.hh>
 
-static
-void
-usage(const char *prgname) {
+static void
+usage(const char* prgname) {
     std::cout << "usage: " << prgname << " [OPTIONS] file" << std::endl
               << std::endl
               << " -l --list         list backends" << std::endl
@@ -25,10 +24,8 @@ usage(const char *prgname) {
               << std::endl;
 }
 
-static
-void
-listComponents()
-{
+static void
+listComponents() {
     std::cout << "list of UIs:" << std::endl << std::endl;
     for (const auto &pair : managers) {
         std::cout << " - " << pair.first << std::endl;
@@ -41,21 +38,20 @@ listComponents()
     std::cout << std::endl;
 }
 
-Arguments*
-parseArgs(int argc, char **argv)
-{
-    static const char *short_options = ":a:b:e:fhlu:x:y:";
+std::shared_ptr<Arguments>
+parseArgs(int argc, char *argv[]) {
+    static auto short_options = ":a:b:e:fhlu:x:y:";
     static const struct option long_options[] = {
-        { "algorithm",  1, 0, 'a' },
-        { "begin",      1, 0, 'b' },
-        { "end",        1, 0, 'e' },
-        { "fullscreen", 0, 0, 'f' },
-        { "height",     1, 0, 'y' },
-        { "help",       0, 0, 'h' },
-        { "list",       0, 0, 'l' },
-        { "ui",         1, 0, 'u' },
-        { "width",      1, 0, 'x' },
-        { 0,            0, 0,  0  }
+        {"algorithm",  1, 0, 'a'},
+        {"begin",      1, 0, 'b'},
+        {"end",        1, 0, 'e'},
+        {"fullscreen", 0, 0, 'f'},
+        {"height",     1, 0, 'y'},
+        {"help",       0, 0, 'h'},
+        {"list",       0, 0, 'l'},
+        {"ui",         1, 0, 'u'},
+        {"width",      1, 0, 'x'},
+        {0,            0, 0,  0 }
     };
 
     bool list = false;
@@ -64,7 +60,8 @@ parseArgs(int argc, char **argv)
     int errors = 0;
     int opt_index;
 
-    auto args = new Arguments();
+    auto args = std::make_shared<Arguments>();
+    args->name = "void*";
     args->algo = "conti";
     args->manager = "glfw";
     args->width = 800;
@@ -134,8 +131,7 @@ parseArgs(int argc, char **argv)
         if (errors) {
             exit(1);
         }
-        delete args;
-        return 0;
+        return NULL;
     }
 
     for (int i = optind; i < argc; ++i) {
@@ -145,8 +141,7 @@ parseArgs(int argc, char **argv)
     if (!args->input.size()) {
         std::cerr << "missing file to process" << std::endl;
         usage(argv[0]);
-        delete args;
-        return 0;
+        return NULL;
     }
 
     return args;

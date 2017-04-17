@@ -7,7 +7,6 @@ public:
     Algo2DEntropy() {}
     virtual ~Algo2DEntropy() {}
 
-    virtual bool apply(GLfloat* vertices, GLfloat* colors,
+    virtual bool apply(Floats& vertices, Floats& colors,
                        size_t width, size_t height);
 };
-

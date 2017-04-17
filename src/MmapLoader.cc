@@ -5,8 +5,7 @@
 #include <MmapLoader.hh>
 
 void
-MmapFileLoader::load()
-{
+MmapFileLoader::load() {
     if (fd_ < 0) {
         fd_ = open(path_.c_str(), O_RDONLY);
         if (fd_ < 0)
@@ -25,8 +24,7 @@ MmapFileLoader::load()
 }
 
 void
-MmapFileLoader::free()
-{
+MmapFileLoader::free() {
     munmap(data_, size_);
     offset_ = 0;
     data_ = 0;
@@ -36,14 +34,12 @@ MmapFileLoader::free()
 }
 
 const u8*
-MmapFileLoader::data()
-{
+MmapFileLoader::data() {
     return data_;
 }
 
 const u8*
-MmapFileLoader::dataChunk(size_t offset, size_t size)
-{
+MmapFileLoader::dataChunk(size_t offset, size_t size) {
     if (size_ < offset + size)
         throw std::out_of_range("Trying to read data out of bound");
     return data() + offset;

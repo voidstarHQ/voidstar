@@ -1,7 +1,7 @@
 #pragma once
 
-#include <iostream>
 #include <bitset>
+#include <memory>
 
 #include <GLFW/glfw3.h>
 
@@ -24,7 +24,7 @@ struct GlfwKeyboardState {
         GlfwModifiers mods;
     };
 
-    void copy(const GlfwKeyboardState* state) {
+    void copy(const std::shared_ptr<GlfwKeyboardState> state) {
         keys = state->keys;
         rawmods = state->rawmods;
     }
@@ -45,8 +45,8 @@ public:
     void process(int key, int scancode, int action, int mods);
 
 //protected:
-    GlfwKeyboardState *current_;
-    GlfwKeyboardState *previous_;
+    std::shared_ptr<GlfwKeyboardState> current_;
+    std::shared_ptr<GlfwKeyboardState> previous_;
 };
 
 class GlfwMouse : public Mouse {
@@ -56,19 +56,19 @@ public:
 };
 
 class GlfwManager : public Manager {
+// private:
 public:
-    GlfwManager(Arguments* args) : Manager(args) {
-        if (instance_)
-            throw std::runtime_error("GlfwManager was previously instanciated");
-        instance_ = this;
-    }
+    GlfwManager(std::shared_ptr<Arguments> args)
+        : Manager(args)
+        {}
+public:
     virtual ~GlfwManager() {}
 
     virtual void init();
     virtual void run();
 
-    virtual Events* getEvents(int id=0) { (void)id; return events_; }
-    virtual Mouse* getMouse(int id=0) { (void)id; return mouse_; }
+    virtual std::shared_ptr<Events> getEvents() { return events_; }
+    virtual std::shared_ptr<Mouse> getMouse() { return mouse_; }
 
     GLFWwindow* window() { return window_; }
 
@@ -76,7 +76,15 @@ public:
     void glInit();
     void glProcessErrors(bool quiet=false);
 
-    static GlfwManager*
+    static std::shared_ptr<GlfwManager>
+    instance(std::shared_ptr<Arguments> args) {
+        if (instance_ || !args)
+            throw std::runtime_error("Bad call to instance of GlfwManager");
+        instance_ = std::make_shared<GlfwManager>(args);
+        return instance_;
+    }
+
+    static std::shared_ptr<GlfwManager>
     instance() {
         if (!instance_)
             throw std::runtime_error("GlfwManager wasn't previously instanciated");
@@ -87,22 +95,21 @@ public:
     toggleFullscreen() {
         int w, h;
         fullscreen_ = !fullscreen_;
-        if (!fullscreen_) {
+        if (fullscreen_) {
+            w = static_cast<int>(args_->width);
+            h = static_cast<int>(args_->height);
+        } else {
             const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
             glfwSetWindowPos(window_, 0, 0);
             w = mode->width;
             h = mode->height;
-        } else {
-            w = static_cast<int>(args_->width);
-            h = static_cast<int>(args_->height);
         }
-        std::cout << "glfwSetWindowSize " << w << 'x' << h << std::endl;
         glfwSetWindowSize(window_, w, h);
     }
 
 protected:
-    static GlfwManager* instance_;
+    static std::shared_ptr<GlfwManager> instance_;
     GLFWwindow* window_;
-    GlfwKeyboardEvents* events_;
-    GlfwMouse* mouse_;
+    std::shared_ptr<GlfwKeyboardEvents> events_;
+    std::shared_ptr<GlfwMouse> mouse_;
 };

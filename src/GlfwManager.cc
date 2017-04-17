@@ -1,25 +1,21 @@
-#include <iostream>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <GlfwManager.hh>
 
-GlfwManager* GlfwManager::instance_ = NULL;
-#define get_manager_ptr(Window) \
-    reinterpret_cast<GlfwManager*>(glfwGetWindowUserPointer(Window))
+std::shared_ptr<GlfwManager> GlfwManager::instance_;
 
 void
-onFramebufferResize(GLFWwindow* window, int width, int height) {
+onFramebufferResize(GLFWwindow* window __unused, int width, int height) {
     glViewport(0, 0, width, height);
-    auto* scene = get_manager_ptr(window)->scene();
+    auto scene = GlfwManager::instance()->scene();
     scene->resize(width, height);
 }
 
 // records how far the y axis has been scrolled
 static void
-onScroll(GLFWwindow* window, double deltaX, double deltaY) {
-    auto* mouse = get_manager_ptr(window)->getMouse();
+onScroll(GLFWwindow* window __unused, double deltaX, double deltaY) {
+    auto mouse = GlfwManager::instance()->getMouse();
     mouse->scrollY += deltaY;
     mouse->scrollX += deltaX;
 }
@@ -30,9 +26,9 @@ onError(int errorCode __unused, const char* msg) {
 }
 
 static void
-onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    auto* events = get_manager_ptr(window)->getEvents();
-    auto* ev = reinterpret_cast<GlfwKeyboardEvents*>(events);
+onKeyEvent(GLFWwindow* window __unused, int key, int scancode, int action, int mods) {
+    auto events = GlfwManager::instance()->getEvents();
+    auto ev = std::static_pointer_cast<GlfwKeyboardEvents>(events);
     ev->process(key, scancode, action, mods);
 
     // if (action == GLFW_PRESS)
@@ -47,8 +43,7 @@ onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
 }
 
 void
-GlfwManager::init()
-{
+GlfwManager::init() {
     glfwSetErrorCallback(onError);
     if (!glfwInit())
         throw std::runtime_error("!glfwInit");
@@ -65,7 +60,7 @@ GlfwManager::init()
         monitor = glfwGetPrimaryMonitor();
     }
 
-    window_ = glfwCreateWindow(args_->width, args_->height, "void*", monitor, NULL);
+    window_ = glfwCreateWindow(args_->width, args_->height, args_->name.c_str(), monitor, NULL);
     if (!window_)
         throw std::runtime_error("!glfwCreateWindow. Can your hardware handle OpenGL 3.2?");
 
@@ -79,8 +74,8 @@ GlfwManager::init()
     glfwSetScrollCallback(window_, onScroll);
     glfwMakeContextCurrent(window_);
 
-    mouse_ = new GlfwMouse();
-    events_ = new GlfwKeyboardEvents();
+    mouse_ = std::make_shared<GlfwMouse>();
+    events_ = std::make_shared<GlfwKeyboardEvents>();
 
     glInit();
 }
@@ -127,7 +122,7 @@ GlfwManager::run() {
         // update the scene based on the time elapsed since last update
         double thisTime = glfwGetTime();
         float elapsedTime = thisTime - lastTime;
-        bool redraw = scene_->update(elapsedTime);
+        bool redraw = scene_->update(GlfwManager::instance(), elapsedTime);
         lastTime = thisTime;
 
         if (redraw) {
@@ -151,13 +146,11 @@ GlfwManager::run() {
 }
 
 GlfwKeyboardEvents::GlfwKeyboardEvents() {
-    current_ = new GlfwKeyboardState{};
-    previous_ = new GlfwKeyboardState{};
+    current_ = std::make_shared<GlfwKeyboardState>();
+    previous_ = std::make_shared<GlfwKeyboardState>();
 }
 
 GlfwKeyboardEvents::~GlfwKeyboardEvents() {
-    delete current_;
-    delete previous_;
 }
 
 bool GlfwKeyboardEvents::keyDown(int key) {

@@ -7,6 +7,6 @@ public:
     Algo2DGrayscale() {}
     virtual ~Algo2DGrayscale() {}
 
-    virtual bool apply(GLfloat* vertices, GLfloat* colors,
+    virtual bool apply(Floats& vertices, Floats& colors,
                        size_t width, size_t height);
 };

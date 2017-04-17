@@ -1,21 +1,25 @@
 #pragma once
 
+#include <memory>
+
 #include <Arguments.hh>
 #include <Scene.hh>
 #include <Events.hh>
 
+class Scene;
+
 class Manager {
 public:
-    Manager(Arguments* args)
+    Manager(std::shared_ptr<Arguments> args)
         : fullscreen_(false), args_(args), fileIndex_(0), scene_(0) {}
     virtual ~Manager() {}
 
-    virtual void loadScene(Scene* scene);
+    virtual void loadScene(std::shared_ptr<Scene> scene);
     virtual void init() = 0;
     virtual void run() = 0;
 
-    virtual Events* getEvents(int id=0) = 0;
-    virtual Mouse* getMouse(int id=0) = 0;
+    virtual std::shared_ptr<Events> getEvents() = 0;
+    virtual std::shared_ptr<Mouse> getMouse() = 0;
 
     void loadFile(size_t index);
     void loadFile(const std::string& filename);
@@ -24,10 +28,9 @@ public:
 
     virtual void toggleFullscreen() = 0;
 
-    Arguments* args() { return args_; }
-    Scene* scene() { return scene_; }
+    std::shared_ptr<Arguments> args() { return args_; }
+    std::shared_ptr<Scene> scene() { return scene_; }
 
-public:
     static std::string  /// 991337 --> "991,337"
     size2str (size_t size) {
         std::string str = std::to_string(size);
@@ -41,12 +44,12 @@ public:
 
 protected:
     bool fullscreen_;
-    Arguments* args_;
+    std::shared_ptr<Arguments> args_;
     size_t fileIndex_;
-    Scene* scene_;
+    std::shared_ptr<Scene> scene_;
 };
 
-Manager* createManager(const std::string& str, Arguments* args);
+std::shared_ptr<Manager> createManager(const std::string& str, std::shared_ptr<Arguments> args);
 
-using ManagerFactoryFunc = std::function<Manager*(Arguments*)>;
+using ManagerFactoryFunc = std::function<std::shared_ptr<Manager>(std::shared_ptr<Arguments>)>;
 extern const std::map<const std::string, ManagerFactoryFunc> managers;

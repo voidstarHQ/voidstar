@@ -1,7 +1,7 @@
 #include <Algo3DCubeContiBnW.hh>
 
 bool
-Algo3DCubeContiBnW::apply(GLfloat* vertices, GLfloat* colors, VertIndices& selected,
+Algo3DCubeContiBnW::apply(Floats& vertices, Floats& colors, VertIndices& selected,
                           size_t width, size_t height, size_t depth) {
     make_vertices(vertices, width, height, depth);
 

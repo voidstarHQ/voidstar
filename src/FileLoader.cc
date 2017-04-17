@@ -3,8 +3,7 @@
 #include <FileLoader.hh>
 
 void
-FileLoader::load()
-{
+FileLoader::load() {
     if (fd_ != -1)
         throw std::runtime_error("Unsupported fd usage");
     is_.open(path_, std::ios::in | std::ios::binary);
@@ -18,21 +17,18 @@ FileLoader::load()
 }
 
 void
-FileLoader::free()
-{
+FileLoader::free() {
     data_.reserve(0);
     is_.close();
     size_ = 0;
 }
 
 const u8*
-FileLoader::data()
-{
+FileLoader::data() {
     return reinterpret_cast<const u8*>(data_.data());
 }
 
 const u8*
-FileLoader::dataChunk(size_t offset, size_t size __unused)
-{
+FileLoader::dataChunk(size_t offset, size_t size __unused) {
     return data() + offset;
 }
