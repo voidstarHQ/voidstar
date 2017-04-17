@@ -35,6 +35,6 @@ protected:
                     vertices[pos++] = r * std::cos(theta) / d;
                 }
 
-        return pos / 3;
+        return vertices.size() / 3;
     }
 };

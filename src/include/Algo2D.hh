@@ -22,6 +22,6 @@ protected:
                 vertices[pos++] = (static_cast<float>(x) - w) / w;
                 vertices[pos++] = (static_cast<float>(y) - h) / h;
             }
-        return pos / 2;
+        return vertices.size() / 2;
     }
 };
