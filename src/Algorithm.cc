@@ -55,15 +55,15 @@ createAlgorithm(const std::string str) {
 using AlgorithmFactoryFunc = std::function<std::shared_ptr<Algorithm>()>;
 
 const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
-    { "entropy", []() { return std::make_shared<Algo2DEntropy>(); } },
-    { "4col", []() { return std::make_shared<Algo2DFourColors>(); } },
-    { "gray", []() { return std::make_shared<Algo2DGrayscale>(); } },
-    { "cube", []() { return std::make_shared<Algo3DCubeFull>(); } },
-    { "contibnw", []() { return std::make_shared<Algo3DCubeContiBnW>(); } },
-    { "contirb", []() { return std::make_shared<Algo3DCubeContiRainbow>(); } },
-    { "conti", []() { return std::make_shared<Algo3DCubeContiFrebet>(); } },
-    { "sphere", []() { return std::make_shared<Algo3DSphereFull>(); } },
-    { "sphere_bnw", []() { return std::make_shared<Algo3DSphereContiBnW>(); } },
-    { "sphere_rb", []() { return std::make_shared<Algo3DSphereContiRainbow>(); } },
-    { "sphere_frebet", []() { return std::make_shared<Algo3DSphereContiFrebet>(); } },
+    {"entropy", []() { return std::make_shared<Algo2DEntropy>(); }},
+    {"4col", []() { return std::make_shared<Algo2DFourColors>(); }},
+    {"gray", []() { return std::make_shared<Algo2DGrayscale>(); }},
+    {"cube", []() { return std::make_shared<Algo3DCubeFull>(); }},
+    {"contibnw", []() { return std::make_shared<Algo3DCubeContiBnW>(); }},
+    {"contirb", []() { return std::make_shared<Algo3DCubeContiRainbow>(); }},
+    {"conti", []() { return std::make_shared<Algo3DCubeContiFrebet>(); }},
+    {"sphere", []() { return std::make_shared<Algo3DSphereFull>(); }},
+    {"sphere_bnw", []() { return std::make_shared<Algo3DSphereContiBnW>(); }},
+    {"sphere_rb", []() { return std::make_shared<Algo3DSphereContiRainbow>(); }},
+    {"sphere_frebet", []() { return std::make_shared<Algo3DSphereContiFrebet>(); }},
 };
