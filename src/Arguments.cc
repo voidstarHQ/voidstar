@@ -9,18 +9,19 @@ static void
 usage(const char* prgname) {
     std::cout << "usage: " << prgname << " [OPTIONS] file" << std::endl
               << std::endl
-              << " -l --list         list backends" << std::endl
-              << " -u --ui           choose ui mode" << std::endl
-              << " -a --algorithm    algorithm to apply" << std::endl
+              << " -l, --list         list backends" << std::endl
+              << " -u, --ui           choose ui mode" << std::endl
+              << " -a, --algorithm    algorithm to apply" << std::endl
               << std::endl
-              << " -x --width        window width" << std::endl
-              << " -y --height       window height" << std::endl
-              << " -f --fullscreen   window fullscreen" << std::endl
+              << " -x, --width        window width" << std::endl
+              << " -y, --height       window height" << std::endl
+              << " -f, --fullscreen   start on fullscreen" << std::endl
+              << "     --keep-chrome  show title bar & allow resizing" << std::endl
               << std::endl
-              << " -b --begin        begin offset for the range" << std::endl
-              << " -e --end          end offset for the range" << std::endl
+              << " -b, --begin        begin offset for the range" << std::endl
+              << " -e, --end          end offset for the range" << std::endl
               << std::endl
-              << " -h, --help        this help" << std::endl
+              << " -h, --help         this help" << std::endl
               << std::endl;
 }
 
@@ -46,6 +47,7 @@ parseArgs(int argc, char *argv[]) {
         {"begin",      1, 0, 'b'},
         {"end",        1, 0, 'e'},
         {"fullscreen", 0, 0, 'f'},
+        {"keep-chrome",0, 0, '_'},
         {"height",     1, 0, 'y'},
         {"help",       0, 0, 'h'},
         {"list",       0, 0, 'l'},
@@ -59,16 +61,7 @@ parseArgs(int argc, char *argv[]) {
     int c;
     int errors = 0;
     int opt_index;
-
     auto args = std::make_shared<Arguments>();
-    args->name = "void*";
-    args->algo = "conti";
-    args->manager = "glfw";
-    args->width = 800;
-    args->height = 600;
-    args->range_begin = 0;
-    args->range_end = 0;
-    args->fullscreen = false;
 
     while ((c = getopt_long(argc, argv, short_options, long_options, &opt_index)) != -1) {
         switch (c) {
@@ -99,6 +92,9 @@ parseArgs(int argc, char *argv[]) {
         case 'y':
             args->height = std::stoi(optarg);
             break;
+        case '_':
+            args->keep_chrome = true;
+            break;
         case '?':
             std::cerr << "unknown option " << (char)optopt << std::endl;
             errors++;
@@ -118,7 +114,7 @@ parseArgs(int argc, char *argv[]) {
 
     if (list) {
         listComponents();
-        return 0;
+        return NULL;
     }
 
     if (args->range_end != 0 && args->range_begin >= args->range_end) {
@@ -134,9 +130,8 @@ parseArgs(int argc, char *argv[]) {
         return NULL;
     }
 
-    for (int i = optind; i < argc; ++i) {
+    for (int i = optind; i < argc; ++i)
         args->input.push_back(argv[i]);
-    }
 
     if (!args->input.size()) {
         std::cerr << "missing file to process" << std::endl;

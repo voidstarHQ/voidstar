@@ -54,6 +54,8 @@ GlfwManager::init() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    if (!args_->keep_chrome)
+        glfwWindowHint(GLFW_DECORATED, false);
 
     GLFWmonitor* monitor = NULL;
     if (args_->fullscreen) {
