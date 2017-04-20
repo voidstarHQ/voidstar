@@ -33,7 +33,7 @@ sudo apt install libglew-dev libglm-dev libglfw3-dev
 ### OSX
 
 ```shell
-brew install glew glm
+brew install glew glm pkg-config
 brew install glfw3 --without-shared-library
 ```
 
