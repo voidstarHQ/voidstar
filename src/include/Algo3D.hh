@@ -4,8 +4,6 @@
 
 #include <Algorithm.hh>
 
-using VertIndices = std::vector<GLuint>;
-
 class Algo3D : public Algorithm {
 public:
     virtual ~Algo3D() {}

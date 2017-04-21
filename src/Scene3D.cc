@@ -62,9 +62,9 @@ void
 Scene3D::reload() {
     auto algo = std::static_pointer_cast<Algo3D>(algo_);
     ctx_.reset_points();
-    algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
+    algo->apply(ctx_.vertices, ctx_.colors, ctx_.indices, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
-    std::cout << "#points: " << Manager::size2str(ctx_.selected.size()) << std::endl;
+    std::cout << "#points: " << Manager::size2str(ctx_.indices.size()) << std::endl;
     ctx_.selected.shrink_to_fit();
     load_buffers();
     glBindVertexArray(ctx_.vao);
@@ -84,9 +84,9 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     load_shaders();
-    algo->apply(ctx_.vertices, ctx_.colors, ctx_.selected, ctx_.width, ctx_.height, ctx_.depth)
+    algo->apply(ctx_.vertices, ctx_.colors, ctx_.indices, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
-    std::cout << "#points: " << Manager::size2str(ctx_.selected.size()) << std::endl;
+    std::cout << "#points: " << Manager::size2str(ctx_.indices.size()) << std::endl;
     ctx_.selected.shrink_to_fit();
     load_buffers();
 
@@ -97,7 +97,8 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
 
 bool
 Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
-    //rotate the volume
+    std::cout << "update" << std::endl;
+    // rotate the volume
     GLfloat degreesPerSecond = 10.0f;
     if (ctx_.rotationEnabled) {
         ctx_.degreesRotated += elapsedTime * degreesPerSecond;
@@ -107,7 +108,7 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
 
     auto events = manager->getEvents();
 
-    //move position of camera based on WASD keys, and XZ keys for up and down
+    // move position of camera based on WASD keys, and XZ keys for up and down
     const float moveSpeed = 2.0; //units per second
     if (events->keyDown('S'))
         camera_.offsetPosition(elapsedTime * moveSpeed * -camera_.forward());
@@ -124,10 +125,14 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
     if (events->keyPressed(' '))
         ctx_.rotationEnabled = !ctx_.rotationEnabled;
 
+    manager->slide_window();
+    manager->slide_window(ctx_.selected, ctx_.indices);
+    ctx_.selected.shrink_to_fit();
+
     auto mouse = manager->getMouse();
     mouse->getCursorPos();
     camera_.offsetOrientation(mouse->sensitivity * mouse->y, mouse->sensitivity * mouse->x);
-    //reset the mouse, so it doesn't go out of the window
+    // reset the mouse, so it doesn't go out of the window
     mouse->setCursorPos(0, 0);
 
     mouse->scrollY = 0.0;
@@ -150,6 +155,10 @@ Scene3D::render() {
 
     // bind the VAO
     glBindVertexArray(ctx_.vao);
+
+    // send newly selected elements
+    auto size_selected = sizeof (decltype(ctx_.selected)::value_type) * ctx_.selected.size();
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, ctx_.selected.data(), GL_STATIC_DRAW);
 
     // draw only the VAO's points we colored
     auto mM = std::minmax_element(ctx_.selected.begin(), ctx_.selected.end());

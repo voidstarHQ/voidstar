@@ -18,7 +18,7 @@ struct Scene3DContext {
     void reset_points() {
         vertices = Floats(3 * n_points);
         colors = Floats(4 * n_points);
-        selected.clear();
+        indices.clear();
     }
 
     GLuint vao;
@@ -34,6 +34,7 @@ struct Scene3DContext {
     Floats vertices;
     Floats colors;
     VertIndices selected;
+    VertIndices indices;
 
     GLfloat degreesRotated;
     bool rotationEnabled;

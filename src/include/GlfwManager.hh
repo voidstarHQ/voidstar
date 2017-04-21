@@ -107,6 +107,17 @@ public:
         glfwSetWindowSize(window_, w, h);
     }
 
+    void slide_window() {
+        if (events_->keyDown(GLFW_KEY_LEFT))
+            slide_window_left();
+        else if (events_->keyDown(GLFW_KEY_RIGHT))
+            slide_window_right();
+        if (events_->keyDown(GLFW_KEY_UP))
+            slide_window_up();
+        else if (events_->keyDown(GLFW_KEY_DOWN))
+            slide_window_down();
+    }
+
 protected:
     static std::shared_ptr<GlfwManager> instance_;
     GLFWwindow* window_;

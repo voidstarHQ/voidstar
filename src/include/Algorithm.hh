@@ -4,10 +4,8 @@
 #include <string>
 #include <map>
 #include <memory>
-#include <vector>
 
-#include <GL/glew.h>
-
+#include <Indices.hh>
 #include <Loader.hh>
 #include <Range.hh>
 
@@ -17,8 +15,6 @@ enum SceneType {
     SCENE_2D,
     SCENE_3D,
 };
-
-using Floats = std::vector<GLfloat>;
 
 class Algorithm {
 public:
