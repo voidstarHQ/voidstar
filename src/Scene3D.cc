@@ -64,8 +64,7 @@ Scene3D::reload() {
     ctx_.reset_points();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.indices, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
-    std::cout << "#points: " << Manager::size2str(ctx_.indices.size()) << std::endl;
-    ctx_.selected.shrink_to_fit();
+    std::cout << "#indices: " << Manager::size2str(ctx_.indices.size()) << std::endl;
     load_buffers();
     glBindVertexArray(ctx_.vao);
     glBindBuffer(GL_ARRAY_BUFFER, ctx_.colors_id);
@@ -86,8 +85,7 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     load_shaders();
     algo->apply(ctx_.vertices, ctx_.colors, ctx_.indices, ctx_.width, ctx_.height, ctx_.depth)
         || std::cerr << "!apply" << std::endl;
-    std::cout << "#points: " << Manager::size2str(ctx_.indices.size()) << std::endl;
-    ctx_.selected.shrink_to_fit();
+    std::cout << "#indices: " << Manager::size2str(ctx_.indices.size()) << std::endl;
     load_buffers();
 
     camera_.setPosition(glm::vec3(0, 0, 4));
@@ -97,7 +95,6 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
 
 bool
 Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
-    std::cout << "update" << std::endl;
     // rotate the volume
     GLfloat degreesPerSecond = 10.0f;
     if (ctx_.rotationEnabled) {
@@ -127,7 +124,6 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
 
     manager->slide_window();
     manager->slide_window(ctx_.selected, ctx_.indices);
-    ctx_.selected.shrink_to_fit();
 
     auto mouse = manager->getMouse();
     mouse->getCursorPos();

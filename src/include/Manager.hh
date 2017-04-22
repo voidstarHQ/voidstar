@@ -13,7 +13,7 @@ class Manager {
 public:
     Manager(std::shared_ptr<Arguments> args)
         : fullscreen_(false), args_(args), fileIndex_(0), scene_(NULL),
-          sliding_window_offset_(0), sliding_window_length_(2 * 1024)
+          sliding_window_offset_(0), sliding_window_length_(999)
         {}
     virtual ~Manager() {}
 
@@ -34,19 +34,22 @@ public:
     std::shared_ptr<Arguments> args() { return args_; }
     std::shared_ptr<Scene> scene() { return scene_; }
 
-    void slide_window_left() { sliding_window_offset_--; }
-    void slide_window_right() { sliding_window_offset_++; }
-    void slide_window_up() { sliding_window_length_++; }
-    void slide_window_down() { sliding_window_length_--; }
+    static constexpr size_t SLIDE_STEP = 1000;
+    void slide_window_left() { sliding_window_offset_ -= SLIDE_STEP; }
+    void slide_window_right() { sliding_window_offset_ += SLIDE_STEP; }
+    void slide_window_up() { sliding_window_length_ += SLIDE_STEP; }
+    void slide_window_down() { sliding_window_length_ -= SLIDE_STEP; }
     virtual void slide_window() = 0;
 
     void slide_window(VertIndices& selected, const VertIndices& indices) {
+        auto previous_size = selected.size();
         auto left = indices.begin() + sliding_window_offset_;
+        if (left > indices.end())
+            left = indices.begin();
         auto right = std::min(indices.end(), left + sliding_window_length_);
-        // auto right = left + sliding_window_length_;
-        // if (right > indices.end())
-        //     right = indices.end();
         selected.assign(left, right);
+        if (selected.size() != previous_size)
+            std::cout << "#selected: " << size2str(selected.size()) << std::endl;
     }
 
     static std::string  /// 991337 --> "991,337"
