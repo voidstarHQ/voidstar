@@ -34,12 +34,19 @@ public:
     std::shared_ptr<Arguments> args() const { return args_; }
     std::shared_ptr<Scene> scene() const { return scene_; }
 
-    void slide_window_left() { sliding_window_offset_ -= args_->sliding_step; }
+    void slide_window_left() {
+        if (sliding_window_offset_ > args_->sliding_step)
+            sliding_window_offset_ -= args_->sliding_step;
+        else
+            sliding_window_offset_ = 0;
+    }
     void slide_window_right() { sliding_window_offset_ += args_->sliding_step; }
     void slide_window_up() { sliding_window_length_ += args_->sliding_step; }
     void slide_window_down() {
         if (sliding_window_length_ > args_->sliding_step)
             sliding_window_length_ -= args_->sliding_step;
+        else
+            sliding_window_length_ = 0;
     }
     virtual void slide_window() = 0;
 
