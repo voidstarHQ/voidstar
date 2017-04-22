@@ -5,17 +5,17 @@
 #include <memory>
 
 struct Arguments {
-    Arguments() {
-        name = "void*";
-        algo = "conti";
-        manager = "glfw";
-        width = 800;
-        height = 600;
-        range_begin = 0;
-        range_end = 0;
-        fullscreen = false;
-        keep_chrome = false;
-    }
+    Arguments()
+        : name("void*"),
+          algo("conti"),
+          manager("glfw"),
+          width(800), height(600),
+          range_begin(0), range_end(0),
+          fullscreen(false),
+          keep_chrome(false),
+          sliding_window_length(999), sliding_step(1024)
+        {}
+
     std::vector<std::string> input;
     std::string name;
     std::string algo;
@@ -26,6 +26,8 @@ struct Arguments {
     size_t range_end;
     bool fullscreen;
     bool keep_chrome;
+    size_t sliding_window_length;
+    size_t sliding_step;
 };
 
 std::shared_ptr<Arguments> parseArgs(int argc, char *argv[]);

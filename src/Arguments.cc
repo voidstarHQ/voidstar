@@ -7,7 +7,7 @@
 
 static void
 usage(const char* prgname) {
-    std::cout << "usage: " << prgname << " [OPTIONS] file" << std::endl
+    std::cout << "Usage: " << prgname << " [OPTIONS] file" << std::endl
               << std::endl
               << " -l, --list         list backends" << std::endl
               << " -u, --ui           choose ui mode" << std::endl
@@ -17,6 +17,9 @@ usage(const char* prgname) {
               << " -y, --height       window height" << std::endl
               << " -f, --fullscreen   start on fullscreen" << std::endl
               << "     --keep-chrome  show title bar & allow resizing" << std::endl
+              << std::endl
+              << " -w, --sliding      Length of sliding window" << std::endl
+              << " -s, --slide-step   Amount of points slid" << std::endl
               << std::endl
               << " -b, --begin        begin offset for the range" << std::endl
               << " -e, --end          end offset for the range" << std::endl
@@ -41,7 +44,7 @@ listComponents() {
 
 std::shared_ptr<Arguments>
 parseArgs(int argc, char *argv[]) {
-    static auto short_options = ":a:b:e:fhlu:x:y:";
+    static auto short_options = ":a:b:e:f_hls:w:u:x:y:";
     static const struct option long_options[] = {
         {"algorithm",  1, 0, 'a'},
         {"begin",      1, 0, 'b'},
@@ -51,9 +54,11 @@ parseArgs(int argc, char *argv[]) {
         {"height",     1, 0, 'y'},
         {"help",       0, 0, 'h'},
         {"list",       0, 0, 'l'},
+        {"slide-step", 1, 0, 's'},
+        {"sliding",    1, 0, 'w'},
         {"ui",         1, 0, 'u'},
         {"width",      1, 0, 'x'},
-        {0,            0, 0,  0 }
+        {NULL,         0, 0,  0}
     };
 
     bool list = false;
@@ -69,10 +74,10 @@ parseArgs(int argc, char *argv[]) {
             args->algo = optarg;
             break;
         case 'b':
-            args->range_begin = std::stoll(optarg);
+            args->range_begin = std::stoull(optarg);
             break;
         case 'e':
-            args->range_end = std::stoll(optarg);
+            args->range_end = std::stoull(optarg);
             break;
         case 'f':
             args->fullscreen = true;
@@ -83,28 +88,34 @@ parseArgs(int argc, char *argv[]) {
         case 'l':
             list = true;
             break;
+        case 's':
+            args->sliding_step = std::stoul(optarg);
+            break;
         case 'u':
             args->manager = optarg;
             break;
+        case 'w':
+            args->sliding_window_length = std::stoul(optarg);
+            break;
         case 'x':
-            args->width = std::stoi(optarg);
+            args->width = std::stoul(optarg);
             break;
         case 'y':
-            args->height = std::stoi(optarg);
+            args->height = std::stoul(optarg);
             break;
         case '_':
             args->keep_chrome = true;
             break;
         case '?':
-            std::cerr << "unknown option " << (char)optopt << std::endl;
+            std::cerr << "Unknown option '" << (char)optopt << "'" << std::endl;
             errors++;
             break;
         case ':':
-            std::cerr << "missing argument for option " << (char)optopt << std::endl;
+            std::cerr << "Missing argument for option '" << (char)optopt << "'" << std::endl;
             errors++;
             break;
         default:
-            std::cerr << "failed to process " << (char)optopt << std::endl;
+            std::cerr << "Failed to process '" << (char)optopt << "'" << std::endl;
             errors++;
         }
 

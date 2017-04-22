@@ -13,7 +13,7 @@ class Manager {
 public:
     Manager(std::shared_ptr<Arguments> args)
         : fullscreen_(false), args_(args), fileIndex_(0), scene_(NULL),
-          sliding_window_offset_(0), sliding_window_length_(999)
+          sliding_window_offset_(0), sliding_window_length_(args_->sliding_window_length)
         {}
     virtual ~Manager() {}
 
@@ -31,14 +31,16 @@ public:
 
     virtual void toggleFullscreen() = 0;
 
-    std::shared_ptr<Arguments> args() { return args_; }
-    std::shared_ptr<Scene> scene() { return scene_; }
+    std::shared_ptr<Arguments> args() const { return args_; }
+    std::shared_ptr<Scene> scene() const { return scene_; }
 
-    static constexpr size_t SLIDE_STEP = 1000;
-    void slide_window_left() { sliding_window_offset_ -= SLIDE_STEP; }
-    void slide_window_right() { sliding_window_offset_ += SLIDE_STEP; }
-    void slide_window_up() { sliding_window_length_ += SLIDE_STEP; }
-    void slide_window_down() { sliding_window_length_ -= SLIDE_STEP; }
+    void slide_window_left() { sliding_window_offset_ -= args_->sliding_step; }
+    void slide_window_right() { sliding_window_offset_ += args_->sliding_step; }
+    void slide_window_up() { sliding_window_length_ += args_->sliding_step; }
+    void slide_window_down() {
+        if (sliding_window_length_ > args_->sliding_step)
+            sliding_window_length_ -= args_->sliding_step;
+    }
     virtual void slide_window() = 0;
 
     void slide_window(VertIndices& selected, const VertIndices& indices) {
