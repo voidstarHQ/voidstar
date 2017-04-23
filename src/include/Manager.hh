@@ -46,7 +46,7 @@ public:
         if (sliding_window_length_ > args_->sliding_step)
             sliding_window_length_ -= args_->sliding_step;
         else
-            sliding_window_length_ = 0;
+            sliding_window_length_ = args_->sliding_window_length;;
     }
     virtual void slide_window() = 0;
 
