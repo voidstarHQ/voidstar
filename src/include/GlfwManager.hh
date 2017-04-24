@@ -107,15 +107,25 @@ public:
         glfwSetWindowSize(window_, w, h);
     }
 
-    void slide_window() {
-        if (events_->keyDown(GLFW_KEY_LEFT))
+    bool slide_window() {
+        bool ret = false;
+        if (events_->keyDown(GLFW_KEY_LEFT)) {
+            ret = true;
             slide_window_left();
-        else if (events_->keyDown(GLFW_KEY_RIGHT))
+        }
+        else if (events_->keyDown(GLFW_KEY_RIGHT)) {
+            ret = true;
             slide_window_right();
-        if (events_->keyDown(GLFW_KEY_UP))
+        }
+        if (events_->keyDown(GLFW_KEY_UP)) {
+            ret = true;
             slide_window_up();
-        else if (events_->keyDown(GLFW_KEY_DOWN))
+        }
+        else if (events_->keyDown(GLFW_KEY_DOWN)) {
+            ret = true;
             slide_window_down();
+        }
+        return ret;
     }
 
 protected:

@@ -42,14 +42,13 @@ public:
     }
 
     inline SceneType type() const { return type_; }
-    std::shared_ptr<Algorithm> algorithm() { return algo_; }
+    std::shared_ptr<Algorithm> algorithm() const { return algo_; }
     static std::shared_ptr<Scene> with_algo(std::shared_ptr<Arguments> args, std::shared_ptr<Algorithm> algo);
 
 protected:
     SceneType type_;
     std::shared_ptr<Algorithm> algo_;
     tdogl::Camera camera_;
-
     size_t width_;
     size_t height_;
     float aspect_ratio_;

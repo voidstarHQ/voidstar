@@ -122,8 +122,8 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
     if (events->keyPressed(' '))
         ctx_.rotationEnabled = !ctx_.rotationEnabled;
 
-    manager->slide_window();
-    manager->slide_window(ctx_.selected, ctx_.indices);
+    if (ctx_.selected.size() == 0 || manager->slide_window())
+        manager->slide_window(ctx_.selected, ctx_.indices);
 
     auto mouse = manager->getMouse();
     mouse->getCursorPos();

@@ -35,30 +35,30 @@ public:
     std::shared_ptr<Scene> scene() const { return scene_; }
 
     void slide_window_left() {
-        if (sliding_window_offset_ > args_->sliding_step)
-            sliding_window_offset_ -= args_->sliding_step;
-        else
-            sliding_window_offset_ = 0;
+        sliding_window_offset_ = (sliding_window_offset_ > args_->sliding_step)
+            ? sliding_window_offset_ - args_->sliding_step
+            : 0;
     }
     void slide_window_right() { sliding_window_offset_ += args_->sliding_step; }
     void slide_window_up() { sliding_window_length_ += args_->sliding_step; }
     void slide_window_down() {
-        if (sliding_window_length_ > args_->sliding_step)
-            sliding_window_length_ -= args_->sliding_step;
-        else
-            sliding_window_length_ = args_->sliding_window_length;;
+        sliding_window_length_ = (sliding_window_length_ > args_->sliding_step)
+            ? sliding_window_length_ - args_->sliding_step
+            : args_->sliding_window_length;
     }
-    virtual void slide_window() = 0;
+    virtual bool slide_window() = 0;
 
     void slide_window(VertIndices& selected, const VertIndices& indices) {
-        auto previous_size = selected.size();
+        auto old_begin = std::begin(selected);
+        auto old_end = std::end(selected);
         auto left = indices.begin() + sliding_window_offset_;
         if (left > indices.end())
             left = indices.begin();
         auto right = std::min(indices.end(), left + sliding_window_length_);
-        selected.assign(left, right);
-        if (selected.size() != previous_size)
+        if (old_begin != left || old_end != right) {
+            selected.assign(left, right);
             std::cout << "#selected: " << size2str(selected.size()) << std::endl;
+        }
     }
 
     static std::string  /// 991337 --> "991,337"
