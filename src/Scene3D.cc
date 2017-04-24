@@ -96,8 +96,8 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
 bool
 Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
     // rotate the volume
-    GLfloat degreesPerSecond = 10.0f;
-    if (ctx_.rotationEnabled) {
+    if (manager->args()->spin_shape) {
+        GLfloat degreesPerSecond = 10.0f;
         ctx_.degreesRotated += elapsedTime * degreesPerSecond;
         while (ctx_.degreesRotated > 360.0f)
             ctx_.degreesRotated -= 360.0f;
@@ -119,19 +119,24 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
         camera_.offsetPosition(elapsedTime * moveSpeed * -glm::vec3(0,1,0));
     else if (events->keyDown('X'))
         camera_.offsetPosition(elapsedTime * moveSpeed * glm::vec3(0,1,0));
-    if (events->keyPressed(' '))
-        ctx_.rotationEnabled = !ctx_.rotationEnabled;
 
-    if (ctx_.selected.size() == 0 || manager->slide_window())
+    if (events->keyPressed(' '))
+        manager->args()->spin_shape = !manager->args()->spin_shape;
+    if (events->keyPressed('M'))
+        manager->args()->move_window = !manager->args()->move_window;
+    if (manager->args()->move_window || ctx_.selected.size() == 0 || manager->slide_window()) {
+        if (manager->args()->move_window)
+            manager->slide_window_right();
         manager->slide_window(ctx_.selected, ctx_.indices);
+    }
 
     auto mouse = manager->getMouse();
     mouse->getCursorPos();
     camera_.offsetOrientation(mouse->sensitivity * mouse->y, mouse->sensitivity * mouse->x);
     // reset the mouse, so it doesn't go out of the window
     mouse->setCursorPos(0, 0);
-
     mouse->scrollY = 0.0;
+
     return true;
 }
 

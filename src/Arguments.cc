@@ -20,6 +20,8 @@ usage(const char* prgname) {
               << std::endl
               << " -w, --sliding      Length of sliding window" << std::endl
               << " -s, --slide-step   Amount of points slid" << std::endl
+              << " -m, --move         Move sliding window forward" << std::endl
+              << " -n, --spin         Spin shape on itself" << std::endl
               << std::endl
               << " -b, --begin        begin offset for the range" << std::endl
               << " -e, --end          end offset for the range" << std::endl
@@ -30,12 +32,12 @@ usage(const char* prgname) {
 
 static void
 listComponents() {
-    std::cout << "list of UIs:" << std::endl << std::endl;
+    std::cout << "Available UIs:" << std::endl;
     for (const auto &pair : managers) {
         std::cout << " - " << pair.first << std::endl;
     }
     std::cout << std::endl
-              << "list of algorithms:" << std::endl << std::endl;
+              << "Available algorithms:" << std::endl;
     for (const auto &pair : algorithms) {
         std::cout << " - " << pair.first << std::endl;
     }
@@ -44,7 +46,7 @@ listComponents() {
 
 std::shared_ptr<Arguments>
 parseArgs(int argc, char *argv[]) {
-    static auto short_options = ":a:b:e:f_hls:w:u:x:y:";
+    static auto short_options = ":a:b:e:fmn_hls:w:u:x:y:";
     static const struct option long_options[] = {
         {"algorithm",  1, 0, 'a'},
         {"begin",      1, 0, 'b'},
@@ -56,6 +58,8 @@ parseArgs(int argc, char *argv[]) {
         {"list",       0, 0, 'l'},
         {"slide-step", 1, 0, 's'},
         {"sliding",    1, 0, 'w'},
+        {"move",       0, 0, 'm'},
+        {"spin",       0, 0, 'n'},
         {"ui",         1, 0, 'u'},
         {"width",      1, 0, 'x'},
         {NULL,         0, 0,  0}
@@ -87,6 +91,12 @@ parseArgs(int argc, char *argv[]) {
             break;
         case 'l':
             list = true;
+            break;
+        case 'm':
+            args->move_window = true;
+            break;
+        case 'n':
+            args->spin_shape = true;
             break;
         case 's':
             args->sliding_step = std::stoul(optarg);

@@ -11,7 +11,7 @@ struct Scene3DContext {
           width(w), height(h), depth(d),
           n_points(width * height * depth),
           vertices(3 * n_points), colors(4 * n_points),
-          degreesRotated(0.0f), rotationEnabled(false)
+          degreesRotated(0.0f)
         {}
     ~Scene3DContext() {}
 
@@ -37,7 +37,6 @@ struct Scene3DContext {
     VertIndices indices;
 
     GLfloat degreesRotated;
-    bool rotationEnabled;
     std::shared_ptr<tdogl::Program> program;
 };
 
@@ -54,9 +53,11 @@ public:
     virtual void reload();
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
     virtual void render();
+
 private:
     void load_shaders();
     void load_buffers();
+
 protected:
     Scene3DContext ctx_;
 };
