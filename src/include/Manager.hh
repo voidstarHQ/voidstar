@@ -5,13 +5,16 @@
 #include <Arguments.hh>
 #include <Scene.hh>
 #include <Events.hh>
+#include <Indices.hh>
 
 class Scene;
 
 class Manager {
 public:
     Manager(std::shared_ptr<Arguments> args)
-        : fullscreen_(false), args_(args), fileIndex_(0), scene_(0) {}
+        : fullscreen_(false), args_(args), fileIndex_(0), scene_(NULL),
+          sliding_window_offset_(0), sliding_window_length_(args_->sliding_window_length)
+        {}
     virtual ~Manager() {}
 
     virtual void loadScene(std::shared_ptr<Scene> scene);
@@ -28,8 +31,35 @@ public:
 
     virtual void toggleFullscreen() = 0;
 
-    std::shared_ptr<Arguments> args() { return args_; }
-    std::shared_ptr<Scene> scene() { return scene_; }
+    std::shared_ptr<Arguments> args() const { return args_; }
+    std::shared_ptr<Scene> scene() const { return scene_; }
+
+    void slide_window_left() {
+        sliding_window_offset_ = (sliding_window_offset_ > args_->sliding_step)
+            ? sliding_window_offset_ - args_->sliding_step
+            : 0;
+    }
+    void slide_window_right() { sliding_window_offset_ += args_->sliding_step; }
+    void slide_window_up() { sliding_window_length_ += args_->sliding_step; }
+    void slide_window_down() {
+        sliding_window_length_ = (sliding_window_length_ > args_->sliding_step)
+            ? sliding_window_length_ - args_->sliding_step
+            : args_->sliding_window_length;
+    }
+    virtual bool slide_window() = 0;
+
+    void slide_window(VertIndices& selected, const VertIndices& indices) {
+        auto old_begin = std::begin(selected);
+        auto old_end = std::end(selected);
+        auto left = indices.begin() + sliding_window_offset_;
+        if (left > indices.end())
+            left = indices.begin();
+        auto right = std::min(indices.end(), left + sliding_window_length_);
+        if (old_begin != left || old_end != right) {
+            selected.assign(left, right);
+            std::cout << "#selected: " << size2str(selected.size()) << std::endl;
+        }
+    }
 
     static std::string  /// 991337 --> "991,337"
     size2str (size_t size) {
@@ -47,6 +77,8 @@ protected:
     std::shared_ptr<Arguments> args_;
     size_t fileIndex_;
     std::shared_ptr<Scene> scene_;
+    size_t sliding_window_offset_;
+    size_t sliding_window_length_;
 };
 
 std::shared_ptr<Manager> createManager(const std::string& str, std::shared_ptr<Arguments> args);

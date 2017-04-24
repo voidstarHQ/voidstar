@@ -11,14 +11,14 @@ struct Scene3DContext {
           width(w), height(h), depth(d),
           n_points(width * height * depth),
           vertices(3 * n_points), colors(4 * n_points),
-          degreesRotated(0.0f), rotationEnabled(false)
+          degreesRotated(0.0f)
         {}
     ~Scene3DContext() {}
 
     void reset_points() {
         vertices = Floats(3 * n_points);
         colors = Floats(4 * n_points);
-        selected.clear();
+        indices.clear();
     }
 
     GLuint vao;
@@ -34,9 +34,9 @@ struct Scene3DContext {
     Floats vertices;
     Floats colors;
     VertIndices selected;
+    VertIndices indices;
 
     GLfloat degreesRotated;
-    bool rotationEnabled;
     std::shared_ptr<tdogl::Program> program;
 };
 
@@ -53,9 +53,11 @@ public:
     virtual void reload();
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
     virtual void render();
+
 private:
     void load_shaders();
     void load_buffers();
+
 protected:
     Scene3DContext ctx_;
 };

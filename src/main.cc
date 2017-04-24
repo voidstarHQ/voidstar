@@ -8,7 +8,7 @@
 #include <FileLoader.hh>
 #include <MmapLoader.hh>
 #include <Manager.hh>
-#include <Range.hh>
+#include <DataRange.hh>
 #include <Scene.hh>
 #include <Scene2D.hh>
 #include <Scene3D.hh>

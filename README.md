@@ -10,9 +10,13 @@ Browse data using Corti's 2D projector as well as 3D variants.
 
 ```shell
 ./configure -d RELEASE && cd build && make
-./voidstar --fullscreen ../data/*
+./voidstar --move --spin ../data/*
 # Press H and L to switch between files
-# Use AWSDZX and your mouse to move in the 3D space
+# Use A W S D Z X and your mouse to move in the 3D space
+# Press F for full screen
+# Use the arrows to slide and enlarge the sliding window
+# Press M to slide the window to the end and SPACE to spin the shape
+# ESC to quit
 ```
 
 ## Requirements
