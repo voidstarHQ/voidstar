@@ -13,7 +13,8 @@ class Manager {
 public:
     Manager(std::shared_ptr<Arguments> args)
         : fullscreen_(false), args_(args), fileIndex_(0), scene_(NULL),
-          sliding_window_offset_(0), sliding_window_length_(args_->sliding_window_length)
+          sliding_window_offset_(0), sliding_window_length_(args_->sliding_window_length),
+          sliding_window_left_(NULL), sliding_window_right_(NULL)
         {}
     virtual ~Manager() {}
 
@@ -48,17 +49,19 @@ public:
     }
     virtual bool slide_window() = 0;
 
-    void slide_window(VertIndices& selected, const VertIndices& indices) {
-        auto old_begin = std::begin(selected);
-        auto old_end = std::end(selected);
+    bool slide_window(VertIndices& selected, const VertIndices& indices) {
         auto left = indices.begin() + sliding_window_offset_;
         if (left > indices.end())
             left = indices.begin();
         auto right = std::min(indices.end(), left + sliding_window_length_);
-        if (old_begin != left || old_end != right) {
+        if (sliding_window_left_ != &left[0] || sliding_window_right_ != &right[0]) {
             selected.assign(left, right);
+            sliding_window_left_ = &left[0];
+            sliding_window_right_ = &right[0];
             std::cout << "#selected: " << size2str(selected.size()) << std::endl;
+            return true;
         }
+        return false;
     }
 
     static std::string  /// 991337 --> "991,337"
@@ -79,6 +82,8 @@ protected:
     std::shared_ptr<Scene> scene_;
     size_t sliding_window_offset_;
     size_t sliding_window_length_;
+    const unsigned int* sliding_window_left_;
+    const unsigned int* sliding_window_right_;
 };
 
 std::shared_ptr<Manager> createManager(const std::string& str, std::shared_ptr<Arguments> args);
