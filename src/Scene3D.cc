@@ -127,7 +127,9 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
     if (manager->args()->move_window || ctx_.selected.size() == 0 || manager->slide_window()) {
         if (manager->args()->move_window)
             manager->slide_window_right();
-        manager->slide_window(ctx_.selected, ctx_.indices);
+        bool slid = manager->slide_window(ctx_.selected, ctx_.indices);
+        if (manager->args()->move_window && !slid)
+            manager->args()->move_window = !manager->args()->move_window;
     }
 
     auto mouse = manager->getMouse();
