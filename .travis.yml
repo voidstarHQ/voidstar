@@ -76,7 +76,7 @@ after_success:
       msg="$(git log -1 --pretty=%B | head -n 1)"
       echo "Message: $msg"
       echo Commit: $TRAVIS_COMMIT
-      if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && exit; fi
+      if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && exit 0; fi
       git config --global user.email 'pierrefenoll+travis-voidstar@gmail.com'
       git config --global user.name 'Autotag'
       git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
