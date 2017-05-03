@@ -87,6 +87,7 @@ after_success:
       echo Tagging $TRAVIS_COMMIT with $tag
       if git push --tags; then echo Tagged!; fi
     fi
+  - set +e
 
 deploy:
   provider: releases
