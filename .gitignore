@@ -1,2 +1,4 @@
 /build
 travis-miners
+conanbuildinfo.cmake
+conaninfo.txt

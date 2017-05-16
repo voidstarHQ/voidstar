@@ -23,6 +23,18 @@ Browse data using Corti's 2D projector as well as 3D variants.
 
 * A C++ compiler
 * `cmake` greater than 2.8
+* `conan` (from [https://conan.io](conan.io))
+
+## Building
+
+```shell
+git clone https://github.com/fenollp/voidstar.git voidstar.git
+mkdir voidstar.git/build
+pushd voidstar.git/build
+conan install --build -- ..
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+```
 
 ### Windows
 

@@ -11,22 +11,18 @@ include(static_analysis)
 #-----------------------------------------------------------------------------
 #                           GENERAL CONFIGURATION
 #-----------------------------------------------------------------------------
-project(ProjectName CXX)
+project(voidstar CXX)
 #-----------------------------------------------------------------------------
 #                              DEPENDENCIES
 #-----------------------------------------------------------------------------
 # find your dependencies here !
 # ==> use cmake --help-module-list
 # ==> and cmake --help-module FindBoost to known which variables are set.
-# find_package(Boost COMPONENTS filesystem threads)
-# include_directories(${Boost_INCLUDE_DIRS})
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 find_package(OpenGL REQUIRED)
 include_directories(${OpenGL_INCLUDE_DIR})
-find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
 find_package(PkgConfig REQUIRED)
-pkg_search_module(GLFW REQUIRED glfw3)
-include_directories(${GLFW_INCLUDE_DIRS})
 
 #-----------------------------------------------------------------------------
 #                           BUILD TYPES & FLAGS
@@ -39,11 +35,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++1y ${CMAKE_CXX_FLA
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
 else(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
-endif()
-
-# strip binary in release mode
-if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
-    set(CMAKE_EXE_LINKER_FLAGS "-s")
 endif()
 
 #-----------------------------------------------------------------------------
@@ -92,32 +83,29 @@ set(SOURCES
     src/common/tdogl/Shader.cpp
 )
 
-if(APPLE)
-    #set(GUI_TYPE MACOSX_BUNDLE)
-    include_directories(/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/)
-    find_library(COREFOUNDATION_LIBRARY CoreFoundation)
-    mark_as_advanced(COREFOUNDATION_LIBRARY)
-    set(EXTRA_LIBS ${COREFOUNDATION_LIBRARY})
-endif(APPLE)
+# if(APPLE)
+#     #set(GUI_TYPE MACOSX_BUNDLE)
+#     include_directories(/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/)
+#     find_library(COREFOUNDATION_LIBRARY CoreFoundation)
+#     mark_as_advanced(COREFOUNDATION_LIBRARY)
+#     set(EXTRA_LIBS ${COREFOUNDATION_LIBRARY})
+# endif(APPLE)
 
 # create your executable with
 add_executable(voidstar ${GUI_TYPE} ${SOURCES})
 
 add_dependencies(voidstar shaders_out)
 
-# create a library with
-# add_library(my_lib SHARED ${SOURCES})
-
 # you can link both with
 target_link_libraries(voidstar
-  m
+  # m
   ${OPENGL_gl_LIBRARY}
-  ${GLEW_LIBRARIES}
-  ${GLFW_STATIC_LIBRARIES} # This needs manual addition of ${GLFW_STATIC_LDFLAGS}
+  ${CONAN_LIBS}
+  # ${GLFW_STATIC_LIBRARIES} # This needs manual addition of ${GLFW_STATIC_LDFLAGS}
   ${EXTRA_LIBS}
 )
-string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
-set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
+# string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
+# set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING

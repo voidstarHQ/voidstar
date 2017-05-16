@@ -1,0 +1,10 @@
+[generators]
+cmake
+
+[requires]
+glew/2.0.0@coding3d/stable
+glfw/3.2.1@coding3d/stable
+
+[options]
+glew:shared=False
+glfw:shared=False
