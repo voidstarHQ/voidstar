@@ -64,3 +64,4 @@ https://github.com/fenollp/voidstar/issues/7
 ### iOS
 
 https://github.com/fenollp/voidstar/issues/8
+./dockcross --args -v /Users/pete/.conan/conan.conf:/home/pete/.conan/conan.conf bash -c 'mkdir build && cd build && conan install --build -- .. && cmake .. -DCMAKE_BUILD_TYPE=Release && cmake --build .'
