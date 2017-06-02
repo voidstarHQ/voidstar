@@ -22,7 +22,7 @@ mkdir -p "$__dir/$__build_dir"
 # parsing option
 OPTIND=1
 compilers=(clang++ g++)
-build_types=(DEBUG RELEASE)
+build_types=(RELEASE DEBUG)
 sanitizers=(address thread memory leak undefined)
 
 # default values
