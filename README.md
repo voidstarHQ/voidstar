@@ -2,7 +2,7 @@
 
 Browse data using Corti's 2D projector as well as 3D variants.
 
-The actual file being represented [is data/BigPictureBG.tga](http://www.docspal.com/viewer?id=ufbxlmfm-12197291).
+The actual file being represented below [is data/BigPictureBG.tga](http://www.docspal.com/viewer?id=ufbxlmfm-12197291).
 
 [![Sorry for potato quality](https://i.vimeocdn.com/video/622736893.webp?mw=480&mh=270)](https://player.vimeo.com/video/207613754?autoplay=1&loop=1)
 
