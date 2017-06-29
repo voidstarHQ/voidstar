@@ -68,7 +68,7 @@ after_script:
 
 after_success:
   - |
-    if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]]; then
+    if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]] && [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then
       major=v1
       minor="$(($(git describe --tags | grep $major | cut -d. -f2) + 1))"
       tag=$major.$minor.$TRAVIS_BUILD_ID
@@ -85,7 +85,7 @@ after_success:
       eval `ssh-agent -s`
       ssh-add travis-miners
       echo Tagging $TRAVIS_COMMIT with $tag
-      if git push --tags; then echo Tagged!; fi
+      git push --tags || true
       set +e
     fi
 
