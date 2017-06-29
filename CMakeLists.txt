@@ -134,7 +134,7 @@ set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ld
 # OR
 # install(PROGRAMS myexecutable DESTINATION <dir>)
 
-install(PROGRAMS build/voidstar DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(TARGETS voidstar RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 include(uninstall)
 # add_subdirectory("${CMAKE_SOURCE_DIR}/cmake/cpack") # enable packaging with CPack
