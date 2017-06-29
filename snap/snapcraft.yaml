@@ -5,14 +5,19 @@ summary: void* casts files onto 2D/3D colored spaces for your mind blowing needs
 description: |
   https://github.com/fenollp/voidstar/blob/master/README.md
 
-#grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode #strict # 'devmode' | use 'strict' once you have the right plugs and slots
+grade: stable
+confinement: strict
 
 apps:
   voidstar:
     command: bin/voidstar
     plugs:
-      - opengl
+      - opengl  # to access rendering hardware
+      - x11  # to create windows
+      - home  # to read files in $HOME
+      - removable-media  # to read USB keys
+      - optical-drive  # to read CDs
+      - network  # to read URLs
 
 parts:
   voidstar:
@@ -20,7 +25,6 @@ parts:
     # source: https://github.com/fenollp/voidstar.git
     source: .
     configflags:
-      # - -DCMAKE_INSTALL_PREFIX=$DESTDIR
       - -DCMAKE_INSTALL_PREFIX=/bin
     build-packages:
       - libglm-dev
