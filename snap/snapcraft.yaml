@@ -28,6 +28,7 @@ parts:
       - -DCMAKE_INSTALL_PREFIX=/bin
     build-packages:
       - libglm-dev
+      - pkg-config
     stage-packages:
       - libglew-dev
       - libglfw3-dev
