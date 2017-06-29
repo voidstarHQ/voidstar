@@ -32,6 +32,24 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 # ESC to quit
 ```
 
+## Installing
+
+### on MacOS
+
+1. Download one of the `osx` files of [the latest release](https://github.com/fenollp/voidstar/releases/latest)
+1. Open Terminal.app (you can search for it in Spotlight)
+1. Type `brew install glew` then press ENTER. This installs the GLEW dependency.
+1. Type `chmod u+x ` then drag and drop the file you downloaded then press ENTER (now this file can be executed)
+1. Now drag and drop your executable then drag a file you want to look at (e.g. `data/dragon.vox`) then press ENTER
+1. A window should appear. Move your mouse and play with your keyboard's arrows. You should see some colored dots in 3D.
+
+### on any Linux distribution
+
+`sudo snap install voidstar`
+
+This relies on [snaps](https://snapcraft.io/docs/core/install).
+
+
 ## Requirements
 
 * A C++ compiler
