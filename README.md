@@ -65,3 +65,5 @@ https://github.com/fenollp/voidstar/issues/7
 ### iOS
 
 https://github.com/fenollp/voidstar/issues/8
+sudo snap install --devmode voidstar_*.snap
+voidstar /snap/bin/voidstar

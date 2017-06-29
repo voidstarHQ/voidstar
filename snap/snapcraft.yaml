@@ -5,18 +5,25 @@ summary: void* casts files onto 2D/3D colored spaces for your mind blowing needs
 description: |
   https://github.com/fenollp/voidstar/blob/master/README.md
 
-grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+#grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode #strict # 'devmode' | use 'strict' once you have the right plugs and slots
 
 apps:
   voidstar:
-    command: voidstar
+    command: bin/voidstar
+    plugs:
+      - opengl
 
 parts:
   voidstar:
     plugin: cmake
-    source: https://github.com/fenollp/voidstar.git
+    # source: https://github.com/fenollp/voidstar.git
+    source: .
+    configflags:
+      # - -DCMAKE_INSTALL_PREFIX=$DESTDIR
+      - -DCMAKE_INSTALL_PREFIX=/bin
+    build-packages:
+      - libglm-dev
     stage-packages:
       - libglew-dev
-      - libglm-dev
       - libglfw3-dev
