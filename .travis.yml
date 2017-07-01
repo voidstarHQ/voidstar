@@ -62,6 +62,7 @@ script:
   - ./build/voidstar -h
   - ./build/voidstar --list
   - mv -v build/voidstar "build/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
+  - cppcheck --enable=all -Isrc/include/ -Isrc/common/tdogl/ src/
 
 after_script:
   - set +e
