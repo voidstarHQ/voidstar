@@ -13,7 +13,6 @@ Algo2DGrayscale::apply(Floats& vertices, Floats& colors,
         colors[pos++] = c;
         colors[pos++] = c;
         colors[pos++] = c;
-        colors[pos++] = 1;
     }
 
     return true;

@@ -12,7 +12,7 @@ public:
           vao_(0), vbo_(0), elements_(0), colors_id_(0),
           width_(256), height_(256), depth_(256),
           n_points_(width_ * height_ * depth_),
-          vertices_(3 * n_points_), colors_(4 * n_points_),
+          vertices_(3 * n_points_), colors_(3 * n_points_),
           degrees_rotated_(0.0f), degrees_per_second_(10.0f), move_speed_(2.0f)
         {}
     virtual ~Scene3D() { unload(); }
@@ -29,7 +29,7 @@ private:
     void load_buffers();
     void reset_points() {
         vertices_ = Floats(3 * n_points_);
-        colors_ = Floats(4 * n_points_);
+        colors_ = Floats(3 * n_points_);
         indices_.clear();
     }
 

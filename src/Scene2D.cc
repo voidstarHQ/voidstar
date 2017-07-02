@@ -32,7 +32,7 @@ Scene2D::load_buffers() {
 
     glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), colors_.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(program_->attrib("colr"));
-    glVertexAttribPointer(program_->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(program_->attrib("colr"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // unbind the VAO
     glBindVertexArray(0);

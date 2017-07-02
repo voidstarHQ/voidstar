@@ -37,7 +37,6 @@ Algo2DFourColors::apply(Floats& vertices, Floats& colors,
         colors[pos++] = c.r;
         colors[pos++] = c.g;
         colors[pos++] = c.b;
-        colors[pos++] = 1.0f;
     }
 
     return true;
