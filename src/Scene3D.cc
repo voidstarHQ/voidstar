@@ -36,7 +36,7 @@ Scene3D::load_buffers() {
     glGenBuffers(1, &colors_id_);
     glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
     glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), colors_.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(program_->attrib("colr"), 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(program_->attrib("colr"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(program_->attrib("colr"));
 
     // unbind the VAO
