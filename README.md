@@ -74,6 +74,8 @@ brew install glfw3 --without-shared-library
 
 ### Web
 
+docker run --rm -it -v "$PWD":/src trzeci/emscripten:sdk-tag-1.35.23-64bit bash -c 'mkdir build && cd build && apt update && apt install -y libglm-dev && sleep 5 && emcmake cmake --DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_COMPILER=$(which em++) -DCMAKE_BUILD_TYPE=Release -DCMAKE_MAKE_PROGRAM=$(which emmake) .. && emmake make'
+
 https://github.com/fenollp/voidstar/issues/9
 
 ### Android

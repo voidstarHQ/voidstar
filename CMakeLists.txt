@@ -22,10 +22,12 @@ project(ProjectName CXX)
 # include_directories(${Boost_INCLUDE_DIRS})
 find_package(OpenGL REQUIRED)
 include_directories(${OpenGL_INCLUDE_DIR})
-find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
-find_package(PkgConfig REQUIRED)
-pkg_search_module(GLFW REQUIRED glfw3)
+if (NOT EMSCRIPTEN)
+  find_package(GLEW REQUIRED)
+  include_directories(${GLEW_INCLUDE_DIRS})
+  find_package(PkgConfig REQUIRED)
+  pkg_search_module(GLFW REQUIRED glfw3)
+endif(NOT EMSCRIPTEN)
 include_directories(${GLFW_INCLUDE_DIRS})
 
 #-----------------------------------------------------------------------------
@@ -108,14 +110,21 @@ add_dependencies(voidstar shaders_out)
 # create a library with
 # add_library(my_lib SHARED ${SOURCES})
 
-# you can link both with
-target_link_libraries(voidstar
-  m
-  ${OPENGL_gl_LIBRARY}
-  ${GLEW_LIBRARIES}
-  ${GLFW_STATIC_LIBRARIES} # This needs manual addition of ${GLFW_STATIC_LDFLAGS}
-  ${EXTRA_LIBS}
-)
+if(EMSCRIPTEN)
+  target_link_libraries(voidstar
+    m
+    ${OPENGL_gl_LIBRARY}
+    ${GLFW_STATIC_LIBRARIES}
+  )
+else(EMSCRIPTEN)
+  target_link_libraries(voidstar
+    m
+    ${OPENGL_gl_LIBRARY}
+    ${GLEW_LIBRARIES}
+    ${GLFW_STATIC_LIBRARIES} # This needs manual addition of ${GLFW_STATIC_LDFLAGS}
+    ${EXTRA_LIBS}
+  )
+endif(EMSCRIPTEN)
 string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
 set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
 
