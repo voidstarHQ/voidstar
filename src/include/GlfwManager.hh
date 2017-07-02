@@ -62,7 +62,7 @@ class GlfwManager : public Manager {
 // private:
 public:
     GlfwManager(std::shared_ptr<Arguments> args)
-        : Manager(args)
+        : Manager(args), window_(nullptr)
         {}
 public:
     virtual ~GlfwManager() {}
