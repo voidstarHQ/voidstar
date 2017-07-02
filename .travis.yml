@@ -17,6 +17,7 @@ addons:
       - xorg-dev
       - libgl1-mesa-dev
       - libc++-dev
+      - cppcheck
 cache:
   apt: true
 
@@ -62,6 +63,7 @@ script:
   - ./build/voidstar -h
   - ./build/voidstar --list
   - mv -v build/voidstar "build/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
+  - if [[ "$TRAVIS_OS_NAME" = 'linux' ]]; then cppcheck --error-exitcode=1 --enable=all -Isrc/include/ -Isrc/common/tdogl/ src/; fi
 
 after_script:
   - set +e

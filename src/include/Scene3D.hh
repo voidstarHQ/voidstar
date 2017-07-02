@@ -5,45 +5,15 @@
 #include <Scene.hh>
 #include <Algo3D.hh>
 
-struct Scene3DContext {
-    Scene3DContext(size_t w, size_t h, size_t d)
-        : vao(0), vbo(0), elements(0), colors_id(0),
-          width(w), height(h), depth(d),
-          n_points(width * height * depth),
-          vertices(3 * n_points), colors(4 * n_points),
-          degreesRotated(0.0f)
-        {}
-    ~Scene3DContext() {}
-
-    void reset_points() {
-        vertices = Floats(3 * n_points);
-        colors = Floats(4 * n_points);
-        indices.clear();
-    }
-
-    GLuint vao;
-    GLuint vbo;
-    GLuint elements;
-    GLuint colors_id;
-
-    size_t  width;
-    size_t  height;
-    size_t  depth;
-    size_t  n_points;
-
-    Floats vertices;
-    Floats colors;
-    VertIndices selected;
-    VertIndices indices;
-
-    GLfloat degreesRotated;
-    std::shared_ptr<tdogl::Program> program;
-};
-
 class Scene3D : public Scene {
 public:
     Scene3D()
-        : Scene(SCENE_3D), ctx_(256, 256, 256)
+        : Scene(SCENE_3D),
+          vao_(0), vbo_(0), elements_(0), colors_id_(0),
+          width_(256), height_(256), depth_(256),
+          n_points_(width_ * height_ * depth_),
+          vertices_(3 * n_points_), colors_(4 * n_points_),
+          degrees_rotated_(0.0f), degrees_per_second_(10.0f), move_speed_(2.0f)
         {}
     virtual ~Scene3D() { unload(); }
 
@@ -57,7 +27,30 @@ public:
 private:
     void load_shaders();
     void load_buffers();
+    void reset_points() {
+        vertices_ = Floats(3 * n_points_);
+        colors_ = Floats(4 * n_points_);
+        indices_.clear();
+    }
 
 protected:
-    Scene3DContext ctx_;
+    GLuint vao_;
+    GLuint vbo_;
+    GLuint elements_;
+    GLuint colors_id_;
+
+    size_t  width_;
+    size_t  height_;
+    size_t  depth_;
+    size_t  n_points_;
+
+    Floats vertices_;
+    Floats colors_;
+    VertIndices selected_;
+    VertIndices indices_;
+
+    GLfloat degrees_rotated_;
+    GLfloat degrees_per_second_;
+    GLfloat move_speed_;
+    std::shared_ptr<tdogl::Program> program_;
 };

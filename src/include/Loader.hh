@@ -6,7 +6,9 @@
 
 class Loader {
 public:
-    Loader(bool stream) : stream_(stream) {}
+    Loader(bool stream)
+        : stream_(stream), size_(0), offset_(0)
+        {}
     virtual ~Loader() {}
 
     virtual void load() = 0;

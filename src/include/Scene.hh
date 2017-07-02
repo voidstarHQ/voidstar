@@ -21,7 +21,7 @@ class Manager;
 class Scene {
 public:
     Scene(SceneType type)
-        : type_(type), algo_(0)
+        : type_(type), algo_(nullptr)
         {}
     virtual ~Scene() {}
 
@@ -32,13 +32,11 @@ public:
     virtual void unload();
     virtual void reload();
 
-    virtual void resize(size_t width, size_t height) {
-        width_ = width;
-        height_ = height;
-        aspect_ratio_ = static_cast<float>(width) / static_cast<float>(height);
-        std::cout << "aspect: " << aspect_ratio_
-                  << " (" << width_ << 'x' << height_ << ')' << std::endl;
-        camera_.setViewportAspectRatio(aspect_ratio_);
+    virtual void resize(int viewport_width, int viewport_height) {
+        float aspect_ratio = static_cast<float>(viewport_width) / static_cast<float>(viewport_height);
+        std::cout << "aspect: " << aspect_ratio
+                  << " (" << viewport_width << 'x' << viewport_height << ')' << std::endl;
+        camera_.setViewportAspectRatio(aspect_ratio);
     }
 
     inline SceneType type() const { return type_; }
@@ -49,7 +47,4 @@ protected:
     SceneType type_;
     std::shared_ptr<Algorithm> algo_;
     tdogl::Camera camera_;
-    size_t width_;
-    size_t height_;
-    float aspect_ratio_;
 };

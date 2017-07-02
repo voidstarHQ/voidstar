@@ -24,7 +24,7 @@ struct GlfwKeyboardState {
         GlfwModifiers mods;
     };
 
-    void copy(const std::shared_ptr<GlfwKeyboardState> state) {
+    void copy(const std::shared_ptr<GlfwKeyboardState>& state) {
         keys = state->keys;
         rawmods = state->rawmods;
     }
@@ -32,7 +32,10 @@ struct GlfwKeyboardState {
 
 class GlfwKeyboardEvents : public Events {
 public:
-    GlfwKeyboardEvents();
+    GlfwKeyboardEvents()
+        : current_(std::make_shared<GlfwKeyboardState>()),
+          previous_(std::make_shared<GlfwKeyboardState>())
+        {}
     virtual ~GlfwKeyboardEvents();
 
     virtual bool keyPressed(int key);
@@ -58,8 +61,8 @@ public:
 class GlfwManager : public Manager {
 // private:
 public:
-    GlfwManager(std::shared_ptr<Arguments> args)
-        : Manager(args)
+    GlfwManager(std::shared_ptr<Arguments>& args)
+        : Manager(args), window_(nullptr)
         {}
 public:
     virtual ~GlfwManager() {}
@@ -72,7 +75,7 @@ public:
 
     GLFWwindow* window() { return window_; }
 
-    // TODO: move these in an OpenGl backend
+    // TODO: move these in an OpenGL backend
     void glInit();
     void glProcessErrors(bool quiet=false);
 

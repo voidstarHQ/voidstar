@@ -147,11 +147,6 @@ GlfwManager::run() {
     glfwTerminate();
 }
 
-GlfwKeyboardEvents::GlfwKeyboardEvents() {
-    current_ = std::make_shared<GlfwKeyboardState>();
-    previous_ = std::make_shared<GlfwKeyboardState>();
-}
-
 GlfwKeyboardEvents::~GlfwKeyboardEvents() {
 }
 

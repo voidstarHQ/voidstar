@@ -46,7 +46,7 @@ protected:
     std::shared_ptr<DataRange> range_;
 };
 
-std::shared_ptr<Algorithm> createAlgorithm(const std::string str);
+std::shared_ptr<Algorithm> createAlgorithm(const std::string& str);
 
 using AlgorithmFactoryFunc = std::function<std::shared_ptr<Algorithm>()>;
 extern const std::map<const std::string, AlgorithmFactoryFunc> algorithms;
