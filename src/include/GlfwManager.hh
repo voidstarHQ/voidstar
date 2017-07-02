@@ -32,7 +32,10 @@ struct GlfwKeyboardState {
 
 class GlfwKeyboardEvents : public Events {
 public:
-    GlfwKeyboardEvents();
+    GlfwKeyboardEvents()
+        : current_(std::make_shared<GlfwKeyboardState>()),
+          previous_(std::make_shared<GlfwKeyboardState>())
+        {}
     virtual ~GlfwKeyboardEvents();
 
     virtual bool keyPressed(int key);
