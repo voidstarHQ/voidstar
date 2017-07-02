@@ -9,7 +9,6 @@ Algo3DSphereFull::apply(Floats& vertices, Floats& colors, VertIndices& selected,
         colors[3 * i + 0] = 1.0f;
         colors[3 * i + 1] = 1.0f;
         colors[3 * i + 2] = 1.0f;
-        colors[3 * i + 3] = 1.0f;
         selected.push_back(i);
     }
 

@@ -61,7 +61,6 @@ Algo2DEntropy::apply(Floats& vertices, Floats& colors,
         colors[pos++] = r;
         colors[pos++] = 0.0f;
         colors[pos++] = b;
-        colors[pos++] = 1.0f;
     }
 
     return true;

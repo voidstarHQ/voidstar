@@ -19,15 +19,11 @@ Algo3DSphereContiFrebet::apply(Floats& vertices, Floats& colors, VertIndices& in
         // float theta = std::acos(static_cast<float>(z) / r);
         // float phi   = std::atan(static_cast<float>(y) / static_cast<float>(x));
         // size_t id = r + theta * height + phi * depth * height;
-        Index idx = 4 * id;
+        Index idx = 3 * id;
         colors[idx + 0] = static_cast<float>(data[i+1]) / 255.0f;
         colors[idx + 1] = static_cast<float>(data[i+2]) / 255.0f;
         colors[idx + 2] = static_cast<float>(data[i+3]) / 255.0f;
-        float opacity = colors[idx + 3];
-        if (opacity < 1.0f/255.0f)
-            indices.push_back(id);
-        // colors[idx + 3] = std::min(1.0f, 1.0f/255.0f + opacity);
-        colors[idx + 3] = 1.0f;
+        indices.push_back(id);
         x = y;
         y = z;
     }
