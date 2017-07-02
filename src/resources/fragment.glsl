@@ -1,8 +1,8 @@
 #version 150
 
-in vec4 carryColr;
+in vec3 carryColr;
 out vec4 finalColor;
 
 void main() {
-    finalColor = carryColr;
+    finalColor = vec4(carryColr, 1);
 }

@@ -2,8 +2,8 @@
 
 in vec2 vert;
 
-in vec4 colr;
-out vec4 carryColr;
+in vec3 colr;
+out vec3 carryColr;
 
 void main() {
     // Pass colr through to fragment shader
