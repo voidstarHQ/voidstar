@@ -44,7 +44,7 @@ Algorithm::loadDataRange(const DataRange& range, size_t& size) {
 }
 
 std::shared_ptr<Algorithm>
-createAlgorithm(const std::string str) {
+createAlgorithm(const std::string& str) {
     auto it = algorithms.find(str);
     if (it == algorithms.end()) {
         return 0;

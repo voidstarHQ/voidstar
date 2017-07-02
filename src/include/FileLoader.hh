@@ -8,7 +8,7 @@
 class FileLoader : public Loader {
 public:
     FileLoader(int fd) : Loader(true), fd_(fd) {}
-    FileLoader(std::string path) : Loader(false), fd_(-1), path_(path) {}
+    FileLoader(const std::string& path) : Loader(false), fd_(-1), path_(path) {}
     virtual ~FileLoader() {}
 
     virtual void load();

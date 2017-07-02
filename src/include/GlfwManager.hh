@@ -24,7 +24,7 @@ struct GlfwKeyboardState {
         GlfwModifiers mods;
     };
 
-    void copy(const std::shared_ptr<GlfwKeyboardState> state) {
+    void copy(const std::shared_ptr<GlfwKeyboardState>& state) {
         keys = state->keys;
         rawmods = state->rawmods;
     }
@@ -61,7 +61,7 @@ public:
 class GlfwManager : public Manager {
 // private:
 public:
-    GlfwManager(std::shared_ptr<Arguments> args)
+    GlfwManager(std::shared_ptr<Arguments>& args)
         : Manager(args), window_(nullptr)
         {}
 public:

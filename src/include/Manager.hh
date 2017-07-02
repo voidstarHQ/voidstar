@@ -11,7 +11,7 @@ class Scene;
 
 class Manager {
 public:
-    Manager(std::shared_ptr<Arguments> args)
+    Manager(std::shared_ptr<Arguments>& args)
         : fullscreen_(false), args_(args), fileIndex_(0), scene_(NULL),
           sliding_window_offset_(0), sliding_window_length_(args_->sliding_window_length),
           sliding_window_left_(NULL), sliding_window_right_(NULL)
