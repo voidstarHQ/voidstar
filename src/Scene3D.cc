@@ -89,7 +89,6 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     load_buffers();
 
     camera_.setPosition(glm::vec3(0, 0, 4));
-    camera_.setViewportAspectRatio(aspect_ratio_);
     camera_.setNearAndFarPlanes(0.1, 100.);
 }
 
