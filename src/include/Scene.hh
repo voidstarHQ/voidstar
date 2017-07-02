@@ -21,7 +21,7 @@ class Manager;
 class Scene {
 public:
     Scene(SceneType type)
-        : type_(type), algo_(0)
+        : type_(type), algo_(nullptr)
         {}
     virtual ~Scene() {}
 
