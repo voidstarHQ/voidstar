@@ -72,7 +72,7 @@ public:
 
     GLFWwindow* window() { return window_; }
 
-    // TODO: move these in an OpenGl backend
+    // TODO: move these in an OpenGL backend
     void glInit();
     void glProcessErrors(bool quiet=false);
 
