@@ -22,15 +22,43 @@ project(ProjectName CXX)
 # include_directories(${Boost_INCLUDE_DIRS})
 
 if(EMSCRIPTEN)
-  include_directories(/usr/include)
+        message(STATUS "here!")
+    message(STATUS "${CMAKE_MODULE_PATH}")
+    set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};/usr/share/cmake-3.0/Modules")
+    message(STATUS "${CMAKE_MODULE_PATH}")
+  include_directories( /usr/include )
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+  message(STATUS "dir='${dir}'")
+endforeach()
   find_package(OpenGL REQUIRED)
+  include_directories( /usr/include )
   include_directories(${OpenGL_INCLUDE_DIR})
-  find_package(GLEW REQUIRED)
-  include_directories(${GLEW_INCLUDE_DIRS})
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+  message(STATUS "dir='${dir}'")
+endforeach()
+  include_directories( /usr/include )
+#  find_package(GLEW REQUIRED)
+#  include_directories( /usr/include )
+#  include_directories(${GLEW_INCLUDE_DIRS})
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+  message(STATUS "dir='${dir}'")
+endforeach()
+  include_directories( /usr/include )
   find_package(PkgConfig REQUIRED)
-  pkg_search_module(GLFW REQUIRED glfw3)
-  include_directories(${GLFW_INCLUDE_DIRS})
+  include_directories( /usr/include )
+#  pkg_search_module(GLFW REQUIRED glfw3)
+#  include_directories( /usr/include )
+#  include_directories(${GLFW_INCLUDE_DIRS})
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+  message(STATUS "dir='${dir}'")
+endforeach()
+  include_directories( /usr/include )
 else(EMSCRIPTEN)
+        message(STATUS "not here!")
   find_package(OpenGL REQUIRED)
   include_directories(${OpenGL_INCLUDE_DIR})
   find_package(GLEW REQUIRED)
@@ -121,11 +149,13 @@ add_dependencies(voidstar shaders_out)
 # add_library(my_lib SHARED ${SOURCES})
 
 if(EMSCRIPTEN)
-  target_link_libraries(voidstar
-    m
-    ${OPENGL_gl_LIBRARY}
-    ${GLFW_STATIC_LIBRARIES}
-  )
+  add_definitions( -s USE_GLFW=3 )
+#  target_link_libraries(voidstar
+#    m
+#    ${OPENGL_gl_LIBRARY}
+#    GLEW
+#    glfw
+#  )
 else(EMSCRIPTEN)
   target_link_libraries(voidstar
     m
@@ -134,9 +164,9 @@ else(EMSCRIPTEN)
     ${GLFW_STATIC_LIBRARIES} # This needs manual addition of ${GLFW_STATIC_LDFLAGS}
     ${EXTRA_LIBS}
   )
-endif(EMSCRIPTEN)
 string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
 set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
+endif(EMSCRIPTEN)
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING
