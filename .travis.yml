@@ -64,6 +64,7 @@ script:
   - ./build/voidstar --list
   - mv -v build/voidstar "build/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
   - if [[ "$TRAVIS_OS_NAME" = 'linux' ]]; then cppcheck --error-exitcode=1 --enable=all -Isrc/include/ -Isrc/common/tdogl/ src/; fi
+  - docker run --rm -it -v "$PWD":/src trzeci/emscripten:sdk-tag-1.36.5-64bit bash -c 'rm -rf build && mkdir build && cd build && apt update && apt upgrade -y && apt install -yy libglew-dev libglm-dev libglfw3-dev pkg-config && emcmake cmake --DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_COMPILER=em++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_MAKE_PROGRAM=emmake .. && emmake make'
 
 after_script:
   - set +e
