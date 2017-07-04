@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 # set cmake module path, to search in cmake/modules first
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -11,7 +11,12 @@ include(static_analysis)
 #-----------------------------------------------------------------------------
 #                           GENERAL CONFIGURATION
 #-----------------------------------------------------------------------------
-project(ProjectName CXX)
+project(voidstar CXX)
+
+## These are cmake >= 3.1
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
 #-----------------------------------------------------------------------------
 #                              DEPENDENCIES
 #-----------------------------------------------------------------------------
@@ -22,42 +27,14 @@ project(ProjectName CXX)
 # include_directories(${Boost_INCLUDE_DIRS})
 
 if(EMSCRIPTEN)
-        message(STATUS "here!")
-    message(STATUS "${CMAKE_MODULE_PATH}")
-    set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};/usr/share/cmake-3.0/Modules")
-    message(STATUS "${CMAKE_MODULE_PATH}")
+  message(STATUS "here!")
   include_directories( /usr/include )
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-  message(STATUS "dir='${dir}'")
-endforeach()
-  find_package(OpenGL REQUIRED)
-  include_directories( /usr/include )
-  include_directories(${OpenGL_INCLUDE_DIR})
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-  message(STATUS "dir='${dir}'")
-endforeach()
-  include_directories( /usr/include )
-#  find_package(GLEW REQUIRED)
-#  include_directories( /usr/include )
-#  include_directories(${GLEW_INCLUDE_DIRS})
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-  message(STATUS "dir='${dir}'")
-endforeach()
-  include_directories( /usr/include )
-  find_package(PkgConfig REQUIRED)
-  include_directories( /usr/include )
-#  pkg_search_module(GLFW REQUIRED glfw3)
-#  include_directories( /usr/include )
-#  include_directories(${GLFW_INCLUDE_DIRS})
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-  message(STATUS "dir='${dir}'")
-endforeach()
-  include_directories( /usr/include )
-else(EMSCRIPTEN)
+
+  set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
+  message(STATUS "Cmake prefix path: ${CMAKE_PREFIX_PATH}")
+endif(EMSCRIPTEN)
+
+if(NOT EMSCRIPTEN)
         message(STATUS "not here!")
   find_package(OpenGL REQUIRED)
   include_directories(${OpenGL_INCLUDE_DIR})
@@ -66,7 +43,7 @@ else(EMSCRIPTEN)
   find_package(PkgConfig REQUIRED)
   pkg_search_module(GLFW REQUIRED glfw3)
   include_directories(${GLFW_INCLUDE_DIRS})
-endif(EMSCRIPTEN)
+endif()
 
 #-----------------------------------------------------------------------------
 #                           BUILD TYPES & FLAGS
@@ -81,10 +58,10 @@ else(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
 
-# strip binary in release mode
-if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
-    set(CMAKE_EXE_LINKER_FLAGS "-s")
-endif()
+# # strip binary in release mode
+# if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+#     set(CMAKE_EXE_LINKER_FLAGS "-s")
+# endif()
 
 #-----------------------------------------------------------------------------
 #                               SOURCES
@@ -141,23 +118,15 @@ if(APPLE)
 endif(APPLE)
 
 # create your executable with
-add_executable(voidstar ${GUI_TYPE} ${SOURCES})
+add_executable(${PROJECT_NAME} ${GUI_TYPE} ${SOURCES})
 
-add_dependencies(voidstar shaders_out)
+add_dependencies(${PROJECT_NAME} shaders_out)
 
 # create a library with
 # add_library(my_lib SHARED ${SOURCES})
 
-if(EMSCRIPTEN)
-  add_definitions( -s USE_GLFW=3 )
-#  target_link_libraries(voidstar
-#    m
-#    ${OPENGL_gl_LIBRARY}
-#    GLEW
-#    glfw
-#  )
-else(EMSCRIPTEN)
-  target_link_libraries(voidstar
+if (NOT EMSCRIPTEN)
+  target_link_libraries(${PROJECT_NAME}
     m
     ${OPENGL_gl_LIBRARY}
     ${GLEW_LIBRARIES}
@@ -165,8 +134,13 @@ else(EMSCRIPTEN)
     ${EXTRA_LIBS}
   )
 string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
-set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
-endif(EMSCRIPTEN)
+set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
+endif()
+
+if(EMSCRIPTEN)
+  set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
+  set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-s USE_GLFW=3 -s USE_WEBGL2=1 -s FULL_ES3=1")
+endif()
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING
@@ -183,7 +157,7 @@ endif(EMSCRIPTEN)
 # OR
 # install(PROGRAMS myexecutable DESTINATION <dir>)
 
-install(TARGETS voidstar RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 include(uninstall)
 # add_subdirectory("${CMAKE_SOURCE_DIR}/cmake/cpack") # enable packaging with CPack
