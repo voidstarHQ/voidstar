@@ -71,7 +71,9 @@ GlfwManager::init() {
     glfwSetKeyCallback(window_, onKeyEvent);
 
     // GLFW settings
+#ifndef __EMSCRIPTEN__
     glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
+#endif
     glfwSetCursorPos(window_, 0, 0);
     glfwSetScrollCallback(window_, onScroll);
     glfwMakeContextCurrent(window_);
