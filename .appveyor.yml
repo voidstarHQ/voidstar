@@ -11,6 +11,25 @@ platform:
   - x64
   - x86
 
+install:
+  - set root_dir=%cd%
+  - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat amd64
+  - set PATH=%PATH%;C:\"Program Files (x86)"\7-zip
+
+  - SET glew_url="https://netcologne.dl.sourceforge.net/project/glew/glew/2.0.0/glew-2.0.0.zip"
+  - SET glew_zip="%root_dir%\third_party\glew-2.0.0.zip"
+  - SET glew_dir="%root_dir%\third_party\glew-2.0.0"
+  - powershell -Command "(New-Object Net.WebClient).DownloadFile('%glew_url%', '%glew_zip%')"
+  - 7z x -o"%root_dir%/third_party" "%glew_zip%"
+  - SET glew_install_prefix="%root_dir%/third_party/glew-bin"
+  - cd %glew_dir%
+  - cd build
+  - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="%glew_install_prefix%" ./cmake
+  - nmake
+  - cmake -P cmake_install.cmake
+
+  - cd %root_dir%
+
 before_build:
   - cmake --version || true
   - g++ --version || true
