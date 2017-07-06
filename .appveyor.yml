@@ -1,29 +1,34 @@
 version: "{build}"
 
-os: Visual Studio 2017
+os: Visual Studio 2015
 
+clone_folder: c:/projects/Voidstar
 shallow_clone: true
 
+configuration: Release
 platform:
   - x64
   - x86
 
-configuration:
-  - Debug
-  - Release
+build:
+  verbosity: minimal
+  project: c:/projects/Voidstar/build/voidstar.sln
 
 before_build:
-  # - nuget install glew
-  # - nuget install glm
-  # - nuget install glfw
-  - nuget restore
   - cmake --version || true
   - g++ --version || true
   - clang++ --version || true
-
-build_script:
-  - bash ./configure
+  # - nuget install glew
+  # - nuget install glm
+  # - nuget install glfw
+  # - nuget restore
+  - cd c:/projects/Voidstar
+  - mkdir build
   - cd build
-  - make
+  - cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release ..
 
-test: off
+on_success:
+  - appveyor PushArtifact c:/projects/Voidstar/build/voidstar.exe
+
+on_failure:
+  - nuget install glew
