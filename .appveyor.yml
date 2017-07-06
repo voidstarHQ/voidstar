@@ -19,7 +19,7 @@ install:
   - SET glew_url="https://netcologne.dl.sourceforge.net/project/glew/glew/2.0.0/glew-2.0.0.zip"
   - SET glew_zip="%root_dir%\third_party\glew-2.0.0.zip"
   - SET glew_dir="%root_dir%\third_party\glew-2.0.0"
-  - ps: (New-Object System.Net.WebClient).DownloadString("%glew_url%") > "%glew_zip%"
+  - powershell -Command "(New-Object System.Net.WebClient).DownloadString('%glew_url%') > '%glew_zip%'"
   # - powershell -Command "(New-Object Net.WebClient).DownloadFile('%glew_url%', '%glew_zip%')"
   - 7z x -o"%root_dir%/third_party" "%glew_zip%"
   - SET glew_install_prefix="%root_dir%/third_party/glew-bin"
