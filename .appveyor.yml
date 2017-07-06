@@ -10,10 +10,6 @@ platform:
   - x64
   - x86
 
-build:
-  verbosity: minimal
-  project: c:/projects/Voidstar/build/voidstar.sln
-
 before_build:
   - cmake --version || true
   - g++ --version || true
@@ -27,9 +23,12 @@ before_build:
   - cd build
   - cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release ..
 
+build:
+  # verbosity: minimal
+  project: c:/projects/Voidstar/build/voidstar.sln
+
 on_success:
   - appveyor PushArtifact c:/projects/Voidstar/build/voidstar.exe
 
 on_failure:
   - nuget install glew
-
