@@ -16,7 +16,7 @@ install:
   # - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat amd64
   - set PATH=%PATH%;C:\"Program Files (x86)"\7-zip
 
-  - SET glew_zip="%root_dir%\glew-2.0.0.zip"
+  - SET glew_zip="glew-2.0.0.zip"
   - powershell -Command "(New-Object System.Net.WebClient).DownloadString('https://netcologne.dl.sourceforge.net/project/glew/glew/2.0.0/glew-2.0.0.zip') > '%glew_zip%'"
   - 7z x -o"%root_dir%" "%glew_zip%"
   - cd "%root_dir%\glew-2.0.0"
