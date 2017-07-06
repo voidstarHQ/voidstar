@@ -13,19 +13,15 @@ platform:
 
 install:
   - set root_dir=%cd%
-  - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat amd64
+  # - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat amd64
   - set PATH=%PATH%;C:\"Program Files (x86)"\7-zip
 
-  - SET glew_url="https://netcologne.dl.sourceforge.net/project/glew/glew/2.0.0/glew-2.0.0.zip"
   - SET glew_zip="%root_dir%\glew-2.0.0.zip"
-  - SET glew_dir="%root_dir%\glew-2.0.0"
-  - powershell -Command "(New-Object System.Net.WebClient).DownloadString('%glew_url%') > '%glew_zip%'"
-  # - powershell -Command "(New-Object Net.WebClient).DownloadFile('%glew_url%', '%glew_zip%')"
+  - powershell -Command "(New-Object System.Net.WebClient).DownloadString('https://netcologne.dl.sourceforge.net/project/glew/glew/2.0.0/glew-2.0.0.zip') > '%glew_zip%'"
   - 7z x -o"%root_dir%" "%glew_zip%"
-  - SET glew_install_prefix="%root_dir%/glew-bin"
-  - cd %glew_dir%
+  - cd "%root_dir%\glew-2.0.0"
   - cd build
-  - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="%glew_install_prefix%" ./cmake
+  - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="%root_dir%\glew-2.0.0\glew-bin" ./cmake
   - nmake
   - cmake -P cmake_install.cmake
 
