@@ -19,7 +19,8 @@ install:
   - SET glew_url="https://netcologne.dl.sourceforge.net/project/glew/glew/2.0.0/glew-2.0.0.zip"
   - SET glew_zip="%root_dir%\third_party\glew-2.0.0.zip"
   - SET glew_dir="%root_dir%\third_party\glew-2.0.0"
-  - powershell -Command "(New-Object Net.WebClient).DownloadFile('%glew_url%', '%glew_zip%')"
+  - ps: (New-Object System.Net.WebClient).DownloadString("%glew_url%") > "%glew_zip%"
+  # - powershell -Command "(New-Object Net.WebClient).DownloadFile('%glew_url%', '%glew_zip%')"
   - 7z x -o"%root_dir%/third_party" "%glew_zip%"
   - SET glew_install_prefix="%root_dir%/third_party/glew-bin"
   - cd %glew_dir%
@@ -28,16 +29,14 @@ install:
   - nmake
   - cmake -P cmake_install.cmake
 
+  # - choco install glfw3
+
   - cd %root_dir%
 
 before_build:
   - cmake --version || true
   - g++ --version || true
   - clang++ --version || true
-  # - nuget install glew
-  # - nuget install glm
-  # - nuget install glfw
-  # - nuget restore
   - cd c:\projects\Voidstar
   - mkdir build
   - cd build
@@ -51,5 +50,4 @@ on_success:
   - appveyor PushArtifact c:\projects\Voidstar\build\voidstar.exe
 
 on_failure:
-  - ls -lha c:\projects\Voidstar\build
-  # - nuget install glew
+  - ls -lha
