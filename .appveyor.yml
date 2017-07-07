@@ -18,6 +18,8 @@ install:
 
   - SET glew_zip="glew-2.0.0.zip"
   - powershell -Command "(New-Object System.Net.WebClient).DownloadString('https://netcologne.dl.sourceforge.net/project/glew/glew/2.0.0/glew-2.0.0.zip') > '%glew_zip%'"
+  - file "%glew_zip%" || true
+  - unzip -l "%glew_zip%" || true
   - 7z x -o"%root_dir%" "%glew_zip%"
   - cd "%root_dir%\glew-2.0.0"
   - cd build
