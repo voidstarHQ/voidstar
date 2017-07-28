@@ -232,7 +232,7 @@ void PlyFile::write_binary_internal(std::ostream & os)
                         memcpy(listSize, &p.listCount, sizeof(uint32_t));
                         size_t dummyCount = 0;
                         write_property_binary(p.listType, os, listSize, dummyCount);
-                        for (int j = 0; j < p.listCount; ++j)
+                        for (size_t j = 0; j < p.listCount; ++j)
                         {
                             write_property_binary(p.propertyType, os, (cursor->data + cursor->offset), cursor->offset);
                         }
@@ -290,7 +290,7 @@ void PlyFile::write_ascii_internal(std::ostream & os)
                     if (p.listCount >= 1)
                     {
                         os << p.listCount;
-                        for (int j = 0; j < p.listCount; ++j)
+                        for (size_t j = 0; j < p.listCount; ++j)
                         {
                             os << " ";
                             write_property_ascii(p.propertyType, os, (cursor->data + cursor->offset), cursor->offset);

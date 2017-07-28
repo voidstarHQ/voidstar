@@ -72,11 +72,11 @@ namespace tinyply
 
 		PlyProperty(std::istream & is);
 		PlyProperty(Type type, const std::string & name) : propertyType(type), isList(false), name(name) {}
-        PlyProperty(Type list_type, Type prop_type, const std::string & name, int listCount) : listType(list_type), propertyType(prop_type), isList(true), listCount(listCount), name(name) {}
+        PlyProperty(Type list_type, Type prop_type, const std::string & name, size_t listCount) : listType(list_type), propertyType(prop_type), isList(true), listCount(listCount), name(name) {}
 
 		Type listType, propertyType;
 		bool isList;
-		int listCount = 0;
+		size_t listCount = 0;
 		std::string name;
 	};
 
