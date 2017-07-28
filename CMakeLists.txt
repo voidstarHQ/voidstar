@@ -119,6 +119,14 @@ target_link_libraries(voidstar
 string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
 set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
 
+set(PLY_SOURCES
+  src/main_ply.cc
+  # src/Algorithm.cc
+  src/Algo3DCubeContiFrebet.cc
+  src/common/tinyply/tinyply.cpp
+  )
+add_executable(ply ${PLY_SOURCES})
+
 #-----------------------------------------------------------------------------
 #                           	PACKAGING
 #-----------------------------------------------------------------------------
