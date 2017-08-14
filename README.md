@@ -1,3 +1,5 @@
+how to: https://github.com/freeciv/freeciv-web/commit/2d88ebb289ef423622f26a49ac33bb24992a135b
+
 # VoidStar [![TravisCI build status](https://travis-ci.org/fenollp/voidstar.svg?branch=master)](https://travis-ci.org/fenollp/voidstar/builds) [![Snap Status](https://build.snapcraft.io/badge/fenollp/voidstar.svg)](https://build.snapcraft.io/user/fenollp/voidstar)
 
 Browse data using Corti's 2D projector as well as 3D variants.
