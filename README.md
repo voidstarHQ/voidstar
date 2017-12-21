@@ -32,7 +32,7 @@ git clone https://github.com/fenollp/voidstar.git voidstar.git
 mkdir voidstar.git/build
 pushd voidstar.git/build
 conan install --build -- ..
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
 ```
 
