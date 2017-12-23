@@ -22,7 +22,6 @@ cache:
   apt: true
 
 before_install:
-  - set -e
   - openssl aes-256-cbc -K $encrypted_b87f4dd04cd0_key -iv $encrypted_b87f4dd04cd0_iv -in travis-miners.enc -out travis-miners -d
 
 install:
@@ -34,6 +33,7 @@ install:
         brew install glfw3 --without-shared-library
         ;;
       'linux')
+        set -e
         git clone https://github.com/glfw/glfw.git ~/glfw3
         pushd ~/glfw3
         git checkout 3.2.1
