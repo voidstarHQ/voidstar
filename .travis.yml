@@ -1,9 +1,8 @@
+sudo: false
 language: cpp
-
 compiler:
   - clang
   - gcc
-
 os:
   - osx
   - linux
@@ -28,9 +27,9 @@ install:
   - |
     case "$TRAVIS_OS_NAME" in
       'osx')
-        brew update
-        brew install glew glm
-        brew install glfw3 --without-shared-library
+        travis_wait 15 brew update
+        travis_wait 15 brew install glew glm
+        travis_wait 15 brew install glfw3 --without-shared-library
         ;;
       'linux')
         set -e
@@ -39,9 +38,9 @@ install:
         git checkout 3.2.1
         mkdir build
         pushd build
-        cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
-        cmake --build .
-        sudo make install
+        travis_wait 15 cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
+        travis_wait 15 cmake --build .
+        travis_wait 15 sudo make install
         popd
         popd
         ;;
