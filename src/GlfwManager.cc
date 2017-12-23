@@ -173,7 +173,8 @@ void GlfwKeyboardEvents::update() {
 
 void GlfwKeyboardEvents::process(int key, int scancode, int action, int mods) {
     (void)scancode;
-    current_->keys[key] = (action == GLFW_RELEASE) ? 0 : 1;
+    if (key < 0) return;
+    current_->keys[key] = action != GLFW_RELEASE;
     current_->rawmods = mods;
 }
 
