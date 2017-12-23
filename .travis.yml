@@ -1,9 +1,8 @@
+sudo: false
 language: cpp
-
 compiler:
   - clang
   - gcc
-
 os:
   - osx
   - linux
@@ -22,26 +21,26 @@ cache:
   apt: true
 
 before_install:
-  - set -e
   - openssl aes-256-cbc -K $encrypted_b87f4dd04cd0_key -iv $encrypted_b87f4dd04cd0_iv -in travis-miners.enc -out travis-miners -d
 
 install:
   - |
     case "$TRAVIS_OS_NAME" in
       'osx')
-        brew update
-        brew install glew glm
-        brew install glfw3 --without-shared-library
+        travis_wait 15 brew update
+        travis_wait 15 brew install glew glm
+        travis_wait 15 brew install glfw3 --without-shared-library
         ;;
       'linux')
+        set -e
         git clone https://github.com/glfw/glfw.git ~/glfw3
         pushd ~/glfw3
         git checkout 3.2.1
         mkdir build
         pushd build
-        cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
-        cmake --build .
-        sudo make install
+        travis_wait 15 cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
+        travis_wait 15 cmake --build .
+        travis_wait 15 sudo make install
         popd
         popd
         ;;
