@@ -23,7 +23,7 @@ std::shared_ptr<Loader>
 loaderFromUri(const std::string& uri) {
     auto data = Uri<>::parse(uri);
     for (const auto& pair : loaders) {
-        auto& scheme = pair.first;
+        const auto& scheme = pair.first;
         if (data.protocol == scheme) {
             std::cout << "Loading file " << uri << std::endl;
             return pair.second(uri);

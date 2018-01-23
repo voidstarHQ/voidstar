@@ -1,5 +1,3 @@
-#include <fstream>
-
 #include <FileLoader.hh>
 
 void
