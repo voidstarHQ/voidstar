@@ -1,33 +1,32 @@
 #include <vector>
 #include <functional>
 #include <iostream>
-#include <unistd.h>
 
-#include <Uri.hh>
 #include <Loader.hh>
 #include <FileLoader.hh>
+#include <FdFileLoader.hh>
 #include <MmapFileLoader.hh>
 
-using LoaderFactoryFunc = std::function<std::shared_ptr<Loader>(const std::string&)>;
+using SomeLoader = std::shared_ptr<Loader>;
+using SomeLoaderFactoryFunc = std::function<SomeLoader(const std::string&)>;
 
-#define LOADER(Body) [](std::string uri) -> std::shared_ptr<Loader> { Body }
-std::vector<std::pair<std::string, LoaderFactoryFunc>> loaders = {
-    {"file", LOADER( return std::make_shared<FileLoader>(uri); )},
-    {"", LOADER(
-            if (uri == "-") return std::make_shared<FileLoader>(STDIN_FILENO);
-            else return std::make_shared<MmapFileLoader>(uri);
-    )},
-};
+#define LOADER(Kind) [](std::string uri) -> SomeLoader { return Kind::make(uri); }
 
-std::shared_ptr<Loader>
+SomeLoader
 loaderFromUri(const std::string& uri) {
-    auto data = Uri<>::parse(uri);
-    for (const auto& pair : loaders) {
-        const auto& scheme = pair.first;
-        if (data.protocol == scheme) {
+    static const std::vector<SomeLoaderFactoryFunc> loaders = {
+        {LOADER(FdFileLoader),
+         LOADER(FileLoader),
+         LOADER(MmapFileLoader)
+        }
+    };
+
+    for (const auto& loader : loaders) {
+        auto maybe_loader = loader(uri);
+        if (NULL != maybe_loader) {
             std::cout << "Loading file " << uri << std::endl;
-            return pair.second(uri);
+            return maybe_loader;
         }
     }
-    throw std::runtime_error("No loader for file " + uri);
+     throw std::runtime_error("No loader for file " + uri);
 }

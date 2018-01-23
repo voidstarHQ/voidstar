@@ -35,20 +35,4 @@ protected:
     size_t offset_;
 };
 
-class NullLoader : public Loader {
-public:
-    NullLoader() : Loader(false) {}
-    virtual ~NullLoader() {}
-
-    virtual void load() {}
-    virtual void free() {}
-
-    virtual const u8* data() {
-        throw std::runtime_error("Unexpected call");
-    }
-    virtual const u8* dataChunk(size_t offset __unused, size_t size __unused) {
-        throw std::runtime_error("Unexpected call");
-    }
-};
-
 std::shared_ptr<Loader> loaderFromUri(const std::string& uri);

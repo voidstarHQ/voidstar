@@ -3,6 +3,14 @@
 #include <sys/mman.h>
 
 #include <MmapFileLoader.hh>
+#include <Uri.hh>
+
+std::shared_ptr<MmapFileLoader>
+MmapFileLoader::make(const std::string& uri) {
+    if ("" == Uri<>::parse(uri).protocol)
+        return std::make_shared<MmapFileLoader>(uri);
+    return NULL;
+}
 
 void
 MmapFileLoader::load() {

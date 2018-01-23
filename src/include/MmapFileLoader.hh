@@ -9,6 +9,7 @@ public:
     MmapFileLoader(const std::string& path) : Loader(false), fd_(-1), data_(nullptr), path_(path) {}
     virtual ~MmapFileLoader() { if (data_) free(); }
 
+    static std::shared_ptr<MmapFileLoader> make(const std::string& uri);
     virtual void load();
     virtual void free();
 
