@@ -71,8 +71,8 @@ set(SOURCES
     src/Scene2D.cc
 
     src/FileLoader.cc
-    src/FdFileLoader.cc
-    src/MmapFileLoader.cc
+    src/FdLoader.cc
+    src/MmapLoader.cc
 
     src/Algo2DEntropy.cc
     src/Algo2DFourColors.cc

@@ -5,12 +5,12 @@
 #include <Types.hh>
 #include <Loader.hh>
 
-class FdFileLoader : public Loader {
+class FdLoader : public Loader {
 public:
-    FdFileLoader(int fd) : Loader(true), fd_(fd) {}
-    virtual ~FdFileLoader() {}
+    FdLoader(int fd) : Loader(true), fd_(fd) {}
+    virtual ~FdLoader() {}
 
-    static std::shared_ptr<FdFileLoader> make(const std::string& uri);
+    static std::shared_ptr<FdLoader> make(const std::string& uri);
     virtual void load();
     virtual void free();
 

@@ -4,8 +4,8 @@
 
 #include <Loader.hh>
 #include <FileLoader.hh>
-#include <FdFileLoader.hh>
-#include <MmapFileLoader.hh>
+#include <FdLoader.hh>
+#include <MmapLoader.hh>
 
 using SomeLoader = std::shared_ptr<Loader>;
 using SomeLoaderFactoryFunc = std::function<SomeLoader(const std::string&)>;
@@ -13,9 +13,9 @@ using SomeLoaderFactoryFunc = std::function<SomeLoader(const std::string&)>;
 SomeLoader
 Loader::fromURI(const std::string& uri) {
     static const std::vector<SomeLoaderFactoryFunc> loaders = {
-        {FdFileLoader::make,
+        {FdLoader::make,
          FileLoader::make,
-         MmapFileLoader::make
+         MmapLoader::make
         }
     };
 

@@ -6,7 +6,7 @@
 #include <Arguments.hh>
 #include <Algorithm.hh>
 #include <FileLoader.hh>
-#include <MmapFileLoader.hh>
+#include <MmapLoader.hh>
 #include <Manager.hh>
 #include <DataRange.hh>
 #include <Scene.hh>
