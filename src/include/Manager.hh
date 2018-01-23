@@ -25,7 +25,7 @@ public:
     virtual std::shared_ptr<Events> getEvents() = 0;
     virtual std::shared_ptr<Mouse> getMouse() = 0;
 
-    void loadFile(size_t index);
+    bool loadFile(size_t index);
     void loadFile(const std::string& filename);
     void loadNextFile() { loadFile((fileIndex_ + 1) % args_->paths.size()); }
     void loadPrevFile() { loadFile((fileIndex_ - 1) % args_->paths.size()); }

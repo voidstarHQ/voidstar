@@ -13,7 +13,7 @@ MmapLoader::make(const std::string& uri) {
         if (!stat(uri.c_str(), &info))
             if (~info.st_mode & S_IFDIR)
                 return std::make_shared<MmapLoader>(uri);
-    return NULL;
+    return nullptr;
 }
 
 void

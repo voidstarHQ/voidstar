@@ -26,7 +26,10 @@ main(int argc, char* argv[]) {
         return 1;
     }
     manager->init();
-    manager->loadFile(0);
+    if (!manager->loadFile(0)) {
+        std::cerr << "no usable paths\n";
+        return 1;
+    }
     manager->run();
 
     return 0;

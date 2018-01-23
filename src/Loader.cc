@@ -21,10 +21,10 @@ Loader::fromURI(const std::string& uri) {
 
     for (const auto& loader : loaders) {
         auto maybe_loader = loader(uri);
-        if (NULL != maybe_loader) {
+        if (nullptr != maybe_loader) {
             std::cout << "Loading file " << uri << std::endl;
             return maybe_loader;
         }
     }
-     throw std::runtime_error("No loader for file " + uri);
+    return nullptr;
 }

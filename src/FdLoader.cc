@@ -6,7 +6,7 @@ std::shared_ptr<FdLoader>
 FdLoader::make(const std::string& uri) {
     if (!strncmp("-", uri.c_str(), 1))
         return std::make_shared<FdLoader>(STDIN_FILENO);
-    return NULL;
+    return nullptr;
 }
 
 void

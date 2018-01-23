@@ -7,7 +7,7 @@ std::shared_ptr<FileLoader>
 FileLoader::make(const std::string& uri) {
     if (!strncmp("file", Uri<>::parse(uri).protocol.c_str(), 4))
         return std::make_shared<FileLoader>(uri);
-    return NULL;
+    return nullptr;
 }
 
 void
