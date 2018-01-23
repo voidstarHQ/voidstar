@@ -85,3 +85,4 @@ https://github.com/fenollp/voidstar/issues/7
 ### iOS
 
 https://github.com/fenollp/voidstar/issues/8
+https://scan.coverity.com/projects/fenollp-voidstar/builds/new?tab=travis_ci
