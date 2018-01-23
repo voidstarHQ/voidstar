@@ -6,7 +6,7 @@
 #include <Uri.hh>
 #include <Loader.hh>
 #include <FileLoader.hh>
-#include <MmapLoader.hh>
+#include <MmapFileLoader.hh>
 
 using LoaderFactoryFunc = std::function<std::shared_ptr<Loader>(const std::string&)>;
 

@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
-#include <MmapLoader.hh>
+#include <MmapFileLoader.hh>
 
 void
 MmapFileLoader::load() {
