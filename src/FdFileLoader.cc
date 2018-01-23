@@ -2,7 +2,7 @@
 
 std::shared_ptr<FdFileLoader>
 FdFileLoader::make(const std::string& uri) {
-    if ("-" == uri)
+    if (std::string("-") == uri)
         return std::make_shared<FdFileLoader>(STDIN_FILENO);
     return NULL;
 }
