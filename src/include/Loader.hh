@@ -22,11 +22,11 @@ public:
         return chunk;
     }
 
+    static std::shared_ptr<Loader> fromURI(const std::string& uri);
+
     void offset(size_t offset) { offset_ = offset; }
     size_t offset() const { return offset_; }
-
     size_t size() const { return size_; }
-
     bool isStream() { return stream_; }
 
 protected:
@@ -34,5 +34,3 @@ protected:
     size_t size_;
     size_t offset_;
 };
-
-std::shared_ptr<Loader> loaderFromUri(const std::string& uri);

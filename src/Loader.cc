@@ -13,7 +13,7 @@ using SomeLoaderFactoryFunc = std::function<SomeLoader(const std::string&)>;
 #define LOADER(Kind) [](std::string uri) -> SomeLoader { return Kind::make(uri); }
 
 SomeLoader
-loaderFromUri(const std::string& uri) {
+Loader::fromURI(const std::string& uri) {
     static const std::vector<SomeLoaderFactoryFunc> loaders = {
         {LOADER(FdFileLoader),
          LOADER(FileLoader),
