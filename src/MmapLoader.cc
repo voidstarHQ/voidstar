@@ -7,7 +7,7 @@
 
 std::shared_ptr<MmapLoader>
 MmapLoader::make(const std::string& uri) {
-    if ("" == Uri<>::parse(uri).protocol)
+    if (Uri<>::parse(uri).protocol.empty())
         return std::make_shared<MmapLoader>(uri);
     return NULL;
 }

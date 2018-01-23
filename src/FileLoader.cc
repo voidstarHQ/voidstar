@@ -1,9 +1,11 @@
+#include <cstring>
+
 #include <FileLoader.hh>
 #include <Uri.hh>
 
 std::shared_ptr<FileLoader>
 FileLoader::make(const std::string& uri) {
-    if ("file" == Uri<>::parse(uri).protocol)
+    if (!strncmp("file", Uri<>::parse(uri).protocol.c_str(), 4))
         return std::make_shared<FileLoader>(uri);
     return NULL;
 }
