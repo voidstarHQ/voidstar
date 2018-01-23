@@ -10,14 +10,12 @@
 using SomeLoader = std::shared_ptr<Loader>;
 using SomeLoaderFactoryFunc = std::function<SomeLoader(const std::string&)>;
 
-#define LOADER(Kind) [](std::string uri) -> SomeLoader { return Kind::make(uri); }
-
 SomeLoader
 Loader::fromURI(const std::string& uri) {
     static const std::vector<SomeLoaderFactoryFunc> loaders = {
-        {LOADER(FdFileLoader),
-         LOADER(FileLoader),
-         LOADER(MmapFileLoader)
+        {FdFileLoader::make,
+         FileLoader::make,
+         MmapFileLoader::make
         }
     };
 
