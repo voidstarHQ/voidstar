@@ -1,14 +1,18 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 
 #include <MmapLoader.hh>
 #include <Uri.hh>
 
 std::shared_ptr<MmapLoader>
 MmapLoader::make(const std::string& uri) {
+    struct stat info;
     if (Uri<>::parse(uri).protocol.empty())
-        return std::make_shared<MmapLoader>(uri);
+        if (!stat(uri.c_str(), &info))
+            if (~info.st_mode & S_IFDIR)
+                return std::make_shared<MmapLoader>(uri);
     return NULL;
 }
 
