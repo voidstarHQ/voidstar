@@ -1,6 +1,7 @@
 #include <vector>
 #include <functional>
 #include <iostream>
+#include <unistd.h>
 
 #include <Uri.hh>
 #include <Loader.hh>
@@ -13,7 +14,7 @@ using LoaderFactoryFunc = std::function<std::shared_ptr<Loader>(const std::strin
 std::vector<std::pair<std::string, LoaderFactoryFunc>> loaders = {
     {"file", LOADER( return std::make_shared<FileLoader>(uri); )},
     {"", LOADER(
-            if (uri == "-") return std::make_shared<FileLoader>(0);
+            if (uri == "-") return std::make_shared<FileLoader>(STDIN_FILENO);
             else return std::make_shared<MmapFileLoader>(uri);
     )},
 };
