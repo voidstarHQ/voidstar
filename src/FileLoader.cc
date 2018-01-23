@@ -1,11 +1,15 @@
-#include <fstream>
-
 #include <FileLoader.hh>
+#include <Uri.hh>
+
+std::shared_ptr<FileLoader>
+FileLoader::make(const std::string& uri) {
+    if ("file" == Uri<>::parse(uri).protocol)
+        return std::make_shared<FileLoader>(uri);
+    return nullptr;
+}
 
 void
 FileLoader::load() {
-    if (fd_ != -1)
-        throw std::runtime_error("Unsupported fd usage");
     is_.open(path_, std::ios::in | std::ios::binary);
     if (!is_.good())
         throw std::invalid_argument("Failed to open file");

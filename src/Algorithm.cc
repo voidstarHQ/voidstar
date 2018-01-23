@@ -22,7 +22,6 @@ Algorithm::use(std::shared_ptr<Loader> loader, std::shared_ptr<DataRange> range)
     if (loader_ && loader != loader_)
         std::cerr << "deleting loader" << std::endl;
     loader_ = loader;
-    // FIXME: implement sliding window for stream based input
     if (loader_->size() < min_data_size_)
         throw std::range_error("this algorithm needs more data");
     if (range_ && range_ != range)

@@ -57,6 +57,7 @@ script:
   - pushd build && make && popd
   - ./build/voidstar --help
   - ./build/voidstar -l
+# - ./build/voidstar $(echo */)
   - ./configure -c "$(basename $CXX)" -b RELEASE
   - pushd build && make VERBOSE=1 -j && popd
   - ./build/voidstar -h

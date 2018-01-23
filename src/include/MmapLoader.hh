@@ -3,12 +3,13 @@
 #include <string>
 #include <Loader.hh>
 
-class MmapFileLoader : public Loader {
+class MmapLoader : public Loader {
 public:
-    MmapFileLoader(int fd) : Loader(true), fd_(fd), data_(nullptr) {}
-    MmapFileLoader(const std::string& path) : Loader(false), fd_(-1), data_(nullptr), path_(path) {}
-    virtual ~MmapFileLoader() { if (data_) free(); }
+    MmapLoader(int fd) : Loader(true), fd_(fd), data_(nullptr) {}
+    MmapLoader(const std::string& path) : Loader(false), fd_(-1), data_(nullptr), path_(path) {}
+    virtual ~MmapLoader() { if (data_) free(); }
 
+    static std::shared_ptr<MmapLoader> make(const std::string& uri);
     virtual void load();
     virtual void free();
 

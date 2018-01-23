@@ -17,7 +17,7 @@ struct Arguments {
           spin_shape(false)
         {}
 
-    std::vector<std::string> input;
+    std::vector<std::string> paths;
     std::string name;
     std::string algo;
     std::string manager;

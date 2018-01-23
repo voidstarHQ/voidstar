@@ -7,10 +7,10 @@
 
 class FileLoader : public Loader {
 public:
-    FileLoader(int fd) : Loader(true), fd_(fd) {}
-    FileLoader(const std::string& path) : Loader(false), fd_(-1), path_(path) {}
+    FileLoader(const std::string& path) : Loader(false), path_(path) {}
     virtual ~FileLoader() {}
 
+    static std::shared_ptr<FileLoader> make(const std::string& uri);
     virtual void load();
     virtual void free();
 
@@ -18,7 +18,6 @@ public:
     virtual const u8* dataChunk(size_t pos, size_t size);
 
 protected:
-    int fd_;
     std::string path_;
     std::ifstream is_;
     std::string data_;

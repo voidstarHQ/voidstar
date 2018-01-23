@@ -152,9 +152,9 @@ parseArgs(int argc, char *argv[]) {
     }
 
     for (int i = optind; i < argc; ++i)
-        args->input.push_back(argv[i]);
+        args->paths.push_back(argv[i]);
 
-    if (!args->input.size()) {
+    if (!args->paths.size()) {
         std::cerr << "missing file to process" << std::endl;
         usage(argv[0]);
         return NULL;

@@ -22,11 +22,11 @@ public:
         return chunk;
     }
 
+    static std::shared_ptr<Loader> fromURI(const std::string& uri);
+
     void offset(size_t offset) { offset_ = offset; }
     size_t offset() const { return offset_; }
-
     size_t size() const { return size_; }
-
     bool isStream() { return stream_; }
 
 protected:
@@ -34,21 +34,3 @@ protected:
     size_t size_;
     size_t offset_;
 };
-
-class NullLoader : public Loader {
-public:
-    NullLoader() : Loader(false) {}
-    virtual ~NullLoader() {}
-
-    virtual void load() {}
-    virtual void free() {}
-
-    virtual const u8* data() {
-        throw std::runtime_error("Unexpected call");
-    }
-    virtual const u8* dataChunk(size_t offset __unused, size_t size __unused) {
-        throw std::runtime_error("Unexpected call");
-    }
-};
-
-std::shared_ptr<Loader> loaderFromUri(const std::string& uri);
