@@ -15,8 +15,8 @@ Manager::loadScene(std::shared_ptr<Scene> scene) {
 
 void
 Manager::loadFile(const std::string& filename) {
-    args_->input.push_back(filename);
-    loadFile(args_->input.size() - 1);
+    args_->paths.push_back(filename);
+    loadFile(args_->paths.size() - 1);
 }
 
 void
@@ -27,7 +27,7 @@ Manager::loadFile(size_t index) {
     fileIndex_ = index;
     // TODO: remove previous loader instance from scene.
     //       properly define who owns the variable and its longevity
-    auto loader = Loader::fromURI(args_->input[index]);
+    auto loader = Loader::fromURI(args_->paths[index]);
     loader->load();
     auto range = DataRange::create(args_->range_begin, args_->range_end);
 
