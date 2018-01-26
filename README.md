@@ -1,4 +1,4 @@
-# VoidStar [![TravisCI build status](https://travis-ci.org/fenollp/voidstar.svg?branch=master)](https://travis-ci.org/fenollp/voidstar/builds) [![Snap Status](https://build.snapcraft.io/badge/fenollp/voidstar.svg)](https://build.snapcraft.io/user/fenollp/voidstar)
+# VoidStar [![TravisCI build status](https://travis-ci.org/fenollp/voidstar.svg?branch=master)](https://travis-ci.org/fenollp/voidstar/builds) [![Snap Status](https://build.snapcraft.io/badge/fenollp/voidstar.svg)](https://build.snapcraft.io/user/fenollp/voidstar) [Coverity](https://scan.coverity.com/projects/fenollp-voidstar?tab=overview)
 
 Browse data using Corti's 2D projector as well as 3D variants.
 
@@ -85,4 +85,3 @@ https://github.com/fenollp/voidstar/issues/7
 ### iOS
 
 https://github.com/fenollp/voidstar/issues/8
-https://scan.coverity.com/projects/fenollp-voidstar/builds/new?tab=travis_ci
