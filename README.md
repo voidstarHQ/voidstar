@@ -64,7 +64,7 @@ https://github.com/fenollp/voidstar/issues/2
 ### Debian
 
 ```shell
-sudo apt install libglew-dev libglm-dev libglfw3-dev
+sudo apt install libglew-dev libglm-dev libglfw3-dev pkg-config
 ```
 
 ### OSX

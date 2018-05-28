@@ -25,8 +25,8 @@ include_directories(${OpenGL_INCLUDE_DIR})
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 find_package(PkgConfig REQUIRED)
-pkg_search_module(GLFW REQUIRED glfw3)
-include_directories(${GLFW_INCLUDE_DIRS})
+find_package(glfw3 REQUIRED)
+include_directories(${GLFW3_INCLUDE_DIR})
 
 #-----------------------------------------------------------------------------
 #                           BUILD TYPES & FLAGS
@@ -114,11 +114,9 @@ target_link_libraries(voidstar
   m
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARIES}
-  ${GLFW_STATIC_LIBRARIES} # This needs manual addition of ${GLFW_STATIC_LDFLAGS}
+  glfw
   ${EXTRA_LIBS}
 )
-string(REPLACE ";" " " glfw_static_ldflags "${GLFW_STATIC_LDFLAGS}")
-set_property(TARGET voidstar APPEND_STRING PROPERTY LINK_FLAGS "${glfw_static_ldflags}")
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING
