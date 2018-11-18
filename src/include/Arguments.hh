@@ -13,7 +13,7 @@ struct Arguments {
           range_begin(0), range_end(0),
           fullscreen(false),
           keep_chrome(false),
-          sliding_window_length(2*1024), sliding_step(1024), move_window(false),
+          sliding_window_length(37*1024), sliding_step(1024), move_window(false),
           spin_shape(true)
         {}
 
