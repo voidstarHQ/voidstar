@@ -117,7 +117,7 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
     else if (events->keyDown('X'))
         camera_.offsetPosition(elapsedTime * move_speed_ * glm::vec3(0,1,0));
     if (events->keyPressed('O')) {
-        camera_.setPosition(glm::vec3(0, -0.1, 5));
+        camera_.setPosition(glm::vec3(0, -0.1, 3.8));
         camera_.lookAt(glm::vec3(0,0,4));
     }
     if (events->keyPressed(' '))
