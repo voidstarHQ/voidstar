@@ -21,7 +21,7 @@ usage(const char* prgname) {
               << " -w, --sliding      Length of sliding window" << std::endl
               << " -s, --slide-step   Amount of points slid" << std::endl
               << " -m, --move         Move sliding window forward" << std::endl
-              << " -n, --spin         Spin shape on itself" << std::endl
+              << " -n, --spin         Don't spin shape on itself" << std::endl
               << std::endl
               << " -b, --begin        begin offset for the range" << std::endl
               << " -e, --end          end offset for the range" << std::endl
@@ -96,7 +96,7 @@ parseArgs(int argc, char *argv[]) {
             args->move_window = true;
             break;
         case 'n':
-            args->spin_shape = true;
+            args->spin_shape = false;
             break;
         case 's':
             args->sliding_step = std::stoul(optarg);
