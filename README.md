@@ -25,12 +25,13 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 
 ```shell
 ./configure -d RELEASE && cd build && make
-./voidstar --move --spin ../data/*
+./voidstar --move ../data/*
 # Press H and L to switch between files
 # Use A W S D Z X and your mouse to move in the 3D space
 # Press F for full screen
 # Use the arrows to slide and enlarge the sliding window
-# Press M to slide the window to the end and SPACE to spin the shape
+# Press M to slide the window to the end
+# SPACE to toggle spinning the shape
 # Press O to reset the camera position
 # ESC to quit
 ```
