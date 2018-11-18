@@ -88,8 +88,11 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     std::cout << "#indices: " << Manager::size2str(indices_.size()) << std::endl;
     load_buffers();
 
-    camera_.setPosition(glm::vec3(0, 0, 4));
+    camera_.setPosition(glm::vec3(0, -0.1, 5));
+    camera_.lookAt(glm::vec3(0,0,4));
     camera_.setNearAndFarPlanes(0.1, 100.);
+   
+
 }
 
 bool
@@ -115,7 +118,10 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
         camera_.offsetPosition(elapsedTime * move_speed_ * -glm::vec3(0,1,0));
     else if (events->keyDown('X'))
         camera_.offsetPosition(elapsedTime * move_speed_ * glm::vec3(0,1,0));
-
+    if (events->keyPressed('O')) {
+        camera_.setPosition(glm::vec3(0, -0.1, 5));
+        camera_.lookAt(glm::vec3(0,0,4));
+    }
     if (events->keyPressed(' '))
         manager->args()->spin_shape = !manager->args()->spin_shape;
     if (events->keyPressed('M'))
