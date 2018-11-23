@@ -37,10 +37,12 @@ public:
 
     void slide_window_left() {
         sliding_window_offset_ = (sliding_window_offset_ > args_->sliding_step)
-            ? sliding_window_offset_ - args_->sliding_step
+            ? sliding_window_offset_ - args_->sliding_step_factor * args_->sliding_step
             : 0;
     }
-    void slide_window_right() { sliding_window_offset_ += args_->sliding_step; }
+    void slide_window_right() {
+        sliding_window_offset_ += args_->sliding_step_factor * args_->sliding_step;
+    }
     void slide_window_up() { sliding_window_length_ += args_->sliding_step; }
     void slide_window_down() {
         sliding_window_length_ = (sliding_window_length_ > args_->sliding_step)
