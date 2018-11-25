@@ -27,13 +27,15 @@ public:
 
     bool loadFile(size_t index);
     void loadFile(const std::string& filename);
-    void loadNextFile() { loadFile((fileIndex_ + 1) % args_->paths.size()); }
-    void loadPrevFile() { loadFile((fileIndex_ - 1) % args_->paths.size()); }
+    void loadNextFile() { loadFile((fileIndex_ + 1) % args_->paths.size()); reset_window(); }
+    void loadPrevFile() { loadFile((fileIndex_ - 1) % args_->paths.size()); reset_window(); }
 
     virtual void toggleFullscreen() = 0;
 
     std::shared_ptr<Arguments> args() const { return args_; }
     std::shared_ptr<Scene> scene() const { return scene_; }
+
+    void reset_window() { sliding_window_offset_ = 0; }
 
     void slide_window_left() {
         sliding_window_offset_ = (sliding_window_offset_ > args_->sliding_step)

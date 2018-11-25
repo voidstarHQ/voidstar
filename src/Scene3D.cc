@@ -133,6 +133,7 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
             manager->args()->sliding_step_factor = 1;
         }
     }
+
     if (manager->args()->move_window || selected_.size() == 0 || manager->slide_window()) {
         if (manager->args()->move_window)
             manager->slide_window_right();
