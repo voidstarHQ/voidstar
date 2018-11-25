@@ -31,6 +31,7 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 # Press F for full screen
 # Use the arrows to slide and enlarge the sliding window
 # Press M to slide the window to the end
+# Use > to slide faster, < to slow down
 # SPACE to toggle spinning the shape
 # Press O to reset the camera position
 # ESC to quit
