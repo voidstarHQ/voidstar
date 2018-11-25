@@ -176,7 +176,6 @@ void GlfwKeyboardEvents::process(int key, int scancode, int action, int mods) {
     if (key < 0) return;
     current_->keys[key] = action != GLFW_RELEASE;
     current_->rawmods = mods;
-    std::cout << "key: " << key << "mod: " << mods << std::endl;
 }
 
 void
