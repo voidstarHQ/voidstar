@@ -124,6 +124,16 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
         manager->args()->spin_shape = !manager->args()->spin_shape;
     if (events->keyPressed('M'))
         manager->args()->move_window = !manager->args()->move_window;
+    if (events->keyPressed('.')) { // '>'
+        manager->args()->sliding_step_factor *= 2;
+    }
+    if (events->keyPressed(',')) { // '<'
+        manager->args()->sliding_step_factor /= 2;
+        if (manager->args()->sliding_step_factor == 0) {
+            manager->args()->sliding_step_factor = 1;
+        }
+    }
+
     if (manager->args()->move_window || selected_.size() == 0 || manager->slide_window()) {
         if (manager->args()->move_window)
             manager->slide_window_right();
