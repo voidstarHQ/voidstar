@@ -39,6 +39,16 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 
 ## Installing
 
+### docker
+
+Known to work with
+* ubuntu 18.10 + docker 18.09.0
+
+```
+docker build -t void .
+./contained.sh
+```
+
 ### on MacOS
 
 1. Download one of the `osx` files of [the latest release](https://github.com/fenollp/voidstar/releases/latest)
