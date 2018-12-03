@@ -12,5 +12,4 @@ docker run --rm -it \
        -v /dev/input \
        -e XAUTHORITY=$XAUTH \
        void \
-       /app/build/voidstar \
        /app/build/voidstar
