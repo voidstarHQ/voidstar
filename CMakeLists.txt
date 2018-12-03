@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+cmake_policy(SET CMP0072 NEW)
 
 # set cmake module path, to search in cmake/modules first
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -112,7 +113,7 @@ add_dependencies(voidstar shaders_out)
 # you can link both with
 target_link_libraries(voidstar
   m
-  ${OPENGL_gl_LIBRARY}
+  ${OPENGL_LIBRARIES}
   ${GLEW_LIBRARIES}
   glfw
   ${EXTRA_LIBS}
