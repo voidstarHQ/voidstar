@@ -3,35 +3,19 @@ cmake_policy(SET CMP0072 NEW)
 
 # set cmake module path, to search in cmake/modules first
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-#-----------------------------------------------------------------------------
+
 #                               MODULES
-#-----------------------------------------------------------------------------
+
 include(static_analysis)
 #include(doxygen)
 #include(ccache)
-#-----------------------------------------------------------------------------
-#                           GENERAL CONFIGURATION
-#-----------------------------------------------------------------------------
-project(ProjectName CXX)
-#-----------------------------------------------------------------------------
-#                              DEPENDENCIES
-#-----------------------------------------------------------------------------
-# find your dependencies here !
-# ==> use cmake --help-module-list
-# ==> and cmake --help-module FindBoost to known which variables are set.
-# find_package(Boost COMPONENTS filesystem threads)
-# include_directories(${Boost_INCLUDE_DIRS})
-find_package(OpenGL REQUIRED)
-include_directories(${OpenGL_INCLUDE_DIR})
-find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
-find_package(PkgConfig REQUIRED)
-find_package(glfw3 REQUIRED)
-include_directories(${GLFW3_INCLUDE_DIR})
 
-#-----------------------------------------------------------------------------
+#                           GENERAL CONFIGURATION
+
+set(PROJECT_NAME voidstar)
+project(${PROJECT_NAME} CXX)
+
 #                           BUILD TYPES & FLAGS
-#-----------------------------------------------------------------------------
 
 include(sanitizers)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -O0")
@@ -42,14 +26,13 @@ else(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
 
-# strip binary in release mode
-if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
-    set(CMAKE_EXE_LINKER_FLAGS "-s")
-endif()
+# strip binary for release builds
+if (CMAKE_BUILD_TYPE STREQUAL Release)
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_STRIP} ${PROJECT_NAME})
+endif ()
 
-#-----------------------------------------------------------------------------
 #                               SOURCES
-#-----------------------------------------------------------------------------
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/resources)
 
@@ -94,30 +77,59 @@ set(SOURCES
     src/common/tdogl/Shader.cpp
 )
 
-if(APPLE)
-    #set(GUI_TYPE MACOSX_BUNDLE)
-    include_directories(/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/)
-    find_library(COREFOUNDATION_LIBRARY CoreFoundation)
-    mark_as_advanced(COREFOUNDATION_LIBRARY)
-    set(EXTRA_LIBS ${COREFOUNDATION_LIBRARY})
-endif(APPLE)
-
 # create your executable with
-add_executable(voidstar ${GUI_TYPE} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-add_dependencies(voidstar shaders_out)
+add_dependencies(${PROJECT_NAME} shaders_out)
 
 # create a library with
 # add_library(my_lib SHARED ${SOURCES})
 
+#                              DEPENDENCIES
+
+# find your dependencies here !
+# ==> use cmake --help-module-list
+# ==> and cmake --help-module FindBoost to known which variables are set.
+# find_package(Boost COMPONENTS filesystem threads)
+# include_directories(${Boost_INCLUDE_DIRS})
+
+find_package(PkgConfig REQUIRED)
+
+find_package(glfw3 REQUIRED)
+include_directories(${GLFW_INCLUDE_DIRS})
+link_libraries(${GLFW_LIBRARY_DIRS})
+
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIRS})
+
+find_package(GLEW REQUIRED)
+include_directories(${GLEW_INCLUDE_DIRS})
+
+if (APPLE)
+    find_library(COCOA_LIBRARY Cocoa)
+    find_library(OpenGL_LIBRARY OpenGL)
+    find_library(IOKIT_LIBRARY IOKit)
+    find_library(COREVIDEO_LIBRARY CoreVideo)
+    set(EXTRA_LIBS
+      ${COCOA_LIBRARY}
+      ${OpenGL_LIBRARY}
+      ${IOKIT_LIBRARY}
+      ${COREVIDEO_LIBRARY}
+      )
+endif (APPLE)
+
+if (WIN32)
+# nothing now
+endif (WIN32)
+
 # you can link both with
-target_link_libraries(voidstar
+target_link_libraries(${PROJECT_NAME}
   m
+  glfw
   ${OPENGL_LIBRARIES}
   ${GLEW_LIBRARIES}
-  glfw
   ${EXTRA_LIBS}
-)
+  )
 
 #-----------------------------------------------------------------------------
 #                           	PACKAGING
@@ -134,7 +146,7 @@ target_link_libraries(voidstar
 # OR
 # install(PROGRAMS myexecutable DESTINATION <dir>)
 
-install(TARGETS voidstar RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 include(uninstall)
 # add_subdirectory("${CMAKE_SOURCE_DIR}/cmake/cpack") # enable packaging with CPack
