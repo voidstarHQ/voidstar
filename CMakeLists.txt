@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
-cmake_policy(SET CMP0072 NEW)
+cmake_minimum_required(VERSION 3.10)
 
 # set cmake module path, to search in cmake/modules first
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -15,15 +14,21 @@ include(static_analysis)
 set(PROJECT_NAME voidstar)
 project(${PROJECT_NAME} CXX)
 
+set(CMAKE_VERBOSE_MAKEFILE 1)
+set(APP_VERSION_MAJOR 1)
+
 #                           BUILD TYPES & FLAGS
 
 include(sanitizers)
+
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Werror -O2")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++1y ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}")
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
-else(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
+else (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
 
 # strip binary for release builds
@@ -99,8 +104,8 @@ find_package(glfw3 REQUIRED)
 include_directories(${GLFW_INCLUDE_DIRS})
 link_libraries(${GLFW_LIBRARY_DIRS})
 
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIR})
+find_package(OpenGL REQUIRED COMPONENTS OpenGL)
+add_dependencies(${PROJECT_NAME} OpenGL::OpenGL)
 
 message(STATUS "OPENGL_INCLUDE_DIRS ${OPENGL_INCLUDE_DIRS}")
 message(STATUS "GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIRS}")
@@ -140,7 +145,7 @@ endif (WIN32)
 target_link_libraries(${PROJECT_NAME}
   m
   glfw
-  ${OPENGL_LIBRARIES}
+  OpenGL::OpenGL
   ${GLEW_LIBRARIES}
   ${EXTRA_LIBS}
   )
