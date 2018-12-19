@@ -88,6 +88,8 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     std::cout << "#indices: " << Manager::size2str(indices_.size()) << std::endl;
     load_buffers();
 
+    camera_.setPosition(glm::vec3(0, 0, 4));
+    camera_.setNearAndFarPlanes(0.1, 100.);
     // camera_.setPosition(glm::vec3(0, -0.1, 3));
     // camera_.lookAt(glm::vec3(0,0,4));
     // camera_.setNearAndFarPlanes(0.1, 100.);
