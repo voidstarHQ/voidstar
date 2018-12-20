@@ -8,23 +8,33 @@ Algo3DCubeContiFrebet::apply(Floats& vertices, Floats& colors, VertIndices& indi
 
     size_t size;
     const u8* data = loadDataRange(size);
-    // u8 x = data[0];
-    // u8 y = data[1];
 
-    for (size_t i = 2; i+3 < size; ++i) {
-        // u8 z = data[i];
-        Index id = i;//(y * width + x) * depth + z;
-        Index idx = id;//3 * id;
+    std::cerr << "#data: " << size << std::endl;
+    std::cerr << "#colors: " << colors.size() << std::endl;
 
-        colors[idx+0] = static_cast<float>(data[i+1]) / 255.0f;
-        colors[idx+1] = static_cast<float>(data[i+2]) / 255.0f;
-        colors[idx+2] = static_cast<float>(data[i+3]) / 255.0f;
-        std::cout << id << " " << colors[idx] << "\n";
+    typedef struct {
+        u8 x, y, z, r, g, b;
+    } void_;
+    const size_t struct_size = sizeof (void_);
+
+    for (size_t i = 0; i+struct_size < size; ++i) {
+        auto* casted = (void_*)(data + i);
+
+        auto x = static_cast<Index>(casted->x);
+        auto y = static_cast<Index>(casted->y);
+        auto z = static_cast<Index>(casted->z);
+
+        Index id = (y * width + x) * depth + z;
+        Index idx = 3 * id;
+
+        colors[idx+0] = static_cast<float>(casted->r) / 255.0f;
+        colors[idx+1] = static_cast<float>(casted->g) / 255.0f;
+        colors[idx+2] = static_cast<float>(casted->b) / 255.0f;
+
         indices.push_back(id);
-
-        // x = y;
-        // y = z;
     }
+
+    std::cerr << "#indices: " << indices.size() << std::endl;
 
     return true;
 }
