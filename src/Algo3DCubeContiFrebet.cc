@@ -17,19 +17,19 @@ Algo3DCubeContiFrebet::apply(Floats& vertices, Floats& colors, VertIndices& indi
     } void_;
     const size_t struct_size = sizeof (void_);
 
-    for (size_t i = 0; i+struct_size < size; ++i) {
-        auto* casted = (void_*)(data + i);
+    for (size_t i = 0; i+struct_size < size; i += 1) {
+        auto* cast = (void_*)(data + i);
 
-        auto x = static_cast<Index>(casted->x);
-        auto y = static_cast<Index>(casted->y);
-        auto z = static_cast<Index>(casted->z);
+        auto x = static_cast<Index>(cast->x);
+        auto y = static_cast<Index>(cast->y);
+        auto z = static_cast<Index>(cast->z);
 
         Index id = (y * width + x) * depth + z;
         Index idx = 3 * id;
 
-        colors[idx+0] = static_cast<float>(casted->r) / 255.0f;
-        colors[idx+1] = static_cast<float>(casted->g) / 255.0f;
-        colors[idx+2] = static_cast<float>(casted->b) / 255.0f;
+        colors[idx+0] = static_cast<float>(cast->r) / 255.0f;
+        colors[idx+1] = static_cast<float>(cast->g) / 255.0f;
+        colors[idx+2] = static_cast<float>(cast->b) / 255.0f;
 
         indices.push_back(id);
     }
