@@ -77,14 +77,6 @@ set(SOURCES
     src/Algo2DEntropy.cc
     src/Algo2DFourColors.cc
     src/Algo2DGrayscale.cc
-    src/Algo3DCubeFull.cc
-    src/Algo3DCubeContiBnW.cc
-    src/Algo3DCubeContiRainbow.cc
-    src/Algo3DCubeContiFrebet.cc
-    src/Algo3DSphereFull.cc
-    src/Algo3DSphereContiBnW.cc
-    src/Algo3DSphereContiRainbow.cc
-    src/Algo3DSphereContiFrebet.cc
 
     src/GlfwManager.cc
 

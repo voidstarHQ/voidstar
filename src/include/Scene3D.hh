@@ -4,6 +4,8 @@
 
 #include <Scene.hh>
 #include <Algo3D.hh>
+#include <Algo3DCube.hh>
+#include <XYZRGB.hh>
 
 class Scene3D : public Scene {
 public:
@@ -33,10 +35,22 @@ private:
         indices_.clear();
     }
     void apply() {
-        auto algo = std::static_pointer_cast<Algo3D>(algo_);
-        algo->apply(vertices_, colors_, indices_, width_, height_, depth_)
-            || std::cerr << "!apply" << std::endl;
+        Algo3DCube::make_vertices(vertices_, width_, height_, depth_);
+
+        size_t size;
+        const u8* data = algo_->loadDataRange(size);
+        auto algo = std::static_pointer_cast<XYZRGB>(algo_);
+        const auto value_size = algo->value_size();
+
+        for (size_t i = 0; i+value_size < size; ++i) {
+            std::cout << "i: " << i << std::endl;
+            auto id = algo->cast(data + i, colors_, width_, height_, depth_);
+            std::cout << "id:" << id << std::endl;
+            indices_.push_back(id);
+        }
+
         std::cout << "#indices: " << Manager::size2str(indices_.size()) << std::endl;
+
         load_buffers();
     }
 

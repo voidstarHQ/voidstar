@@ -7,7 +7,7 @@
 struct Arguments {
     Arguments()
         : name("void*"),
-          algo("conti"),
+          algo("cube"),
           manager("glfw"),
           width(800), height(600),
           range_begin(0), range_end(0),

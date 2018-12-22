@@ -1,17 +1,18 @@
 #pragma once
 
+#include <Manager.hh>
+
 #include <Algo3D.hh>
 
 class Algo3DCube : public Algo3D {
 public:
     virtual ~Algo3DCube() {}
 
-    virtual bool apply(Floats& vertices, Floats& colors, VertIndices& selected,
-                       size_t width, size_t height, size_t depth) = 0;
+    static void make_vertices(Floats& vertices,
+                              size_t width, size_t height, size_t depth) {
+        std::cerr << "drawing " << width << "x" << height << "x" << depth
+                  << " cube" << std::endl;
 
-protected:
-    size_t
-    make_vertices(Floats& vertices, size_t width, size_t height, size_t depth) {
         const float w = static_cast<float>(width) / 2;
         const float h = static_cast<float>(height) / 2;
         const float d = static_cast<float>(depth) / 2;
@@ -25,6 +26,7 @@ protected:
                     vertices[pos++] = (static_cast<float>(z) - d) / d;
                 }
 
-        return vertices.size() / 3;
+        std::cerr << "drawn cube of " << Manager::size2str(vertices.size() / 3)
+                  << " vertices" << std::endl;
     }
 };

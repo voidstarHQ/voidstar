@@ -6,14 +6,9 @@
 #include <Algo2DEntropy.hh>
 #include <Algo2DFourColors.hh>
 #include <Algo2DGrayscale.hh>
-#include <Algo3DCubeFull.hh>
-#include <Algo3DCubeContiBnW.hh>
-#include <Algo3DCubeContiRainbow.hh>
-#include <Algo3DCubeContiFrebet.hh>
-#include <Algo3DSphereFull.hh>
-#include <Algo3DSphereContiBnW.hh>
-#include <Algo3DSphereContiRainbow.hh>
-#include <Algo3DSphereContiFrebet.hh>
+#include <XYZRGB.hh>
+#include <RΘΦ.hh>
+#include <ΡΦZ.hh>
 
 void
 Algorithm::use(std::shared_ptr<Loader> loader, std::shared_ptr<DataRange> range) {
@@ -57,12 +52,7 @@ const std::map<const std::string, AlgorithmFactoryFunc> algorithms = {
     {"entropy", []() { return std::make_shared<Algo2DEntropy>(); }},
     {"4col", []() { return std::make_shared<Algo2DFourColors>(); }},
     {"gray", []() { return std::make_shared<Algo2DGrayscale>(); }},
-    {"cube", []() { return std::make_shared<Algo3DCubeFull>(); }},
-    {"contibnw", []() { return std::make_shared<Algo3DCubeContiBnW>(); }},
-    {"contirb", []() { return std::make_shared<Algo3DCubeContiRainbow>(); }},
-    {"conti", []() { return std::make_shared<Algo3DCubeContiFrebet>(); }},
-    {"sphere", []() { return std::make_shared<Algo3DSphereFull>(); }},
-    {"sphere_bnw", []() { return std::make_shared<Algo3DSphereContiBnW>(); }},
-    {"sphere_rb", []() { return std::make_shared<Algo3DSphereContiRainbow>(); }},
-    {"sphere_frebet", []() { return std::make_shared<Algo3DSphereContiFrebet>(); }},
+    {"cube", []() { return std::make_shared<XYZRGB>(); }},
+    {"sphere", []() { return std::make_shared<RΘΦ>(); }},
+    {"cylinder", []() { return std::make_shared<ΡΦZ>(); }},
 };
