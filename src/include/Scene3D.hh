@@ -43,9 +43,7 @@ private:
         const auto value_size = algo->value_size();
 
         for (size_t i = 0; i+value_size < size; ++i) {
-            std::cout << "i: " << i << std::endl;
             auto id = algo->cast(data + i, colors_, width_, height_, depth_);
-            std::cout << "id:" << id << std::endl;
             indices_.push_back(id);
         }
 
