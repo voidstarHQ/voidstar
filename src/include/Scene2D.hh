@@ -30,6 +30,12 @@ private:
         vertices_ = Floats(3 * n_points_);
         colors_ = Floats(3 * n_points_);
     }
+    void apply() {
+        auto algo = std::static_pointer_cast<Algo2D>(algo_);
+        algo->apply(vertices_, colors_, width_, height_)
+            || std::cerr << "!apply" << std::endl;
+        load_buffers();
+    }
 
 protected:
     GLuint vao_;

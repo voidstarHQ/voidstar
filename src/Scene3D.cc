@@ -60,12 +60,9 @@ Scene3D::unload() {
 
 void
 Scene3D::reload() {
-    auto algo = std::static_pointer_cast<Algo3D>(algo_);
     reset_points();
-    algo->apply(vertices_, colors_, indices_, width_, height_, depth_)
-        || std::cerr << "!apply" << std::endl;
-    std::cout << "#indices: " << Manager::size2str(indices_.size()) << std::endl;
-    load_buffers();
+    apply();
+
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
     glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), colors_.data(), GL_STATIC_DRAW);
@@ -75,7 +72,6 @@ Scene3D::reload() {
 void
 Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     Scene::load(algorithm);
-    auto algo = std::static_pointer_cast<Algo3D>(algorithm);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -83,10 +79,7 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     load_shaders();
-    algo->apply(vertices_, colors_, indices_, width_, height_, depth_)
-        || std::cerr << "!apply" << std::endl;
-    std::cout << "#indices: " << Manager::size2str(indices_.size()) << std::endl;
-    load_buffers();
+    apply();
 
     // camera_.setPosition(glm::vec3(0, -0.1, 3));
     // camera_.lookAt(glm::vec3(0,0,4));
