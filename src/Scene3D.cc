@@ -70,8 +70,8 @@ Scene3D::reload() {
 }
 
 void
-Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
-    Scene::load(algorithm);
+Scene3D::load(std::shared_ptr<Algo3D> algo) {
+    Scene::load(algo);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);

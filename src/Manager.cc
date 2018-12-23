@@ -4,16 +4,6 @@
 #include <GlfwManager.hh>
 
 void
-Manager::loadScene(std::shared_ptr<Scene> scene) {
-    // XXX delete scene prior to creating a new one
-    if (scene_) {
-        std::cout << "deleting scene" << std::endl;
-    }
-    scene_ = scene;
-    scene->init(args_);
-}
-
-void
 Manager::loadFile(const std::string& filename) {
     args_->paths.push_back(filename);
     loadFile(args_->paths.size() - 1);
@@ -37,13 +27,29 @@ Manager::loadFile(size_t index) {
     auto range = DataRange::create(args_->range_begin, args_->range_end);
 
     if (scene_) {
-        auto algo = scene_->algorithm();
-        algo->use(loader, range);
+        scene_->algorithm()->use(loader, range);
         scene_->reload();
-    } else {
-        auto algo = createAlgorithm(args_->algo);
+        return true;
+    }
+
+    auto uglyhack_algo = createAlgorithm(args_->algo);
+    if (auto algo = std::dynamic_pointer_cast<Algo3D>(uglyhack_algo)) {
         algo->use(loader, range);
-        loadScene(Scene::with_algo(args_, algo));
+        if (scene_) {
+            std::cout << "deleting 3D scene" << std::endl;
+        }
+        scene_ = Scene::with_algo(args_, algo);
+        scene_->init(args_);
+        return true;
+    }
+
+    if (auto algo = std::dynamic_pointer_cast<Algo2D>(uglyhack_algo)) {
+        algo->use(loader, range);
+        if (scene_) {
+            std::cout << "deleting 2D scene" << std::endl;
+        }
+        scene_ = Scene::with_algo(args_, algo);
+        scene_->init(args_);
     }
     return true;
 }

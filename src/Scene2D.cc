@@ -64,8 +64,8 @@ Scene2D::reload() {
 }
 
 void
-Scene2D::load(std::shared_ptr<Algorithm> algorithm) {
-    Scene::load(algorithm);
+Scene2D::load(std::shared_ptr<Algo2D> algo) {
+    Scene::load(algo);
 
     glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_BLEND);

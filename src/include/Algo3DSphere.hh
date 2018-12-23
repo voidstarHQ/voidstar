@@ -10,8 +10,8 @@ class Algo3DSphere : public Algo3D {
 public:
     virtual ~Algo3DSphere() {}
 
-    static void make_vertices(Floats& vertices,
-                              size_t width, size_t height, size_t depth) {
+    virtual void make_vertices(Floats& vertices,
+                               size_t width, size_t height, size_t depth) {
         const float w = static_cast<float>(width) / 2;
         const float h = static_cast<float>(height) / 2;
         const float d = static_cast<float>(depth) / 2;

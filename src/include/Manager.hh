@@ -18,7 +18,6 @@ public:
         {}
     virtual ~Manager() {}
 
-    virtual void loadScene(std::shared_ptr<Scene> scene);
     virtual void init() = 0;
     virtual void run() = 0;
 

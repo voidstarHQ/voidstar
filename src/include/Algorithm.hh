@@ -9,13 +9,6 @@
 #include <Loader.hh>
 #include <DataRange.hh>
 
-// XXX moved here as a placeholder due to circular dependency #badDesign
-enum SceneType {
-    SCENE_UNDEFINED,
-    SCENE_2D,
-    SCENE_3D,
-};
-
 class Algorithm {
 public:
     Algorithm(size_t min_size=0, size_t max_size=0)
@@ -23,7 +16,6 @@ public:
           loader_(0), range_(0) {}
     virtual ~Algorithm() {}
 
-    virtual SceneType sceneType() const = 0;
     virtual void use(std::shared_ptr<Loader> loader, std::shared_ptr<DataRange> range=NULL);
 
     const u8* loadDataRange(const DataRange& range, size_t& size);

@@ -20,7 +20,7 @@ public:
     virtual ~Scene3D() { unload(); }
 
     virtual void init(std::shared_ptr<Arguments> args);
-    virtual void load(std::shared_ptr<Algorithm> algo);
+    virtual void load(std::shared_ptr<Algo3D> algo);
     virtual void unload();
     virtual void reload();
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
@@ -34,16 +34,16 @@ private:
         colors_ = Floats(3 * n_points_);
         indices_.clear();
     }
+
     void apply() {
-        Algo3DCube::make_vertices(vertices_, width_, height_, depth_);
+        algo3D_->make_vertices(vertices_, width_, height_, depth_);
 
         size_t size;
-        const u8* data = algo_->loadDataRange(size);
-        auto algo = std::static_pointer_cast<XYZRGB>(algo_);
-        const auto value_size = algo->value_size();
+        const u8* data = algo3D_->loadDataRange(size);
+        const auto value_size = algo3D_->value_size();
 
         for (size_t i = 0; i+value_size < size; ++i) {
-            auto id = algo->cast(data + i, colors_, width_, height_, depth_);
+            auto id = algo3D_->cast(data + i, colors_, width_, height_, depth_);
             indices_.push_back(id);
         }
 

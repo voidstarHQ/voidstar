@@ -17,7 +17,7 @@ public:
     virtual ~Scene2D() { unload(); }
 
     virtual void init(std::shared_ptr<Arguments> args);
-    virtual void load(std::shared_ptr<Algorithm> algo);
+    virtual void load(std::shared_ptr<Algo2D> algo);
     virtual void unload();
     virtual void reload();
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
@@ -31,8 +31,7 @@ private:
         colors_ = Floats(3 * n_points_);
     }
     void apply() {
-        auto algo = std::static_pointer_cast<Algo2D>(algo_);
-        algo->apply(vertices_, colors_, width_, height_)
+        algo2D_->apply(vertices_, colors_, width_, height_)
             || std::cerr << "!apply" << std::endl;
         load_buffers();
     }

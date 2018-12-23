@@ -8,8 +8,8 @@ class Algo3DCube : public Algo3D {
 public:
     virtual ~Algo3DCube() {}
 
-    static void make_vertices(Floats& vertices,
-                              size_t width, size_t height, size_t depth) {
+    virtual void make_vertices(Floats& vertices,
+                               size_t width, size_t height, size_t depth) {
         std::cerr << "drawing " << width << "x" << height << "x" << depth
                   << " cube" << std::endl;
 
