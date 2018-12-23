@@ -9,8 +9,11 @@ os:
 
 dist: trusty
 addons:
+  sources:
+  - llvm-toolchain-trusty-7 # clang-7
   apt:
     packages:
+      - clang-7
       - libglew-dev
       - libglm-dev
       - xorg-dev
