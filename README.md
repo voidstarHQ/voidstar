@@ -45,8 +45,9 @@ Known to work with
 * ubuntu 18.10 + docker 18.09.0
 
 ```
-docker build -t void .
-./contained.sh
+docker build -f Dockerfile.dev -t voiddev .
+mv your/interesting/files/* data/
+./docker-dev.sh
 ```
 
 ### on MacOS
