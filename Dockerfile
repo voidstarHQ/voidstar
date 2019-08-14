@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:9
 WORKDIR /app
 COPY . $PWD
 RUN set -x \
