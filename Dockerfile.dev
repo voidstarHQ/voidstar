@@ -1,0 +1,10 @@
+FROM debian:9
+RUN set -x \
+ && apt update \
+ && apt install -y \
+    x11-apps \
+    libglew-dev libglm-dev libglfw3-dev pkg-config \
+    libc++-dev clang cmake
+ENV DISPLAY :0
+WORKDIR /app
+ENTRYPOINT ["/bin/sh", "-c", "set -x && ./configure && cd build && make -j7 && ./voidstar ./voidstar ../data/*"]
