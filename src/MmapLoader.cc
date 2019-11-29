@@ -3,8 +3,8 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
-#include <MmapLoader.hh>
-#include <Uri.hh>
+#include "src/include/MmapLoader.h"
+#include "src/include/Uri.h"
 
 std::shared_ptr<MmapLoader>
 MmapLoader::make(const std::string& uri) {

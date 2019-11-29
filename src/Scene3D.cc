@@ -1,8 +1,8 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include <shaders.hh>
-#include <Scene3D.hh>
+#include "src/resources/shaders.h"
+#include "src/include/Scene3D.h"
 
 void
 Scene3D::load_shaders() {
@@ -77,6 +77,7 @@ Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
     Scene::load(algorithm);
     auto algo = std::static_pointer_cast<Algo3D>(algorithm);
 
+    glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glEnable(GL_BLEND);

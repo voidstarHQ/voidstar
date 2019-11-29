@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <GlfwManager.hh>
+#include "src/include/GlfwManager.h"
 
 std::shared_ptr<GlfwManager> GlfwManager::instance_;
 

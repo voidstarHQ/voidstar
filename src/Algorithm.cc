@@ -1,19 +1,18 @@
 #include <iostream>
 
-#include <Manager.hh>
-
-#include <Algorithm.hh>
-#include <Algo2DEntropy.hh>
-#include <Algo2DFourColors.hh>
-#include <Algo2DGrayscale.hh>
-#include <Algo3DCubeFull.hh>
-#include <Algo3DCubeContiBnW.hh>
-#include <Algo3DCubeContiRainbow.hh>
-#include <Algo3DCubeContiFrebet.hh>
-#include <Algo3DSphereFull.hh>
-#include <Algo3DSphereContiBnW.hh>
-#include <Algo3DSphereContiRainbow.hh>
-#include <Algo3DSphereContiFrebet.hh>
+#include "src/include/Manager.h"
+#include "src/include/Algorithm.h"
+#include "src/include/Algo2DEntropy.h"
+#include "src/include/Algo2DFourColors.h"
+#include "src/include/Algo2DGrayscale.h"
+#include "src/include/Algo3DCubeFull.h"
+#include "src/include/Algo3DCubeContiBnW.h"
+#include "src/include/Algo3DCubeContiRainbow.h"
+#include "src/include/Algo3DCubeContiFrebet.h"
+#include "src/include/Algo3DSphereFull.h"
+#include "src/include/Algo3DSphereContiBnW.h"
+#include "src/include/Algo3DSphereContiRainbow.h"
+#include "src/include/Algo3DSphereContiFrebet.h"
 
 void
 Algorithm::use(std::shared_ptr<Loader> loader, std::shared_ptr<DataRange> range) {

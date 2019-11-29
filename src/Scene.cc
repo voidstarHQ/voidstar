@@ -1,6 +1,6 @@
-#include <Scene.hh>
-#include <Scene2D.hh>
-#include <Scene3D.hh>
+#include "src/include/Scene.h"
+#include "src/include/Scene2D.h"
+#include "src/include/Scene3D.h"
 
 void
 Scene::load(std::shared_ptr<Algorithm> algo) {

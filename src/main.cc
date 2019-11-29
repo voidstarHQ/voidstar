@@ -3,15 +3,15 @@
 #include <string>
 #include <map>
 
-#include <Arguments.hh>
-#include <Algorithm.hh>
-#include <FileLoader.hh>
-#include <MmapLoader.hh>
-#include <Manager.hh>
-#include <DataRange.hh>
-#include <Scene.hh>
-#include <Scene2D.hh>
-#include <Scene3D.hh>
+#include "src/include/Arguments.h"
+#include "src/include/Algorithm.h"
+#include "src/include/FileLoader.h"
+#include "src/include/MmapLoader.h"
+#include "src/include/Manager.h"
+#include "src/include/DataRange.h"
+#include "src/include/Scene.h"
+#include "src/include/Scene2D.h"
+#include "src/include/Scene3D.h"
 
 int
 main(int argc, char* argv[]) {

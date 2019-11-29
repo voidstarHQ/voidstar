@@ -1,4 +1,4 @@
-#include <Algo3DCubeContiRainbow.hh>
+#include "src/include/Algo3DCubeContiRainbow.h"
 
 bool
 Algo3DCubeContiRainbow::apply(Floats& vertices, Floats& colors, VertIndices& indices,

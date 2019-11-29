@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 
-#include <Algo2DEntropy.hh>
+#include "src/include/Algo2DEntropy.h"
 
 // github.com/cortesi/scurve/blob/a59e8335c48a7cda7043fbd1b28bcae1abc9645d/binvis#L58
 

@@ -1,4 +1,4 @@
-#include <Algo3DCubeFull.hh>
+#include "src/include/Algo3DCubeFull.h"
 
 bool
 Algo3DCubeFull::apply(Floats& vertices, Floats& colors, VertIndices& selected,

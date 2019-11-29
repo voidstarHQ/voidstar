@@ -1,4 +1,4 @@
-#include <Algo3DCubeContiFrebet.hh>
+#include "src/include/Algo3DCubeContiFrebet.h"
 
 bool
 Algo3DCubeContiFrebet::apply(Floats& vertices, Floats& colors, VertIndices& indices,

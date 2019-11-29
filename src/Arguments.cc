@@ -1,9 +1,9 @@
 #include <iostream>
 #include <getopt.h>
 
-#include <Arguments.hh>
-#include <Manager.hh>
-#include <Algorithm.hh>
+#include "src/include/Arguments.h"
+#include "src/include/Manager.h"
+#include "src/include/Algorithm.h"
 
 static void
 usage(const char* prgname) {

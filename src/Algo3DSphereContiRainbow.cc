@@ -1,4 +1,4 @@
-#include <Algo3DSphereContiRainbow.hh>
+#include "src/include/Algo3DSphereContiRainbow.h"
 
 bool
 Algo3DSphereContiRainbow::apply(Floats& vertices, Floats& colors, VertIndices& indices,

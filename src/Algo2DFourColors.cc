@@ -1,4 +1,4 @@
-#include <Algo2DFourColors.hh>
+#include "src/include/Algo2DFourColors.h"
 
 struct RGBColor {
     float r, g, b;

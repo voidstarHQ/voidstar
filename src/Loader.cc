@@ -2,10 +2,10 @@
 #include <functional>
 #include <iostream>
 
-#include <Loader.hh>
-#include <FileLoader.hh>
-#include <FdLoader.hh>
-#include <MmapLoader.hh>
+#include "src/include/Loader.h"
+#include "src/include/FileLoader.h"
+#include "src/include/FdLoader.h"
+#include "src/include/MmapLoader.h"
 
 using SomeLoader = std::shared_ptr<Loader>;
 using SomeLoaderFactoryFunc = std::function<SomeLoader(const std::string&)>;

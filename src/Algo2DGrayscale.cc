@@ -1,4 +1,4 @@
-#include <Algo2DGrayscale.hh>
+#include "src/include/Algo2DGrayscale.h"
 
 bool
 Algo2DGrayscale::apply(Floats& vertices, Floats& colors,

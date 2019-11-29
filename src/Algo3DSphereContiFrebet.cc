@@ -1,4 +1,4 @@
-#include <Algo3DSphereContiFrebet.hh>
+#include "src/include/Algo3DSphereContiFrebet.h"
 
 bool
 Algo3DSphereContiFrebet::apply(Floats& vertices, Floats& colors, VertIndices& indices,

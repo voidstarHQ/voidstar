@@ -1,5 +1,5 @@
-#include <FileLoader.hh>
-#include <Uri.hh>
+#include "src/include/FileLoader.h"
+#include "src/include/Uri.h"
 
 std::shared_ptr<FileLoader>
 FileLoader::make(const std::string& uri) {

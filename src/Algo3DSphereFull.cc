@@ -1,4 +1,4 @@
-#include <Algo3DSphereFull.hh>
+#include "src/include/Algo3DSphereFull.h"
 
 bool
 Algo3DSphereFull::apply(Floats& vertices, Floats& colors, VertIndices& selected,

@@ -1,4 +1,4 @@
-#include <Algo3DCubeContiBnW.hh>
+#include "src/include/Algo3DCubeContiBnW.h"
 
 bool
 Algo3DCubeContiBnW::apply(Floats& vertices, Floats& colors, VertIndices& indices,

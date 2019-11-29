@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <Manager.hh>
-#include <GlfwManager.hh>
+#include "src/include/Manager.h"
+#include "src/include/GlfwManager.h"
 
 void
 Manager::loadScene(std::shared_ptr<Scene> scene) {

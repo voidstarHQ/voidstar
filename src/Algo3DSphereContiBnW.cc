@@ -1,4 +1,4 @@
-#include <Algo3DSphereContiBnW.hh>
+#include "src/include/Algo3DSphereContiBnW.h"
 
 bool
 Algo3DSphereContiBnW::apply(Floats& vertices, Floats& colors, VertIndices& indices,

@@ -1,7 +1,7 @@
 #include <stdexcept>
 
-#include <shaders.hh>
-#include <Scene2D.hh>
+#include "src/resources/shaders.h"
+#include "src/include/Scene2D.h"
 
 void
 Scene2D::load_shaders() {
