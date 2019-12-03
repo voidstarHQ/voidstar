@@ -29,8 +29,8 @@ public:
     virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime) = 0;
     virtual void render() = 0;
     virtual void load(std::shared_ptr<Algorithm> algo);
-    virtual void unload();
-    virtual void reload();
+    virtual void unload() {}
+    virtual void reload() {}
 
     virtual void resize(int viewport_width, int viewport_height) {
         float aspect_ratio = static_cast<float>(viewport_width) / static_cast<float>(viewport_height);

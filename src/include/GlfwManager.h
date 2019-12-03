@@ -77,7 +77,7 @@ public:
 
     // TODO: move these in an OpenGL backend
     void glInit();
-    void glProcessErrors(bool quiet=false);
+    static void glProcessErrors(bool quiet=false);
 
     static std::shared_ptr<GlfwManager>
     instance(std::shared_ptr<Arguments> args) {

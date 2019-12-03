@@ -3,6 +3,7 @@
 
 #include "src/resources/shaders.h"
 #include "src/include/Scene3D.h"
+#include "src/include/GlfwManager.h"
 
 void
 Scene3D::load_shaders() {
@@ -135,7 +136,7 @@ Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
         }
     }
 
-    if (manager->args()->move_window || selected_.size() == 0 || manager->slide_window()) {
+    if (manager->args()->move_window || selected_.empty() || manager->slide_window()) {
         if (manager->args()->move_window)
             manager->slide_window_right();
         bool slid = manager->slide_window(selected_, indices_);

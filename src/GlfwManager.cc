@@ -89,7 +89,7 @@ GlfwManager::glInit() {
         throw std::runtime_error("!glewInit");
 
     // GLEW throws some errors, so discard all the errors so far
-    glProcessErrors(true);
+    glProcessErrors();
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl
               << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl

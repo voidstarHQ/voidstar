@@ -11,14 +11,6 @@ Scene::load(std::shared_ptr<Algorithm> algo) {
     algo_ = algo;
 }
 
-void
-Scene::unload() {
-}
-
-void
-Scene::reload() {
-}
-
 #define SCENE(Body) []() -> std::shared_ptr<Scene> { Body }
 using SceneFactoryFunc = std::function<std::shared_ptr<Scene>()>;
 std::map<SceneType, SceneFactoryFunc> scenes = {
