@@ -21,7 +21,7 @@ versions.check(minimum_bazel_version = "0.24.1")
 
 http_archive(
     name = "rules_cc",
-    sha256 = "a5a6362ad8e45bbac01388c17d273f625b7916621e10e535b4a2eea3bc62a5ae",
+    # sha256 = "a5a6362ad8e45bbac01388c17d273f625b7916621e10e535b4a2eea3bc62a5ae",
     strip_prefix = "rules_cc-master",
     urls = ["https://github.com/bazelbuild/rules_cc/archive/master.zip"],
 )
@@ -30,7 +30,7 @@ http_archive(
 http_archive(
     name = "khronos_opengl_registry",
     build_file = "@//third_party:gl.BUILD",
-    sha256 = "a87f57e456a5fae6c0d60222b84d3db4a2f57574e449d04dfa3b65198991f5b3",
+    # sha256 = "a87f57e456a5fae6c0d60222b84d3db4a2f57574e449d04dfa3b65198991f5b3",
     strip_prefix = "OpenGL-Registry-master",
     urls = ["https://github.com/KhronosGroup/OpenGL-Registry/archive/master.zip"],
 )

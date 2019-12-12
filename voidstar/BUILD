@@ -18,3 +18,13 @@ cc_binary(
         "@khronos_opengl_registry//:gl_headers",
     ],
 )
+
+cc_binary(
+    name = "elem",
+    srcs = ["elem.cc"],
+    # linkopts = ["-lGLEW"],
+    deps = [
+        "@glfw",
+        "@khronos_opengl_registry//:gl_headers",
+    ],
+)
