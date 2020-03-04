@@ -52,9 +52,7 @@ cc_library(
         "include/GLFW/glfw3.h",
         "include/GLFW/glfw3native.h",
     ],
-    copts = [
-        "-I/usr/include",
-    ],
+    copts = ["-I/usr/include"],
     defines = [
         "_GLFW_X11",
         "_GLFW_GLX",

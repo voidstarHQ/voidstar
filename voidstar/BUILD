@@ -1,5 +1,10 @@
 package(default_visibility = ["//visibility:public"])
 
+# For glfw3:
+# sudo apt install libgl1-mesa-dev xorg-dev
+# For glew:
+# sudo apt install libglew-dev
+
 cc_binary(
     name = "simple",
     srcs = ["glfwSample.cc"],

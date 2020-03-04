@@ -1,5 +1,8 @@
 package(default_visibility = ["//visibility:public"])
 
+# TODO: third_party GLM
+# sudo apt install libglm-dev
+
 cc_binary(
     name = "voidstar",
     srcs = [
@@ -16,28 +19,28 @@ cc_binary(
         "Algo3DSphereFull.cc",
         "Algorithm.cc",
         "Arguments.cc",
+        "FdLoader.cc",
+        "FileLoader.cc",
+        "GlfwManager.cc",
+        "Loader.cc",
+        "Manager.cc",
+        "MmapLoader.cc",
+        "Scene.cc",
+        "Scene2D.cc",
+        "Scene3D.cc",
         "common/tdogl/Camera.cpp",
         "common/tdogl/Camera.h",
         "common/tdogl/Program.cpp",
         "common/tdogl/Program.h",
         "common/tdogl/Shader.cpp",
         "common/tdogl/Shader.h",
-        "FdLoader.cc",
-        "FileLoader.cc",
-        "GlfwManager.cc",
-        "Loader.cc",
         "main.cc",
-        "Manager.cc",
-        "MmapLoader.cc",
         "resources/shaders.h",
-        "Scene2D.cc",
-        "Scene3D.cc",
-        "Scene.cc",
     ],
     linkopts = ["-lGLEW"],
     deps = [
+        "//src/include:headers",
         "@glfw",
         "@khronos_opengl_registry//:gl_headers",
-        "//src/include:headers",
     ],
 )
