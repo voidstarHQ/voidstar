@@ -1,4 +1,4 @@
-#include <GLFW/glfw3.h>
+#include "include/GLFW/glfw3.h"
 #include <glad/gl.h>
 
 #include "linmath.h"

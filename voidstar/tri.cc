@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 
 // GLFW
-#include <GLFW/glfw3.h>
+#include "include/GLFW/glfw3.h"
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action,

@@ -7,7 +7,16 @@ package(default_visibility = ["//visibility:public"])
 
 cc_binary(
     name = "simple",
-    srcs = ["glfwSample.cc"],
+    srcs = ["simple.cc"],
+    deps = [
+        "@glfw",
+        "@khronos_opengl_registry//:gl_headers",
+    ],
+)
+
+cc_binary(
+    name = "sample",
+    srcs = ["sample.cc"],
     deps = [
         "@glfw",
         "@khronos_opengl_registry//:gl_headers",
@@ -16,7 +25,7 @@ cc_binary(
 
 cc_binary(
     name = "tri",
-    srcs = ["hello_triangle.cc"],
+    srcs = ["tri.cc"],
     linkopts = ["-lGLEW"],
     deps = [
         "@glfw",

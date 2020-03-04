@@ -1,5 +1,5 @@
 #include <iostream>
-#include <GLFW/glfw3.h>
+#include "include/GLFW/glfw3.h"
 #include <GLUT/GLUT.h>
 #include <vector>
 #include <math.h>
