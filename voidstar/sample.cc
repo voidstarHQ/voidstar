@@ -18,13 +18,16 @@ int main(void) {
   glfwSetErrorCallback(error_callback);
   if (!glfwInit()) exit(EXIT_FAILURE);
 
-  // cout << "default shader lang: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
-  // << endl;
+  cout << "default shader lang: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
+       << "\n"
+       << endl;
+
+  std::cout << "Hi!\n";
 
   // select opengl version
-  // int major, minor, rev;
-  // glfwGetVersion(&major, &minor, &rev);
-  // cout << "glfw major.minor " << major << "." << minor << "." << rev << endl;
+  int major, minor, rev;
+  glfwGetVersion(&major, &minor, &rev);
+  cout << "glfw major.minor " << major << "." << minor << "." << rev << endl;
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
