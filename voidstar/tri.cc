@@ -1,10 +1,32 @@
+#include <cstdint>
+#include <fstream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include <vector>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
 
 #include "include/GLFW/glfw3.h"
+
+bool readFile(const int to_read, const char* filename,
+              std::vector<uint8_t>& vec) {
+  std::ifstream is(filename, std::ios::binary);
+  if (!is) return false;
+
+  // Stop eating new lines in binary mode!!!
+  is.unsetf(std::ios::skipws);
+
+  is.seekg(0, std::ios::end);
+  std::streampos size = is.tellg();
+  is.seekg(0, std::ios::beg);
+  if (size < to_read) return false;
+
+  vec.reserve(to_read);
+  is.read(reinterpret_cast<char*>(vec.data()), to_read);
+  if (!is) return false;
+  return true;
+}
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action,
                   int mode);
@@ -16,9 +38,10 @@ const GLchar* vertexShaderSource = R"(
 
 // Input vertex data, different for all executions of this shader.
 layout (location = 0) in vec3 vertexPosition_modelspace;
+layout (location = 1) in vec2 vertexUV;
 
-// Notice that the "1" here equals the "1" in glVertexAttribPointer
-layout(location = 1) in vec3 vertexColor;
+// Output data ; will be interpolated for each fragment.
+out vec2 UV;
 
 // Values that stay constant for the whole mesh.
 uniform mat4 MVP;
@@ -29,26 +52,32 @@ void main() {
   // Output position of the vertex, in clip space : MVP * position
   gl_Position =  MVP * vec4(vertexPosition_modelspace, 1);
 
-  fragmentColor = vertexColor;
+  // UV of the vertex. No special space for this one.
+  UV = vertexUV;
 }
 )";
 
 const GLchar* fragmentShaderSource = R"(
 #version 330 core
 
+// Interpolated values from the vertex shaders
+in vec2 UV;
+
 in vec3 fragmentColor;
 
-out vec4 color;
+// Values that stay constant for the whole mesh.
+uniform sampler2D myTextureSampler;
+
+out vec3 color;
 
 void main() {
-  // Output color = color specified in the vertex shader,
-  // interpolated between all 3 surrounding vertices
-  color = vec4(fragmentColor, 1);
+  // Output color = color of the texture at the specified UV
+  color = texture( myTextureSampler, UV ).rgb;
 }
 )";
 
 // The MAIN function, from here we start the application and run the game loop
-int main() {
+int main(int argc, const char* argv[]) {
   // Init GLFW
   glfwInit();
   // Set all the required options for GLFW
@@ -119,7 +148,7 @@ int main() {
   // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive
   // vertices give a triangle. A cube has 6 faces with 2 triangles each, so this
   // makes 6*2=12 triangles, and 12*3 vertices
-  static const GLfloat g_vertex_buffer_data[] = {
+  static const GLfloat vertices[] = {
       -1.0f, -1.0f, -1.0f,                       // triangle 1 : begin
       -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,   // triangle 1 : end
       1.0f,  1.0f,  -1.0f,                       // triangle 2 : begin
@@ -139,44 +168,88 @@ int main() {
   // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and
   // attribute pointer(s).
   glBindVertexArray(VAO);
-
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data),
-               g_vertex_buffer_data, GL_STATIC_DRAW);
-
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat),
                         (GLvoid*)0);
   glEnableVertexAttribArray(0);
-
   glBindBuffer(
       GL_ARRAY_BUFFER,
       0);  // Note that this is allowed, the call to glVertexAttribPointer
            // registered VBO as the currently bound vertex buffer object so
            // afterwards we can safely unbind
 
-  // One color for each vertex. They were generated randomly.
-  static GLfloat g_color_buffer_data[12 * 3 * 3];
-  for (int v = 0; v < 12 * 3; ++v) {
-    g_color_buffer_data[3 * v + 0] = 3.0f / v;
-    g_color_buffer_data[3 * v + 1] = 4.0f / v;
-    g_color_buffer_data[3 * v + 2] = 3.0f / v;
-  }
-  GLuint colorbuffer;
-  glGenBuffers(1, &colorbuffer);
-  glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data),
-               g_color_buffer_data, GL_STATIC_DRAW);
-  // 2nd attribute buffer : colors
+  // Two UV coordinatesfor each vertex. They were created with Blender. You'll
+  // learn shortly how to do this yourself.
+  static const GLfloat uv[] = {
+      0.000059f, 1.0f - 0.000004f, 0.000103f, 1.0f - 0.336048f,
+      0.335973f, 1.0f - 0.335903f, 1.000023f, 1.0f - 0.000013f,
+      0.667979f, 1.0f - 0.335851f, 0.999958f, 1.0f - 0.336064f,
+      0.667979f, 1.0f - 0.335851f, 0.336024f, 1.0f - 0.671877f,
+      0.667969f, 1.0f - 0.671889f, 1.000023f, 1.0f - 0.000013f,
+      0.668104f, 1.0f - 0.000013f, 0.667979f, 1.0f - 0.335851f,
+      0.000059f, 1.0f - 0.000004f, 0.335973f, 1.0f - 0.335903f,
+      0.336098f, 1.0f - 0.000071f, 0.667979f, 1.0f - 0.335851f,
+      0.335973f, 1.0f - 0.335903f, 0.336024f, 1.0f - 0.671877f,
+      1.000004f, 1.0f - 0.671847f, 0.999958f, 1.0f - 0.336064f,
+      0.667979f, 1.0f - 0.335851f, 0.668104f, 1.0f - 0.000013f,
+      0.335973f, 1.0f - 0.335903f, 0.667979f, 1.0f - 0.335851f,
+      0.335973f, 1.0f - 0.335903f, 0.668104f, 1.0f - 0.000013f,
+      0.336098f, 1.0f - 0.000071f, 0.000103f, 1.0f - 0.336048f,
+      0.000004f, 1.0f - 0.671870f, 0.336024f, 1.0f - 0.671877f,
+      0.000103f, 1.0f - 0.336048f, 0.336024f, 1.0f - 0.671877f,
+      0.335973f, 1.0f - 0.335903f, 0.667969f, 1.0f - 0.671889f,
+      1.000004f, 1.0f - 0.671847f, 0.667979f, 1.0f - 0.335851f};
+  GLuint uvbuffer;
+  glGenBuffers(1, &uvbuffer);
+  glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(uv), uv, GL_STATIC_DRAW);
+  // 2nd attribute buffer
   glEnableVertexAttribArray(1);
-  glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+  glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
   glVertexAttribPointer(1,  // attribute. No particular reason for 1, but must
                             // match the layout in the shader.
-                        3,  // size
+                        2,  // size
                         GL_FLOAT,  // type
                         GL_FALSE,  // normalized?
                         0,         // stride
                         (void*)0   // array buffer offset
   );
+
+  if (argc != 2) {
+    std::cerr << "Needs one argument.\n";
+    return 1;
+  }
+  const char* filename = argv[1];
+  // Powers of two
+  const int fffff = 128;
+  const int fW = fffff, fH = fffff;
+  std::vector<uint8_t> someFile;
+  if (!readFile(fW * fH, filename, someFile)) {
+    std::cerr << "Couln't read " << fW * fH << " bytes from " << filename
+              << std::endl;
+    return 1;
+  }
+  // Create one OpenGL texture
+  GLuint textureID;
+  glGenTextures(1, &textureID);
+  // "Bind" the newly created texture : all future texture functions will modify
+  // this texture
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  // Give the image to OpenGL
+  // GL_RGB indicates that we are talking about a 3-component color,
+  // and GL_BGR says how exactly it is represented in RAM.
+  // As a matter of fact, BMP does not store Red->Green->Blue but
+  // Blue->Green->Red
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fW, fH, 0, GL_BGR, GL_UNSIGNED_BYTE,
+               someFile.data());
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+  // GL_LINEAR_MIPMAP_LINEAR); glGenerateMipmap(GL_TEXTURE_2D);
 
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
@@ -209,7 +282,7 @@ int main() {
   // Accept fragment if it closer to the camera than the former one
   glDepthFunc(GL_LESS);
 
-  // Game loop
+  std::cerr << "Ready!\n";
   while (!glfwWindowShouldClose(window)) {
     // Check if any events have been activiated (key pressed, mouse moved etc.)
     // and call corresponding response functions
