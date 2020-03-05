@@ -17,20 +17,33 @@ const GLchar* vertexShaderSource = R"(
 // Input vertex data, different for all executions of this shader.
 layout (location = 0) in vec3 vertexPosition_modelspace;
 
+// Notice that the "1" here equals the "1" in glVertexAttribPointer
+layout(location = 1) in vec3 vertexColor;
+
 // Values that stay constant for the whole mesh.
 uniform mat4 MVP;
+
+out vec3 fragmentColor;
 
 void main() {
   // Output position of the vertex, in clip space : MVP * position
   gl_Position =  MVP * vec4(vertexPosition_modelspace, 1);
+
+  fragmentColor = vertexColor;
 }
 )";
 
 const GLchar* fragmentShaderSource = R"(
 #version 330 core
+
+in vec3 fragmentColor;
+
 out vec4 color;
+
 void main() {
-  color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+  // Output color = color specified in the vertex shader,
+  // interpolated between all 3 surrounding vertices
+  color = vec4(fragmentColor, 1);
 }
 )";
 
@@ -103,12 +116,23 @@ int main() {
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  // Set up vertex data (and buffer(s)) and attribute pointers
-  GLfloat vertices[] = {
-      -0.5f, -0.5f, 0.0f,  // Left
-      0.5f,  -0.5f, 0.0f,  // Right
-      0.0f,  0.5f,  0.0f   // Top
-  };
+  // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive
+  // vertices give a triangle. A cube has 6 faces with 2 triangles each, so this
+  // makes 6*2=12 triangles, and 12*3 vertices
+  static const GLfloat g_vertex_buffer_data[] = {
+      -1.0f, -1.0f, -1.0f,                       // triangle 1 : begin
+      -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,   // triangle 1 : end
+      1.0f,  1.0f,  -1.0f,                       // triangle 2 : begin
+      -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f,  // triangle 2 : end
+      1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,
+      1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
+      -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, 1.0f,  -1.0f, 1.0f,
+      -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f,
+      -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  -1.0f,
+      -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  1.0f,  1.0f,
+      1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, -1.0f,
+      1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,
+      1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  -1.0f, 1.0f};
   GLuint VBO, VAO;
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -117,7 +141,8 @@ int main() {
   glBindVertexArray(VAO);
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data),
+               g_vertex_buffer_data, GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat),
                         (GLvoid*)0);
@@ -128,6 +153,30 @@ int main() {
       0);  // Note that this is allowed, the call to glVertexAttribPointer
            // registered VBO as the currently bound vertex buffer object so
            // afterwards we can safely unbind
+
+  // One color for each vertex. They were generated randomly.
+  static GLfloat g_color_buffer_data[12 * 3 * 3];
+  for (int v = 0; v < 12 * 3; ++v) {
+    g_color_buffer_data[3 * v + 0] = 3.0f / v;
+    g_color_buffer_data[3 * v + 1] = 4.0f / v;
+    g_color_buffer_data[3 * v + 2] = 3.0f / v;
+  }
+  GLuint colorbuffer;
+  glGenBuffers(1, &colorbuffer);
+  glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data),
+               g_color_buffer_data, GL_STATIC_DRAW);
+  // 2nd attribute buffer : colors
+  glEnableVertexAttribArray(1);
+  glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+  glVertexAttribPointer(1,  // attribute. No particular reason for 1, but must
+                            // match the layout in the shader.
+                        3,  // size
+                        GL_FLOAT,  // type
+                        GL_FALSE,  // normalized?
+                        0,         // stride
+                        (void*)0   // array buffer offset
+  );
 
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
@@ -155,6 +204,11 @@ int main() {
   // Only during the initialisation
   GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
 
+  // Enable depth test
+  glEnable(GL_DEPTH_TEST);
+  // Accept fragment if it closer to the camera than the former one
+  glDepthFunc(GL_LESS);
+
   // Game loop
   while (!glfwWindowShouldClose(window)) {
     // Check if any events have been activiated (key pressed, mouse moved etc.)
@@ -165,7 +219,7 @@ int main() {
 
     // Clear the colorbuffer
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Send our transformation to the currently bound shader, in the "MVP"
     // uniform
@@ -176,7 +230,9 @@ int main() {
     // Draw our first triangle
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(
+        GL_TRIANGLES, 0,
+        12 * 3);  // 12*3 indices starting at 0 -> 12 triangles -> 6 squares
     glBindVertexArray(0);
 
     // Swap the screen buffers
