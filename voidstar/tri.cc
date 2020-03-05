@@ -1,34 +1,39 @@
 #include <iostream>
 
-// GLEW
+#include <glm/gtc/matrix_transform.hpp>
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-// GLFW
 #include "include/GLFW/glfw3.h"
 
-// Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action,
                   int mode);
 
-// Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
 
-// Shaders
-const GLchar* vertexShaderSource =
-    "#version 330 core\n"
-    "layout (location = 0) in vec3 position;\n"
-    "void main()\n"
-    "{\n"
-    "gl_Position = vec4(position.x, position.y, position.z, 1.0);\n"
-    "}\0";
-const GLchar* fragmentShaderSource =
-    "#version 330 core\n"
-    "out vec4 color;\n"
-    "void main()\n"
-    "{\n"
-    "color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\n\0";
+const GLchar* vertexShaderSource = R"(
+#version 330 core
+
+// Input vertex data, different for all executions of this shader.
+layout (location = 0) in vec3 vertexPosition_modelspace;
+
+// Values that stay constant for the whole mesh.
+uniform mat4 MVP;
+
+void main() {
+  // Output position of the vertex, in clip space : MVP * position
+  gl_Position =  MVP * vec4(vertexPosition_modelspace, 1);
+}
+)";
+
+const GLchar* fragmentShaderSource = R"(
+#version 330 core
+out vec4 color;
+void main() {
+  color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+}
+)";
 
 // The MAIN function, from here we start the application and run the game loop
 int main() {
@@ -128,6 +133,25 @@ int main() {
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
 
+// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+
+// Camera matrix
+glm::mat4 View = glm::lookAt(
+    glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
+    glm::vec3(0,0,0), // and looks at the origin
+    glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+    );
+
+// Model matrix : an identity matrix (model will be at the origin)
+glm::mat4 Model = glm::mat4(1.0f);
+// Our ModelViewProjection : multiplication of our 3 matrices
+glm::mat4 mvp = Projection * View * Model; // Remember, matrix multiplication is the other way around
+
+// Get a handle for our "MVP" uniform
+// Only during the initialisation
+GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
+
   // Game loop
   while (!glfwWindowShouldClose(window)) {
     // Check if any events have been activiated (key pressed, mouse moved etc.)
@@ -135,9 +159,15 @@ int main() {
     glfwPollEvents();
 
     // Render
+
     // Clear the colorbuffer
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    // Send our transformation to the currently bound shader, in the "MVP" uniform
+// This is done in the main loop since each model will have a different MVP matrix (At least for the M part)
+glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
+
 
     // Draw our first triangle
     glUseProgram(shaderProgram);
