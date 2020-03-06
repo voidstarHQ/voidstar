@@ -76,19 +76,134 @@ void main() {
 }
 )";
 
+// position
+glm::vec3 position = glm::vec3(0, 0, 5);
+// horizontal angle : toward -Z
+float horizontalAngle = 3.14f;
+// vertical angle : 0, look at the horizon
+float verticalAngle = 0.0f;
+// Initial Field of View
+float initialFoV = 45.0f;
+
+float speed = 3.0f;  // 3 units / second
+float mouseSpeed = 0.005f;
+// FoV is the level of zoom. 80° = very wide angle, huge deformations. 60° - 45°
+// : standard. 20° : big zoom.
+
+void computeMatricesFromInputs(GLFWwindow* window, glm::mat4* ProjectionMatrix,
+                               glm::mat4* ViewMatrix) {
+  // glfwGetTime is called only once, the first time this function is called
+  static double lastTime = glfwGetTime();
+
+  // Compute time difference between current and last frame
+  double currentTime = glfwGetTime();
+  float deltaTime = float(currentTime - lastTime);
+
+  // Get mouse position
+  double xpos, ypos;
+  glfwGetCursorPos(window, &xpos, &ypos);
+
+  // Reset mouse position for next frame
+  glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
+
+  // Compute new orientation
+  horizontalAngle += mouseSpeed * float(WIDTH / 2 - xpos);
+  verticalAngle += mouseSpeed * float(HEIGHT / 2 - ypos);
+
+  // Direction : Spherical coordinates to Cartesian coordinates conversion
+  glm::vec3 direction(cos(verticalAngle) * sin(horizontalAngle),
+                      sin(verticalAngle),
+                      cos(verticalAngle) * cos(horizontalAngle));
+
+  // Right vector
+  glm::vec3 right = glm::vec3(sin(horizontalAngle - 3.14f / 2.0f), 0,
+                              cos(horizontalAngle - 3.14f / 2.0f));
+
+  // Up vector
+  glm::vec3 up = glm::cross(right, direction);
+
+  // Move forward
+  if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+    position += direction * deltaTime * speed;
+  }
+  // Move backward
+  if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+    position -= direction * deltaTime * speed;
+  }
+  // Strafe right
+  if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+    position += right * deltaTime * speed;
+  }
+  // Strafe left
+  if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+    position -= right * deltaTime * speed;
+  }
+  // up & down
+  if (glfwGetKey(window, 'X') == GLFW_PRESS) {
+    position += up * deltaTime * speed;
+  }
+  if (glfwGetKey(window, 'Z') == GLFW_PRESS) {
+    position -= up * deltaTime * speed;
+  }
+
+  if (glfwGetKey(window, 'O') == GLFW_PRESS) {
+    position = glm::vec3(0, 0, 5);
+    horizontalAngle = 3.14f;
+    verticalAngle = 0.0f;
+    initialFoV = 45.0f;
+    direction =
+        glm::vec3(cos(verticalAngle) * sin(horizontalAngle), sin(verticalAngle),
+                  cos(verticalAngle) * cos(horizontalAngle));
+    right = glm::vec3(sin(horizontalAngle - 3.14f / 2.0f), 0,
+                      cos(horizontalAngle - 3.14f / 2.0f));
+    up = glm::cross(right, direction);
+  }
+
+  float FoV =
+      initialFoV;  // - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting
+                   // up a callback for this. It's a bit too complicated for
+                   // this beginner's tutorial, so it's disabled instead.
+
+  // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit
+  // <-> 100 units
+  *ProjectionMatrix = glm::perspective(
+      glm::radians(FoV), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+  // Camera matrix
+  *ViewMatrix = glm::lookAt(
+      position,  // Camera is here
+      position +
+          direction,  // and looks here : at the same position, plus "direction"
+      up              // Head is up (set to 0,-1,0 to look upside-down)
+  );
+
+  // For the next frame, the "last time" will be "now"
+  lastTime = currentTime;
+}
+
 // The MAIN function, from here we start the application and run the game loop
 int main(int argc, const char* argv[]) {
-  // Init GLFW
-  glfwInit();
-  // Set all the required options for GLFW
+  if (!glfwInit()) {
+    std::cerr << "Failed to initialize GLFW\n";
+    getchar();
+    return -1;
+  }
+
+  glfwWindowHint(GLFW_SAMPLES, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,
+                 GL_TRUE);  // To make MacOS happy; should not be needed
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+  // glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
   // Create a GLFWwindow object that we can use for GLFW's functions
-  GLFWwindow* window =
-      glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
+  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "tri", nullptr, nullptr);
+  if (window == NULL) {
+    std::cerr << "Failed to open GLFW window.\n";
+    getchar();
+    glfwTerminate();
+    return -1;
+  }
   glfwMakeContextCurrent(window);
 
   // Set the required callback functions
@@ -98,12 +213,31 @@ int main(int argc, const char* argv[]) {
   // function pointers and extensions
   glewExperimental = GL_TRUE;
   // Initialize GLEW to setup the OpenGL Function pointers
-  glewInit();
+  if (glewInit() != GLEW_OK) {
+    std::cerr << "Failed to initialize GLEW\n";
+    getchar();
+    glfwTerminate();
+    return -1;
+  }
+
+  // Ensure we can capture the escape key being pressed below
+  glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+  // Hide the mouse and enable unlimited mouvement
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
   // Define the viewport dimensions
   int width, height;
   glfwGetFramebufferSize(window, &width, &height);
   glViewport(0, 0, width, height);
+
+  // Set the mouse at the center of the screen
+  glfwPollEvents();
+  glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
+
+  // Enable depth test
+  glEnable(GL_DEPTH_TEST);
+  // Accept fragment if it closer to the camera than the former one
+  glDepthFunc(GL_LESS);
 
   // Build and compile our shader program
   // Vertex shader
@@ -254,51 +388,26 @@ int main(int argc, const char* argv[]) {
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
 
-  // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit
-  // <-> 100 units
-  glm::mat4 Projection = glm::perspective(
-      glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-
-  // Camera matrix
-  glm::mat4 View = glm::lookAt(
-      glm::vec3(4, 3, 3),  // Camera is at (4,3,3), in World Space
-      glm::vec3(0, 0, 0),  // and looks at the origin
-      glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
-  );
-
-  // Model matrix : an identity matrix (model will be at the origin)
-  glm::mat4 Model = glm::mat4(1.0f);
-  // Our ModelViewProjection : multiplication of our 3 matrices
-  glm::mat4 mvp =
-      Projection * View *
-      Model;  // Remember, matrix multiplication is the other way around
-
   // Get a handle for our "MVP" uniform
   // Only during the initialisation
   GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
 
-  // Enable depth test
-  glEnable(GL_DEPTH_TEST);
-  // Accept fragment if it closer to the camera than the former one
-  glDepthFunc(GL_LESS);
-
   std::cerr << "Ready!\n";
   while (!glfwWindowShouldClose(window)) {
-    // Check if any events have been activiated (key pressed, mouse moved etc.)
-    // and call corresponding response functions
-    glfwPollEvents();
-
-    // Render
-
     // Clear the colorbuffer
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Send our transformation to the currently bound shader, in the "MVP"
-    // uniform
-    // This is done in the main loop since each model will have a different MVP
-    // matrix (At least for the M part)
-    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
+    // Model matrix : an identity matrix (model will be at the origin)
+    glm::mat4 ProjectionMatrix, ViewMatrix, ModelMatrix = glm::mat4(1.0);
+    computeMatricesFromInputs(window, &ProjectionMatrix, &ViewMatrix);
+    // Our ModelViewProjection : multiplication of our 3 matrices
+    glm::mat4 MVP =
+        ProjectionMatrix * ViewMatrix *
+        ModelMatrix;  // Remember, matrix multiplication is the other way around
+    // Send our transformation to the currently bound shader,
+    // in the "MVP" uniform
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
     // Draw our first triangle
     glUseProgram(shaderProgram);
@@ -310,12 +419,17 @@ int main(int argc, const char* argv[]) {
 
     // Swap the screen buffers
     glfwSwapBuffers(window);
+    glfwPollEvents();
   }
+
   // Properly de-allocate all resources once they've outlived their purpose
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
+  glDeleteBuffers(1, &uvbuffer);
+
   // Terminate GLFW, clearing any resources allocated by GLFW.
   glfwTerminate();
+
   return 0;
 }
 
