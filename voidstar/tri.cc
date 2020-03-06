@@ -32,6 +32,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action,
                   int mode);
 
 const GLuint WIDTH = 800, HEIGHT = 600;
+int viewportW = WIDTH, viewportH = HEIGHT;  // TODO: atomic pair
+
+void onFramebufferResize(GLFWwindow* /*window*/, int width, int height) {
+  glViewport(0, 0, width, height);
+  viewportW = width;
+  viewportH = height;
+}
 
 const GLchar* vertexShaderSource = R"(
 #version 330 core
@@ -104,11 +111,11 @@ void computeMatricesFromInputs(GLFWwindow* window, glm::mat4* ProjectionMatrix,
   glfwGetCursorPos(window, &xpos, &ypos);
 
   // Reset mouse position for next frame
-  glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
+  glfwSetCursorPos(window, viewportW / 2, viewportH / 2);
 
   // Compute new orientation
-  horizontalAngle += mouseSpeed * float(WIDTH / 2 - xpos);
-  verticalAngle += mouseSpeed * float(HEIGHT / 2 - ypos);
+  horizontalAngle += mouseSpeed * float(viewportW / 2 - xpos);
+  verticalAngle += mouseSpeed * float(viewportH / 2 - ypos);
 
   // Direction : Spherical coordinates to Cartesian coordinates conversion
   glm::vec3 direction(cos(verticalAngle) * sin(horizontalAngle),
@@ -167,7 +174,7 @@ void computeMatricesFromInputs(GLFWwindow* window, glm::mat4* ProjectionMatrix,
   // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit
   // <-> 100 units
   *ProjectionMatrix = glm::perspective(
-      glm::radians(FoV), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+      glm::radians(FoV), (float)viewportW / (float)viewportH, 0.1f, 100.0f);
   // Camera matrix
   *ViewMatrix = glm::lookAt(
       position,  // Camera is here
@@ -206,6 +213,7 @@ int main(int argc, const char* argv[]) {
   }
   glfwMakeContextCurrent(window);
 
+  glfwSetFramebufferSizeCallback(window, onFramebufferResize);
   // Set the required callback functions
   glfwSetKeyCallback(window, key_callback);
 
@@ -226,13 +234,12 @@ int main(int argc, const char* argv[]) {
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
   // Define the viewport dimensions
-  int width, height;
-  glfwGetFramebufferSize(window, &width, &height);
-  glViewport(0, 0, width, height);
+  glfwGetFramebufferSize(window, &viewportW, &viewportH);
+  glViewport(0, 0, viewportW, viewportH);
 
   // Set the mouse at the center of the screen
   glfwPollEvents();
-  glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
+  glfwSetCursorPos(window, viewportW / 2, viewportH / 2);
 
   // Enable depth test
   glEnable(GL_DEPTH_TEST);
