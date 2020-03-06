@@ -57,6 +57,7 @@ uniform mat4 uMVP;
 
 void main() {
   gl_Position = uMVP * vec4(Position, 1);
+  // gl_Position = vec4(0,0,0, 1);
 
   vs_out.vUV = UV;
 }
@@ -134,11 +135,13 @@ void main() {
 #endif
 
 const GLchar* geometryShaderSource = R"(
-// #version 330 core
-#version 420 core
+#version 330 core
+// #version 420 core
 
 layout (triangles) in;
-layout (triangle_strip, max_vertices = 3) out;
+layout (triangle_strip, max_vertices=3) out;
+// layout (points) in;
+// layout (triangle_strip, max_vertices=4) out;
 
 in VS_OUT {
   vec2 vUV;
@@ -150,7 +153,24 @@ out GS_OUT {
   vec3 vColor;
 } gs_out;
 
+// const vec3 offset [4] =
+//   vec3 [] ( vec3 (-0.5,  0.5, 0.0),
+//             vec3 ( 0.5,  0.5, 0.0),
+//             vec3 ( 0.5, -0.5, 0.0),
+//             vec3 (-0.5, -0.5, 0.0) );
+
+// const vec2 tc     [4] =
+//   vec2 [] ( vec2 (0.0, 0.0),
+//             vec2 (1.0, 0.0),
+//             vec2 (1.0, 1.0),
+//             vec2 (0.0, 1.0) );
+
+
+// uniform mat4x4 uModel;
+// uniform mat4x4 uView;
+// uniform mat4x4 uProjection;
 // uniform mat4 uMVP;
+
 // uniform vec3 uUp;
 // uniform vec3 uRight;
 // vec3 front = cross(uUp, uRight);
@@ -171,6 +191,16 @@ out GS_OUT {
 // };
 
 void main() {
+  // mat4 MVP = uModel * uView * uProjection;
+  // for (int i = 0; i < gl_in.length(); ++i) {
+  //   for (int j = 0; j < 4; ++j) {
+  //     // gl_Position = uProjection*uView*uModel * (gl_in[i].gl_Position + offset[j]);
+  //     gl_Position = uMVP * (gl_in[i].gl_Position + offset[j]);
+  //     gs_out.vColor = vec3(tc[j], 0);
+  //     EmitVertex();
+  //   }
+  // }
+
   for (int i = 0; i < 3; i++) {
   // for (int i = 0; i < 12*3; i++) {
     // gl_Position = uMVP*vec4((gl_in[i].gl_Position.xyz + face_table[i].x * uRight + face_table[i].y * uUp + face_table[i].z * front), 1);
@@ -199,10 +229,12 @@ out vec3 color;
 uniform sampler2D myTextureSampler;
 
 void main() {
-  // Output color = color of the texture at the specified UV
-  color = texture(myTextureSampler, fs_in.vUV).rgb;
   // color = texture(myTextureSampler, vec2(0,0)).rgb;
-  // color = texture(myTextureSampler, gl_FragCoord.xy).rgb;
+  color = texture(myTextureSampler, gl_FragCoord.xy).rgb;
+  color = texture(myTextureSampler, gl_PointCoord).rgb;
+  // color = texture(myTextureSampler, fs_in.vColor.xy).rgb;
+
+  color = texture(myTextureSampler, fs_in.vUV).rgb;
 }
 )";
 
@@ -529,6 +561,9 @@ int main(int argc, const char* argv[]) {
                          // buffer/array to prevent strange bugs)
 
   GLuint uMVP = glGetUniformLocation(shaderProgram, "uMVP");
+  GLuint uModel = glGetUniformLocation(shaderProgram, "uModel");
+  GLuint uView = glGetUniformLocation(shaderProgram, "uView");
+  GLuint uProjection = glGetUniformLocation(shaderProgram, "uProjection");
 
   std::cerr << "Ready!\n";
   while (!glfwWindowShouldClose(window)) {
@@ -544,6 +579,9 @@ int main(int argc, const char* argv[]) {
         ProjectionMatrix * ViewMatrix *
         ModelMatrix;  // Remember, matrix multiplication is the other way around
     glUniformMatrix4fv(uMVP, 1, GL_FALSE, &MVP[0][0]);
+    glUniformMatrix4fv(uModel, 1, GL_FALSE, &ModelMatrix[0][0]);
+    glUniformMatrix4fv(uView, 1, GL_FALSE, &ViewMatrix[0][0]);
+    glUniformMatrix4fv(uProjection, 1, GL_FALSE, &ProjectionMatrix[0][0]);
 
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
