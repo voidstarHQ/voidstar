@@ -40,6 +40,8 @@ void onFramebufferResize(GLFWwindow* /*window*/, int width, int height) {
   viewportH = height;
 }
 
+#if 1
+#define DRAW_TRI (12 * 3)
 const GLchar* vertexShaderSource = R"(
 #version 330 core
 
@@ -59,9 +61,81 @@ void main() {
   vs_out.vUV = UV;
 }
 )";
+#endif
+
+#if 0
+#define DRAW_TRI (12 * 3)
+const GLchar* vertexShaderSource = R"(
+#version 330 core
+
+layout (location = 1) in vec2 UV;
+
+out VS_OUT {
+  vec2 vUV;
+  vec3 vColor;
+} vs_out;
+
+uniform mat4 uMVP;
+
+void main() {
+  int tri = gl_VertexID / 3;
+  int idx = gl_VertexID % 3;
+  int face = tri / 2;
+  int top = tri % 2;
+
+  int dir = face % 3;
+  int pos = face / 3;
+
+  int nz = dir >> 1;
+  int ny = dir & 1;
+  int nx = 1 ^ (ny | nz);
+
+  vec3 d = vec3(nx, ny, nz);
+  float flip = 1 - 2 * pos;
+
+  vec3 n = flip * d;
+  vec3 u = -d.yzx;
+  vec3 v = flip * d.zxy;
+
+  float mirror = -1 + 2 * top;
+  vec3 xyz = n + mirror*(1-2*(idx&1))*u + mirror*(1-2*(idx>>1))*v;
+
+  gl_Position = uMVP * vec4(xyz, 1);
+  vs_out.vUV = UV;
+}
+)";
+#endif
+
+#if 0
+#define DRAW_TRI 24
+const GLchar* vertexShaderSource = R"(
+#version 330 core
+
+layout (location = 1) in vec2 UV;
+
+out VS_OUT {
+  vec2 vUV;
+  vec3 vColor;
+} vs_out;
+
+uniform mat4 uMVP;
+
+void main() {
+  vec4 pos = vec4(0.0, 0.0, 0.0, 1.0);
+  int axis = gl_VertexID >> 3;
+  pos[(axis+0)%3] = (gl_VertexID & 1) >> 0;
+  pos[(axis+1)%3] = (gl_VertexID & 2) >> 1;
+  pos[(axis+2)%3] = (gl_VertexID & 4) >> 2;
+
+  gl_Position = uMVP * (vec4(-1.0) + 2.0*pos);
+  vs_out.vUV = UV;
+}
+)";
+#endif
 
 const GLchar* geometryShaderSource = R"(
-#version 330 core
+// #version 330 core
+#version 420 core
 
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
@@ -76,8 +150,31 @@ out GS_OUT {
   vec3 vColor;
 } gs_out;
 
+// uniform mat4 uMVP;
+// uniform vec3 uUp;
+// uniform vec3 uRight;
+// vec3 front = cross(uUp, uRight);
+
+// vec3 face_table[12*3] = {
+//   vec3(-1, -1, -1), vec3(-1, -1, +1), vec3(-1, +1, +1),
+//   vec3(+1, +1, -1), vec3(-1, -1, -1), vec3(-1, +1, -1),
+//   vec3(+1, -1, +1), vec3(-1, -1, -1), vec3(+1, -1, -1),
+//   vec3(+1, +1, -1), vec3(+1, -1, -1), vec3(-1, -1, -1),
+//   vec3(-1, -1, -1), vec3(-1, +1, +1), vec3(-1, +1, -1),
+//   vec3(+1, -1, +1), vec3(-1, -1, +1), vec3(-1, -1, -1),
+//   vec3(-1, +1, +1), vec3(-1, -1, +1), vec3(+1, -1, +1),
+//   vec3(+1, +1, +1), vec3(+1, -1, -1), vec3(+1, +1, -1),
+//   vec3(+1, -1, -1), vec3(+1, +1, +1), vec3(+1, -1, +1),
+//   vec3(+1, +1, +1), vec3(+1, +1, -1), vec3(-1, +1, -1),
+//   vec3(+1, +1, +1), vec3(-1, +1, -1), vec3(-1, +1, +1),
+//   vec3(+1, +1, +1), vec3(-1, +1, +1), vec3(+1, -1, +1),
+// };
+
 void main() {
   for (int i = 0; i < 3; i++) {
+  // for (int i = 0; i < 12*3; i++) {
+    // gl_Position = uMVP*vec4((gl_in[i].gl_Position.xyz + face_table[i].x * uRight + face_table[i].y * uUp + face_table[i].z * front), 1);
+
     gl_Position = gl_in[i].gl_Position;
     gs_out.vUV = gs_in[i].vUV;
     gs_out.vColor = gs_in[i].vColor;
@@ -89,6 +186,8 @@ void main() {
 
 const GLchar* fragmentShaderSource = R"(
 #version 330 core
+
+// layout(origin_upper_left, pixel_center_integer) in vec4 gl_FragCoord;
 
 in GS_OUT {
   vec2 vUV;
@@ -102,6 +201,8 @@ uniform sampler2D myTextureSampler;
 void main() {
   // Output color = color of the texture at the specified UV
   color = texture(myTextureSampler, fs_in.vUV).rgb;
+  // color = texture(myTextureSampler, vec2(0,0)).rgb;
+  // color = texture(myTextureSampler, gl_FragCoord.xy).rgb;
 }
 )";
 
@@ -312,6 +413,7 @@ int main(int argc, const char* argv[]) {
   // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive
   // vertices give a triangle. A cube has 6 faces with 2 triangles each, so this
   // makes 6*2=12 triangles, and 12*3 vertices
+  // static const GLfloat vertices[] = {0,0,0};
   static const GLfloat vertices[] = {
       // tri1
       -1.0f, -1.0f,
@@ -426,8 +528,6 @@ int main(int argc, const char* argv[]) {
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
 
-  // Get a handle for our "MVP" uniform
-  // Only during the initialisation
   GLuint uMVP = glGetUniformLocation(shaderProgram, "uMVP");
 
   std::cerr << "Ready!\n";
@@ -447,9 +547,7 @@ int main(int argc, const char* argv[]) {
 
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
-    glDrawArrays(
-        GL_TRIANGLES, 0,
-        12 * 3);  // 12*3 indices starting at 0 -> 12 triangles -> 6 squares
+    glDrawArrays(GL_TRIANGLES, 0, DRAW_TRI);
     glBindVertexArray(0);
 
     // Swap the screen buffers
