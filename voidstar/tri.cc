@@ -43,47 +43,68 @@ void onFramebufferResize(GLFWwindow* /*window*/, int width, int height) {
 const GLchar* vertexShaderSource = R"(
 #version 330 core
 
-// Input vertex data, different for all executions of this shader.
-layout (location = 0) in vec3 vertexPosition_modelspace;
-layout (location = 1) in vec2 vertexUV;
+layout (location = 0) in vec3 Position;
+layout (location = 1) in vec2 UV;
 
-// Output data ; will be interpolated for each fragment.
-out vec2 UV;
+out VS_OUT {
+  vec2 vUV;
+  vec3 vColor;
+} vs_out;
 
-// Values that stay constant for the whole mesh.
-uniform mat4 MVP;
-
-out vec3 fragmentColor;
+uniform mat4 uMVP;
 
 void main() {
-  // Output position of the vertex, in clip space : MVP * position
-  gl_Position =  MVP * vec4(vertexPosition_modelspace, 1);
+  gl_Position = uMVP * vec4(Position, 1);
 
-  // UV of the vertex. No special space for this one.
-  UV = vertexUV;
+  vs_out.vUV = UV;
+}
+)";
+
+const GLchar* geometryShaderSource = R"(
+#version 330 core
+
+layout (triangles) in;
+layout (triangle_strip, max_vertices = 3) out;
+
+in VS_OUT {
+  vec2 vUV;
+  vec3 vColor;
+} gs_in[];
+
+out GS_OUT {
+  vec2 vUV;
+  vec3 vColor;
+} gs_out;
+
+void main() {
+  for (int i = 0; i < 3; i++) {
+    gl_Position = gl_in[i].gl_Position;
+    gs_out.vUV = gs_in[i].vUV;
+    gs_out.vColor = gs_in[i].vColor;
+    EmitVertex();
+  }
+  EndPrimitive();
 }
 )";
 
 const GLchar* fragmentShaderSource = R"(
 #version 330 core
 
-// Interpolated values from the vertex shaders
-in vec2 UV;
-
-in vec3 fragmentColor;
-
-// Values that stay constant for the whole mesh.
-uniform sampler2D myTextureSampler;
+in GS_OUT {
+  vec2 vUV;
+  vec3 vColor;
+} fs_in;
 
 out vec3 color;
 
+uniform sampler2D myTextureSampler;
+
 void main() {
   // Output color = color of the texture at the specified UV
-  color = texture( myTextureSampler, UV ).rgb;
+  color = texture(myTextureSampler, fs_in.vUV).rgb;
 }
 )";
 
-// position
 glm::vec3 position = glm::vec3(0, 0, 5);
 // horizontal angle : toward -Z
 float horizontalAngle = 3.14f;
@@ -94,22 +115,18 @@ float initialFoV = 45.0f;
 
 float speed = 3.0f;  // 3 units / second
 float mouseSpeed = 0.005f;
-// FoV is the level of zoom. 80° = very wide angle, huge deformations. 60° - 45°
-// : standard. 20° : big zoom.
+// FoV is the level of zoom. 80° = very wide angle, huge deformations.
+// 60° - 45°: standard. 20°: big zoom.
 
 void computeMatricesFromInputs(GLFWwindow* window, glm::mat4* ProjectionMatrix,
                                glm::mat4* ViewMatrix) {
-  // glfwGetTime is called only once, the first time this function is called
   static double lastTime = glfwGetTime();
-
-  // Compute time difference between current and last frame
   double currentTime = glfwGetTime();
   float deltaTime = float(currentTime - lastTime);
 
   // Get mouse position
   double xpos, ypos;
   glfwGetCursorPos(window, &xpos, &ypos);
-
   // Reset mouse position for next frame
   glfwSetCursorPos(window, viewportW / 2, viewportH / 2);
 
@@ -122,35 +139,28 @@ void computeMatricesFromInputs(GLFWwindow* window, glm::mat4* ProjectionMatrix,
                       sin(verticalAngle),
                       cos(verticalAngle) * cos(horizontalAngle));
 
-  // Right vector
   glm::vec3 right = glm::vec3(sin(horizontalAngle - 3.14f / 2.0f), 0,
                               cos(horizontalAngle - 3.14f / 2.0f));
-
-  // Up vector
   glm::vec3 up = glm::cross(right, direction);
 
-  // Move forward
-  if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-    position += direction * deltaTime * speed;
+  // GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_LEFT
+  if (glfwGetKey(window, 'W') == GLFW_PRESS) {
+    position += direction * deltaTime * speed;  // forward
   }
-  // Move backward
-  if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-    position -= direction * deltaTime * speed;
+  if (glfwGetKey(window, 'S') == GLFW_PRESS) {
+    position -= direction * deltaTime * speed;  // backward
   }
-  // Strafe right
-  if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-    position += right * deltaTime * speed;
+  if (glfwGetKey(window, 'D') == GLFW_PRESS) {
+    position += right * deltaTime * speed;  // strafe right
   }
-  // Strafe left
-  if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-    position -= right * deltaTime * speed;
+  if (glfwGetKey(window, 'A') == GLFW_PRESS) {
+    position -= right * deltaTime * speed;  // strafe left
   }
-  // up & down
   if (glfwGetKey(window, 'X') == GLFW_PRESS) {
-    position += up * deltaTime * speed;
+    position += up * deltaTime * speed;  // up
   }
   if (glfwGetKey(window, 'Z') == GLFW_PRESS) {
-    position -= up * deltaTime * speed;
+    position -= up * deltaTime * speed;  // down
   }
 
   if (glfwGetKey(window, 'O') == GLFW_PRESS) {
@@ -198,8 +208,8 @@ int main(int argc, const char* argv[]) {
   glfwWindowHint(GLFW_SAMPLES, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,
-                 GL_TRUE);  // To make MacOS happy; should not be needed
+  // GLFW_OPENGL_FORWARD_COMPAT to make macOS happy; should not be needed
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   // glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -257,8 +267,19 @@ int main(int argc, const char* argv[]) {
   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
   if (!success) {
     glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-              << infoLog << std::endl;
+    std::cout << "Error compiling vertex shader:\n" << infoLog << std::endl;
+    return -1;
+  }
+  // Geometry shader
+  GLuint geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+  glShaderSource(geometryShader, 1, &geometryShaderSource, NULL);
+  glCompileShader(geometryShader);
+  // Check for compile time errors
+  glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(geometryShader, 512, NULL, infoLog);
+    std::cout << "Error compiling geometry shader:\n" << infoLog << std::endl;
+    return -1;
   }
   // Fragment shader
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -268,41 +289,48 @@ int main(int argc, const char* argv[]) {
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
   if (!success) {
     glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
-              << infoLog << std::endl;
+    std::cout << "Error compiling fragment shader:\n" << infoLog << std::endl;
+    return -1;
   }
   // Link shaders
   GLuint shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
+  glAttachShader(shaderProgram, geometryShader);
   glAttachShader(shaderProgram, fragmentShader);
   glLinkProgram(shaderProgram);
   // Check for linking errors
   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
   if (!success) {
     glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
-              << infoLog << std::endl;
+    std::cout << "Error linking shaders:\n" << infoLog << std::endl;
+    return -1;
   }
   glDeleteShader(vertexShader);
+  glDeleteShader(geometryShader);
   glDeleteShader(fragmentShader);
 
   // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive
   // vertices give a triangle. A cube has 6 faces with 2 triangles each, so this
   // makes 6*2=12 triangles, and 12*3 vertices
   static const GLfloat vertices[] = {
-      -1.0f, -1.0f, -1.0f,                       // triangle 1 : begin
-      -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,   // triangle 1 : end
-      1.0f,  1.0f,  -1.0f,                       // triangle 2 : begin
-      -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f,  // triangle 2 : end
-      1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,
-      1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
-      -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, 1.0f,  -1.0f, 1.0f,
-      -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f,
-      -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  -1.0f,
-      -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  1.0f,  1.0f,
-      1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, -1.0f,
-      1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,
-      1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  -1.0f, 1.0f};
+      // tri1
+      -1.0f, -1.0f,
+      -1.0f,  // triangle 1 : begin
+      -1.0f, -1.0f,
+      +1.0f,  // triangle 1 : continued
+      -1.0f, +1.0f,
+      +1.0f,  // triangle 1 : end
+      +1.0f, +1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, +1.0f, -1.0f, +1.0f,
+      -1.0f, +1.0f, -1.0f, -1.0f, -1.0f, +1.0f, -1.0f, -1.0f, +1.0f, +1.0f,
+      -1.0f, +1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
+      -1.0f, +1.0f, +1.0f, -1.0f, +1.0f, -1.0f, +1.0f, -1.0f, +1.0f, -1.0f,
+      -1.0f, +1.0f, -1.0f, -1.0f, -1.0f, -1.0f, +1.0f, +1.0f, -1.0f, -1.0f,
+      +1.0f, +1.0f, -1.0f, +1.0f, +1.0f, +1.0f, +1.0f, +1.0f, -1.0f, -1.0f,
+      +1.0f, +1.0f, -1.0f, +1.0f, -1.0f, -1.0f, +1.0f, +1.0f, +1.0f, +1.0f,
+      -1.0f, +1.0f, +1.0f, +1.0f, +1.0f, +1.0f, +1.0f, -1.0f, -1.0f, +1.0f,
+      -1.0f, +1.0f, +1.0f, +1.0f, -1.0f, +1.0f, -1.0f, -1.0f, +1.0f, +1.0f,
+      +1.0f, +1.0f, +1.0f, -1.0f, +1.0f, +1.0f, +1.0f, -1.0f, +1.0f,
+  };
   GLuint VBO, VAO;
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -311,14 +339,18 @@ int main(int argc, const char* argv[]) {
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat),
-                        (GLvoid*)0);
+  glVertexAttribPointer(0,                    // layout = 0
+                        3,                    // it's triangles
+                        GL_FLOAT,             // type
+                        GL_FALSE,             // normalized?
+                        3 * sizeof(GLfloat),  // stride
+                        (GLvoid*)0            // array buffer offset
+  );
   glEnableVertexAttribArray(0);
-  glBindBuffer(
-      GL_ARRAY_BUFFER,
-      0);  // Note that this is allowed, the call to glVertexAttribPointer
-           // registered VBO as the currently bound vertex buffer object so
-           // afterwards we can safely unbind
+  // Note that this is allowed, the call to glVertexAttribPointer
+  // registered VBO as the currently bound vertex buffer object so
+  // afterwards we can safely unbind
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   // Two UV coordinatesfor each vertex. They were created with Blender. You'll
   // learn shortly how to do this yourself.
@@ -348,9 +380,8 @@ int main(int argc, const char* argv[]) {
   // 2nd attribute buffer
   glEnableVertexAttribArray(1);
   glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-  glVertexAttribPointer(1,  // attribute. No particular reason for 1, but must
-                            // match the layout in the shader.
-                        2,  // size
+  glVertexAttribPointer(1,         // layout = 1
+                        2,         // size
                         GL_FLOAT,  // type
                         GL_FALSE,  // normalized?
                         0,         // stride
@@ -397,7 +428,7 @@ int main(int argc, const char* argv[]) {
 
   // Get a handle for our "MVP" uniform
   // Only during the initialisation
-  GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
+  GLuint uMVP = glGetUniformLocation(shaderProgram, "uMVP");
 
   std::cerr << "Ready!\n";
   while (!glfwWindowShouldClose(window)) {
@@ -412,11 +443,8 @@ int main(int argc, const char* argv[]) {
     glm::mat4 MVP =
         ProjectionMatrix * ViewMatrix *
         ModelMatrix;  // Remember, matrix multiplication is the other way around
-    // Send our transformation to the currently bound shader,
-    // in the "MVP" uniform
-    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    glUniformMatrix4fv(uMVP, 1, GL_FALSE, &MVP[0][0]);
 
-    // Draw our first triangle
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
     glDrawArrays(
