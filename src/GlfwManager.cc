@@ -214,6 +214,20 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
     up = glm::cross(right, direction);
   }
 
+  if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS)
+    args_->spin_shape = !args_->spin_shape;
+  if (glfwGetKey(window_, 'M') == GLFW_PRESS)
+    args_->move_window = !args_->move_window;
+  if (glfwGetKey(window_, '.') == GLFW_PRESS) {  // '>'
+    args_->sliding_step_factor *= 2;
+  }
+  if (glfwGetKey(window_, ',') == GLFW_PRESS) {  // '<'
+    args_->sliding_step_factor /= 2;
+    if (args_->sliding_step_factor == 0) {
+      args_->sliding_step_factor = 1;
+    }
+  }
+
   float FoV =
       initialFoV;  // - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting
                    // up a callback for this. It's a bit too complicated for

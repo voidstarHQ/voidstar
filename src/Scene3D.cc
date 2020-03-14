@@ -138,54 +138,13 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
     while (degrees_rotated_ > 360.0f) degrees_rotated_ -= 360.0f;
   }
 
-  auto events = manager->getEvents();
-
-  // move position of camera based on WASD keys, and XZ keys for up and down
-  if (events->keyDown('S'))
-    camera_.offsetPosition(elapsedTime * move_speed_ * -camera_.forward());
-  else if (events->keyDown('W'))
-    camera_.offsetPosition(elapsedTime * move_speed_ * camera_.forward());
-  if (events->keyDown('A'))
-    camera_.offsetPosition(elapsedTime * move_speed_ * -camera_.right());
-  else if (events->keyDown('D'))
-    camera_.offsetPosition(elapsedTime * move_speed_ * camera_.right());
-  if (events->keyDown('Z'))
-    camera_.offsetPosition(elapsedTime * move_speed_ * -glm::vec3(0, 1, 0));
-  else if (events->keyDown('X'))
-    camera_.offsetPosition(elapsedTime * move_speed_ * glm::vec3(0, 1, 0));
-  if (events->keyPressed('O')) {
-    camera_.setPosition(glm::vec3(0, -0.1, 3.8));
-    camera_.lookAt(glm::vec3(0, 0, 4));
-  }
-  if (events->keyPressed(' '))
-    manager->args()->spin_shape = !manager->args()->spin_shape;
-  if (events->keyPressed('M'))
-    manager->args()->move_window = !manager->args()->move_window;
-  if (events->keyPressed('.')) {  // '>'
-    manager->args()->sliding_step_factor *= 2;
-  }
-  if (events->keyPressed(',')) {  // '<'
-    manager->args()->sliding_step_factor /= 2;
-    if (manager->args()->sliding_step_factor == 0) {
-      manager->args()->sliding_step_factor = 1;
-    }
-  }
-
-  if (manager->args()->move_window || selected_.empty() ||
-      manager->slide_window()) {
-    if (manager->args()->move_window) manager->slide_window_right();
-    bool slid = manager->slide_window(selected_, indices_);
-    if (manager->args()->move_window && !slid)
-      manager->args()->move_window = !manager->args()->move_window;
-  }
-
-  auto mouse = manager->getMouse();
-  mouse->getCursorPos();
-  camera_.offsetOrientation(mouse->sensitivity * mouse->y,
-                            mouse->sensitivity * mouse->x);
+  // auto mouse = manager->getMouse();
+  // mouse->getCursorPos();
+  // camera_.offsetOrientation(mouse->sensitivity * mouse->y,
+  //                           mouse->sensitivity * mouse->x);
   // reset the mouse, so it doesn't go out of the window
-  mouse->setCursorPos(0, 0);
-  mouse->scrollY = 0.0;
+  // mouse->setCursorPos(0, 0);
+  // mouse->scrollY = 0.0;
 
   // bind the program (the shaders)
   program_->use();
@@ -199,12 +158,32 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
       ModelMatrix;  // Remember, matrix multiplication is the other way around
   program_->setUniformMatrix4("uMVP", &MVP[0][0]);
 
+
+    if (manager->args()->move_window || selected_.empty() ||
+        manager->slide_window()) {
+      if (manager->args()->move_window) manager->slide_window_right();
+      bool slid = manager->slide_window(selected_, indices_);
+      if (manager->args()->move_window && !slid)
+        manager->args()->move_window = !manager->args()->move_window;
+    }
+    
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
+  GlfwManager::glProcessErrors();
+  // std::cout << "load_buffers:: size_selected = " << size_selected <<
+  // std::endl;
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * selected_.size(),
+               &selected_[0], GL_STATIC_DRAW);
+  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, NULL, GL_STATIC_DRAW);
+  GlfwManager::glProcessErrors();
+
+
   return true;
 }
 
 void Scene3D::render() {
   // Clear the colorbuffer
-  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  glClearColor(0, 0, 0, 0);
+  // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // program_->setUniform("camera", camera_.matrix());
