@@ -38,7 +38,7 @@ void Scene3D::load_buffers() {
   // registered VBO as the currently bound vertex buffer object so
   // afterwards we can safely unbind
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  std::cerr << "Loaded vertices.\n";
+  std::cerr << "Loaded "<<vertices_.size()/3<<" vertices.\n";
 
   // make and bind the VBO
   glGenBuffers(1, &colors_id_);
@@ -56,8 +56,9 @@ void Scene3D::load_buffers() {
                         0,         // stride
                         NULL       // array buffer offset
   );
-  std::cerr << "Loaded UV.\n";
+  std::cerr << "Loaded "<<colors_.size()/3<<" colors.\n";
 
+    selected_.assign(indices_.begin(), std::min(indices_.end(), 8192+indices_.begin()));
   glGenBuffers(1, &ebo_);
   GlfwManager::glProcessErrors();
   // std::cout << "load_buffers:: " << ebo_ << std::endl;
@@ -69,7 +70,7 @@ void Scene3D::load_buffers() {
                &selected_[0], GL_STATIC_DRAW);
   // glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, NULL, GL_STATIC_DRAW);
   GlfwManager::glProcessErrors();
-  std::cerr << "Loaded elements.\n";
+  std::cerr << "Loaded "<<selected_.size()<<" elements.\n";
 
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
@@ -100,8 +101,7 @@ void Scene3D::reload() {
   load_buffers();
   glBindVertexArray(vao_);
   glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-  glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), colors_.data(),
-               GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), &colors_[0], GL_STATIC_DRAW);
   glBindVertexArray(0);
 }
 
@@ -215,29 +215,27 @@ void Scene3D::render() {
 
   constexpr size_t SAMPLE = 999UL;
 
-  // const VertIndices sels =
+  // VertIndices sels;
+  // sels.reserve(SAMPLE);
+  // for (int i = 0; i < SAMPLE; ++i) {
+  //   sels.emplace_back(i);
+  // }
+  // selected_.assign(sels.begin(), sels.end());
 
-  VertIndices sels;
-  sels.reserve(SAMPLE);
-  for (int i = 0; i < SAMPLE; ++i) {
-    sels.emplace_back(i);
-  }
-  selected_.assign(sels.begin(), sels.end());
+  // Floats cols;
+  // cols.reserve(4 * SAMPLE);
+  // for (int i = 0; i < 4 * SAMPLE; ++i) {
+  //   cols.emplace_back(1.0f);
+  // }
+  // colors_.assign(cols.begin(), cols.end());
 
-  Floats cols;
-  cols.reserve(4 * SAMPLE);
-  for (int i = 0; i < 4 * SAMPLE; ++i) {
-    cols.emplace_back(1.0f);
-  }
-  colors_.assign(cols.begin(), cols.end());
-
-  // // send newly selected elements
-  auto size_selected =
-      sizeof(decltype(selected_)::value_type) * selected_.size();
-  // std::cout << "render:: size_selected = " << size_selected << std::endl;
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, selected_.data(),
-               GL_STATIC_DRAW);
-  GlfwManager::glProcessErrors();
+  // // // send newly selected elements
+  // auto size_selected =
+  //     sizeof(decltype(selected_)::value_type) * selected_.size();
+  // // std::cout << "render:: size_selected = " << size_selected << std::endl;
+  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, selected_.data(),
+  //              GL_STATIC_DRAW);
+  // GlfwManager::glProcessErrors();
 
   // bind the VAO
   glBindVertexArray(vao_);
@@ -245,8 +243,8 @@ void Scene3D::render() {
 
   // draw only the VAO's points we colored
   auto mM = std::minmax_element(selected_.begin(), selected_.end());
-  std::cout << "render:: min:" << *mM.first << " max:" << *mM.second
-  << "#:" << selected_.size() << std::endl;
+  // std::cout << "render:: min:" << *mM.first << " max:" << *mM.second
+  // << "#:" << selected_.size() << std::endl;
   glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, selected_.size(), GL_UNSIGNED_INT, NULL);
 
   // glDrawArrays(GL_POINTS, 0, n_points_);
