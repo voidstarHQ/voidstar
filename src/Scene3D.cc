@@ -239,31 +239,25 @@ void Scene3D::render() {
                GL_STATIC_DRAW);
   GlfwManager::glProcessErrors();
 
-  // std::ostringstream SSsels;
-  // for (size_t i = 0; i < std::min(selected_.size(), SAMPLE); ++i) {
-  //     // SSsels << ", " << selected_[i];
-  // }
-  // std::cout << SSsels.str() << " = SSsels" << std::endl;
-
   // bind the VAO
   glBindVertexArray(vao_);
+  GlfwManager::glProcessErrors();
 
-  glDrawArrays(GL_POINTS, 0, n_points_);
-
-  std::cerr << "#elements: " << selected_.size() << " " << selected_[0] << "-"
-            << selected_.back() << std::endl;
-  // // // draw only the VAO's points we colored
-  // auto mM = std::minmax_element(selected_.begin(), selected_.end());
-  // // std::cout << "render:: min:" << *mM.first << " max:" << *mM.second << "
-  // #:" << selected_.size() << std::endl; glDrawRangeElements(GL_POINTS,
-  // *mM.first, *mM.second, selected_.size(), GL_UNSIGNED_INT, NULL);
-  // GlfwManager::glProcessErrors();
+  // draw only the VAO's points we colored
+  auto mM = std::minmax_element(selected_.begin(), selected_.end());
+  std::cout << "render:: min:" << *mM.first << " max:" << *mM.second
+  << "#:" << selected_.size() << std::endl;
+  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, selected_.size(), GL_UNSIGNED_INT, NULL);
 
   // glDrawArrays(GL_POINTS, 0, n_points_);
-  // glDrawElements(GL_POINTS, selected_.size(), GL_UNSIGNED_INT,
-  // selected_.data());
+  // glDrawElements(GL_POINTS, selected_.size(), GL_UNSIGNED_INT, &selected_[0]);
+
+  GlfwManager::glProcessErrors();
+
 
   // unbind the VAO and the program
   glBindVertexArray(0);
+  GlfwManager::glProcessErrors();
+
   program_->stopUsing();
 }
