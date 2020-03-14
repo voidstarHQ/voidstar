@@ -1,17 +1,15 @@
-#version 150
+#version 330 core
 
-uniform mat4 camera;
-uniform mat4 model;
+layout (location = 0) in vec3 vert;
+layout (location = 1) in vec3 colr;
 
-in vec3 vert;
-
-in vec3 colr;
 out vec3 carryColr;
 
+uniform mat4 uMVP;
+
 void main() {
+    gl_Position = uMVP * vec4(vert, 1);
+
     // Pass colr through to fragment shader
     carryColr = colr;
-
-    // Apply all matrix transformations to vert
-    gl_Position = camera * model * vec4(vert, 1);
 }
