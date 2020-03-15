@@ -6,7 +6,8 @@
 #include <stdexcept>
 
 #include "src/include/GlfwManager.h"
-#include "src/resources/shaders.h"
+#include "src/shaders/fragment.h"
+#include "src/shaders/vertex_3d.h"
 
 void Scene3D::load_shaders() {
   const std::vector<tdogl::Shader> shaders{

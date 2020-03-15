@@ -2,7 +2,8 @@
 
 #include <stdexcept>
 
-#include "src/resources/shaders.h"
+#include "src/shaders/fragment.h"
+#include "src/shaders/vertex_2d.h"
 
 void Scene2D::load_shaders() {
   const std::vector<tdogl::Shader> shaders{
