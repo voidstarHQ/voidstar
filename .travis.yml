@@ -29,7 +29,6 @@ install:
       curl -#fSLo ./bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-darwin-amd64 && chmod +x ./bazel
       ;;
     'linux')
-      set -e
       curl -#fSLo ./bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 && chmod +x ./bazel
       ;;
   esac
@@ -49,9 +48,6 @@ script:
 - mv -v bazel-bin/src/voidstar "bazel-bin/src/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
 - if [[ "$TRAVIS_OS_NAME" = 'linux' ]]; then cppcheck --error-exitcode=1 --enable=all -Isrc/include/ -Isrc/common/tdogl/ src/; fi
 
-after_script:
-- set +e
-
 after_success:
 - |
   if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]] && [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then
@@ -62,7 +58,7 @@ after_success:
     msg="$(git log -1 --pretty=%B | head -n 1)"
     echo "Message: $msg"
     echo Commit: $TRAVIS_COMMIT
-    if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && set +e && exit 0; fi
+    if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && exit 0; fi
     git config --global user.email 'pierrefenoll+travis-voidstar@gmail.com'
     git config --global user.name 'Autotag'
     git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
@@ -72,7 +68,6 @@ after_success:
     ssh-add travis-miners
     echo Tagging $TRAVIS_COMMIT with $tag
     git push --tags || true
-    set +e
   fi
 
 deploy:
