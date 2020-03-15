@@ -24,8 +24,8 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 ## Usage
 
 ```shell
-./configure -d RELEASE && cd build && make
-./voidstar --move ../data/*
+bazel build //src:voistar
+./bazel-bin/src/voidstar --move ../data/*
 # Press H and L to switch between files
 # Use A W S D Z X and your mouse to move in the 3D space
 # Press F for full screen
@@ -69,7 +69,7 @@ This relies on [snaps](https://snapcraft.io/docs/core/install).
 ## Requirements
 
 * A C++ compiler
-* `cmake` greater than 2.8
+* `bazel` that you can use through [bazelisk](https://github.com/bazelbuild/bazelisk)
 
 ### Windows
 
@@ -78,14 +78,13 @@ https://github.com/fenollp/voidstar/issues/2
 ### Debian
 
 ```shell
-sudo apt install libglew-dev libglm-dev libglfw3-dev pkg-config
+sudo apt install libglew-dev libglm-dev
 ```
 
 ### OSX
 
 ```shell
-brew install glew glm pkg-config
-brew install glfw3 --without-shared-library
+brew install glew glm
 ```
 
 ### Web
