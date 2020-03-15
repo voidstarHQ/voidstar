@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
-
 #include <GL/glew.h>
+
+#include <vector>
 
 using Floats = std::vector<GLfloat>;
 
