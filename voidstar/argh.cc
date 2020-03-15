@@ -354,7 +354,8 @@ int main(int argc, const char* argv[]) {
   std::cerr << "Loaded UV.\n";
 
   std::vector<GLuint> elements;
-  for (size_t i = 0; i < 256 * 256 * 256; ++i) elements.push_back(i);
+#define POINTS (1024)
+  for (size_t i = 0; i < POINTS; ++i) elements.push_back(i);
   GLuint EBO;
   glGenBuffers(1, &EBO);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -436,9 +437,11 @@ int main(int argc, const char* argv[]) {
 
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_POINTS, 0, 256 * 256 * 256);
-    glDrawRangeElements(GL_POINTS, elements[0], elements.back(),
-                        elements.size(), GL_UNSIGNED_INT, elements.data());
+    glDrawArrays(GL_POINTS, 0, POINTS);
+    // std::cerr << "#elements: " << elements.size() << " " << elements[0] << "-"
+    // << elements.back() << std::endl;
+    // glDrawRangeElements(GL_POINTS, elements[0], elements.back(),
+    //                     elements.size(), GL_UNSIGNED_INT, &elements[0]);
     glBindVertexArray(0);
 
     // Swap the screen buffers
