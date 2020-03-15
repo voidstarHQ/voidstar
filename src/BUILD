@@ -28,8 +28,6 @@ cc_binary(
         "Scene.cc",
         "Scene2D.cc",
         "Scene3D.cc",
-        "common/tdogl/Camera.cpp",
-        "common/tdogl/Camera.h",
         "common/tdogl/Program.cpp",
         "common/tdogl/Program.h",
         "common/tdogl/Shader.cpp",

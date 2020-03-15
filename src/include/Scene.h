@@ -10,7 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "src/common/tdogl/Camera.h"
+#include "src/common/tdogl/Program.h"
 #include "src/include/Algorithm.h"
 #include "src/include/Arguments.h"
 #include "src/include/Manager.h"
@@ -34,10 +34,10 @@ class Scene {
                          static_cast<float>(viewport_height);
     std::cout << "aspect: " << aspect_ratio << " (" << viewport_width << 'x'
               << viewport_height << ')' << std::endl;
-    camera_.setViewportAspectRatio(aspect_ratio);
   }
 
   inline SceneType type() const { return type_; }
+  std::shared_ptr<tdogl::Program> program() const { return program_; }
   std::shared_ptr<Algorithm> algorithm() const { return algo_; }
   static std::shared_ptr<Scene> with_algo(std::shared_ptr<Arguments> args,
                                           std::shared_ptr<Algorithm> algo);
@@ -45,5 +45,5 @@ class Scene {
  protected:
   SceneType type_;
   std::shared_ptr<Algorithm> algo_;
-  tdogl::Camera camera_;
+  std::shared_ptr<tdogl::Program> program_;
 };

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "src/common/tdogl/Program.h"
 #include "src/include/Algo2D.h"
 #include "src/include/Scene.h"
 
@@ -44,6 +43,4 @@ class Scene2D : public Scene {
 
   Floats vertices_;
   Floats colors_;
-
-  std::shared_ptr<tdogl::Program> program_;
 };

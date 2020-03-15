@@ -120,17 +120,6 @@ void Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
 }
 
 bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
-  // auto mouse = manager->getMouse();
-  // mouse->getCursorPos();
-  // camera_.offsetOrientation(mouse->sensitivity * mouse->y,
-  //                           mouse->sensitivity * mouse->x);
-  // reset the mouse, so it doesn't go out of the window
-  // mouse->setCursorPos(0, 0);
-  // mouse->scrollY = 0.0;
-
-  // bind the program (the shaders)
-  program_->use();
-
   glm::mat4 projection, view;
   manager->computeMatricesFromInputs(&projection, &view);
   if (manager->args()->spin_shape) {
@@ -165,11 +154,6 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
 }
 
 void Scene3D::render() {
-  // Clear the colorbuffer
-  glClearColor(0, 0, 0, 0);
-  // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
   // bind the VAO
   glBindVertexArray(vao_);
   GlfwManager::glProcessErrors();
@@ -184,6 +168,4 @@ void Scene3D::render() {
   // unbind the VAO and the program
   glBindVertexArray(0);
   GlfwManager::glProcessErrors();
-
-  program_->stopUsing();
 }

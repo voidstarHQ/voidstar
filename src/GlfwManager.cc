@@ -229,13 +229,26 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
 }
 
 void GlfwManager::run() {
-  if (scene_->type() == SCENE_3D)
-    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  const auto is3D = scene_->type() == SCENE_3D;
+  if (is3D) glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
   double lastTime = glfwGetTime();
   while (!glfwWindowShouldClose(window_)) {
     // process pending events
     events_->update();
+
+    glClearColor(0, 0, 0, 1);
+    // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    // Clear the colorbuffer
+    if (is3D) {
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    } else {
+      glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    // bind the program (the shaders) so uniforms can be set in scene
+    // update/render.
+    scene_->program()->use();
 
     // update the scene based on the time elapsed since last update
     double thisTime = glfwGetTime();
@@ -248,7 +261,7 @@ void GlfwManager::run() {
       glfwSwapBuffers(window_);
     }
 
-    glProcessErrors();
+    scene_->program()->stopUsing();
 
     if (events_->keyPressed(GLFW_KEY_ESCAPE))
       glfwSetWindowShouldClose(window_, GL_TRUE);

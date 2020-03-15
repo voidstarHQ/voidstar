@@ -83,12 +83,6 @@ bool Scene2D::update(std::shared_ptr<Manager> manager __unused,
 }
 
 void Scene2D::render() {
-  glClearColor(0, 0, 0, 1);
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  // bind the program (the shaders)
-  program_->use();
-
   // bind the VAO
   glBindVertexArray(vao_);
 
@@ -97,5 +91,4 @@ void Scene2D::render() {
 
   // unbind the VAO and the program
   glBindVertexArray(0);
-  program_->stopUsing();
 }

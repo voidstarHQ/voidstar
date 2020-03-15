@@ -1,6 +1,5 @@
 #pragma once
 
-#include "src/common/tdogl/Program.h"
 #include "src/include/Algo3D.h"
 #include "src/include/Scene.h"
 
@@ -58,5 +57,4 @@ class Scene3D : public Scene {
   GLfloat degrees_rotated_;
   GLfloat degrees_per_second_;
   GLfloat move_speed_;
-  std::shared_ptr<tdogl::Program> program_;
 };
