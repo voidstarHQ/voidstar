@@ -70,6 +70,9 @@ class GlfwManager : public Manager {
   virtual std::shared_ptr<Events> getEvents() final { return events_; }
   virtual std::shared_ptr<Mouse> getMouse() final { return mouse_; }
 
+  virtual void ToggleFullscreen() override;
+  virtual bool SlideWindow() override;
+
   GLFWwindow* window() { return window_; }
 
   static void glProcessErrors(bool quiet = false);
@@ -86,40 +89,6 @@ class GlfwManager : public Manager {
     if (!instance_)
       throw std::runtime_error("GlfwManager wasn't previously instanciated");
     return instance_;
-  }
-
-  void toggleFullscreen() {
-    int w, h;
-    fullscreen_ = !fullscreen_;
-    if (fullscreen_) {
-      w = static_cast<int>(args_->width);
-      h = static_cast<int>(args_->height);
-    } else {
-      const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-      glfwSetWindowPos(window_, 0, 0);
-      w = mode->width;
-      h = mode->height;
-    }
-    glfwSetWindowSize(window_, w, h);
-  }
-
-  bool slide_window() {
-    bool ret = false;
-    if (events_->keyDown(GLFW_KEY_LEFT)) {
-      ret = true;
-      slide_window_left();
-    } else if (events_->keyDown(GLFW_KEY_RIGHT)) {
-      ret = true;
-      slide_window_right();
-    }
-    if (events_->keyDown(GLFW_KEY_UP)) {
-      ret = true;
-      slide_window_up();
-    } else if (events_->keyDown(GLFW_KEY_DOWN)) {
-      ret = true;
-      slide_window_down();
-    }
-    return ret;
   }
 
   void viewport(int w, int h) {

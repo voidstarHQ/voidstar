@@ -37,7 +37,7 @@ void Scene3D::load_buffers() {
   // registered VBO as the currently bound vertex buffer object so
   // afterwards we can safely unbind
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  std::cerr << "Loaded " << vertices_.size() << " vertices.\n";
+  std::cerr << "Loaded " << vertices_.size() / 3 << " vertices.\n";
 
   // make and bind the VBO
   glGenBuffers(1, &colors_id_);
@@ -53,7 +53,7 @@ void Scene3D::load_buffers() {
                         3 * sizeof(GLfloat),  // stride
                         NULL                  // array buffer offset
   );
-  std::cerr << "Loaded " << colors_.size() << " colors.\n";
+  std::cerr << "Loaded " << colors_.size() / 3 << " colors.\n";
 
   // Load an initial set of points
   selected_.assign(indices_.begin(),
@@ -147,7 +147,7 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
   program_->setUniformMatrix4("uMVP", &MVP[0][0]);
 
   if (manager->args()->move_window || selected_.empty() ||
-      manager->slide_window()) {
+      manager->SlideWindow()) {
     if (manager->args()->move_window) manager->slide_window_right();
     bool slid = manager->slide_window(selected_, indices_);
     if (manager->args()->move_window && !slid)

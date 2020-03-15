@@ -41,7 +41,7 @@ class Manager {
     reset_window();
   }
 
-  virtual void toggleFullscreen() = 0;
+  virtual void ToggleFullscreen() = 0;
 
   std::shared_ptr<Arguments> args() const { return args_; }
   std::shared_ptr<Scene> scene() const { return scene_; }
@@ -64,7 +64,7 @@ class Manager {
                                  ? sliding_window_length_ - args_->sliding_step
                                  : args_->sliding_window_length;
   }
-  virtual bool slide_window() = 0;
+  virtual bool SlideWindow() = 0;
 
   bool slide_window(VertIndices& selected, const VertIndices& indices) {
     auto left = indices.begin() + sliding_window_offset_;

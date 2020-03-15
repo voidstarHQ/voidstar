@@ -111,6 +111,40 @@ void GlfwManager::glProcessErrors(bool quiet) {
   }
 }
 
+void GlfwManager::ToggleFullscreen() {
+  int w, h;
+  fullscreen_ = !fullscreen_;
+  if (fullscreen_) {
+    w = static_cast<int>(args_->width);
+    h = static_cast<int>(args_->height);
+  } else {
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    glfwSetWindowPos(window_, 0, 0);
+    w = mode->width;
+    h = mode->height;
+  }
+  glfwSetWindowSize(window_, w, h);
+}
+
+bool GlfwManager::SlideWindow() {
+  bool ret = false;
+  if (events_->keyDown(GLFW_KEY_LEFT)) {
+    ret = true;
+    slide_window_left();
+  } else if (events_->keyDown(GLFW_KEY_RIGHT)) {
+    ret = true;
+    slide_window_right();
+  }
+  if (events_->keyDown(GLFW_KEY_UP)) {
+    ret = true;
+    slide_window_up();
+  } else if (events_->keyDown(GLFW_KEY_DOWN)) {
+    ret = true;
+    slide_window_down();
+  }
+  return ret;
+}
+
 void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
                                             glm::mat4* ViewMatrix) {
   static double lastTime = glfwGetTime();
@@ -218,7 +252,7 @@ void GlfwManager::run() {
 
     if (events_->keyPressed(GLFW_KEY_ESCAPE))
       glfwSetWindowShouldClose(window_, GL_TRUE);
-    if (events_->keyPressed('F')) toggleFullscreen();
+    if (events_->keyPressed('F')) ToggleFullscreen();
 
     if (events_->keyPressed('H')) loadPrevFile();
     if (events_->keyPressed('L')) loadNextFile();
