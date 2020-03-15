@@ -10,45 +10,78 @@
 #include "src/shaders/vertex_3d.h"
 
 void Scene3D::load_shaders() {
-  const std::vector<tdogl::Shader> shaders{
-      tdogl::Shader(shader__vertex_3d, GL_VERTEX_SHADER),
-      tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)};
-  program_ = std::make_shared<tdogl::Program>(shaders);
+  // Build and compile our shader program
+  GLint success;
+  GLchar infoLog[512];
+
+  // Vertex shader
+  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertexShader, 1, &shader__vertex_3d, NULL);
+  glCompileShader(vertexShader);
+  // Check for compile time errors
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+    std::cerr << "Error compiling vertex shader:\n" << infoLog << std::endl;
+    throw std::runtime_error("!glCompileShader");
+  }
+
+  // Fragment shader
+  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &shader__fragment, NULL);
+  glCompileShader(fragmentShader);
+  // Check for compile time errors
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+    std::cerr << "Error compiling fragment shader:\n" << infoLog << std::endl;
+    throw std::runtime_error("!glCompileShader");
+  }
+
+  // Link shaders
+  program_ = glCreateProgram();
+  if (program_ == 0) throw std::runtime_error("!glCreateProgram");
+  glAttachShader(program_, vertexShader);
+  glAttachShader(program_, fragmentShader);
+  glLinkProgram(program_);
+  // Check for linking errors
+  glGetProgramiv(program_, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(program_, 512, NULL, infoLog);
+    std::cerr << "Error linking shaders:\n" << infoLog << std::endl;
+    throw std::runtime_error("!glLinkProgram");
+  }
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);
+  std::cerr << "Compiled shaders\n";
 }
 
 void Scene3D::load_buffers() {
   // make and bind the VAO
   glGenVertexArrays(1, &vao_);
-  glGenBuffers(1, &vbo_);
   glBindVertexArray(vao_);
 
+  // vertices
+  glGenBuffers(1, &vbo_);
   glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-  glBufferData(GL_ARRAY_BUFFER, Size(vertices_), vertices_.data(),
-               GL_STATIC_DRAW);
-  // connect the xyz to the "vert" attribute of the vertex shader
+  glBufferData(GL_ARRAY_BUFFER, Size(vertices_), &vertices_[0], GL_STATIC_DRAW);
+  glEnableVertexAttribArray(0);
   glVertexAttribPointer(0,                    // layout = 0
-                        3,                    // it's triangles
+                        3,                    // it's 3D points
                         GL_FLOAT,             // type
                         GL_FALSE,             // normalized?
                         3 * sizeof(GLfloat),  // stride
                         NULL                  // array buffer offset
   );
-  glEnableVertexAttribArray(0);
-  // Note that this is allowed, the call to glVertexAttribPointer
-  // registered VBO as the currently bound vertex buffer object so
-  // afterwards we can safely unbind
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
   std::cerr << "Loaded " << vertices_.size() / 3 << " vertices.\n";
 
-  // make and bind the VBO
-  glGenBuffers(1, &colors_id_);
-  glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
+  // colors
+  glGenBuffers(1, &cbo_);
+  glBindBuffer(GL_ARRAY_BUFFER, cbo_);
   glBufferData(GL_ARRAY_BUFFER, Size(colors_), &colors_[0], GL_STATIC_DRAW);
-  // 2nd attribute buffer
   glEnableVertexAttribArray(1);
-  glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
   glVertexAttribPointer(1,                    // layout = 1
-                        3,                    // size
+                        3,                    // size(RGB) = 3
                         GL_FLOAT,             // type
                         GL_FALSE,             // normalized?
                         3 * sizeof(GLfloat),  // stride
@@ -56,20 +89,19 @@ void Scene3D::load_buffers() {
   );
   std::cerr << "Loaded " << colors_.size() / 3 << " colors.\n";
 
-  // Load an initial set of points
-  selected_.assign(indices_.begin(),
-                   std::min(indices_.end(), 8192 + indices_.begin()));
+  // indices
+  const auto right = std::min(indices_.end(), 8192 + indices_.begin());
+  selected_.assign(indices_.begin(), right);
   glGenBuffers(1, &ebo_);
-  GlfwManager::glProcessErrors();
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
-  GlfwManager::glProcessErrors();
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, Size(selected_), &selected_[0],
                GL_STATIC_DRAW);
-  GlfwManager::glProcessErrors();
   std::cerr << "Loaded " << selected_.size() << " elements.\n";
 
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
+
+  uMVP_ = glGetUniformLocation(program_, "uMVP");
 
   std::cerr << "Ready!\n";
 }
@@ -82,7 +114,7 @@ void Scene3D::unload() {
   if (program_) {
     glDeleteVertexArrays(1, &vao_);
     glDeleteBuffers(1, &vbo_);
-    glDeleteBuffers(1, &colors_id_);
+    glDeleteBuffers(1, &cbo_);
     glDeleteBuffers(1, &ebo_);
   }
 }
@@ -91,10 +123,10 @@ void Scene3D::reload() {
   auto algo = std::static_pointer_cast<Algo3D>(algo_);
   reset_points();
   algo->apply(vertices_, colors_, indices_, width_, height_, depth_) ||
-      std::cerr << "!apply" << std::endl;
+      std::cerr << "!apply\n";
   load_buffers();
   glBindVertexArray(vao_);
-  glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
+  glBindBuffer(GL_ARRAY_BUFFER, cbo_);
   glBufferData(GL_ARRAY_BUFFER, Size(colors_), &colors_[0], GL_STATIC_DRAW);
   glBindVertexArray(0);
 }
@@ -115,7 +147,7 @@ void Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
 
   load_shaders();
   algo->apply(vertices_, colors_, indices_, width_, height_, depth_) ||
-      std::cerr << "!apply" << std::endl;
+      std::cerr << "!apply\n";
   load_buffers();
 }
 
@@ -134,7 +166,7 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
   // Our ModelViewProjection : multiplication of our 3 matrices
   // Note matrix multiplication is not commutative
   glm::mat4 MVP = projection * view * model;
-  program_->setUniformMatrix4("uMVP", &MVP[0][0]);
+  glUniformMatrix4fv(uMVP_, 1, GL_FALSE, &MVP[0][0]);
 
   if (manager->args()->move_window || selected_.empty() ||
       manager->SlideWindow()) {

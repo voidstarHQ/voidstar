@@ -246,9 +246,8 @@ void GlfwManager::run() {
       glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    // bind the program (the shaders) so uniforms can be set in scene
-    // update/render.
-    scene_->program()->use();
+    // use program so uniforms can be set in scene update/render
+    glUseProgram(scene_->program());
 
     // update the scene based on the time elapsed since last update
     double thisTime = glfwGetTime();
@@ -261,7 +260,7 @@ void GlfwManager::run() {
       glfwSwapBuffers(window_);
     }
 
-    scene_->program()->stopUsing();
+    glUseProgram(0);  // stop using
 
     if (events_->keyPressed(GLFW_KEY_ESCAPE))
       glfwSetWindowShouldClose(window_, GL_TRUE);

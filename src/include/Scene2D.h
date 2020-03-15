@@ -7,22 +7,20 @@ class Scene2D : public Scene {
  public:
   Scene2D()
       : Scene(SCENE_2D),
-        vao_(0),
-        vbo_(0),
-        colors_id_(0),
         width_(256),
         height_(256),
-        n_points_(width_ * height_),
-        vertices_(3 * n_points_),
-        colors_(3 * n_points_) {}
+        n_points_(width_ * height_) {
+    reset_points();
+  }
   virtual ~Scene2D() { unload(); }
 
-  virtual void init(std::shared_ptr<Arguments> args);
-  virtual void load(std::shared_ptr<Algorithm> algo);
-  virtual void unload();
-  virtual void reload();
-  virtual bool update(std::shared_ptr<Manager> manager, float elapsedTime);
-  virtual void render();
+  virtual void init(std::shared_ptr<Arguments> args) override;
+  virtual void load(std::shared_ptr<Algorithm> algo) override;
+  virtual void unload() override;
+  virtual void reload() override;
+  virtual bool update(std::shared_ptr<Manager> manager,
+                      float elapsedTime) override;
+  virtual void render() override;
 
  private:
   void load_shaders();
@@ -33,9 +31,9 @@ class Scene2D : public Scene {
   }
 
  protected:
-  GLuint vao_;
-  GLuint vbo_;
-  GLuint colors_id_;
+  GLuint vao_ = 0;
+  GLuint vbo_ = 0;
+  GLuint cbo_ = 0;
 
   size_t width_;
   size_t height_;

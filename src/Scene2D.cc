@@ -6,10 +6,50 @@
 #include "src/shaders/vertex_2d.h"
 
 void Scene2D::load_shaders() {
-  const std::vector<tdogl::Shader> shaders{
-      tdogl::Shader(shader__vertex_2d, GL_VERTEX_SHADER),
-      tdogl::Shader(shader__fragment, GL_FRAGMENT_SHADER)};
-  program_ = std::make_shared<tdogl::Program>(shaders);
+  // Build and compile our shader program
+  GLint success;
+  GLchar infoLog[512];
+
+  // Vertex shader
+  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertexShader, 1, &shader__vertex_2d, NULL);
+  glCompileShader(vertexShader);
+  // Check for compile time errors
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+    std::cerr << "Error compiling vertex shader:\n" << infoLog << std::endl;
+    throw std::runtime_error("!glCompileShader");
+  }
+
+  // Fragment shader
+  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &shader__fragment, NULL);
+  glCompileShader(fragmentShader);
+  // Check for compile time errors
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+    std::cerr << "Error compiling fragment shader:\n" << infoLog << std::endl;
+    throw std::runtime_error("!glCompileShader");
+  }
+
+  // Link shaders
+  program_ = glCreateProgram();
+  if (program_ == 0) throw std::runtime_error("!glCreateProgram");
+  glAttachShader(program_, vertexShader);
+  glAttachShader(program_, fragmentShader);
+  glLinkProgram(program_);
+  // Check for linking errors
+  glGetProgramiv(program_, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(program_, 512, NULL, infoLog);
+    std::cerr << "Error linking shaders:\n" << infoLog << std::endl;
+    throw std::runtime_error("!glLinkProgram");
+  }
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);
+  std::cerr << "Compiled shaders\n";
 }
 
 void Scene2D::load_buffers() {
@@ -17,24 +57,31 @@ void Scene2D::load_buffers() {
   glGenVertexArrays(1, &vao_);
   glBindVertexArray(vao_);
 
-  // make and bind the VBO
+  // vertices
   glGenBuffers(1, &vbo_);
   glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-  glBufferData(GL_ARRAY_BUFFER, Size(vertices_), vertices_.data(),
-               GL_STATIC_DRAW);
-  // connect the xyz to the "vert" attribute of the vertex shader
-  glEnableVertexAttribArray(program_->attrib("vert"));
-  glVertexAttribPointer(program_->attrib("vert"), 2, GL_FLOAT, GL_FALSE, 0,
-                        NULL);
+  glBufferData(GL_ARRAY_BUFFER, Size(vertices_), &vertices_[0], GL_STATIC_DRAW);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0,                    // layout = 0
+                        2,                    // it's 2D points
+                        GL_FLOAT,             // type
+                        GL_FALSE,             // normalized?
+                        0 * sizeof(GLfloat),  // stride
+                        NULL                  // array buffer offset
+  );
 
-  // make and bind the VBO
-  glGenBuffers(1, &colors_id_);
-  glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-
-  glBufferData(GL_ARRAY_BUFFER, Size(colors_), colors_.data(), GL_STATIC_DRAW);
-  glEnableVertexAttribArray(program_->attrib("colr"));
-  glVertexAttribPointer(program_->attrib("colr"), 3, GL_FLOAT, GL_FALSE, 0,
-                        NULL);
+  // colors
+  glGenBuffers(1, &cbo_);
+  glBindBuffer(GL_ARRAY_BUFFER, cbo_);
+  glBufferData(GL_ARRAY_BUFFER, Size(colors_), &colors_[0], GL_STATIC_DRAW);
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1,                    // layout = 1
+                        3,                    // size(RGB) = 3
+                        GL_FLOAT,             // type
+                        GL_FALSE,             // normalized?
+                        0 * sizeof(GLfloat),  // stride
+                        NULL                  // array buffer offset
+  );
 
   // unbind the VAO
   glBindVertexArray(0);
@@ -47,7 +94,7 @@ void Scene2D::init(std::shared_ptr<Arguments> args) {
 void Scene2D::unload() {
   if (program_) {
     glDeleteBuffers(1, &vbo_);
-    glDeleteBuffers(1, &colors_id_);
+    glDeleteBuffers(1, &cbo_);
     glDeleteVertexArrays(1, &vao_);
   }
 }
@@ -55,11 +102,10 @@ void Scene2D::unload() {
 void Scene2D::reload() {
   auto algo = std::static_pointer_cast<Algo2D>(algo_);
   reset_points();
-  algo->apply(vertices_, colors_, width_, height_) || std::cerr << "!apply"
-                                                                << std::endl;
+  algo->apply(vertices_, colors_, width_, height_) || std::cerr << "!apply\n";
   glBindVertexArray(vao_);
-  glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-  glBufferData(GL_ARRAY_BUFFER, Size(colors_), colors_.data(), GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, cbo_);
+  glBufferData(GL_ARRAY_BUFFER, Size(colors_), &colors_[0], GL_STATIC_DRAW);
   glBindVertexArray(0);
 }
 
@@ -72,8 +118,7 @@ void Scene2D::load(std::shared_ptr<Algorithm> algorithm) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   load_shaders();
-  algo->apply(vertices_, colors_, width_, height_) || std::cerr << "!apply"
-                                                                << std::endl;
+  algo->apply(vertices_, colors_, width_, height_) || std::cerr << "!apply\n";
   load_buffers();
 }
 
