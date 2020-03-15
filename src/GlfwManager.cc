@@ -15,14 +15,6 @@ void onFramebufferResize(GLFWwindow* window __unused, int width, int height) {
   scene->resize(width, height);
 }
 
-// records how far the y axis has been scrolled
-static void onScroll(GLFWwindow* window __unused, double deltaX,
-                     double deltaY) {
-  auto mouse = GlfwManager::instance()->getMouse();
-  mouse->scrollY += deltaY;
-  mouse->scrollX += deltaX;
-}
-
 static void onError(int errorCode __unused, const char* msg) {
   throw std::runtime_error(msg);
 }
@@ -83,8 +75,6 @@ void GlfwManager::init() {
 
   // Ensure we can capture the escape key being pressed below
   glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
-  // Hide the mouse and enable unlimited mouvement
-  glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
   // Define the viewport dimensions
   glfwGetFramebufferSize(window_, &viewport_width_, &viewport_height_);
@@ -99,7 +89,6 @@ void GlfwManager::init() {
   // glfwSetWindowUserPointer(window_, this);
   // glfwSetScrollCallback(window_, onScroll);
 
-  mouse_ = std::make_shared<GlfwMouse>();
   events_ = std::make_shared<GlfwKeyboardEvents>();
 }
 
@@ -205,24 +194,20 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
     }
   }
 
-  float FoV =
-      initial_fov_;  // - 5 * glfwGetMouseWheel();
-                     // Now GLFW 3 requires setting
-                     // up a callback for this. It's a bit too complicated for
-                     // this beginner's tutorial, so it's disabled instead.
-
-  // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit
-  // <-> 100 units
   *ProjectionMatrix = glm::perspective(
-      glm::radians(FoV), (float)viewport_width_ / (float)viewport_height_, 0.1f,
-      100.0f);
-  // Camera matrix
+      // TODO: change field of view when scrolling
+      glm::radians(initial_fov_),
+      // aspect ratio
+      (float)viewport_width_ / (float)viewport_height_,
+      // display range : 0.1 unit <-> 100 units
+      0.1f, 100.0f);
   *ViewMatrix = glm::lookAt(
-      position_,  // Camera is here
-      position_ +
-          direction,  // and looks here : at the same position, plus "direction"
-      up              // Head is up (set to 0,-1,0 to look upside-down)
-  );
+      // Camera is here
+      position_,
+      // and looks here : at the same position, plus "direction"
+      position_ + direction,
+      // Head is up (set to 0,-1,0 to look upside-down)
+      up);
 
   // For the next frame, the "last time" will be "now"
   lastTime = currentTime;
@@ -230,7 +215,10 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
 
 void GlfwManager::run() {
   const auto is3D = scene_->type() == SCENE_3D;
-  if (is3D) glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  if (is3D) {
+    // Hide the mouse and enable unlimited mouvement
+    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  }
 
   double lastTime = glfwGetTime();
   while (!glfwWindowShouldClose(window_)) {

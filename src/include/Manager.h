@@ -28,7 +28,6 @@ class Manager {
   virtual void computeMatricesFromInputs(glm::mat4*, glm::mat4*) = 0;
 
   virtual std::shared_ptr<Events> getEvents() = 0;
-  virtual std::shared_ptr<Mouse> getMouse() = 0;
 
   bool loadFile(size_t index);
   void loadFile(const std::string& filename);

@@ -48,12 +48,6 @@ class GlfwKeyboardEvents : public Events {
   std::shared_ptr<GlfwKeyboardState> previous_;
 };
 
-class GlfwMouse : public Mouse {
- public:
-  virtual void getCursorPos();
-  virtual void setCursorPos();
-};
-
 class GlfwManager : public Manager {
  public:
   GlfwManager(std::shared_ptr<Arguments>& args)
@@ -68,7 +62,6 @@ class GlfwManager : public Manager {
       glm::mat4*, glm::mat4*) override;  // TODO: remove from manager api
 
   virtual std::shared_ptr<Events> getEvents() final { return events_; }
-  virtual std::shared_ptr<Mouse> getMouse() final { return mouse_; }
 
   virtual void ToggleFullscreen() override;
   virtual bool SlideWindow() override;
@@ -108,7 +101,6 @@ class GlfwManager : public Manager {
   static std::shared_ptr<GlfwManager> instance_;
   GLFWwindow* window_;
   std::shared_ptr<GlfwKeyboardEvents> events_;
-  std::shared_ptr<GlfwMouse> mouse_;
   int viewport_width_ = 800, viewport_height_ = 600;
 
  private:
