@@ -21,9 +21,8 @@ void Scene3D::load_buffers() {
   glGenBuffers(1, &vbo_);
   glBindVertexArray(vao_);
 
-  // std::cout << "load_buffers:: " << vbo_ << std::endl;
   glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-  glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(vertices_), vertices_.data(),
+  glBufferData(GL_ARRAY_BUFFER, Size(vertices_), vertices_.data(),
                GL_STATIC_DRAW);
   // connect the xyz to the "vert" attribute of the vertex shader
   glVertexAttribPointer(0,                    // layout = 0
@@ -31,45 +30,40 @@ void Scene3D::load_buffers() {
                         GL_FLOAT,             // type
                         GL_FALSE,             // normalized?
                         3 * sizeof(GLfloat),  // stride
-                        (GLvoid*)0            // array buffer offset
+                        NULL                  // array buffer offset
   );
   glEnableVertexAttribArray(0);
   // Note that this is allowed, the call to glVertexAttribPointer
   // registered VBO as the currently bound vertex buffer object so
   // afterwards we can safely unbind
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  std::cerr << "Loaded " << vertices_.size() / 3 << " vertices.\n";
+  std::cerr << "Loaded " << vertices_.size() << " vertices.\n";
 
   // make and bind the VBO
   glGenBuffers(1, &colors_id_);
-  // std::cout << "load_buffers:: " << colors_id_ << std::endl;
   glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-  glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), &colors_[0],
-               GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, Size(colors_), &colors_[0], GL_STATIC_DRAW);
   // 2nd attribute buffer
   glEnableVertexAttribArray(1);
   glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-  glVertexAttribPointer(1,         // layout = 1
-                        3,         // size
-                        GL_FLOAT,  // type
-                        GL_FALSE,  // normalized?
-                        0,         // stride
-                        NULL       // array buffer offset
+  glVertexAttribPointer(1,                    // layout = 1
+                        3,                    // size
+                        GL_FLOAT,             // type
+                        GL_FALSE,             // normalized?
+                        3 * sizeof(GLfloat),  // stride
+                        NULL                  // array buffer offset
   );
-  std::cerr << "Loaded " << colors_.size() / 3 << " colors.\n";
+  std::cerr << "Loaded " << colors_.size() << " colors.\n";
 
+  // Load an initial set of points
   selected_.assign(indices_.begin(),
                    std::min(indices_.end(), 8192 + indices_.begin()));
   glGenBuffers(1, &ebo_);
   GlfwManager::glProcessErrors();
-  // std::cout << "load_buffers:: " << ebo_ << std::endl;
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
   GlfwManager::glProcessErrors();
-  // std::cout << "load_buffers:: size_selected = " << size_selected <<
-  // std::endl;
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * selected_.size(),
-               &selected_[0], GL_STATIC_DRAW);
-  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, NULL, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, Size(selected_), &selected_[0],
+               GL_STATIC_DRAW);
   GlfwManager::glProcessErrors();
   std::cerr << "Loaded " << selected_.size() << " elements.\n";
 
@@ -97,13 +91,10 @@ void Scene3D::reload() {
   reset_points();
   algo->apply(vertices_, colors_, indices_, width_, height_, depth_) ||
       std::cerr << "!apply" << std::endl;
-  // std::cout << "#indices: " << Manager::size2str(indices_.size()) <<
-  // std::endl;
   load_buffers();
   glBindVertexArray(vao_);
   glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-  glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), &colors_[0],
-               GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, Size(colors_), &colors_[0], GL_STATIC_DRAW);
   glBindVertexArray(0);
 }
 
@@ -124,22 +115,10 @@ void Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
   load_shaders();
   algo->apply(vertices_, colors_, indices_, width_, height_, depth_) ||
       std::cerr << "!apply" << std::endl;
-  // std::cout << "#indices: " << Manager::size2str(indices_.size()) <<
-  // std::endl;
   load_buffers();
-
-  // camera_.setPosition(glm::vec3(0, -0.1, 3));
-  // camera_.lookAt(glm::vec3(0,0,4));
-  // camera_.setNearAndFarPlanes(0.1, 100.);
 }
 
 bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
-  if (manager->args()->spin_shape) {
-    degrees_rotated_ += elapsedTime * degrees_per_second_;
-    ;
-    while (degrees_rotated_ > 360.0f) degrees_rotated_ -= 360.0f;
-  }
-
   // auto mouse = manager->getMouse();
   // mouse->getCursorPos();
   // camera_.offsetOrientation(mouse->sensitivity * mouse->y,
@@ -151,13 +130,20 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
   // bind the program (the shaders)
   program_->use();
 
+  glm::mat4 projection, view;
+  manager->computeMatricesFromInputs(&projection, &view);
+  if (manager->args()->spin_shape) {
+    degrees_rotated_ += elapsedTime * degrees_per_second_;
+    while (degrees_rotated_ > 360.0f) degrees_rotated_ -= 360.0f;
+  }
   // Model matrix : an identity matrix (model will be at the origin)
-  glm::mat4 ProjectionMatrix, ViewMatrix, ModelMatrix = glm::mat4(1.0);
-  manager->computeMatricesFromInputs(&ProjectionMatrix, &ViewMatrix);
+  glm::mat4 model = glm::mat4(1.0);
+  model =
+      glm::rotate(model, glm::radians(degrees_rotated_), glm::vec3(0, 1, 0));
+
   // Our ModelViewProjection : multiplication of our 3 matrices
-  glm::mat4 MVP =
-      ProjectionMatrix * ViewMatrix *
-      ModelMatrix;  // Remember, matrix multiplication is the other way around
+  // Note matrix multiplication is not commutative
+  glm::mat4 MVP = projection * view * model;
   program_->setUniformMatrix4("uMVP", &MVP[0][0]);
 
   if (manager->args()->move_window || selected_.empty() ||
@@ -170,11 +156,8 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
   GlfwManager::glProcessErrors();
-  // std::cout << "load_buffers:: size_selected = " << size_selected <<
-  // std::endl;
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * selected_.size(),
-               &selected_[0], GL_STATIC_DRAW);
-  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, NULL, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, Size(selected_), &selected_[0],
+               GL_STATIC_DRAW);
   GlfwManager::glProcessErrors();
 
   return true;
@@ -186,35 +169,7 @@ void Scene3D::render() {
   // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // program_->setUniform("camera", camera_.matrix());
-
-  // // set the "model" uniform in the vertex shader, based on degreesRotated
-  // auto rotated = glm::rotate(glm::mat4(), glm::radians(degrees_rotated_),
-  // glm::vec3(0,1,0)); program_->setUniform("model", rotated);
-
   constexpr size_t SAMPLE = 999UL;
-
-  // VertIndices sels;
-  // sels.reserve(SAMPLE);
-  // for (int i = 0; i < SAMPLE; ++i) {
-  //   sels.emplace_back(i);
-  // }
-  // selected_.assign(sels.begin(), sels.end());
-
-  // Floats cols;
-  // cols.reserve(4 * SAMPLE);
-  // for (int i = 0; i < 4 * SAMPLE; ++i) {
-  //   cols.emplace_back(1.0f);
-  // }
-  // colors_.assign(cols.begin(), cols.end());
-
-  // // // send newly selected elements
-  // auto size_selected =
-  //     sizeof(decltype(selected_)::value_type) * selected_.size();
-  // // std::cout << "render:: size_selected = " << size_selected << std::endl;
-  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, selected_.data(),
-  //              GL_STATIC_DRAW);
-  // GlfwManager::glProcessErrors();
 
   // bind the VAO
   glBindVertexArray(vao_);
@@ -222,14 +177,8 @@ void Scene3D::render() {
 
   // draw only the VAO's points we colored
   auto mM = std::minmax_element(selected_.begin(), selected_.end());
-  // std::cout << "render:: min:" << *mM.first << " max:" << *mM.second
-  // << "#:" << selected_.size() << std::endl;
   glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, selected_.size(),
                       GL_UNSIGNED_INT, NULL);
-
-  // glDrawArrays(GL_POINTS, 0, n_points_);
-  // glDrawElements(GL_POINTS, selected_.size(), GL_UNSIGNED_INT,
-  // &selected_[0]);
 
   GlfwManager::glProcessErrors();
 
