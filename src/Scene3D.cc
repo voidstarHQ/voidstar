@@ -38,7 +38,7 @@ void Scene3D::load_buffers() {
   // registered VBO as the currently bound vertex buffer object so
   // afterwards we can safely unbind
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  std::cerr << "Loaded "<<vertices_.size()/3<<" vertices.\n";
+  std::cerr << "Loaded " << vertices_.size() / 3 << " vertices.\n";
 
   // make and bind the VBO
   glGenBuffers(1, &colors_id_);
@@ -56,9 +56,10 @@ void Scene3D::load_buffers() {
                         0,         // stride
                         NULL       // array buffer offset
   );
-  std::cerr << "Loaded "<<colors_.size()/3<<" colors.\n";
+  std::cerr << "Loaded " << colors_.size() / 3 << " colors.\n";
 
-    selected_.assign(indices_.begin(), std::min(indices_.end(), 8192+indices_.begin()));
+  selected_.assign(indices_.begin(),
+                   std::min(indices_.end(), 8192 + indices_.begin()));
   glGenBuffers(1, &ebo_);
   GlfwManager::glProcessErrors();
   // std::cout << "load_buffers:: " << ebo_ << std::endl;
@@ -70,7 +71,7 @@ void Scene3D::load_buffers() {
                &selected_[0], GL_STATIC_DRAW);
   // glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, NULL, GL_STATIC_DRAW);
   GlfwManager::glProcessErrors();
-  std::cerr << "Loaded "<<selected_.size()<<" elements.\n";
+  std::cerr << "Loaded " << selected_.size() << " elements.\n";
 
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
@@ -101,7 +102,8 @@ void Scene3D::reload() {
   load_buffers();
   glBindVertexArray(vao_);
   glBindBuffer(GL_ARRAY_BUFFER, colors_id_);
-  glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), &colors_[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, Algorithm::vsize(colors_), &colors_[0],
+               GL_STATIC_DRAW);
   glBindVertexArray(0);
 }
 
@@ -158,15 +160,14 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
       ModelMatrix;  // Remember, matrix multiplication is the other way around
   program_->setUniformMatrix4("uMVP", &MVP[0][0]);
 
+  if (manager->args()->move_window || selected_.empty() ||
+      manager->slide_window()) {
+    if (manager->args()->move_window) manager->slide_window_right();
+    bool slid = manager->slide_window(selected_, indices_);
+    if (manager->args()->move_window && !slid)
+      manager->args()->move_window = !manager->args()->move_window;
+  }
 
-    if (manager->args()->move_window || selected_.empty() ||
-        manager->slide_window()) {
-      if (manager->args()->move_window) manager->slide_window_right();
-      bool slid = manager->slide_window(selected_, indices_);
-      if (manager->args()->move_window && !slid)
-        manager->args()->move_window = !manager->args()->move_window;
-    }
-    
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
   GlfwManager::glProcessErrors();
   // std::cout << "load_buffers:: size_selected = " << size_selected <<
@@ -175,7 +176,6 @@ bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
                &selected_[0], GL_STATIC_DRAW);
   // glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_selected, NULL, GL_STATIC_DRAW);
   GlfwManager::glProcessErrors();
-
 
   return true;
 }
@@ -224,13 +224,14 @@ void Scene3D::render() {
   auto mM = std::minmax_element(selected_.begin(), selected_.end());
   // std::cout << "render:: min:" << *mM.first << " max:" << *mM.second
   // << "#:" << selected_.size() << std::endl;
-  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, selected_.size(), GL_UNSIGNED_INT, NULL);
+  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, selected_.size(),
+                      GL_UNSIGNED_INT, NULL);
 
   // glDrawArrays(GL_POINTS, 0, n_points_);
-  // glDrawElements(GL_POINTS, selected_.size(), GL_UNSIGNED_INT, &selected_[0]);
+  // glDrawElements(GL_POINTS, selected_.size(), GL_UNSIGNED_INT,
+  // &selected_[0]);
 
   GlfwManager::glProcessErrors();
-
 
   // unbind the VAO and the program
   glBindVertexArray(0);

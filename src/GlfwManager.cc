@@ -1,18 +1,16 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
+// This forces clang-format to move below headers up.
+
 #include "include/GLFW/glfw3.h"
 #include "src/include/GlfwManager.h"
 
-
 std::shared_ptr<GlfwManager> GlfwManager::instance_;
-
-int viewportW = 800, viewportH = 600;
 
 void onFramebufferResize(GLFWwindow* window __unused, int width, int height) {
   glViewport(0, 0, width, height);
-  viewportW = width;
-  viewportH = height;
+  GlfwManager::instance()->viewport(width, height);
   auto scene = GlfwManager::instance()->scene();
   scene->resize(width, height);
 }
@@ -34,17 +32,6 @@ static void onKeyEvent(GLFWwindow* window __unused, int key, int scancode,
   auto events = GlfwManager::instance()->getEvents();
   auto ev = std::static_pointer_cast<GlfwKeyboardEvents>(events);
   ev->process(key, scancode, action, mods);
-
-  // if (action == GLFW_PRESS)
-  //     std::cout << "pressed: ";
-  // else if (action == GLFW_RELEASE)
-  //     std::cout << "released: ";
-  // else if (action == GLFW_REPEAT)
-  //     std::cout << "repeat: ";
-  // else
-  //     std::cout << "wtf: ";
-  // std::cout << "key " << key << " (" << scancode << ", " << mods << ")" <<
-  // std::endl;
 }
 
 void GlfwManager::init() {
@@ -100,12 +87,12 @@ void GlfwManager::init() {
   glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
   // Define the viewport dimensions
-  glfwGetFramebufferSize(window_, &viewportW, &viewportH);
-  glViewport(0, 0, viewportW, viewportH);
+  glfwGetFramebufferSize(window_, &viewport_width_, &viewport_height_);
+  glViewport(0, 0, viewport_width_, viewport_height_);
 
   // Set the mouse at the center of the screen
   glfwPollEvents();
-  glfwSetCursorPos(window_, viewportW / 2, viewportH / 2);
+  glfwSetCursorPos(window_, viewport_width_ / 2, viewport_height_ / 2);
 
   glfwSetErrorCallback(onError);
 
@@ -116,25 +103,6 @@ void GlfwManager::init() {
   events_ = std::make_shared<GlfwKeyboardEvents>();
 }
 
-// void
-// GlfwManager::glInit() {
-//     glewExperimental = GL_TRUE; //stops glew from crashing on OSX :-/
-//     if (glewInit() != GLEW_OK)
-//         throw std::runtime_error("!glewInit");
-
-//     // GLEW throws some errors, so discard all the errors so far
-//     glProcessErrors();
-
-//     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl
-//               << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
-//               << std::endl
-//               << "Vendor: " << glGetString(GL_VENDOR) << std::endl
-//               << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-
-//     if (!GLEW_VERSION_3_2)
-//         throw std::runtime_error("OpenGL 3.2 API is not available.");
-// }
-
 void GlfwManager::glProcessErrors(bool quiet) {
   while (true) {
     GLenum error = glGetError();
@@ -142,19 +110,6 @@ void GlfwManager::glProcessErrors(bool quiet) {
     if (!quiet) std::cerr << "OpenGL Error " << error << std::endl;
   }
 }
-
-glm::vec3 position = glm::vec3(0, 0, 5);
-// horizontal angle : toward -Z
-float horizontalAngle = 3.14f;
-// vertical angle : 0, look at the horizon
-float verticalAngle = 0.0f;
-// Initial Field of View
-float initialFoV = 45.0f;
-
-float speed = 3.0f;  // 3 units / second
-float mouseSpeed = 0.005f;
-// FoV is the level of zoom. 80° = very wide angle, huge deformations.
-// 60° - 45°: standard. 20°: big zoom.
 
 void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
                                             glm::mat4* ViewMatrix) {
@@ -166,62 +121,50 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
   double xpos, ypos;
   glfwGetCursorPos(window_, &xpos, &ypos);
   // Reset mouse position for next frame
-  glfwSetCursorPos(window_, viewportW / 2, viewportH / 2);
+  glfwSetCursorPos(window_, viewport_width_ / 2, viewport_height_ / 2);
 
   // Compute new orientation
-  horizontalAngle += mouseSpeed * float(viewportW / 2 - xpos);
-  verticalAngle += mouseSpeed * float(viewportH / 2 - ypos);
+  horizontal_angle_ += mouse_sensitivity_ * float(viewport_width_ / 2 - xpos);
+  vertical_angle_ += mouse_sensitivity_ * float(viewport_height_ / 2 - ypos);
 
-  // Direction : Spherical coordinates to Cartesian coordinates conversion
-  glm::vec3 direction(cos(verticalAngle) * sin(horizontalAngle),
-                      sin(verticalAngle),
-                      cos(verticalAngle) * cos(horizontalAngle));
+  glm::vec3 direction, right, up;
+  auto resetVecs = [this, &direction, &right, &up]() {
+    // Direction : Spherical coordinates to Cartesian coordinates conversion
+    direction = glm::vec3(cos(vertical_angle_) * sin(horizontal_angle_),
+                          sin(vertical_angle_),
+                          cos(vertical_angle_) * cos(horizontal_angle_));
 
-  glm::vec3 right = glm::vec3(sin(horizontalAngle - 3.14f / 2.0f), 0,
-                              cos(horizontalAngle - 3.14f / 2.0f));
-  glm::vec3 up = glm::cross(right, direction);
-
-  // GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_LEFT
-  if (glfwGetKey(window_, 'W') == GLFW_PRESS) {
-    position += direction * deltaTime * speed;  // forward
-  }
-  if (glfwGetKey(window_, 'S') == GLFW_PRESS) {
-    position -= direction * deltaTime * speed;  // backward
-  }
-  if (glfwGetKey(window_, 'D') == GLFW_PRESS) {
-    position += right * deltaTime * speed;  // strafe right
-  }
-  if (glfwGetKey(window_, 'A') == GLFW_PRESS) {
-    position -= right * deltaTime * speed;  // strafe left
-  }
-  if (glfwGetKey(window_, 'X') == GLFW_PRESS) {
-    position += up * deltaTime * speed;  // up
-  }
-  if (glfwGetKey(window_, 'Z') == GLFW_PRESS) {
-    position -= up * deltaTime * speed;  // down
-  }
-
-  if (glfwGetKey(window_, 'O') == GLFW_PRESS) {
-    position = glm::vec3(0, 0, 5);
-    horizontalAngle = 3.14f;
-    verticalAngle = 0.0f;
-    initialFoV = 45.0f;
-    direction =
-        glm::vec3(cos(verticalAngle) * sin(horizontalAngle), sin(verticalAngle),
-                  cos(verticalAngle) * cos(horizontalAngle));
-    right = glm::vec3(sin(horizontalAngle - 3.14f / 2.0f), 0,
-                      cos(horizontalAngle - 3.14f / 2.0f));
+    right = glm::vec3(sin(horizontal_angle_ - 3.14f / 2.0f), 0,
+                      cos(horizontal_angle_ - 3.14f / 2.0f));
     up = glm::cross(right, direction);
+  };
+  resetVecs();
+
+  if (events_->keyDown('W'))  // forward
+    position_ += direction * deltaTime * speed_;
+  if (events_->keyDown('S'))  // backward
+    position_ -= direction * deltaTime * speed_;
+  if (events_->keyDown('D'))  // strafe right
+    position_ += right * deltaTime * speed_;
+  if (events_->keyDown('A'))  // strafe left
+    position_ -= right * deltaTime * speed_;
+  if (events_->keyDown('X'))  // upward
+    position_ += up * deltaTime * speed_;
+  if (events_->keyDown('Z'))  // downward
+    position_ -= up * deltaTime * speed_;
+
+  if (events_->keyPressed('O')) {
+    resetFloats();
+    resetVecs();
   }
 
-  if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS)
+  if (events_->keyPressed(' '))  // toggle spinning shape
     args_->spin_shape = !args_->spin_shape;
-  if (glfwGetKey(window_, 'M') == GLFW_PRESS)
+  if (events_->keyPressed('M'))  // toggle sliding window
     args_->move_window = !args_->move_window;
-  if (glfwGetKey(window_, '.') == GLFW_PRESS) {  // '>'
+  if (events_->keyPressed('.'))  // FIXME: '>'
     args_->sliding_step_factor *= 2;
-  }
-  if (glfwGetKey(window_, ',') == GLFW_PRESS) {  // '<'
+  if (events_->keyPressed(',')) {  // FIXME: '<'
     args_->sliding_step_factor /= 2;
     if (args_->sliding_step_factor == 0) {
       args_->sliding_step_factor = 1;
@@ -229,18 +172,20 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
   }
 
   float FoV =
-      initialFoV;  // - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting
-                   // up a callback for this. It's a bit too complicated for
-                   // this beginner's tutorial, so it's disabled instead.
+      initial_fov_;  // - 5 * glfwGetMouseWheel();
+                     // Now GLFW 3 requires setting
+                     // up a callback for this. It's a bit too complicated for
+                     // this beginner's tutorial, so it's disabled instead.
 
   // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit
   // <-> 100 units
   *ProjectionMatrix = glm::perspective(
-      glm::radians(FoV), (float)viewportW / (float)viewportH, 0.1f, 100.0f);
+      glm::radians(FoV), (float)viewport_width_ / (float)viewport_height_, 0.1f,
+      100.0f);
   // Camera matrix
   *ViewMatrix = glm::lookAt(
-      position,  // Camera is here
-      position +
+      position_,  // Camera is here
+      position_ +
           direction,  // and looks here : at the same position, plus "direction"
       up              // Head is up (set to 0,-1,0 to look upside-down)
   );
