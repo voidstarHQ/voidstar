@@ -24,8 +24,8 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 ## Usage
 
 ```shell
-bazel build //src:voistar
-./bazel-bin/src/voidstar --move ../data/*
+bazel build //voidstar
+./bazel-bin/voidstar/voidstar --move ../data/*
 # Press H and L to switch between files
 # Use A W S D Z X and your mouse to move in the 3D space
 # Press F for full screen

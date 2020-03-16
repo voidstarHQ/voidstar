@@ -39,14 +39,14 @@ before_script:
 - $CXX --version || true
 
 script:
-- ./bazel build //src:voidstar
-- ./bazel-bin/src/voidstar -h
-- ./bazel-bin/src/voidstar --help
-- ./bazel-bin/src/voidstar -l
-- ./bazel-bin/src/voidstar --list
-#- ./bazel-bin/src/voidstar $(echo */)
-- mv -v bazel-bin/src/voidstar "bazel-bin/src/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
-- if [[ "$TRAVIS_OS_NAME" = 'linux' ]]; then cppcheck --error-exitcode=1 --enable=all -Isrc/include/ src/; fi
+- ./bazel build //voidstar
+- ./bazel-bin/voidstar/voidstar -h
+- ./bazel-bin/voidstar/voidstar --help
+- ./bazel-bin/voidstar/voidstar -l
+- ./bazel-bin/voidstar/voidstar --list
+#- ./bazel-bin/voidstar/voidstar $(echo */)
+- mv -v bazel-bin/voidstar/voidstar "bazel-bin/voidstar/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
+- if [[ "$TRAVIS_OS_NAME" = 'linux' ]]; then cppcheck --error-exitcode=1 --enable=all -Ivoidstar/include/ voids tar/; fi
 
 after_success:
 - |
@@ -77,6 +77,6 @@ deploy:
   skip_cleanup: true
   overwrite: true
   file_glob: true
-  file: bazel-bin/src/voidstar-*
+  file: bazel-bin/voidstar/voidstar-*
   on:
     tags: true
