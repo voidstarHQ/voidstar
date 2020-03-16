@@ -3,7 +3,6 @@
 
 // This forces clang-format to move below headers up.
 
-#include "include/GLFW/glfw3.h"
 #include "src/include/GlfwManager.h"
 
 std::shared_ptr<GlfwManager> GlfwManager::instance_;

@@ -3,7 +3,7 @@
 #include <bitset>
 #include <memory>
 
-#include "include/GLFW/glfw3.h"  // TODO: fix include path some day
+#include "GLFW/glfw3.h"
 #include "src/include/Manager.h"
 #include "src/include/Types.h"
 

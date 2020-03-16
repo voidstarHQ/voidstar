@@ -43,7 +43,7 @@ http_archive(
 
 http_archive(
     name = "glfw",
-    build_file = "@//third_party:glfw.BUILD",
+    build_file = "@//third_party:glfw3.BUILD",
     sha256 = "1092f6815d1f6d1f67479d2dad6057172b471122d911e7a7ea2be120956ffaa4",
     strip_prefix = "glfw-3.3",
     urls = ["https://github.com/glfw/glfw/archive/3.3.zip"],

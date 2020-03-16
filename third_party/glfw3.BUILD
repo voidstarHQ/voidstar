@@ -52,12 +52,12 @@ cc_library(
         "include/GLFW/glfw3.h",
         "include/GLFW/glfw3native.h",
     ],
-    copts = ["-I/usr/include"],
     defines = [
         "_GLFW_X11",
         "_GLFW_GLX",
         "_GLFW_USE_OPENGL",
     ],
+    includes = ["include"],
     linkopts = [
         # Note:  This is a bit of a HACK to build & link against whatever
         # version of X11 is installed on the system. Ideally, X11 would also
