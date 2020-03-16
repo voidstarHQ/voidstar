@@ -101,8 +101,6 @@ void Scene3D::load_buffers() {
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
 
-  uMVP_ = glGetUniformLocation(program_, "uMVP");
-
   std::cerr << "Ready!\n";
 }
 
@@ -151,36 +149,10 @@ void Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
   load_buffers();
 }
 
-bool Scene3D::update(std::shared_ptr<Manager> manager, float elapsedTime) {
-  glm::mat4 projection, view;
-  manager->computeMatricesFromInputs(&projection, &view);
-  if (manager->args()->spin_shape) {
-    degrees_rotated_ += elapsedTime * degrees_per_second_;
-    while (degrees_rotated_ > 360.0f) degrees_rotated_ -= 360.0f;
-  }
-  // Model matrix : an identity matrix (model will be at the origin)
-  glm::mat4 model = glm::mat4(1.0);
-  model =
-      glm::rotate(model, glm::radians(degrees_rotated_), glm::vec3(0, 1, 0));
-
-  // Our ModelViewProjection : multiplication of our 3 matrices
-  // Note matrix multiplication is not commutative
-  glm::mat4 MVP = projection * view * model;
-  glUniformMatrix4fv(uMVP_, 1, GL_FALSE, &MVP[0][0]);
-
-  if (manager->args()->move_window || selected_.empty() ||
-      manager->SlideWindow()) {
-    if (manager->args()->move_window) manager->slide_window_right();
-    bool slid = manager->slide_window(selected_, indices_);
-    if (manager->args()->move_window && !slid)
-      manager->args()->move_window = !manager->args()->move_window;
-  }
-
+bool Scene3D::update(float elapsedTime) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
-  GlfwManager::glProcessErrors();
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, Size(selected_), &selected_[0],
                GL_STATIC_DRAW);
-  GlfwManager::glProcessErrors();
 
   return true;
 }

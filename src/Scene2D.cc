@@ -122,10 +122,7 @@ void Scene2D::load(std::shared_ptr<Algorithm> algorithm) {
   load_buffers();
 }
 
-bool Scene2D::update(std::shared_ptr<Manager> manager __unused,
-                     float elapsedTime __unused) {
-  return true;
-}
+bool Scene2D::update(float elapsedTime __unused) { return true; }
 
 void Scene2D::render() {
   // bind the VAO

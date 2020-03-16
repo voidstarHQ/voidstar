@@ -18,8 +18,7 @@ class Scene2D : public Scene {
   virtual void load(std::shared_ptr<Algorithm> algo) override;
   virtual void unload() override;
   virtual void reload() override;
-  virtual bool update(std::shared_ptr<Manager> manager,
-                      float elapsedTime) override;
+  virtual bool update(float elapsedTime) override;
   virtual void render() override;
 
  private:
@@ -28,6 +27,8 @@ class Scene2D : public Scene {
   void reset_points() {
     vertices_ = Floats(3 * n_points_);
     colors_ = Floats(3 * n_points_);
+    // selected_.clear();
+    indices_.clear();
   }
 
  protected:

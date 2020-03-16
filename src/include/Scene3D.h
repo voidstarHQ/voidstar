@@ -19,8 +19,7 @@ class Scene3D : public Scene {
   virtual void load(std::shared_ptr<Algorithm> algo) override;
   virtual void unload() override;
   virtual void reload() override;
-  virtual bool update(std::shared_ptr<Manager> manager,
-                      float elapsedTime) override;
+  virtual bool update(float elapsedTime) override;
   virtual void render() override;
 
  private:
@@ -29,6 +28,7 @@ class Scene3D : public Scene {
   void reset_points() {
     vertices_ = Floats(3 * n_points_);
     colors_ = Floats(3 * n_points_);
+    // selected_.clear();
     indices_.clear();
   }
 
@@ -38,8 +38,6 @@ class Scene3D : public Scene {
   GLuint cbo_ = 0;
   GLuint ebo_ = 0;
 
-  GLuint uMVP_ = 0;
-
   size_t width_;
   size_t height_;
   size_t depth_;
@@ -47,10 +45,4 @@ class Scene3D : public Scene {
 
   Floats vertices_;
   Floats colors_;
-  VertIndices selected_;
-  VertIndices indices_;
-
-  GLfloat degrees_rotated_ = 0;
-  GLfloat degrees_per_second_ = 10;
-  GLfloat move_speed_ = 2;
 };

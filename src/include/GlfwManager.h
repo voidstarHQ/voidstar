@@ -51,22 +51,25 @@ class GlfwKeyboardEvents : public Events {
 class GlfwManager : public Manager {
  public:
   GlfwManager(std::shared_ptr<Arguments>& args)
-      : Manager(args), window_(nullptr) {
+      : Manager(args),
+        window_(nullptr),
+        viewport_width_(args->width),
+        viewport_height_(args->height) {
     resetFloats();
   }
   virtual ~GlfwManager() {}
 
   virtual void init() override;
   virtual void run() override;
-  virtual void computeMatricesFromInputs(
-      glm::mat4*, glm::mat4*) override;  // TODO: remove from manager api
 
   virtual std::shared_ptr<Events> getEvents() final { return events_; }
 
   virtual void ToggleFullscreen() override;
-  virtual bool SlideWindow() override;
 
-  GLFWwindow* window() { return window_; }
+  void viewport(int w, int h) {
+    viewport_width_ = w;
+    viewport_height_ = h;
+  }
 
   static void glProcessErrors(bool quiet = false);
 
@@ -84,11 +87,6 @@ class GlfwManager : public Manager {
     return instance_;
   }
 
-  void viewport(int w, int h) {
-    viewport_width_ = w;
-    viewport_height_ = h;
-  }
-
  private:
   void resetFloats() {
     position_ = glm::vec3(0, 0, 5);
@@ -96,14 +94,6 @@ class GlfwManager : public Manager {
     vertical_angle_ = 0.0f;  // look at the horizon
     initial_fov_ = 45.0f;
   }
-
- protected:
-  static std::shared_ptr<GlfwManager> instance_;
-  GLFWwindow* window_;
-  std::shared_ptr<GlfwKeyboardEvents> events_;
-  int viewport_width_ = 800, viewport_height_ = 600;
-
- private:
   glm::vec3 position_;
   // horizontal angle : toward -Z
   float horizontal_angle_;
@@ -112,7 +102,18 @@ class GlfwManager : public Manager {
   // Initial Field of View
   float initial_fov_;
 
-  float speed_ = 3.0f;                // 3 units / second
+ protected:
+  static std::shared_ptr<GlfwManager> instance_;
+  GLFWwindow* window_;
+  std::shared_ptr<GlfwKeyboardEvents> events_;
+  int viewport_width_, viewport_height_;
+
+ private:
+  bool SlideWindow();
+  bool updateFirst(float deltaTime, glm::mat4* MVP);
+  float degrees_rotated_ = 0;
+  float degrees_per_second_ = 10;
+  float move_speed_ = 3.0f;           // 3 units / second
   float mouse_sensitivity_ = 0.005f;  // 0.1f;
   // FoV is the level of zoom. 80° = very wide angle, huge deformations.
   // 60° - 45°: standard. 20°: big zoom.

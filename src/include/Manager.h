@@ -7,8 +7,6 @@
 #include "src/include/Indices.h"
 #include "src/include/Scene.h"
 
-class Scene;
-
 class Manager {
  public:
   Manager(std::shared_ptr<Arguments>& args)
@@ -25,7 +23,6 @@ class Manager {
   virtual void loadScene(std::shared_ptr<Scene> scene);
   virtual void init() = 0;
   virtual void run() = 0;
-  virtual void computeMatricesFromInputs(glm::mat4*, glm::mat4*) = 0;
 
   virtual std::shared_ptr<Events> getEvents() = 0;
 
@@ -48,10 +45,10 @@ class Manager {
   void reset_window() { sliding_window_offset_ = 0; }
 
   void slide_window_left() {
+    const auto step = args_->sliding_step;
     sliding_window_offset_ =
-        (sliding_window_offset_ > args_->sliding_step)
-            ? sliding_window_offset_ -
-                  args_->sliding_step_factor * args_->sliding_step
+        (sliding_window_offset_ > step)
+            ? sliding_window_offset_ - args_->sliding_step_factor * step
             : 0;
   }
   void slide_window_right() {
@@ -59,11 +56,11 @@ class Manager {
   }
   void slide_window_up() { sliding_window_length_ += args_->sliding_step; }
   void slide_window_down() {
-    sliding_window_length_ = (sliding_window_length_ > args_->sliding_step)
-                                 ? sliding_window_length_ - args_->sliding_step
+    const auto step = args_->sliding_step;
+    sliding_window_length_ = (sliding_window_length_ > step)
+                                 ? sliding_window_length_ - step
                                  : args_->sliding_window_length;
   }
-  virtual bool SlideWindow() = 0;
 
   bool slide_window(VertIndices& selected, const VertIndices& indices) {
     auto left = indices.begin() + sliding_window_offset_;
@@ -98,8 +95,8 @@ class Manager {
   std::shared_ptr<Scene> scene_;
   size_t sliding_window_offset_;
   size_t sliding_window_length_;
-  const unsigned int* sliding_window_left_;
-  const unsigned int* sliding_window_right_;
+  const Index* sliding_window_left_;
+  const Index* sliding_window_right_;
 };
 
 std::shared_ptr<Manager> createManager(const std::string& str,

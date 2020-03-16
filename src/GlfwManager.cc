@@ -134,12 +134,7 @@ bool GlfwManager::SlideWindow() {
   return ret;
 }
 
-void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
-                                            glm::mat4* ViewMatrix) {
-  static double lastTime = glfwGetTime();
-  double currentTime = glfwGetTime();
-  float deltaTime = float(currentTime - lastTime);
-
+bool GlfwManager::updateFirst(float deltaTime, glm::mat4* MVP) {
   // Get mouse position
   double xpos, ypos;
   glfwGetCursorPos(window_, &xpos, &ypos);
@@ -164,17 +159,17 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
   resetVecs();
 
   if (events_->keyDown('W'))  // forward
-    position_ += direction * deltaTime * speed_;
+    position_ += deltaTime * move_speed_ * direction;
   if (events_->keyDown('S'))  // backward
-    position_ -= direction * deltaTime * speed_;
+    position_ -= deltaTime * move_speed_ * direction;
   if (events_->keyDown('D'))  // strafe right
-    position_ += right * deltaTime * speed_;
+    position_ += deltaTime * move_speed_ * right;
   if (events_->keyDown('A'))  // strafe left
-    position_ -= right * deltaTime * speed_;
+    position_ -= deltaTime * move_speed_ * right;
   if (events_->keyDown('X'))  // upward
-    position_ += up * deltaTime * speed_;
+    position_ += deltaTime * move_speed_ * up;
   if (events_->keyDown('Z'))  // downward
-    position_ -= up * deltaTime * speed_;
+    position_ -= deltaTime * move_speed_ * up;
 
   if (events_->keyPressed('O')) {
     resetFloats();
@@ -187,21 +182,18 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
     args_->move_window = !args_->move_window;
   if (events_->keyPressed('.'))  // FIXME: '>'
     args_->sliding_step_factor *= 2;
-  if (events_->keyPressed(',')) {  // FIXME: '<'
-    args_->sliding_step_factor /= 2;
-    if (args_->sliding_step_factor == 0) {
-      args_->sliding_step_factor = 1;
-    }
-  }
+  if (events_->keyPressed(','))  // FIXME: '<'
+    args_->sliding_step_factor =
+        std::max<size_t>(1, args_->sliding_step_factor / 2);
 
-  *ProjectionMatrix = glm::perspective(
+  const glm::mat4 projection = glm::perspective(
       // TODO: change field of view when scrolling
       glm::radians(initial_fov_),
       // aspect ratio
       (float)viewport_width_ / (float)viewport_height_,
       // display range : 0.1 unit <-> 100 units
       0.1f, 100.0f);
-  *ViewMatrix = glm::lookAt(
+  const glm::mat4 view = glm::lookAt(
       // Camera is here
       position_,
       // and looks here : at the same position, plus "direction"
@@ -209,13 +201,36 @@ void GlfwManager::computeMatricesFromInputs(glm::mat4* ProjectionMatrix,
       // Head is up (set to 0,-1,0 to look upside-down)
       up);
 
-  // For the next frame, the "last time" will be "now"
-  lastTime = currentTime;
+  if (args_->spin_shape) {
+    degrees_rotated_ += deltaTime * degrees_per_second_;
+    while (degrees_rotated_ > 360.0f) degrees_rotated_ -= 360.0f;
+  }
+
+  // Model matrix : an identity matrix (model will be at the origin)
+  const glm::mat4 model = glm::rotate(
+      // id mat
+      glm::mat4(1.0),
+      // rotate
+      glm::radians(degrees_rotated_),
+      // around Y axis
+      glm::vec3(0, 1, 0));
+  // Note matrix multiplication is not commutative
+  *MVP = projection * view * model;
+
+  if (args_->move_window || scene_->selected().empty() || SlideWindow()) {
+    if (args_->move_window) slide_window_right();
+    bool slid = slide_window(scene_->selected(), scene_->indices());
+    if (!slid && args_->move_window) args_->move_window = !args_->move_window;
+  }
+
+  return true;
 }
 
 void GlfwManager::run() {
   const auto is3D = scene_->type() == SCENE_3D;
+  GLuint uMVP = 0;
   if (is3D) {
+    uMVP = glGetUniformLocation(scene_->program(), "uMVP");
     // Hide the mouse and enable unlimited mouvement
     glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   }
@@ -240,7 +255,12 @@ void GlfwManager::run() {
     // update the scene based on the time elapsed since last update
     double thisTime = glfwGetTime();
     float elapsedTime = thisTime - lastTime;
-    bool redraw = scene_->update(GlfwManager::instance(), elapsedTime);
+    glm::mat4 MVP;
+    bool redraw = updateFirst(elapsedTime, &MVP);
+    if (redraw) {
+      if (is3D) glUniformMatrix4fv(uMVP, 1, GL_FALSE, &MVP[0][0]);
+      redraw |= scene_->update(elapsedTime);
+    }
     lastTime = thisTime;
 
     if (redraw) {
@@ -284,12 +304,4 @@ void GlfwKeyboardEvents::process(int key, int scancode, int action, int mods) {
   if (key < 0) return;
   current_->keys[key] = action != GLFW_RELEASE;
   current_->rawmods = mods;
-}
-
-void GlfwMouse::getCursorPos() {
-  glfwGetCursorPos(GlfwManager::instance()->window(), &x, &y);
-}
-
-void GlfwMouse::setCursorPos() {
-  glfwSetCursorPos(GlfwManager::instance()->window(), x, y);
 }
