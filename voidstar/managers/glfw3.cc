@@ -5,12 +5,12 @@
 
 #include "voidstar/managers/glfw3.h"
 
-std::shared_ptr<GlfwManager> GlfwManager::instance_;
+std::shared_ptr<GLFW3Manager> GLFW3Manager::instance_;
 
 void onFramebufferResize(GLFWwindow* window __unused, int width, int height) {
   glViewport(0, 0, width, height);
-  GlfwManager::instance()->viewport(width, height);
-  auto scene = GlfwManager::instance()->scene();
+  GLFW3Manager::instance()->viewport(width, height);
+  auto scene = GLFW3Manager::instance()->scene();
   scene->resize(width, height);
 }
 
@@ -20,12 +20,12 @@ static void onError(int errorCode __unused, const char* msg) {
 
 static void onKeyEvent(GLFWwindow* window __unused, int key, int scancode,
                        int action, int mods) {
-  auto events = GlfwManager::instance()->getEvents();
+  auto events = GLFW3Manager::instance()->getEvents();
   auto ev = std::static_pointer_cast<GlfwKeyboardEvents>(events);
   ev->process(key, scancode, action, mods);
 }
 
-void GlfwManager::init() {
+void GLFW3Manager::init() {
   if (!glfwInit()) {
     std::cerr << "Failed to initialize GLFW\n";
     getchar();
@@ -91,7 +91,7 @@ void GlfwManager::init() {
   events_ = std::make_shared<GlfwKeyboardEvents>();
 }
 
-void GlfwManager::glProcessErrors(bool quiet) {
+void GLFW3Manager::glProcessErrors(bool quiet) {
   while (true) {
     GLenum error = glGetError();
     if (error == GL_NO_ERROR) break;
@@ -99,7 +99,7 @@ void GlfwManager::glProcessErrors(bool quiet) {
   }
 }
 
-void GlfwManager::ToggleFullscreen() {
+void GLFW3Manager::ToggleFullscreen() {
   int w, h;
   fullscreen_ = !fullscreen_;
   if (fullscreen_) {
@@ -114,7 +114,7 @@ void GlfwManager::ToggleFullscreen() {
   glfwSetWindowSize(window_, w, h);
 }
 
-bool GlfwManager::SlideWindow() {
+bool GLFW3Manager::SlideWindow() {
   bool ret = false;
   if (events_->keyDown(GLFW_KEY_LEFT)) {
     ret = true;
@@ -133,7 +133,7 @@ bool GlfwManager::SlideWindow() {
   return ret;
 }
 
-bool GlfwManager::updateFirst(float deltaTime, glm::mat4* MVP) {
+bool GLFW3Manager::updateFirst(float deltaTime, glm::mat4* MVP) {
   // Get mouse position
   double xpos, ypos;
   glfwGetCursorPos(window_, &xpos, &ypos);
@@ -225,8 +225,8 @@ bool GlfwManager::updateFirst(float deltaTime, glm::mat4* MVP) {
   return true;
 }
 
-void GlfwManager::run() {
-  const bool is3D = scene_->type() == "3D";
+void GLFW3Manager::run() {
+  const bool is3D = scene_->type() == "Scene3D";
   GLuint uMVP = 0;
   if (is3D) {
     uMVP = glGetUniformLocation(scene_->program(), "uMVP");

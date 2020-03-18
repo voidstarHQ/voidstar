@@ -49,4 +49,4 @@ class Algo2DFourColors : public Algo2D {
     return true;
   }
 };
-REGISTER_ALGORITHM("4col", Algo2DFourColors);
+REGISTER_ALGORITHM(Algo2DFourColors);

@@ -53,16 +53,16 @@ class GlfwKeyboardEvents : public Events {
   std::shared_ptr<GlfwKeyboardState> previous_;
 };
 
-class GlfwManager : public Manager {
+class GLFW3Manager : public Manager {
  public:
-  GlfwManager(std::shared_ptr<Arguments>& args)
+  GLFW3Manager(std::shared_ptr<Arguments>& args)
       : Manager(args),
         window_(nullptr),
         viewport_width_(args->width),
         viewport_height_(args->height) {
     resetFloats();
   }
-  virtual ~GlfwManager() {}
+  virtual ~GLFW3Manager() {}
 
   virtual void init() override;
   virtual void run() override;
@@ -78,17 +78,17 @@ class GlfwManager : public Manager {
 
   static void glProcessErrors(bool quiet = false);
 
-  static std::shared_ptr<GlfwManager> instance(
+  static std::shared_ptr<GLFW3Manager> instance(
       std::shared_ptr<Arguments> args) {
     if (instance_ || !args)
-      throw std::runtime_error("Bad call to instance of GlfwManager");
-    instance_ = std::make_shared<GlfwManager>(args);
+      throw std::runtime_error("Bad call to instance of GLFW3Manager");
+    instance_ = std::make_shared<GLFW3Manager>(args);
     return instance_;
   }
 
-  static std::shared_ptr<GlfwManager> instance() {
+  static std::shared_ptr<GLFW3Manager> instance() {
     if (!instance_)
-      throw std::runtime_error("GlfwManager wasn't previously instanciated");
+      throw std::runtime_error("GLFW3Manager wasn't previously instanciated");
     return instance_;
   }
 
@@ -108,7 +108,7 @@ class GlfwManager : public Manager {
   float initial_fov_;
 
  protected:
-  static std::shared_ptr<GlfwManager> instance_;
+  static std::shared_ptr<GLFW3Manager> instance_;
   GLFWwindow* window_;
   std::shared_ptr<GlfwKeyboardEvents> events_;
   int viewport_width_, viewport_height_;
@@ -123,4 +123,4 @@ class GlfwManager : public Manager {
   // FoV is the level of zoom. 80° = very wide angle, huge deformations.
   // 60° - 45°: standard. 20°: big zoom.
 };
-REGISTER_MANAGER("glfw", GlfwManager);
+REGISTER_MANAGER(GLFW3Manager);

@@ -66,4 +66,4 @@ class Algo2DEntropy : public Algo2D {
     return std::max(f, 0.0f);
   }
 };
-REGISTER_ALGORITHM("entropy", Algo2DEntropy);
+REGISTER_ALGORITHM(Algo2DEntropy);

@@ -29,4 +29,4 @@ class Algo3DCubeContiBnW : public Algo3DCube {
     return true;
   }
 };
-REGISTER_ALGORITHM("cube_bnw", Algo3DCubeContiBnW);
+REGISTER_ALGORITHM(Algo3DCubeContiBnW);

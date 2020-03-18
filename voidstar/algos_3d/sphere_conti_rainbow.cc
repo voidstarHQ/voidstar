@@ -29,4 +29,4 @@ class Algo3DSphereContiRainbow : public Algo3DSphere {
     return true;
   }
 };
-REGISTER_ALGORITHM("sphere_rb", Algo3DSphereContiRainbow);
+REGISTER_ALGORITHM(Algo3DSphereContiRainbow);

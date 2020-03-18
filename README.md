@@ -26,15 +26,41 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 ```shell
 bazel build //voidstar
 ./bazel-bin/voidstar/voidstar --move ../data/*
-# Press H and L to switch between files
-# Use A W S D Z X and your mouse to move in the 3D space
-# Press F for full screen
-# Use the arrows to slide and enlarge the sliding window
-# Press M to slide the window to the end
-# Use > to slide faster, < to slow down
-# SPACE to toggle spinning the shape
-# Press O to reset the camera position
-# ESC to quit
+```
+
+```
+Usage:
+  voidstar  [OPTIONS]  FILE...
+
+    -l, --list         list backends
+    -u, --ui           choose ui mode
+    -a, --algorithm    algorithm to apply
+
+    -x, --width        window width
+    -y, --height       window height
+    -f, --fullscreen   start on fullscreen
+        --keep-chrome  show title bar & allow resizing
+
+    -w, --sliding      length of sliding window
+    -s, --slide-step   amount of points slid
+    -m, --move         move sliding window forward
+    -n, --spin         don't spin shape on itself
+
+    -b, --begin        begin offset for the range
+    -e, --end          end offset for the range
+
+    -h, --help         this help
+
+  # Press H and L to switch between files
+  # Use A W S D Z X and your mouse to move in the 3D space
+  # Press F for full screen
+  # Use the arrows to slide and enlarge the sliding window
+  # Press M to slide the window to the end
+  # Use > to slide faster, < to slow down
+  # SPACE to toggle spinning the shape
+  # Press O to reset the camera position
+  # ESC to quit
+
 ```
 
 ## Installing

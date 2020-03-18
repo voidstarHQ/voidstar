@@ -29,4 +29,4 @@ class Algo3DSphereContiBnW : public Algo3DSphere {
     return true;
   }
 };
-REGISTER_ALGORITHM("sphere_bnw", Algo3DSphereContiBnW);
+REGISTER_ALGORITHM(Algo3DSphereContiBnW);

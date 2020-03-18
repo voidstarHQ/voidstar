@@ -29,6 +29,17 @@ static void usage(const char* prgname) {
     -e, --end          end offset for the range
 
     -h, --help         this help
+
+  # Press H and L to switch between files
+  # Use A W S D Z X and your mouse to move in the 3D space
+  # Press F for full screen
+  # Use the arrows to slide and enlarge the sliding window
+  # Press M to slide the window to the end
+  # Use > to slide faster, < to slow down
+  # SPACE to toggle spinning the shape
+  # Press O to reset the camera position
+  # ESC to quit
+
 )";
 }
 

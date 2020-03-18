@@ -40,6 +40,6 @@ class Algorithm {
 };
 
 REGISTRY_DECLARATION_FOR(Algorithm, std::shared_ptr<Algorithm>());
-#define REGISTER_ALGORITHM(NAME, KLASS) \
-  REGISTRY_REGISTER_FOR(                \
-      Algorithm, NAME, KLASS, () { return std::make_shared<KLASS>(); })
+#define REGISTER_ALGORITHM(KLASS) \
+  REGISTRY_REGISTER_FOR(          \
+      Algorithm, #KLASS, KLASS, () { return std::make_shared<KLASS>(); })

@@ -28,7 +28,7 @@ class FileLoader : public Loader {
   std::ifstream is_;
   std::string data_;
 };
-REGISTER_LOADER("file", FileLoader);
+REGISTER_LOADER(FileLoader);
 
 void FileLoader::load() {
   is_.open(path_, std::ios::in | std::ios::binary);

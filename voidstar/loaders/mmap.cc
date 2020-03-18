@@ -37,7 +37,7 @@ class MmapLoader : public Loader {
   u8* data_ = nullptr;
   std::string path_;
 };
-REGISTER_LOADER("mmap", MmapLoader);
+REGISTER_LOADER(MmapLoader);
 
 void MmapLoader::load() {
   if (fd_ < 0) {

@@ -10,8 +10,8 @@ struct Arguments {
 
   std::vector<std::string> paths;
   std::string name = "void*";
-  std::string algo = "cube_frebet";
-  std::string manager = "glfw";
+  std::string algo = "Algo3DCubeContiFrebet";
+  std::string manager = "GLFW3Manager";
   size_t width = 800;
   size_t height = 600;
   size_t range_begin = 0;

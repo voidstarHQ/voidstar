@@ -46,9 +46,9 @@ class Scene {
 REGISTRY_DECLARATION_FOR(Scene,
                          std::shared_ptr<Scene>(std::shared_ptr<Arguments>,
                                                 std::shared_ptr<Algorithm>));
-#define REGISTER_SCENE(NAME, KLASS)                                      \
+#define REGISTER_SCENE(KLASS)                                            \
   REGISTRY_REGISTER_FOR(                                                 \
-      Scene, NAME, KLASS,                                                \
+      Scene, #KLASS, KLASS,                                              \
       (std::shared_ptr<Arguments> args, std::shared_ptr<Algorithm> algo) \
           ->std::shared_ptr<Scene> {                                     \
             auto scene = std::make_shared<KLASS>();                      \

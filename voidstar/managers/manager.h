@@ -92,7 +92,7 @@ class Manager {
 
 REGISTRY_DECLARATION_FOR(Manager,
                          std::shared_ptr<Manager>(std::shared_ptr<Arguments>));
-#define REGISTER_MANAGER(NAME, KLASS) \
-  REGISTRY_REGISTER_FOR(              \
-      Manager, NAME, KLASS,           \
+#define REGISTER_MANAGER(KLASS) \
+  REGISTRY_REGISTER_FOR(        \
+      Manager, #KLASS, KLASS,   \
       (std::shared_ptr<Arguments> args) { return KLASS::instance(args); })

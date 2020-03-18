@@ -6,7 +6,7 @@ class Algo2D : public Algorithm {
  public:
   virtual ~Algo2D() {}
 
-  static constexpr char kSceneType[] = "2D";
+  static constexpr char kSceneType[] = "Scene2D";
   virtual std::string sceneType() const final { return kSceneType; }
 
   virtual bool apply(Floats& vertices, Floats& colors, size_t width,

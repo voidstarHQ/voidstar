@@ -6,7 +6,10 @@
 class Scene2D : public Scene {
  public:
   Scene2D()
-      : Scene("2D"), width_(256), height_(256), n_points_(width_ * height_) {
+      : Scene("Scene2D"),
+        width_(256),
+        height_(256),
+        n_points_(width_ * height_) {
     reset_points();
   }
   virtual ~Scene2D() { unload(); }
@@ -40,7 +43,7 @@ class Scene2D : public Scene {
   Floats vertices_;
   Floats colors_;
 };
-REGISTER_SCENE("2D", Scene2D);
+REGISTER_SCENE(Scene2D);
 
 void Scene2D::load_shaders() {
   // Build and compile our shader program

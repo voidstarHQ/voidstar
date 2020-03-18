@@ -35,4 +35,4 @@ class Algo3DSphereContiFrebet : public Algo3DSphere {
     return true;
   }
 };
-REGISTER_ALGORITHM("sphere_frebet", Algo3DSphereContiFrebet);
+REGISTER_ALGORITHM(Algo3DSphereContiFrebet);

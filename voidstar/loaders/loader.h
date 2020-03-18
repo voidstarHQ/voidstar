@@ -36,9 +36,9 @@ class Loader {
 
 REGISTRY_DECLARATION_FOR(
     Loader, std::function<std::shared_ptr<Loader>()>(const std::string&));
-#define REGISTER_LOADER(NAME, KLASS)                                      \
+#define REGISTER_LOADER(KLASS)                                            \
   REGISTRY_REGISTER_FOR(                                                  \
-      Loader, NAME, KLASS,                                                \
+      Loader, #KLASS, KLASS,                                              \
       (const std::string& uri)->std::function<std::shared_ptr<KLASS>()> { \
         if (KLASS::CanLoad(uri))                                          \
           return [&]() -> std::shared_ptr<KLASS> {                        \

@@ -6,7 +6,7 @@
 class Scene3D : public Scene {
  public:
   Scene3D()
-      : Scene("3D"),
+      : Scene("Scene3D"),
         width_(256),
         height_(256),
         depth_(256),
@@ -46,7 +46,7 @@ class Scene3D : public Scene {
   Floats vertices_;
   Floats colors_;
 };
-REGISTER_SCENE("3D", Scene3D);
+REGISTER_SCENE(Scene3D);
 
 void Scene3D::load_shaders() {
   // Build and compile our shader program
