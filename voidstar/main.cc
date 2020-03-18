@@ -1,17 +1,7 @@
-#include <functional>
-#include <iostream>
-#include <map>
-#include <string>
-
-#include "src/include/Algorithm.h"
-#include "src/include/Arguments.h"
-#include "src/include/DataRange.h"
-#include "src/include/FileLoader.h"
-#include "src/include/Manager.h"
-#include "src/include/MmapLoader.h"
-#include "src/include/Scene.h"
-#include "src/include/Scene2D.h"
-#include "src/include/Scene3D.h"
+#include "voidstar/algorithm.h"
+#include "voidstar/arguments.h"
+#include "voidstar/managers/manager.h"
+#include "voidstar/scenes/scene.h"
 
 int main(int argc, char* argv[]) {
   auto args = parseArgs(argc, argv);
@@ -19,11 +9,12 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  auto manager = createManager(args->manager, args);
-  if (!manager) {
+  auto managerFactory = RegisteredManager(args->manager);
+  if (!managerFactory) {
     std::cerr << "unknown manager " << args->manager << std::endl;
     return 1;
   }
+  auto manager = managerFactory(args);
   manager->init();
   if (!manager->loadFile(0)) {
     std::cerr << "no usable paths\n";

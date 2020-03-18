@@ -2,7 +2,8 @@
 
 #include <memory>
 
-#include "src/include/Types.h"
+#include "voidstar/registrar.h"
+#include "voidstar/types.h"
 
 class Loader {
  public:
@@ -32,3 +33,16 @@ class Loader {
   size_t size_;
   size_t offset_;
 };
+
+REGISTRY_DECLARATION_FOR(
+    Loader, std::function<std::shared_ptr<Loader>()>(const std::string&));
+#define REGISTER_LOADER(NAME, KLASS)                                      \
+  REGISTRY_REGISTER_FOR(                                                  \
+      Loader, NAME, KLASS,                                                \
+      (const std::string& uri)->std::function<std::shared_ptr<KLASS>()> { \
+        if (KLASS::CanLoad(uri))                                          \
+          return [&]() -> std::shared_ptr<KLASS> {                        \
+            return std::make_shared<KLASS>(uri);                          \
+          };                                                              \
+        return nullptr;                                                   \
+      })

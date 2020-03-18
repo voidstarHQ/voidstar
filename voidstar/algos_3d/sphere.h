@@ -3,7 +3,7 @@
 #include <cmath>
 #include <vector>
 
-#include "src/include/Algo3D.h"
+#include "voidstar/algos_3d/algo_3d.h"
 
 class Algo3DSphere : public Algo3D {
  public:

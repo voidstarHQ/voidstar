@@ -1,20 +1,12 @@
 #pragma once
 
-#include <functional>
-#include <map>
 #include <memory>
-#include <string>
 
-#include "src/include/DataRange.h"
-#include "src/include/Indices.h"
-#include "src/include/Loader.h"
-
-// XXX moved here as a placeholder due to circular dependency #badDesign
-enum SceneType {
-  SCENE_UNDEFINED,
-  SCENE_2D,
-  SCENE_3D,
-};
+#include "voidstar/arguments.h"
+#include "voidstar/data_range.h"
+#include "voidstar/indices.h"
+#include "voidstar/loaders/loader.h"
+#include "voidstar/registrar.h"
 
 size_t Size(const Floats& v);
 size_t Size(const VertIndices& v);
@@ -28,7 +20,7 @@ class Algorithm {
         range_(0) {}
   virtual ~Algorithm() {}
 
-  virtual SceneType sceneType() const = 0;
+  virtual std::string sceneType() const = 0;
   virtual void use(std::shared_ptr<Loader> loader,
                    std::shared_ptr<DataRange> range = NULL);
 
@@ -47,7 +39,7 @@ class Algorithm {
   std::shared_ptr<DataRange> range_;
 };
 
-std::shared_ptr<Algorithm> createAlgorithm(const std::string& str);
-
-using AlgorithmFactoryFunc = std::function<std::shared_ptr<Algorithm>()>;
-extern const std::map<const std::string, AlgorithmFactoryFunc> algorithms;
+REGISTRY_DECLARATION_FOR(Algorithm, std::shared_ptr<Algorithm>());
+#define REGISTER_ALGORITHM(NAME, KLASS) \
+  REGISTRY_REGISTER_FOR(                \
+      Algorithm, NAME, KLASS, () { return std::make_shared<KLASS>(); })

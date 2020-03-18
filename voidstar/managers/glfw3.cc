@@ -1,9 +1,9 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-// This forces clang-format to move below headers up.
+// This comments prevents clang-format from messing up includes.
 
-#include "src/include/GlfwManager.h"
+#include "voidstar/managers/glfw3.h"
 
 std::shared_ptr<GlfwManager> GlfwManager::instance_;
 
@@ -226,7 +226,7 @@ bool GlfwManager::updateFirst(float deltaTime, glm::mat4* MVP) {
 }
 
 void GlfwManager::run() {
-  const auto is3D = scene_->type() == SCENE_3D;
+  const bool is3D = scene_->type() == "3D";
   GLuint uMVP = 0;
   if (is3D) {
     uMVP = glGetUniformLocation(scene_->program(), "uMVP");

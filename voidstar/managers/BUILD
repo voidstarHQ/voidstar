@@ -1,18 +1,37 @@
 package(default_visibility = ["//visibility:public"])
 
-# TODO: third_party GLM
-# sudo apt install libglm-dev
+cc_library(
+    name = "manager",
+    srcs = ["manager.cc"],
+    hdrs = [
+        "events.h",
+        "manager.h",
+    ],
+    deps = [
+        "//voidstar:arguments",
+        "//voidstar:framework",
+        "//voidstar/scenes:scene",
+    ],
+    alwayslink = 1,  # For registration
+)
 
-cc_binary(
-    name = "voidstar",
-    srcs = [        "main.cc",    ],
+cc_library(
+    name = "managers",
+    deps = [
+        ":manager_glfw3",
+    ],
+)
+
+# TODO: third_party GLM -- sudo apt install libglm-dev
+cc_library(
+    name = "manager_glfw3",
+    srcs = ["glfw3.cc"],
+    hdrs = ["glfw3.h"],
     linkopts = ["-lGLEW"],
     deps = [
-        "//voidstar/include:headers",
-        "//voidstar/shaders:shader__fragment",
-        "//voidstar/shaders:shader__vertex_2d",
-        "//voidstar/shaders:shader__vertex_3d",
+        ":manager",
         "@glfw",
         "@khronos_opengl_registry//:gl_headers",
     ],
+    alwayslink = 1,  # For registration
 )

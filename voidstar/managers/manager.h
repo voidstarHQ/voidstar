@@ -2,10 +2,12 @@
 
 #include <memory>
 
-#include "src/include/Arguments.h"
-#include "src/include/Events.h"
-#include "src/include/Indices.h"
-#include "src/include/Scene.h"
+#include "voidstar/arguments.h"
+#include "voidstar/indices.h"
+#include "voidstar/managers/events.h"
+#include "voidstar/registrar.h"
+#include "voidstar/scenes/scene.h"
+#include "voidstar/size2str.h"
 
 class Manager {
  public:
@@ -77,17 +79,6 @@ class Manager {
     return false;
   }
 
-  static std::string  /// 991337 --> "991,337"
-  size2str(size_t size) {
-    std::string str = std::to_string(size);
-    int pos = str.length() - 3;
-    while (pos > 0) {
-      str.insert(pos, ",");
-      pos -= 3;
-    }
-    return str;
-  }
-
  protected:
   bool fullscreen_;
   std::shared_ptr<Arguments> args_;
@@ -99,9 +90,9 @@ class Manager {
   const Index* sliding_window_right_;
 };
 
-std::shared_ptr<Manager> createManager(const std::string& str,
-                                       std::shared_ptr<Arguments> args);
-
-using ManagerFactoryFunc =
-    std::function<std::shared_ptr<Manager>(std::shared_ptr<Arguments>)>;
-extern const std::map<const std::string, ManagerFactoryFunc> managers;
+REGISTRY_DECLARATION_FOR(Manager,
+                         std::shared_ptr<Manager>(std::shared_ptr<Arguments>));
+#define REGISTER_MANAGER(NAME, KLASS) \
+  REGISTRY_REGISTER_FOR(              \
+      Manager, NAME, KLASS,           \
+      (std::shared_ptr<Arguments> args) { return KLASS::instance(args); })

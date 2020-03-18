@@ -1,41 +1,40 @@
 #pragma once
 
+#include <algorithm>
 #include <memory>
-#include <string>
-#include <vector>
+
+#include "voidstar/registrar.h"
 
 struct Arguments {
-  Arguments()
-      : name("void*"),
-        algo("conti"),
-        manager("glfw"),
-        width(800),
-        height(600),
-        range_begin(0),
-        range_end(0),
-        fullscreen(false),
-        keep_chrome(false),
-        sliding_window_length(37 * 1024),
-        sliding_step(1024),
-        sliding_step_factor(1),
-        move_window(false),
-        spin_shape(true) {}
+  Arguments() {}
 
   std::vector<std::string> paths;
-  std::string name;
-  std::string algo;
-  std::string manager;
-  size_t width;
-  size_t height;
-  size_t range_begin;
-  size_t range_end;
-  bool fullscreen;
-  bool keep_chrome;
-  size_t sliding_window_length;
-  size_t sliding_step;
-  size_t sliding_step_factor;
-  bool move_window;
-  bool spin_shape;
+  std::string name = "void*";
+  std::string algo = "cube_frebet";
+  std::string manager = "glfw";
+  size_t width = 800;
+  size_t height = 600;
+  size_t range_begin = 0;
+  size_t range_end = 0;
+  bool fullscreen = false;
+  bool keep_chrome = false;
+  size_t sliding_window_length = 37 * 1024;
+  size_t sliding_step = 1024;
+  size_t sliding_step_factor = 1;
+  bool move_window = false;
+  bool spin_shape = true;
 };
 
-std::shared_ptr<Arguments> parseArgs(int argc, char *argv[]);
+std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]);
+
+REGISTRY_DECLARATION_FOR(Meta, std::shared_ptr<std::vector<std::string>>());
+#define REGISTER_META(NAME, KLASS)                                       \
+  REGISTRY_REGISTER_FOR(                                                 \
+      Meta, NAME, KLASS, ()->std::shared_ptr<std::vector<std::string>> { \
+        const auto& meta = RegistryFor##KLASS();                         \
+        auto names = std::make_shared<std::vector<std::string>>();       \
+        names->reserve(meta.size());                                     \
+        for (const auto& [n, _] : meta) names->push_back(n);             \
+        std::sort(names->begin(), names->end());                         \
+        return names;                                                    \
+      })

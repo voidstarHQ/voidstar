@@ -1,19 +1,43 @@
-#include "src/include/MmapLoader.h"
-
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "src/include/Uri.h"
+#include "voidstar/loaders/loader.h"
+#include "voidstar/loaders/uri.h"
 
-std::shared_ptr<MmapLoader> MmapLoader::make(const std::string& uri) {
-  struct stat info;
-  if (Uri<>::parse(uri).protocol.empty())
-    if (!stat(uri.c_str(), &info))
-      if (~info.st_mode & S_IFDIR) return std::make_shared<MmapLoader>(uri);
-  return nullptr;
-}
+class MmapLoader : public Loader {
+ public:
+  MmapLoader(int fd) : Loader(true), fd_(fd) {}
+  MmapLoader(const std::string& path) : Loader(false), path_(path) {}
+  virtual ~MmapLoader() final {
+    if (data_) free();
+  }
+
+  static bool CanLoad(const std::string& uri) {
+    struct stat info;
+    if (Uri<>::parse(uri).protocol.empty())
+      if (!stat(uri.c_str(), &info))
+        if (~info.st_mode & S_IFDIR) return true;
+    return false;
+  };
+
+  virtual void load() final;
+  virtual void free() final;
+
+  virtual const u8* data() final { return data_; }
+  virtual const u8* dataChunk(size_t offset, size_t size) final {
+    if (size_ < offset + size)
+      throw std::out_of_range("Trying to read data out of bound");
+    return data() + offset;
+  }
+
+ protected:
+  int fd_ = -1;
+  u8* data_ = nullptr;
+  std::string path_;
+};
+REGISTER_LOADER("mmap", MmapLoader);
 
 void MmapLoader::load() {
   if (fd_ < 0) {
@@ -39,12 +63,4 @@ void MmapLoader::free() {
   size_ = 0;
   // fd?
   // close(fd_)
-}
-
-const u8* MmapLoader::data() { return data_; }
-
-const u8* MmapLoader::dataChunk(size_t offset, size_t size) {
-  if (size_ < offset + size)
-    throw std::out_of_range("Trying to read data out of bound");
-  return data() + offset;
 }

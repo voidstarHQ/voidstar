@@ -1,9 +1,46 @@
-#include "src/include/Scene2D.h"
+#include "voidstar/algos_2d/algo_2d.h"
+#include "voidstar/scenes/scene.h"
+#include "voidstar/shaders/fragment.h"
+#include "voidstar/shaders/vertex_2d.h"
 
-#include <stdexcept>
+class Scene2D : public Scene {
+ public:
+  Scene2D()
+      : Scene("2D"), width_(256), height_(256), n_points_(width_ * height_) {
+    reset_points();
+  }
+  virtual ~Scene2D() { unload(); }
 
-#include "src/shaders/fragment.h"
-#include "src/shaders/vertex_2d.h"
+  virtual void init(std::shared_ptr<Arguments> args) override;
+  virtual void load(std::shared_ptr<Algorithm> algo) override;
+  virtual void unload() override;
+  virtual void reload() override;
+  virtual bool update(float elapsedTime) override;
+  virtual void render() override;
+
+ private:
+  void load_shaders();
+  void load_buffers();
+  void reset_points() {
+    vertices_ = Floats(3 * n_points_);
+    colors_ = Floats(3 * n_points_);
+    // selected_.clear();
+    indices_.clear();
+  }
+
+ protected:
+  GLuint vao_ = 0;
+  GLuint vbo_ = 0;
+  GLuint cbo_ = 0;
+
+  size_t width_;
+  size_t height_;
+  size_t n_points_;
+
+  Floats vertices_;
+  Floats colors_;
+};
+REGISTER_SCENE("2D", Scene2D);
 
 void Scene2D::load_shaders() {
   // Build and compile our shader program

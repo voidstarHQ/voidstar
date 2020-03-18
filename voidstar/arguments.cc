@@ -1,50 +1,48 @@
-#include "src/include/Arguments.h"
+#include "voidstar/arguments.h"
 
 #include <getopt.h>
 
+#include <cassert>
 #include <iostream>
 
-#include "src/include/Algorithm.h"
-#include "src/include/Manager.h"
+REGISTRY_IMPLEMENTATION_FOR(Meta);
 
-static void usage(const char *prgname) {
-  std::cout << "Usage: " << prgname << " [OPTIONS] file" << std::endl
-            << std::endl
-            << " -l, --list         list backends" << std::endl
-            << " -u, --ui           choose ui mode" << std::endl
-            << " -a, --algorithm    algorithm to apply" << std::endl
-            << std::endl
-            << " -x, --width        window width" << std::endl
-            << " -y, --height       window height" << std::endl
-            << " -f, --fullscreen   start on fullscreen" << std::endl
-            << "     --keep-chrome  show title bar & allow resizing"
-            << std::endl
-            << std::endl
-            << " -w, --sliding      Length of sliding window" << std::endl
-            << " -s, --slide-step   Amount of points slid" << std::endl
-            << " -m, --move         Move sliding window forward" << std::endl
-            << " -n, --spin         Don't spin shape on itself" << std::endl
-            << std::endl
-            << " -b, --begin        begin offset for the range" << std::endl
-            << " -e, --end          end offset for the range" << std::endl
-            << std::endl
-            << " -h, --help         this help" << std::endl
-            << std::endl;
+static void usage(const char* prgname) {
+  std::cout << R"(Usage:
+  voidstar  [OPTIONS]  FILE...
+
+    -l, --list         list backends
+    -u, --ui           choose ui mode
+    -a, --algorithm    algorithm to apply
+
+    -x, --width        window width
+    -y, --height       window height
+    -f, --fullscreen   start on fullscreen
+        --keep-chrome  show title bar & allow resizing
+
+    -w, --sliding      length of sliding window
+    -s, --slide-step   amount of points slid
+    -m, --move         move sliding window forward
+    -n, --spin         don't spin shape on itself
+
+    -b, --begin        begin offset for the range
+    -e, --end          end offset for the range
+
+    -h, --help         this help
+)";
 }
 
 static void listComponents() {
-  std::cout << "Available UIs:" << std::endl;
-  for (const auto &pair : managers) {
-    std::cout << " - " << pair.first << std::endl;
+  for (const auto& [category, namesFactory] : RegistryForMeta()) {
+    std::cout << "Available " << category << ":\n";
+    assert(namesFactory);
+    const auto& names = namesFactory();
+    for (const auto& name : *names) std::cout << "    " << name << std::endl;
+    std::cout << std::endl;
   }
-  std::cout << std::endl << "Available algorithms:" << std::endl;
-  for (const auto &pair : algorithms) {
-    std::cout << " - " << pair.first << std::endl;
-  }
-  std::cout << std::endl;
 }
 
-std::shared_ptr<Arguments> parseArgs(int argc, char *argv[]) {
+std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
   static auto short_options = ":a:b:e:fmn_hls:w:u:x:y:";
   static const struct option long_options[] = {{"algorithm", 1, 0, 'a'},
                                                {"begin", 1, 0, 'b'},
@@ -137,6 +135,7 @@ std::shared_ptr<Arguments> parseArgs(int argc, char *argv[]) {
   }
 
   if (args->range_end != 0 && args->range_begin >= args->range_end) {
+    // TODO: clearer message suggesting to swap numbers + show the numbers
     std::cerr << "range end must be greater than beginning" << std::endl;
     errors += 1;
   }

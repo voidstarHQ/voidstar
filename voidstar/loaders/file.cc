@@ -1,12 +1,34 @@
-#include "src/include/FileLoader.h"
+#include <fstream>
 
-#include "src/include/Uri.h"
+#include "voidstar/loaders/loader.h"
+#include "voidstar/loaders/uri.h"
+#include "voidstar/types.h"
 
-std::shared_ptr<FileLoader> FileLoader::make(const std::string& uri) {
-  if ("file" == Uri<>::parse(uri).protocol)
-    return std::make_shared<FileLoader>(uri);
-  return nullptr;
-}
+class FileLoader : public Loader {
+ public:
+  FileLoader(const std::string& path) : Loader(false), path_(path) {}
+  virtual ~FileLoader() {}
+
+  static bool CanLoad(const std::string& uri) {
+    return ("file" == Uri<>::parse(uri).protocol);
+  };
+
+  virtual void load() final;
+  virtual void free() final;
+
+  virtual const u8* data() final {
+    return reinterpret_cast<const u8*>(data_.data());
+  }
+  virtual const u8* dataChunk(size_t offset, size_t size __unused) final {
+    return data() + offset;
+  }
+
+ protected:
+  std::string path_;
+  std::ifstream is_;
+  std::string data_;
+};
+REGISTER_LOADER("file", FileLoader);
 
 void FileLoader::load() {
   is_.open(path_, std::ios::in | std::ios::binary);
@@ -22,12 +44,4 @@ void FileLoader::free() {
   data_.reserve(0);
   is_.close();
   size_ = 0;
-}
-
-const u8* FileLoader::data() {
-  return reinterpret_cast<const u8*>(data_.data());
-}
-
-const u8* FileLoader::dataChunk(size_t offset, size_t size __unused) {
-  return data() + offset;
 }

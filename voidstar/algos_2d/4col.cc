@@ -1,4 +1,4 @@
-#include "src/include/Algo2DFourColors.h"
+#include "voidstar/algos_2d/algo_2d.h"
 
 struct RGBColor {
   float r, g, b;
@@ -27,19 +27,26 @@ struct RGBColor {
   }
 };
 
-bool Algo2DFourColors::apply(Floats& vertices, Floats& colors, size_t width,
-                             size_t height) {
-  make_vertices(vertices, width, height);
+class Algo2DFourColors : public Algo2D {
+ public:
+  Algo2DFourColors() {}
+  virtual ~Algo2DFourColors() {}
 
-  const size_t chunk_size = width * height;
-  const u8* data = loader_->dataChunk(0, chunk_size);
-  size_t pos = 0;
-  for (size_t i = 0; i < chunk_size; ++i) {
-    auto c = RGBColor(data[i]);
-    colors[pos++] = c.r;
-    colors[pos++] = c.g;
-    colors[pos++] = c.b;
+  virtual bool apply(Floats& vertices, Floats& colors, size_t width,
+                     size_t height) final {
+    make_vertices(vertices, width, height);
+
+    const size_t chunk_size = width * height;
+    const u8* data = loader_->dataChunk(0, chunk_size);
+    size_t pos = 0;
+    for (size_t i = 0; i < chunk_size; ++i) {
+      auto c = RGBColor(data[i]);
+      colors[pos++] = c.r;
+      colors[pos++] = c.g;
+      colors[pos++] = c.b;
+    }
+
+    return true;
   }
-
-  return true;
-}
+};
+REGISTER_ALGORITHM("4col", Algo2DFourColors);

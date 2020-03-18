@@ -1,12 +1,14 @@
 #pragma once
 
-#include "src/include/Algorithm.h"
+#include "voidstar/algorithm.h"
 
 class Algo2D : public Algorithm {
  public:
   virtual ~Algo2D() {}
 
-  virtual SceneType sceneType() const { return SCENE_2D; }
+  static constexpr char kSceneType[] = "2D";
+  virtual std::string sceneType() const final { return kSceneType; }
+
   virtual bool apply(Floats& vertices, Floats& colors, size_t width,
                      size_t height) = 0;
 

@@ -9,8 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "GLFW/glfw3.h"
-#include "src/include/Manager.h"
-#include "src/include/Types.h"
+#include "voidstar/managers/manager.h"
+#include "voidstar/types.h"
 
 struct GlfwModifiers {
   int shift : 1;
@@ -123,3 +123,4 @@ class GlfwManager : public Manager {
   // FoV is the level of zoom. 80° = very wide angle, huge deformations.
   // 60° - 45°: standard. 20°: big zoom.
 };
+REGISTER_MANAGER("glfw", GlfwManager);

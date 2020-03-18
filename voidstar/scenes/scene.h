@@ -1,21 +1,16 @@
 #pragma once
 
-#include <GL/glew.h>
-
 #include <cstddef>
 #include <iostream>
 #include <memory>
-#define GLM_FORCE_RADIANS
-// functions taking degrees as a parameter are deprecated
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
-#include "src/include/Algorithm.h"
-#include "src/include/Arguments.h"
+#include "voidstar/algorithm.h"
+#include "voidstar/arguments.h"
+#include "voidstar/registrar.h"
 
 class Scene {
  public:
-  Scene(SceneType type) : type_(type), algo_(nullptr) {}
+  Scene(std::string type) : type_(type) {}
   virtual ~Scene() {}
 
   virtual void init(std::shared_ptr<Arguments> args) = 0;
@@ -32,20 +27,32 @@ class Scene {
               << viewport_height << ")\n";
   }
 
-  inline SceneType type() const { return type_; }
+  inline std::string type() const { return type_; }
   inline GLuint program() const { return program_; }
   inline VertIndices& selected() { return selected_; };
   inline const VertIndices& indices() const { return indices_; };
 
   std::shared_ptr<Algorithm> algorithm() const { return algo_; }
-  static std::shared_ptr<Scene> with_algo(std::shared_ptr<Arguments> args,
-                                          std::shared_ptr<Algorithm> algo);
 
  protected:
-  SceneType type_;
-  std::shared_ptr<Algorithm> algo_;
-  GLuint program_;
+  std::string type_;
+  std::shared_ptr<Algorithm> algo_ = nullptr;
+  GLuint program_ = 0;
 
   VertIndices selected_;
   VertIndices indices_;
 };
+
+REGISTRY_DECLARATION_FOR(Scene,
+                         std::shared_ptr<Scene>(std::shared_ptr<Arguments>,
+                                                std::shared_ptr<Algorithm>));
+#define REGISTER_SCENE(NAME, KLASS)                                      \
+  REGISTRY_REGISTER_FOR(                                                 \
+      Scene, NAME, KLASS,                                                \
+      (std::shared_ptr<Arguments> args, std::shared_ptr<Algorithm> algo) \
+          ->std::shared_ptr<Scene> {                                     \
+            auto scene = std::make_shared<KLASS>();                      \
+            scene->init(args);                                           \
+            scene->load(algo);                                           \
+            return scene;                                                \
+          })

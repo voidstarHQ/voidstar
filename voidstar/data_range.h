@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/include/Types.h"
+#include "voidstar/types.h"
 
 struct DataRange {
   DataRange(size_t b, size_t e) : begin(b), end(e) {}

@@ -1,8 +1,9 @@
-#include "src/include/Manager.h"
+#include "voidstar/managers/manager.h"
 
 #include <iostream>
 
-#include "src/include/GlfwManager.h"
+REGISTRY_IMPLEMENTATION_FOR(Manager);
+REGISTER_META("managers", Manager);
 
 void Manager::loadScene(std::shared_ptr<Scene> scene) {
   // XXX delete scene prior to creating a new one
@@ -23,9 +24,9 @@ bool Manager::loadFile(size_t index) {
 
   fileIndex_ = index;
   // TODO: remove previous loader instance from scene.
-  //       properly define who owns the variable and its longevity
+  //       properly define who owns the variable and its lifetime.
   auto loader = Loader::fromURI(args_->paths[index]);
-  if (nullptr == loader) args_->paths[index].erase(fileIndex_);
+  if (!loader) args_->paths[index].erase(fileIndex_);
   if (args_->paths[index].empty()) return false;
 
   loader->load();
@@ -36,23 +37,14 @@ bool Manager::loadFile(size_t index) {
     algo->use(loader, range);
     scene_->reload();
   } else {
-    auto algo = createAlgorithm(args_->algo);
+    std::cerr << "Picked algo: " << args_->algo << std::endl;
+    auto algoFactory = RegisteredAlgorithm(args_->algo);
+    assert(algoFactory != nullptr);
+    auto algo = algoFactory();
     algo->use(loader, range);
-    loadScene(Scene::with_algo(args_, algo));
+    auto sceneFactory = RegisteredScene(algo->sceneType());
+    assert(sceneFactory);
+    loadScene(sceneFactory(args_, algo));
   }
   return true;
 }
-
-std::shared_ptr<Manager> createManager(const std::string& str,
-                                       std::shared_ptr<Arguments> args) {
-  auto it = managers.find(str);
-  if (it == managers.end()) {
-    return NULL;
-  }
-  return it->second(args);
-}
-
-#define MANAGER(Body) [](std::shared_ptr<Arguments> args) { Body }
-const std::map<const std::string, ManagerFactoryFunc> managers = {
-    {"glfw", MANAGER(return GlfwManager::instance(args);)},
-};
