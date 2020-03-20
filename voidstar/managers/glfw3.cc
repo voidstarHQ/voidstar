@@ -79,9 +79,7 @@ void GLFW3Manager::init() {
   glfwGetFramebufferSize(window_, &viewport_width_, &viewport_height_);
   glViewport(0, 0, viewport_width_, viewport_height_);
 
-  // Set the mouse at the center of the screen
   glfwPollEvents();
-  glfwSetCursorPos(window_, viewport_width_ / 2, viewport_height_ / 2);
 
   glfwSetErrorCallback(onError);
 
@@ -137,8 +135,6 @@ bool GLFW3Manager::updateFirst(float deltaTime, glm::mat4* MVP) {
   // Get mouse position
   double xpos, ypos;
   glfwGetCursorPos(window_, &xpos, &ypos);
-  // Reset mouse position for next frame
-  glfwSetCursorPos(window_, viewport_width_ / 2, viewport_height_ / 2);
 
   // Compute new orientation
   horizontal_angle_ += mouse_sensitivity_ * float(viewport_width_ / 2 - xpos);
@@ -229,9 +225,12 @@ void GLFW3Manager::run() {
   const bool is3D = scene_->type() == "Scene3D";
   GLuint uMVP = 0;
   if (is3D) {
+    // Get uniform uMVP slot within shader program
     uMVP = glGetUniformLocation(scene_->program(), "uMVP");
     // Hide the mouse and enable unlimited mouvement
     glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // Set the mouse at the center of the screen
+    glfwSetCursorPos(window_, viewport_width_ / 2, viewport_height_ / 2);
   }
 
   double lastTime = glfwGetTime();
@@ -239,9 +238,9 @@ void GLFW3Manager::run() {
     // process pending events
     events_->update();
 
+    // Clear the colorbuffer
     glClearColor(0, 0, 0, 1);
     // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    // Clear the colorbuffer
     if (is3D) {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     } else {
@@ -269,10 +268,12 @@ void GLFW3Manager::run() {
 
     glUseProgram(0);  // stop using
 
+    // Set the mouse at the center of the screen
+    if (is3D)
+      glfwSetCursorPos(window_, viewport_width_ / 2, viewport_height_ / 2);
     if (events_->keyPressed(GLFW_KEY_ESCAPE))
       glfwSetWindowShouldClose(window_, GL_TRUE);
     if (events_->keyPressed('F')) ToggleFullscreen();
-
     if (events_->keyPressed('H')) loadPrevFile();
     if (events_->keyPressed('L')) loadNextFile();
   }
