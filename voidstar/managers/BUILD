@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
@@ -30,6 +32,7 @@ cc_library(
     linkopts = ["-lGLEW"],
     deps = [
         ":manager",
+        "@com_github_gtruc_glm//:glm",
         "@glfw",
         "@khronos_opengl_registry//:gl_headers",
     ],

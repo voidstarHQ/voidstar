@@ -1,0 +1,6 @@
+locked = {}
+locked["http_archive>  tar.gz github.com/KhronosGroup/OpenGL-Registry  "] = {"sha256": "e8ed826674eaac11cb74e256c7a5bd03ee5d9678949a69e312b52394484d0657", "url": "https://github.com/KhronosGroup/OpenGL-Registry/archive/4594c03239fb76580bc5d5a13acb2a8f563f0158.tar.gz"}
+locked["http_archive>  zip github.com/bazelbuild/bazel-skylib  "] = {"sha256": "80a884c80b890c2fb3125d8dd00af8d46ac030bfddf449fcad664ef46e18939a", "url": "https://github.com/bazelbuild/bazel-skylib/archive/dfcfe825005ffba4a7c15cd9ddac737d040d2506.zip"}
+locked["http_archive>  zip github.com/bazelbuild/rules_cc  "] = {"sha256": "523c59bb3f16518679668594c8874da46872fde05c32ba246bc0a35ec292f8a6", "url": "https://github.com/bazelbuild/rules_cc/archive/34ca16f4aa4bf2a5d3e4747229202d6cb630ebab.zip"}
+locked["http_archive>  zip github.com/g-truc/glm  "] = {"sha256": "cc5f92593be85d51fc243a4735a07898f010e32f7c1496822e8d78a3df651320", "url": "https://github.com/g-truc/glm/archive/efbfecab63da2adb2dc197f91270ff6221900740.zip"}
+locked["http_archive>  zip github.com/glfw/glfw  "] = {"sha256": "d22c409c39513a99b2c264974a436953820919fa9ba29204ad61d8f92465833a", "url": "https://github.com/glfw/glfw/archive/44b5d06583cd21ac237eb8f6263db03faf1726c2.zip"}
