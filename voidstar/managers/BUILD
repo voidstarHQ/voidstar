@@ -24,7 +24,6 @@ cc_library(
     ],
 )
 
-# TODO: third_party GLM -- sudo apt install libglm-dev
 cc_library(
     name = "manager_glfw3",
     srcs = ["glfw3.cc"],
