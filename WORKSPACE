@@ -1,8 +1,14 @@
 workspace(name = "voidstar")
 
-local_repository(
+load("@bazel_tools//tools/build_defs/repo:http.bzl", bare_http_archive = "http_archive")
+
+bare_http_archive(
     name = "bazel_lock",
-    path = "../bazel_lock.git",
+    # Locked on 2020-04-04
+    sha256 = "ce1a1c3753b970419c8d5ea3e5afbc24ad62beacbb32c48672186c78411540f8",
+    strip_prefix = "bazel_lock-081217b3d17d9a8a817eb8fd4ec6058145126a2c",
+    type = "zip",
+    url = "https://github.com/fenollp/bazel_lock/archive/081217b3d17d9a8a817eb8fd4ec6058145126a2c.zip",
 )
 
 load("@bazel_lock//rules:locked.bzl", "http_archive")
