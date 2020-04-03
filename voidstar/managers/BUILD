@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
@@ -22,7 +24,6 @@ cc_library(
     ],
 )
 
-# TODO: third_party GLM -- sudo apt install libglm-dev
 cc_library(
     name = "manager_glfw3",
     srcs = ["glfw3.cc"],
@@ -30,6 +31,7 @@ cc_library(
     linkopts = ["-lGLEW"],
     deps = [
         ":manager",
+        "@com_github_gtruc_glm//:glm",
         "@glfw",
         "@khronos_opengl_registry//:gl_headers",
     ],

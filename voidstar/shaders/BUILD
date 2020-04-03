@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 package(default_visibility = ["//visibility:public"])
 
 GLSLs = [glsl.replace(".glsl", "") for glsl in glob(["*.glsl"])]

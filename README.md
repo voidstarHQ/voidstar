@@ -104,13 +104,13 @@ https://github.com/fenollp/voidstar/issues/2
 ### Debian
 
 ```shell
-sudo apt install libglew-dev libglm-dev
+sudo apt install libglew-dev
 ```
 
 ### OSX
 
 ```shell
-brew install glew glm
+brew install glew
 ```
 
 ### Web
