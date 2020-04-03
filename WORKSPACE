@@ -15,21 +15,6 @@ load("@bazel_lock//rules:locked.bzl", "http_archive")
 load("//:LOCKFILE.bzl", "locked")
 
 http_archive(
-    name = "bazel_skylib",
-    locked = locked,
-    type = "zip",
-    upgrades_slug = "github.com/bazelbuild/bazel-skylib",
-)
-
-load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
-
-bazel_skylib_workspace()
-
-load("@bazel_skylib//lib:versions.bzl", "versions")
-
-versions.check(minimum_bazel_version = "0.24.1")
-
-http_archive(
     name = "rules_cc",
     locked = locked,
     type = "zip",
