@@ -21,7 +21,10 @@ cc_library(
     name = "glew",
     srcs = ["src/glew.c"],
     hdrs = glob(["include/GL/*.h"]),
-    defines = ["GLEW_STATIC"],
+    defines = [
+        "GLEW_NO_GLU",
+        "GLEW_STATIC",
+    ],
     includes = ["include"],
     linkopts = select({
         ":linux": ["-lGL"],
