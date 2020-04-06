@@ -2,7 +2,7 @@ build --jobs 128
 build --cxxopt='-std=c++17'
 
 build --copt=-fdiagnostics-color=always
-run --copt=-fdiagnostics-color=always
+run   --copt=-fdiagnostics-color=always
 
 # Dependencies locking
 sync --experimental_repository_resolved_file=resolved.bzl

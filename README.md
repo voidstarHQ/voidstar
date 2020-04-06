@@ -27,8 +27,8 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 ## Usage
 
 ```shell
-bazel build //voidstar
-./bazel-bin/voidstar/voidstar --move ../data/*
+bazel build voidstar
+./bazel-bin/voidstar/voidstar --move bazel-bin/voidstar/voidstar data/*
 ```
 
 ```

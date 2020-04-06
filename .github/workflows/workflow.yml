@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Install
+      run: |
+        sudo apt update
+        sudo apt install -y libglew-dev xorg-dev
     - run: bazelisk build voidstar
 
   build_on_macos:
@@ -16,6 +20,10 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Install
+      run: |
+        brew update
+        brew install glew
     - run: bazelisk build voidstar
 
   build_on_windows:
