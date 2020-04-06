@@ -1,0 +1,26 @@
+on: push
+name: Build
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  build_on_ubuntu:
+    name: Build on ubuntu
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: bazelisk build voidstar
+
+  build_on_macos:
+    name: Build on macos
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: bazelisk build voidstar
+
+  build_on_windows:
+    name: Build on windows
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: bazelisk build voidstar
