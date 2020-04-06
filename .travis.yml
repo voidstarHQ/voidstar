@@ -10,8 +10,6 @@ os:
 addons:
   apt:
     packages:
-    - libglew-dev
-    - xorg-dev
     - libgl1-mesa-dev
     - libc++-dev
     - cppcheck
@@ -23,8 +21,6 @@ install:
 - |
   case "$TRAVIS_OS_NAME" in
     'osx')
-      travis_wait 15 brew update
-      travis_wait 15 brew install glew
       curl -#fSLo ./bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-darwin-amd64 && chmod +x ./bazel
       ;;
     'linux')

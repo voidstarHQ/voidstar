@@ -32,8 +32,17 @@ upgradable_github_archive(
 )
 
 upgradable_github_archive(
-    name = "com_github_gtruc_glm",
+    name = "glm",
     branch = "master",
     build_file = "@//third_party:glm.BUILD",
     slug = "g-truc/glm",
+)
+
+# TODO: use upgradable_github_release with tag <=2
+http_archive(
+    name = "glew",
+    build_file = "@//third_party:glew.BUILD",
+    strip_prefix = "glew-2.1.0",
+    type = "zip",
+    url = "https://github.com/nigels-com/glew/releases/download/glew-2.1.0/glew-2.1.0.zip",
 )

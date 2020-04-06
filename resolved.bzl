@@ -122,20 +122,25 @@ resolved = [
         ]
     },
     {
-        "original_rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+        "original_rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
         "original_attributes": {
-            "name": "com_github_gtruc_glm",
-            "build_file": "//third_party:glm.BUILD",
-            "branch": "master",
-            "slug": "g-truc/glm"
+            "name": "glew",
+            "url": "https://github.com/nigels-com/glew/releases/download/glew-2.1.0/glew-2.1.0.zip",
+            "strip_prefix": "glew-2.1.0",
+            "type": "zip",
+            "build_file": "//third_party:glew.BUILD"
         },
         "repositories": [
             {
-                "rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+                "rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
                 "attributes": {
+                    "url": "https://github.com/nigels-com/glew/releases/download/glew-2.1.0/glew-2.1.0.zip",
+                    "urls": [],
+                    "sha256": "2700383d4de2455f06114fbaf872684f15529d4bdc5cdea69b5fb0e9aa7763f1",
                     "netrc": "",
-                    "auth_patterns": {},
                     "canonical_id": "",
+                    "strip_prefix": "glew-2.1.0",
+                    "type": "zip",
                     "patches": [],
                     "patch_tool": "",
                     "patch_args": [
@@ -143,20 +148,12 @@ resolved = [
                     ],
                     "patch_cmds": [],
                     "patch_cmds_win": [],
-                    "build_file": "//third_party:glm.BUILD",
+                    "build_file": "//third_party:glew.BUILD",
                     "build_file_content": "",
                     "workspace_file_content": "",
-                    "branch": "master",
-                    "slug": "g-truc/glm",
-                    "tag": "",
-                    "sha256": "cc5f92593be85d51fc243a4735a07898f010e32f7c1496822e8d78a3df651320",
-                    "strip_prefix": "glm-efbfecab63da2adb2dc197f91270ff6221900740",
-                    "urls": [
-                        "https://github.com/g-truc/glm/archive/efbfecab63da2adb2dc197f91270ff6221900740.zip"
-                    ],
-                    "name": "com_github_gtruc_glm"
+                    "name": "glew"
                 },
-                "output_tree_hash": "294235b12e80f17d7f43e8acf64a5eeaa2abed2f8cdeb138dddd3f2fa33d9ff3"
+                "output_tree_hash": "dd0de533bbfa88914b9dfc3daaef53dc481a5ea55545f1e7872df3fe9f9a9cf4"
             }
         ]
     },
@@ -195,7 +192,46 @@ resolved = [
                     ],
                     "name": "glfw"
                 },
-                "output_tree_hash": "a7df8ded487e666323402f7c623f103b7437bd53a92e011c83fbe351a54866ab"
+                "output_tree_hash": "44ac091abadc52ca0f37114e97b0958bff381e68f2004bc8998a345e6e1ee981"
+            }
+        ]
+    },
+    {
+        "original_rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+        "original_attributes": {
+            "name": "glm",
+            "build_file": "//third_party:glm.BUILD",
+            "branch": "master",
+            "slug": "g-truc/glm"
+        },
+        "repositories": [
+            {
+                "rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+                "attributes": {
+                    "netrc": "",
+                    "auth_patterns": {},
+                    "canonical_id": "",
+                    "patches": [],
+                    "patch_tool": "",
+                    "patch_args": [
+                        "-p0"
+                    ],
+                    "patch_cmds": [],
+                    "patch_cmds_win": [],
+                    "build_file": "//third_party:glm.BUILD",
+                    "build_file_content": "",
+                    "workspace_file_content": "",
+                    "branch": "master",
+                    "slug": "g-truc/glm",
+                    "tag": "",
+                    "sha256": "cc5f92593be85d51fc243a4735a07898f010e32f7c1496822e8d78a3df651320",
+                    "strip_prefix": "glm-efbfecab63da2adb2dc197f91270ff6221900740",
+                    "urls": [
+                        "https://github.com/g-truc/glm/archive/efbfecab63da2adb2dc197f91270ff6221900740.zip"
+                    ],
+                    "name": "glm"
+                },
+                "output_tree_hash": "7b1b13a2636830a14442afe4b841d26d06af6f09e6f4a25e03986243becd4ada"
             }
         ]
     },

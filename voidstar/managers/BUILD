@@ -28,10 +28,10 @@ cc_library(
     name = "manager_glfw3",
     srcs = ["glfw3.cc"],
     hdrs = ["glfw3.h"],
-    linkopts = ["-lGLEW"],
     deps = [
         ":manager",
-        "@com_github_gtruc_glm//:glm",
+        "@glm",
+        "@glew",
         "@glfw",
         "@khronos_opengl_registry//:gl_headers",
     ],
