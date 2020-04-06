@@ -101,7 +101,7 @@ resolved = [
                 "attributes": {
                     "url": "https://github.com/fenollp/bazel_upgradable/archive/master.zip",
                     "urls": [],
-                    "sha256": "c18eba9c7fb6a9206586eacb10c2946d9204c2f7749c676217079c96a6d3da59",
+                    "sha256": "eff1907a3318751a9f194126b84c9e30489c7b1f1e6def32735954d718ccfbe5",
                     "netrc": "",
                     "canonical_id": "",
                     "strip_prefix": "bazel_upgradable-master",
@@ -117,7 +117,7 @@ resolved = [
                     "workspace_file_content": "",
                     "name": "bazel_upgradable"
                 },
-                "output_tree_hash": "e7d0faa83e22e2c8b3a0b0ccdfd82413c7a7e7ce29e43987cfeaae110c2a33d3"
+                "output_tree_hash": "f54a0bbd0b277a6de8e0ace8c6bd0ef1c2d6831d27e41e88c371350f49333617"
             }
         ]
     },
@@ -153,7 +153,7 @@ resolved = [
                     "workspace_file_content": "",
                     "name": "glew"
                 },
-                "output_tree_hash": "dd0de533bbfa88914b9dfc3daaef53dc481a5ea55545f1e7872df3fe9f9a9cf4"
+                "output_tree_hash": "c20f5fa46a2b9c03b4fa849e87a0479ba5df1400c0ab3f616dd95f008cd0c226"
             }
         ]
     },
@@ -185,14 +185,14 @@ resolved = [
                     "branch": "master",
                     "slug": "glfw/glfw",
                     "tag": "",
-                    "sha256": "d627cb439cece9ead0693659ced597e9775596a3b72c708ba04590520c7e8ca9",
+                    "sha256": "2e64b9dd50c835860d271677dd3386f250a49b852eb73a6ee96a5f9f1e3eac09",
                     "strip_prefix": "glfw-e65de2941c056ee5833b4dab3db36b297b53aa14",
                     "urls": [
-                        "https://github.com/glfw/glfw/archive/e65de2941c056ee5833b4dab3db36b297b53aa14.zip"
+                        "https://github.com/glfw/glfw/archive/e65de2941c056ee5833b4dab3db36b297b53aa14.tar.gz"
                     ],
                     "name": "glfw"
                 },
-                "output_tree_hash": "44ac091abadc52ca0f37114e97b0958bff381e68f2004bc8998a345e6e1ee981"
+                "output_tree_hash": "4727a2e752e7d3a429a66a51d8ef1c0d71bbc57fccb831313363b53e7ce24fca"
             }
         ]
     },
@@ -224,14 +224,14 @@ resolved = [
                     "branch": "master",
                     "slug": "g-truc/glm",
                     "tag": "",
-                    "sha256": "cc5f92593be85d51fc243a4735a07898f010e32f7c1496822e8d78a3df651320",
+                    "sha256": "6802233a65bd4eaab83221f3a2a9000a7e99887c92b924ffb92ec514feed7242",
                     "strip_prefix": "glm-efbfecab63da2adb2dc197f91270ff6221900740",
                     "urls": [
-                        "https://github.com/g-truc/glm/archive/efbfecab63da2adb2dc197f91270ff6221900740.zip"
+                        "https://github.com/g-truc/glm/archive/efbfecab63da2adb2dc197f91270ff6221900740.tar.gz"
                     ],
                     "name": "glm"
                 },
-                "output_tree_hash": "7b1b13a2636830a14442afe4b841d26d06af6f09e6f4a25e03986243becd4ada"
+                "output_tree_hash": "2b3ad2694f0bfb14f868a68aa4e2a566cda126a3aaccdf9869f46e96aa4e6e32"
             }
         ]
     },
@@ -263,14 +263,14 @@ resolved = [
                     "branch": "master",
                     "slug": "KhronosGroup/OpenGL-Registry",
                     "tag": "",
-                    "sha256": "f6542a854b3ac7d6af8a8da76e00303e000852942aa1b2b83b52c07bacbb0913",
+                    "sha256": "e8ed826674eaac11cb74e256c7a5bd03ee5d9678949a69e312b52394484d0657",
                     "strip_prefix": "OpenGL-Registry-4594c03239fb76580bc5d5a13acb2a8f563f0158",
                     "urls": [
-                        "https://github.com/KhronosGroup/OpenGL-Registry/archive/4594c03239fb76580bc5d5a13acb2a8f563f0158.zip"
+                        "https://github.com/KhronosGroup/OpenGL-Registry/archive/4594c03239fb76580bc5d5a13acb2a8f563f0158.tar.gz"
                     ],
                     "name": "khronos_opengl_registry"
                 },
-                "output_tree_hash": "a8053e275c1de3f382d06c735dc3a6419828e377716358d7df055d3beef525df"
+                "output_tree_hash": "aacf8e326f18f47a9303fd75928438fe1f491ce1f74ff244e2bdbc76e4e28e69"
             }
         ]
     },
@@ -300,14 +300,14 @@ resolved = [
                     "branch": "master",
                     "slug": "bazelbuild/rules_cc",
                     "tag": "",
-                    "sha256": "523c59bb3f16518679668594c8874da46872fde05c32ba246bc0a35ec292f8a6",
+                    "sha256": "e637dc045e70e43b7431fbeacb68d569a84f9fe1cb5879c432aa0855097dce57",
                     "strip_prefix": "rules_cc-34ca16f4aa4bf2a5d3e4747229202d6cb630ebab",
                     "urls": [
-                        "https://github.com/bazelbuild/rules_cc/archive/34ca16f4aa4bf2a5d3e4747229202d6cb630ebab.zip"
+                        "https://github.com/bazelbuild/rules_cc/archive/34ca16f4aa4bf2a5d3e4747229202d6cb630ebab.tar.gz"
                     ],
                     "name": "rules_cc"
                 },
-                "output_tree_hash": "aa9a5fa504287193f8401e75000f9a7fe7c2dcbcaee37f61077734f2bb650a22"
+                "output_tree_hash": "ee079949868f4df4176257b08a038207c5a7b6145ca63b6003e37254ad1be580"
             }
         ]
     },
