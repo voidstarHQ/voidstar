@@ -1,46 +1,39 @@
 workspace(name = "voidstar")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", bare_http_archive = "http_archive")
-
-bare_http_archive(
-    name = "bazel_lock",
-    # Locked on 2020-04-04
-    sha256 = "ce1a1c3753b970419c8d5ea3e5afbc24ad62beacbb32c48672186c78411540f8",
-    strip_prefix = "bazel_lock-081217b3d17d9a8a817eb8fd4ec6058145126a2c",
-    type = "zip",
-    url = "https://github.com/fenollp/bazel_lock/archive/081217b3d17d9a8a817eb8fd4ec6058145126a2c.zip",
-)
-
-load("@bazel_lock//rules:locked.bzl", "http_archive")
-load("//:LOCKFILE.bzl", "locked")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
+    name = "bazel_upgradable",
+    strip_prefix = "bazel_upgradable-master",
+    type = "zip",
+    url = "https://github.com/fenollp/bazel_upgradable/archive/master.zip",
+)
+
+load("@bazel_upgradable//rules:github.bzl", "upgradable_github_archive")
+
+upgradable_github_archive(
     name = "rules_cc",
-    locked = locked,
-    type = "zip",
-    upgrades_slug = "github.com/bazelbuild/rules_cc",
+    branch = "master",
+    slug = "bazelbuild/rules_cc",
 )
 
-http_archive(
+upgradable_github_archive(
     name = "khronos_opengl_registry",
+    branch = "master",
     build_file = "@//third_party:gl.BUILD",
-    locked = locked,
-    type = "tar.gz",
-    upgrades_slug = "github.com/KhronosGroup/OpenGL-Registry",
+    slug = "KhronosGroup/OpenGL-Registry",
 )
 
-http_archive(
+upgradable_github_archive(
     name = "glfw",
+    branch = "master",
     build_file = "@//third_party:glfw3.BUILD",
-    locked = locked,
-    type = "zip",
-    upgrades_slug = "github.com/glfw/glfw",
+    slug = "glfw/glfw",
 )
 
-http_archive(
+upgradable_github_archive(
     name = "com_github_gtruc_glm",
+    branch = "master",
     build_file = "@//third_party:glm.BUILD",
-    locked = locked,
-    type = "zip",
-    upgrades_slug = "github.com/g-truc/glm",
+    slug = "g-truc/glm",
 )
