@@ -20,6 +20,15 @@ config_setting(
     constraint_values = ["@bazel_tools//platforms:windows"],
 )
 
+cc_library(
+    name = "glfw",
+    deps = select({
+        ":linux": [":glfw_linux"],
+        ":osx": [":glfw_osx"],
+        ":windows": [":glfw_windows"],
+    }),
+)
+
 # SRCS from https://github.com/glfw/glfw/blob/e65de2941c056ee5833b4dab3db36b297b53aa14/src/CMakeLists.txt
 
 SRCS = [
@@ -161,13 +170,4 @@ objc_library(
         "IOKit",
         "OpenGL",
     ],
-)
-
-cc_library(
-    name = "glfw",
-    deps = select({
-        ":linux": [":glfw_linux"],
-        ":osx": [":glfw_osx"],
-        ":windows": [":glfw_windows"],
-    }),
 )

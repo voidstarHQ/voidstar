@@ -13,6 +13,11 @@ cc_library(
     alwayslink = 1,  # For registration
 )
 
+config_setting(
+    name = "windows",
+    constraint_values = ["@bazel_tools//platforms:windows"],
+)
+
 LOADERS = [
     "fd",
     "file",
@@ -21,7 +26,18 @@ LOADERS = [
 
 cc_library(
     name = "loaders",
-    deps = [":loader_" + loader for loader in LOADERS],
+    deps = select({
+        ":windows": [
+            ":loader_fd",
+            ":loader_file",
+            # ":loader_mmap", # TODO
+        ],
+        "//conditions:default": [
+            ":loader_fd",
+            ":loader_file",
+            ":loader_mmap",
+        ],
+    }),
 )
 
 [
