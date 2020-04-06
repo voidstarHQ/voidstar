@@ -106,5 +106,5 @@ https://github.com/fenollp/voidstar/issues/2
 ### Debian
 
 ```shell
-sudo apt install libgl1-mesa-dev xorg-dev
+sudo apt-get install mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev xorg-dev
 ```
