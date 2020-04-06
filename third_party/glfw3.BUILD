@@ -162,6 +162,11 @@ objc_library(
     name = "glfw_osx",
     srcs = SRCS + SRCS_COCOA,
     hdrs = HDRS,
+    defines = [
+        "_GLFW_COCOA",
+        "_GLFW_GLX",
+        "_GLFW_USE_OPENGL",
+    ],
     includes = INCLUDES,
     sdk_frameworks = [
         "Cocoa",
