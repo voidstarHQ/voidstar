@@ -12,14 +12,7 @@
 class Manager {
  public:
   Manager(std::shared_ptr<Arguments>& args)
-      : fullscreen_(false),
-        args_(args),
-        fileIndex_(0),
-        scene_(NULL),
-        sliding_window_offset_(0),
-        sliding_window_length_(args_->sliding_window_length),
-        sliding_window_left_(NULL),
-        sliding_window_right_(NULL) {}
+      : args_(args), sliding_window_length_(args_->sliding_window_length) {}
   virtual ~Manager() {}
 
   virtual void loadScene(std::shared_ptr<Scene> scene);
@@ -28,15 +21,20 @@ class Manager {
 
   virtual std::shared_ptr<Events> getEvents() = 0;
 
+  bool FileJustChanged() {
+    bool x = file_just_changed_;
+    if (file_just_changed_) file_just_changed_ = false;
+    return x;
+  }
   bool loadFile(size_t index);
   void loadFile(const std::string& filename);
   void loadNextFile() {
     loadFile((fileIndex_ + 1) % args_->paths.size());
-    reset_window();
+    slide_window_leftmost();
   }
   void loadPrevFile() {
     loadFile((fileIndex_ - 1) % args_->paths.size());
-    reset_window();
+    slide_window_leftmost();
   }
 
   virtual void ToggleFullscreen() = 0;
@@ -44,7 +42,7 @@ class Manager {
   std::shared_ptr<Arguments> args() const { return args_; }
   std::shared_ptr<Scene> scene() const { return scene_; }
 
-  void reset_window() { sliding_window_offset_ = 0; }
+  void slide_window_leftmost() { sliding_window_offset_ = 0; }
 
   void slide_window_left() {
     const auto step = args_->sliding_step;
@@ -66,7 +64,8 @@ class Manager {
 
   bool slide_window(VertIndices& selected, const VertIndices& indices) {
     auto left = indices.begin() + sliding_window_offset_;
-    if (left > indices.end()) left = indices.begin();
+    if (left > indices.end()) left = indices.end() - sliding_window_offset_;
+    if (left < indices.begin()) left = indices.begin();
     auto right = std::min(indices.end(), left + sliding_window_length_);
     if (sliding_window_left_ != &left[0] ||
         sliding_window_right_ != &right[0]) {
@@ -80,14 +79,18 @@ class Manager {
   }
 
  protected:
-  bool fullscreen_;
+  bool fullscreen_ = false;
+  // TODO: move attributes (and their methods) marked 'this'
+  // to scene_ object so sliding window, loader & things can
+  // be set per scene_.
+  bool file_just_changed_ = false;  // this
   std::shared_ptr<Arguments> args_;
-  size_t fileIndex_;
-  std::shared_ptr<Scene> scene_;
-  size_t sliding_window_offset_;
-  size_t sliding_window_length_;
-  const Index* sliding_window_left_;
-  const Index* sliding_window_right_;
+  size_t fileIndex_ = 0;
+  std::shared_ptr<Scene> scene_ = nullptr;       // TODO: make this a collection
+  size_t sliding_window_offset_ = 0;             // this
+  size_t sliding_window_length_;                 // this
+  const Index* sliding_window_left_ = nullptr;   // this
+  const Index* sliding_window_right_ = nullptr;  // this
 };
 
 REGISTRY_DECLARATION_FOR(Manager,

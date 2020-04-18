@@ -46,5 +46,6 @@ bool Manager::loadFile(size_t index) {
     assert(sceneFactory);
     loadScene(sceneFactory(args_, algo));
   }
+  file_just_changed_ = true;
   return true;
 }

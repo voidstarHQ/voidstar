@@ -212,10 +212,19 @@ bool GLFW3Manager::updateFirst(float deltaTime, glm::mat4* MVP) {
   // Note matrix multiplication is not commutative
   *MVP = projection * view * model;
 
-  if (args_->move_window || scene_->selected().empty() || SlideWindow()) {
+  const bool file_changed = FileJustChanged();
+  if (false ||
+      // Args ask to slide window
+      args_->move_window ||
+      // Window contains nothing
+      scene_->selected().empty() ||
+      // User changed window
+      SlideWindow() ||
+      // User loaded a different file
+      file_changed || false) {
     if (args_->move_window) slide_window_right();
     bool slid = slide_window(scene_->selected(), scene_->indices());
-    if (!slid && args_->move_window) args_->move_window = !args_->move_window;
+    if (!slid && args_->move_window) args_->move_window = false;
   }
 
   return true;
