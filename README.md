@@ -21,6 +21,7 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 1. [Codisec's open source & maintained Veles](https://codisec.com/veles/)
 1. [What do numbers look like?](https://johnhw.github.io/umap_primes/index.md.html)
 1. [Some explorations of string repetition statistics](http://www.fantascienza.net/leonardo/ar/string_repetition_statistics/string_repetition_statistics.html)
+1. [3D scatterplot of an image](https://alexander.engineering/imagescatter/) ([HN discussion](https://news.ycombinator.com/item?id=15931266))
 
 
 ## Usage
