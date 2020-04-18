@@ -20,6 +20,7 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 1. [Bailey–Borwein–Plouffe formula](https://en.wikipedia.org/wiki/Bailey%E2%80%93Borwein%E2%80%93Plouffe_formula)
 1. [Codisec's open source & maintained Veles](https://codisec.com/veles/)
 1. [What do numbers look like?](https://johnhw.github.io/umap_primes/index.md.html)
+1. [Some explorations of string repetition statistics](http://www.fantascienza.net/leonardo/ar/string_repetition_statistics/string_repetition_statistics.html)
 
 
 ## Usage
