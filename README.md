@@ -50,7 +50,7 @@ Usage:
     -n, --spin         don't spin shape on itself
 
     -b, --begin        begin offset for the range
-    -e, --end          end offset for the range
+    -e, --end          end offset for the range (0: till end of file)
 
     -h, --help         this help
 
