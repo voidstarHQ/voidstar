@@ -19,6 +19,7 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 1. [rule 30 on OEIS.org](https://oeis.org/search?q=%22rule+30%22&sort=&language=&go=Search)
 1. [Bailey–Borwein–Plouffe formula](https://en.wikipedia.org/wiki/Bailey%E2%80%93Borwein%E2%80%93Plouffe_formula)
 1. [Codisec's open source & maintained Veles](https://codisec.com/veles/)
+1. [What do numbers look like?](https://johnhw.github.io/umap_primes/index.md.html)
 
 
 ## Usage
