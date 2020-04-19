@@ -164,15 +164,15 @@ objc_library(
     hdrs = HDRS,
     defines = [
         "_GLFW_COCOA",
-        "_GLFW_GLX",
-        "_GLFW_USE_OPENGL",
+        # "_GLFW_GLX",
+        # "_GLFW_USE_OPENGL",
     ],
     includes = INCLUDES,
     sdk_frameworks = [
         "Cocoa",
         "CoreFoundation",
-        "CoreVideo",
+        # "CoreVideo",
         "IOKit",
-        "OpenGL",
+        # "OpenGL",
     ],
 )
