@@ -1,0 +1,5 @@
+build --jobs 128
+build --cxxopt='-std=c++17'
+
+build --copt=-fdiagnostics-color=always
+run --copt=-fdiagnostics-color=always

@@ -7,3 +7,4 @@ travis-miners
 /snap/.snapcraft
 /stage
 /voidstar_*.snap
+/bazel-*

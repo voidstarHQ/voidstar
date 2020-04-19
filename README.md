@@ -1,4 +1,4 @@
-# VoidStar [![TravisCI build status](https://travis-ci.org/fenollp/voidstar.svg?branch=master)](https://travis-ci.org/fenollp/voidstar/builds) [![Snap Status](https://build.snapcraft.io/badge/fenollp/voidstar.svg)](https://build.snapcraft.io/user/fenollp/voidstar)
+# VoidStar [![TravisCI build status](https://travis-ci.org/fenollp/voidstar.svg?branch=master)](https://travis-ci.org/fenollp/voidstar/builds) [![Snap Status](https://build.snapcraft.io/badge/fenollp/voidstar.svg)](https://build.snapcraft.io/user/fenollp/voidstar) [Coverity](https://scan.coverity.com/projects/fenollp-voidstar?tab=overview)
 
 Browse data using Corti's 2D projector as well as 3D variants.
 
@@ -12,27 +12,72 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 1. [Blackhat 2010 - Voyage of the reverser - Sergey Bratus Greg Conti](https://www.youtube.com/watch?v=T3qqeP4TdPA)
 1. [Conti's & Bratus' `binvis`](https://github.com/rebelbot/binvis)
 1. [Cortesi's `binvis.io`](https://corte.si/posts/binvis/announce/index.html)
+1. [REcon 2013 - The Future of RE : Dynamic Binary Visualization (Christopher Domas)](https://www.youtube.com/watch?v=C8--cXwuuFQ)
 1. [Christopher Domas The future of RE Dynamic Binary Visualization](https://www.youtube.com/watch?v=4bM3Gut1hIk)
 1. [Look for the past, present and future inside of π Edit Add topics](https://github.com/fenollp/minepi)
 1. [Sloane's Gap. Mathematical and Social Factors Explain the Distribution of Numbers in the OEIS](https://arxiv.org/abs/1101.4470v2)
 1. [rule 30 on OEIS.org](https://oeis.org/search?q=%22rule+30%22&sort=&language=&go=Search)
 1. [Bailey–Borwein–Plouffe formula](https://en.wikipedia.org/wiki/Bailey%E2%80%93Borwein%E2%80%93Plouffe_formula)
+1. [Codisec's open source & maintained Veles](https://codisec.com/veles/)
+1. [What do numbers look like?](https://johnhw.github.io/umap_primes/index.md.html)
+1. [Some explorations of string repetition statistics](http://www.fantascienza.net/leonardo/ar/string_repetition_statistics/string_repetition_statistics.html)
+1. [3D scatterplot of an image](https://alexander.engineering/imagescatter/) ([3D RGB Scatterplots of colours used in famous paintings](https://imgur.com/a/aRBd1), [HN discussion](https://news.ycombinator.com/item?id=15931266), [Reddit](https://www.reddit.com/r/dataisbeautiful/comments/7584no/3d_rgb_scatterplots_of_colours_used_in_famous/))
 
 
 ## Usage
 
 ```shell
-./configure -d RELEASE && cd build && make
-./voidstar --move --spin ../data/*
-# Press H and L to switch between files
-# Use A W S D Z X and your mouse to move in the 3D space
-# Press F for full screen
-# Use the arrows to slide and enlarge the sliding window
-# Press M to slide the window to the end and SPACE to spin the shape
-# ESC to quit
+bazel build //voidstar
+./bazel-bin/voidstar/voidstar --move ../data/*
+```
+
+```
+Usage:
+  voidstar  [OPTIONS]  FILE...
+
+    -l, --list         list backends
+    -u, --ui           choose ui mode
+    -a, --algorithm    algorithm to apply
+
+    -x, --width        window width
+    -y, --height       window height
+    -f, --fullscreen   start on fullscreen
+        --keep-chrome  show title bar & allow resizing
+
+    -w, --sliding      length of sliding window
+    -s, --slide-step   amount of points slid
+    -m, --move         move sliding window forward
+    -n, --spin         don't spin shape on itself
+
+    -b, --begin        begin offset for the range
+    -e, --end          end offset for the range (0: till end of file)
+
+    -h, --help         this help
+
+  # Press H and L to switch between files
+  # Use A W S D Z X and your mouse to move in the 3D space
+  # Press F for full screen
+  # Use the arrows to slide and enlarge the sliding window
+  # Press M to slide the window to the end
+  # Use > to slide faster, < to slow down
+  # SPACE to toggle spinning the shape
+  # Press O to reset the camera position
+  # ESC to quit
+
 ```
 
 ## Installing
+
+### docker
+
+Known to work with
+* ubuntu 18.10 + docker 18.09.0
+
+```
+docker build -f Dockerfile.dev -t voiddev .
+mv your/interesting/files/* data/
+./docker-dev.sh
+```
 
 ### on MacOS
 
@@ -53,7 +98,7 @@ This relies on [snaps](https://snapcraft.io/docs/core/install).
 ## Requirements
 
 * A C++ compiler
-* `cmake` greater than 2.8
+* `bazel` that you can use through [bazelisk](https://github.com/bazelbuild/bazelisk)
 
 ### Windows
 
@@ -62,14 +107,13 @@ https://github.com/fenollp/voidstar/issues/2
 ### Debian
 
 ```shell
-sudo apt install libglew-dev libglm-dev libglfw3-dev
+sudo apt install libglew-dev
 ```
 
 ### OSX
 
 ```shell
-brew install glew glm pkg-config
-brew install glfw3 --without-shared-library
+brew install glew
 ```
 
 ### Web

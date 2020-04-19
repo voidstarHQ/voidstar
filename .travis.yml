@@ -1,95 +1,73 @@
+sudo: false
 language: cpp
-
 compiler:
-  - clang
-  - gcc
-
+- clang
+- gcc
 os:
-  - osx
-  - linux
+- osx
+- linux
 
-dist: trusty
 addons:
   apt:
     packages:
-      - libglew-dev
-      - libglm-dev
-      - xorg-dev
-      - libgl1-mesa-dev
-      - libc++-dev
-      - cppcheck
-cache:
-  apt: true
+    - libglew-dev
+    - xorg-dev
+    - libgl1-mesa-dev
+    - libc++-dev
+    - cppcheck
 
 before_install:
-  - set -e
-  - openssl aes-256-cbc -K $encrypted_b87f4dd04cd0_key -iv $encrypted_b87f4dd04cd0_iv -in travis-miners.enc -out travis-miners -d
+- openssl aes-256-cbc -K $encrypted_b87f4dd04cd0_key -iv $encrypted_b87f4dd04cd0_iv -in travis-miners.enc -out travis-miners -d
 
 install:
-  - |
-    case "$TRAVIS_OS_NAME" in
-      'osx')
-        brew update
-        brew install glew glm
-        brew install glfw3 --without-shared-library
-        ;;
-      'linux')
-        git clone https://github.com/glfw/glfw.git ~/glfw3
-        pushd ~/glfw3
-        git checkout 3.2.1
-        mkdir build
-        pushd build
-        cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_DOCS=OFF ..
-        cmake --build .
-        sudo make install
-        popd
-        popd
-        ;;
-    esac
+- |
+  case "$TRAVIS_OS_NAME" in
+    'osx')
+      travis_wait 15 brew update
+      travis_wait 15 brew install glew
+      curl -#fSLo ./bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-darwin-amd64 && chmod +x ./bazel
+      ;;
+    'linux')
+      curl -#fSLo ./bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 && chmod +x ./bazel
+      ;;
+  esac
 
 before_script:
-  - cmake --version || true
-  - $CC --version || true
-  - $CXX --version || true
-  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]] && [[ "$(basename "$CC")" == 'clang' ]]; then export CXXFLAGS='-stdlib=libc++'; fi
+- ./bazel --version || true
+- $CC --version || true
+- $CXX --version || true
 
 script:
-  - ./configure -c "$(basename $CXX)" -b DEBUG
-  - pushd build && make && popd
-  - ./build/voidstar --help
-  - ./build/voidstar -l
-  - ./configure -c "$(basename $CXX)" -b RELEASE
-  - pushd build && make VERBOSE=1 -j && popd
-  - ./build/voidstar -h
-  - ./build/voidstar --list
-  - mv -v build/voidstar "build/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
-  - if [[ "$TRAVIS_OS_NAME" = 'linux' ]]; then cppcheck --error-exitcode=1 --enable=all -Isrc/include/ -Isrc/common/tdogl/ src/; fi
-
-after_script:
-  - set +e
+- ./bazel build //voidstar
+- ./bazel-bin/voidstar/voidstar -h
+- ./bazel-bin/voidstar/voidstar --help
+- ./bazel-bin/voidstar/voidstar -l
+- ./bazel-bin/voidstar/voidstar --list
+#- ./bazel-bin/voidstar/voidstar $(echo */)
+- mv -v bazel-bin/voidstar/voidstar "bazel-bin/voidstar/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
+- if [[ "$TRAVIS_OS_NAME" = 'linux' ]]; then cppcheck --error-exitcode=1 --enable=all -Ivoidstar/include/ voids tar/; fi
 
 after_success:
-  - |
-    if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]] && [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then
-      major=v1
-      minor="$(($(git describe --tags | grep $major | cut -d. -f2) + 1))"
-      tag=$major.$minor.$TRAVIS_BUILD_ID
-      echo Tag: $tag
-      msg="$(git log -1 --pretty=%B | head -n 1)"
-      echo "Message: $msg"
-      echo Commit: $TRAVIS_COMMIT
-      if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && set +e && exit 0; fi
-      git config --global user.email 'pierrefenoll+travis-voidstar@gmail.com'
-      git config --global user.name 'Autotag'
-      git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
-      git tag -a $tag -m "$msg" $TRAVIS_COMMIT
-      chmod 600 travis-miners
-      eval `ssh-agent -s`
-      ssh-add travis-miners
-      echo Tagging $TRAVIS_COMMIT with $tag
-      git push --tags || true
-      set +e
-    fi
+- |
+  if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]] && [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then
+    major=v1
+    minor="$(($(git describe --tags | grep $major | cut -d. -f2) + 1))"
+    tag=$major.$minor.$TRAVIS_BUILD_ID
+    echo Tag: $tag
+    msg="$(git log -1 --pretty=%B | head -n 1)"
+    echo "Message: $msg"
+    echo Commit: $TRAVIS_COMMIT
+    if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && exit 0; fi
+    git config --global user.email 'pierrefenoll+travis-voidstar@gmail.com'
+    git config --global user.name 'Autotag'
+    git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
+    git tag -a $tag -m "$msg" $TRAVIS_COMMIT
+    chmod 600 travis-miners
+    eval `ssh-agent -s`
+    ssh-add travis-miners
+    echo Tagging $TRAVIS_COMMIT with $tag
+    git push --tags || true
+  fi
 
 deploy:
   provider: releases
@@ -98,6 +76,6 @@ deploy:
   skip_cleanup: true
   overwrite: true
   file_glob: true
-  file: build/voidstar-*
+  file: bazel-bin/voidstar/voidstar-*
   on:
     tags: true
