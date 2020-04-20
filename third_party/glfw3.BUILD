@@ -1,33 +1,8 @@
-load("@rules_cc//cc:defs.bzl", "cc_library", "objc_library")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-# TODO: simplify & update using this:
-# https://raw.githubusercontent.com/pbellis/bazel-glfw/master/glfw.BUILD
-
-config_setting(
-    name = "linux",
-    constraint_values = ["@bazel_tools//platforms:linux"],
-)
-
-config_setting(
-    name = "osx",
-    constraint_values = ["@bazel_tools//platforms:osx"],
-)
-
-config_setting(
-    name = "windows",
-    constraint_values = ["@bazel_tools//platforms:windows"],
-)
-
-cc_library(
-    name = "glfw",
-    deps = select({
-        ":linux": [":glfw_linux"],
-        ":osx": [":glfw_osx"],
-        ":windows": [":glfw_windows"],
-    }),
-)
+# TODO: simplify & update using https://raw.githubusercontent.com/pbellis/bazel-glfw/master/glfw.BUILD
 
 # SRCS from https://github.com/glfw/glfw/blob/e65de2941c056ee5833b4dab3db36b297b53aa14/src/CMakeLists.txt
 
@@ -40,24 +15,6 @@ SRCS = [
     "src/monitor.c",
     "src/vulkan.c",
     "src/window.c",
-]
-
-SRCS_COCOA = [
-    "src/cocoa_init.m",
-    "src/cocoa_joystick.h",
-    "src/cocoa_joystick.m",
-    "src/cocoa_monitor.m",
-    "src/cocoa_platform.h",
-    "src/cocoa_time.c",
-    "src/cocoa_window.m",
-    "src/egl_context.c",
-    "src/egl_context.h",
-    "src/nsgl_context.h",
-    "src/nsgl_context.m",
-    "src/osmesa_context.c",
-    "src/osmesa_context.h",
-    "src/posix_thread.c",
-    "src/posix_thread.h",
 ]
 
 SRCS_WIN32 = [
@@ -156,23 +113,4 @@ cc_library(
     # in nocopts attribute of cc_library rule @glfw//:glfw_windows: This attribute was removed. See https://github.com/bazelbuild/bazel/issues/8706 for details.
     # nocopts = "/DNOGDI",
     deps = ["@khronos_opengl_registry//:gl_headers"],
-)
-
-objc_library(
-    name = "glfw_osx",
-    srcs = SRCS + SRCS_COCOA,
-    hdrs = HDRS,
-    defines = [
-        "_GLFW_COCOA",
-        # "_GLFW_GLX",
-        # "_GLFW_USE_OPENGL",
-    ],
-    includes = INCLUDES,
-    sdk_frameworks = [
-        "Cocoa",
-        "CoreFoundation",
-        # "CoreVideo",
-        "IOKit",
-        # "OpenGL",
-    ],
 )

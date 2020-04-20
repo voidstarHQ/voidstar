@@ -92,8 +92,7 @@ resolved = [
         "original_attributes": {
             "name": "bazel_upgradable",
             "url": "https://github.com/fenollp/bazel_upgradable/archive/master.zip",
-            "strip_prefix": "bazel_upgradable-master",
-            "type": "zip"
+            "strip_prefix": "bazel_upgradable-master"
         },
         "repositories": [
             {
@@ -101,11 +100,11 @@ resolved = [
                 "attributes": {
                     "url": "https://github.com/fenollp/bazel_upgradable/archive/master.zip",
                     "urls": [],
-                    "sha256": "eff1907a3318751a9f194126b84c9e30489c7b1f1e6def32735954d718ccfbe5",
+                    "sha256": "54c243e96358113d659994881e55090ed6e7db2c0262343109a78319d4bcd70b",
                     "netrc": "",
                     "canonical_id": "",
                     "strip_prefix": "bazel_upgradable-master",
-                    "type": "zip",
+                    "type": "",
                     "patches": [],
                     "patch_tool": "",
                     "patch_args": [
@@ -117,30 +116,27 @@ resolved = [
                     "workspace_file_content": "",
                     "name": "bazel_upgradable"
                 },
-                "output_tree_hash": "f54a0bbd0b277a6de8e0ace8c6bd0ef1c2d6831d27e41e88c371350f49333617"
+                "output_tree_hash": "0612603fcc06f4ec4d9489e5a0c89ebebd6c36088c58c4eb7b4b7daa884248d4"
             }
         ]
     },
     {
-        "original_rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
         "original_attributes": {
             "name": "glew",
-            "url": "https://github.com/nigels-com/glew/releases/download/glew-2.1.0/glew-2.1.0.zip",
-            "strip_prefix": "glew-2.1.0",
-            "type": "zip",
-            "build_file": "//third_party:glew.BUILD"
+            "build_file": "//third_party:glew.BUILD",
+            "release": "{tag}.tgz",
+            "remote": "git://github.com/nigels-com/glew.git",
+            "tag": "<=2",
+            "type": "tar.gz"
         },
         "repositories": [
             {
-                "rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
                 "attributes": {
-                    "url": "https://github.com/nigels-com/glew/releases/download/glew-2.1.0/glew-2.1.0.zip",
-                    "urls": [],
-                    "sha256": "2700383d4de2455f06114fbaf872684f15529d4bdc5cdea69b5fb0e9aa7763f1",
                     "netrc": "",
+                    "auth_patterns": {},
                     "canonical_id": "",
-                    "strip_prefix": "glew-2.1.0",
-                    "type": "zip",
                     "patches": [],
                     "patch_tool": "",
                     "patch_args": [
@@ -151,23 +147,75 @@ resolved = [
                     "build_file": "//third_party:glew.BUILD",
                     "build_file_content": "",
                     "workspace_file_content": "",
+                    "branch": "",
+                    "release": "{tag}.tgz",
+                    "remote": "git://github.com/nigels-com/glew.git",
+                    "sha256": "04de91e7e6763039bc11940095cd9c7f880baba82196a7765f727ac05a993c95",
+                    "strip_prefix": "",
+                    "tag": "<=2",
+                    "type": "tar.gz",
+                    "urls": [
+                        "https://github.com/nigels-com/glew/releases/download/glew-2.1.0/glew-2.1.0.tgz"
+                    ],
                     "name": "glew"
                 },
-                "output_tree_hash": "c20f5fa46a2b9c03b4fa849e87a0479ba5df1400c0ab3f616dd95f008cd0c226"
+                "output_tree_hash": "bc0edc6ac1b1f0195eece677364594ce31e6a9b748a7443946974d724cc2c44d"
             }
         ]
     },
     {
-        "original_rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
         "original_attributes": {
-            "name": "glfw",
-            "build_file": "//third_party:glfw3.BUILD",
-            "branch": "master",
-            "slug": "glfw/glfw"
+            "name": "glew_win64",
+            "build_file": "//third_party:glew_win64.BUILD",
+            "release": "{tag}-win32.zip",
+            "remote": "git://github.com/nigels-com/glew.git",
+            "strip_prefix": "glew-2.1.0",
+            "tag": "<=2"
         },
         "repositories": [
             {
-                "rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
+                "attributes": {
+                    "netrc": "",
+                    "auth_patterns": {},
+                    "canonical_id": "",
+                    "patches": [],
+                    "patch_tool": "",
+                    "patch_args": [
+                        "-p0"
+                    ],
+                    "patch_cmds": [],
+                    "patch_cmds_win": [],
+                    "build_file": "//third_party:glew_win64.BUILD",
+                    "build_file_content": "",
+                    "workspace_file_content": "",
+                    "branch": "",
+                    "release": "{tag}-win32.zip",
+                    "remote": "git://github.com/nigels-com/glew.git",
+                    "sha256": "80cfc88fd295426b49001a9dc521da793f8547ac10aebfc8bdc91ddc06c5566c",
+                    "strip_prefix": "glew-2.1.0",
+                    "tag": "<=2",
+                    "type": "zip",
+                    "urls": [
+                        "https://github.com/nigels-com/glew/releases/download/glew-2.1.0/glew-2.1.0-win32.zip"
+                    ],
+                    "name": "glew_win64"
+                },
+                "output_tree_hash": "73848204f8734716c63d44190227fa2285b74d830ea2ef7eb9db168949ac0cc4"
+            }
+        ]
+    },
+    {
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
+        "original_attributes": {
+            "name": "glfw",
+            "build_file": "//third_party:glfw3.BUILD",
+            "remote": "git://github.com/glfw/glfw.git"
+        },
+        "repositories": [
+            {
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
                 "attributes": {
                     "netrc": "",
                     "auth_patterns": {},
@@ -182,31 +230,74 @@ resolved = [
                     "build_file": "//third_party:glfw3.BUILD",
                     "build_file_content": "",
                     "workspace_file_content": "",
-                    "branch": "master",
-                    "slug": "glfw/glfw",
-                    "tag": "",
+                    "branch": "",
+                    "release": "",
+                    "remote": "git://github.com/glfw/glfw.git",
                     "sha256": "2e64b9dd50c835860d271677dd3386f250a49b852eb73a6ee96a5f9f1e3eac09",
                     "strip_prefix": "glfw-e65de2941c056ee5833b4dab3db36b297b53aa14",
+                    "tag": "",
+                    "type": "tar.gz",
                     "urls": [
                         "https://github.com/glfw/glfw/archive/e65de2941c056ee5833b4dab3db36b297b53aa14.tar.gz"
                     ],
                     "name": "glfw"
                 },
-                "output_tree_hash": "4727a2e752e7d3a429a66a51d8ef1c0d71bbc57fccb831313363b53e7ce24fca"
+                "output_tree_hash": "34292e679f5f8200fc8820ca898e06f3c7b41f2d16b5faf85f795ff96cb6ec64"
             }
         ]
     },
     {
-        "original_rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
         "original_attributes": {
-            "name": "glm",
-            "build_file": "//third_party:glm.BUILD",
-            "branch": "master",
-            "slug": "g-truc/glm"
+            "name": "glfw_osx",
+            "build_file": "//third_party:glfw3_osx.BUILD",
+            "release": "glfw-{tag_digits}.bin.MACOS.zip",
+            "remote": "git://github.com/glfw/glfw.git",
+            "tag": "~3"
         },
         "repositories": [
             {
-                "rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
+                "attributes": {
+                    "netrc": "",
+                    "auth_patterns": {},
+                    "canonical_id": "",
+                    "patches": [],
+                    "patch_tool": "",
+                    "patch_args": [
+                        "-p0"
+                    ],
+                    "patch_cmds": [],
+                    "patch_cmds_win": [],
+                    "build_file": "//third_party:glfw3_osx.BUILD",
+                    "build_file_content": "",
+                    "workspace_file_content": "",
+                    "branch": "",
+                    "release": "glfw-{tag_digits}.bin.MACOS.zip",
+                    "remote": "git://github.com/glfw/glfw.git",
+                    "sha256": "e412c75f850c320192df491ec3bf623847fafa847b46ffd3bbd7478057148f5a",
+                    "strip_prefix": "",
+                    "tag": "~3",
+                    "type": "zip",
+                    "urls": [
+                        "https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.MACOS.zip"
+                    ],
+                    "name": "glfw_osx"
+                },
+                "output_tree_hash": "0c89ea86ce1e3231a4e1cc0fc9b21719a333e50fc90e1c3644429d142fba2692"
+            }
+        ]
+    },
+    {
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
+        "original_attributes": {
+            "name": "glm",
+            "build_file": "//third_party:glm.BUILD",
+            "remote": "git://github.com/g-truc/glm.git"
+        },
+        "repositories": [
+            {
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
                 "attributes": {
                     "netrc": "",
                     "auth_patterns": {},
@@ -221,31 +312,32 @@ resolved = [
                     "build_file": "//third_party:glm.BUILD",
                     "build_file_content": "",
                     "workspace_file_content": "",
-                    "branch": "master",
-                    "slug": "g-truc/glm",
+                    "branch": "",
+                    "release": "",
+                    "remote": "git://github.com/g-truc/glm.git",
+                    "sha256": "70ad78e872c145f0164d54da833b651914c184edc65958906937b9739fb8fb1b",
+                    "strip_prefix": "glm-bf71a834948186f4097caa076cd2663c69a10e1e",
                     "tag": "",
-                    "sha256": "6802233a65bd4eaab83221f3a2a9000a7e99887c92b924ffb92ec514feed7242",
-                    "strip_prefix": "glm-efbfecab63da2adb2dc197f91270ff6221900740",
+                    "type": "tar.gz",
                     "urls": [
-                        "https://github.com/g-truc/glm/archive/efbfecab63da2adb2dc197f91270ff6221900740.tar.gz"
+                        "https://github.com/g-truc/glm/archive/bf71a834948186f4097caa076cd2663c69a10e1e.tar.gz"
                     ],
                     "name": "glm"
                 },
-                "output_tree_hash": "2b3ad2694f0bfb14f868a68aa4e2a566cda126a3aaccdf9869f46e96aa4e6e32"
+                "output_tree_hash": "7ce5597866e31431b7ec5491f4c033879e2beb557f9a86d119060ae90dc42f77"
             }
         ]
     },
     {
-        "original_rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
         "original_attributes": {
             "name": "khronos_opengl_registry",
             "build_file": "//third_party:gl.BUILD",
-            "branch": "master",
-            "slug": "KhronosGroup/OpenGL-Registry"
+            "remote": "git://github.com/KhronosGroup/OpenGL-Registry.git"
         },
         "repositories": [
             {
-                "rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
                 "attributes": {
                     "netrc": "",
                     "auth_patterns": {},
@@ -260,30 +352,31 @@ resolved = [
                     "build_file": "//third_party:gl.BUILD",
                     "build_file_content": "",
                     "workspace_file_content": "",
-                    "branch": "master",
-                    "slug": "KhronosGroup/OpenGL-Registry",
+                    "branch": "",
+                    "release": "",
+                    "remote": "git://github.com/KhronosGroup/OpenGL-Registry.git",
+                    "sha256": "708ab9be144ff1fdc4f579f3dc92e1cc44dbc69423ee1b8e0392dab2923f7d2a",
+                    "strip_prefix": "OpenGL-Registry-6b670cbfa807378e46c7e704b2980561279304f3",
                     "tag": "",
-                    "sha256": "e8ed826674eaac11cb74e256c7a5bd03ee5d9678949a69e312b52394484d0657",
-                    "strip_prefix": "OpenGL-Registry-4594c03239fb76580bc5d5a13acb2a8f563f0158",
+                    "type": "tar.gz",
                     "urls": [
-                        "https://github.com/KhronosGroup/OpenGL-Registry/archive/4594c03239fb76580bc5d5a13acb2a8f563f0158.tar.gz"
+                        "https://github.com/KhronosGroup/OpenGL-Registry/archive/6b670cbfa807378e46c7e704b2980561279304f3.tar.gz"
                     ],
                     "name": "khronos_opengl_registry"
                 },
-                "output_tree_hash": "aacf8e326f18f47a9303fd75928438fe1f491ce1f74ff244e2bdbc76e4e28e69"
+                "output_tree_hash": "eeeb0341f76c25683108df86790c8a941da6291af32cf0995b9cf4e7a1b06051"
             }
         ]
     },
     {
-        "original_rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
         "original_attributes": {
             "name": "rules_cc",
-            "branch": "master",
-            "slug": "bazelbuild/rules_cc"
+            "remote": "git://github.com/bazelbuild/rules_cc.git"
         },
         "repositories": [
             {
-                "rule_class": "@bazel_upgradable//rules:github.bzl%upgradable_github_archive",
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
                 "attributes": {
                     "netrc": "",
                     "auth_patterns": {},
@@ -297,17 +390,19 @@ resolved = [
                     "patch_cmds_win": [],
                     "build_file_content": "",
                     "workspace_file_content": "",
-                    "branch": "master",
-                    "slug": "bazelbuild/rules_cc",
+                    "branch": "",
+                    "release": "",
+                    "remote": "git://github.com/bazelbuild/rules_cc.git",
+                    "sha256": "6b4f61176c8f29173886e3625ff4488c4a708ef871b6f6dd4c0c09478bb3fca2",
+                    "strip_prefix": "rules_cc-77099ee80d15004ddbac96234761c0a564479131",
                     "tag": "",
-                    "sha256": "e637dc045e70e43b7431fbeacb68d569a84f9fe1cb5879c432aa0855097dce57",
-                    "strip_prefix": "rules_cc-34ca16f4aa4bf2a5d3e4747229202d6cb630ebab",
+                    "type": "tar.gz",
                     "urls": [
-                        "https://github.com/bazelbuild/rules_cc/archive/34ca16f4aa4bf2a5d3e4747229202d6cb630ebab.tar.gz"
+                        "https://github.com/bazelbuild/rules_cc/archive/77099ee80d15004ddbac96234761c0a564479131.tar.gz"
                     ],
                     "name": "rules_cc"
                 },
-                "output_tree_hash": "ee079949868f4df4176257b08a038207c5a7b6145ca63b6003e37254ad1be580"
+                "output_tree_hash": "6b681b20946d243322193eee8349f04d7ce23cbb8ec1aaf4dfb33f2dcf90ffa9"
             }
         ]
     },

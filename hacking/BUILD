@@ -6,8 +6,8 @@ cc_binary(
     name = "argh",
     srcs = ["argh.cc"],
     deps = [
+        "//third_party:glfw",
         "@glew",
-        "@glfw",
         "@glm",
         "@khronos_opengl_registry//:gl_headers",
     ],

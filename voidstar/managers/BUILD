@@ -30,9 +30,9 @@ cc_library(
     hdrs = ["glfw3.h"],
     deps = [
         ":manager",
-        "@glm",
+        "//third_party:glfw",
         "@glew",
-        "@glfw",
+        "@glm",
         "@khronos_opengl_registry//:gl_headers",
     ],
     alwayslink = 1,  # For registration
