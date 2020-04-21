@@ -25,3 +25,11 @@ cc_library(
         ":windows": ["@glfw//:glfw_windows"],
     }),
 )
+
+cc_library(
+    name = "glew",
+    deps = select({
+        ":windows": ["@glew_win64//:glew_win64"],
+        "//conditions:default": ["@glew//:glew"],
+    }),
+)
