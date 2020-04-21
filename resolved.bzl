@@ -254,6 +254,7 @@ resolved = [
             "build_file": "//third_party:glfw3_osx.BUILD",
             "release": "glfw-{tag_digits}.bin.MACOS.zip",
             "remote": "git://github.com/glfw/glfw.git",
+            "strip_prefix": "glfw-{tag_digits}.bin.MACOS",
             "tag": "~3"
         },
         "repositories": [
@@ -277,7 +278,7 @@ resolved = [
                     "release": "glfw-{tag_digits}.bin.MACOS.zip",
                     "remote": "git://github.com/glfw/glfw.git",
                     "sha256": "e412c75f850c320192df491ec3bf623847fafa847b46ffd3bbd7478057148f5a",
-                    "strip_prefix": "",
+                    "strip_prefix": "glfw-3.3.2.bin.MACOS",
                     "tag": "~3",
                     "type": "zip",
                     "urls": [
@@ -285,7 +286,7 @@ resolved = [
                     ],
                     "name": "glfw_osx"
                 },
-                "output_tree_hash": "0c89ea86ce1e3231a4e1cc0fc9b21719a333e50fc90e1c3644429d142fba2692"
+                "output_tree_hash": "e3f0d998e3bbea2ffd34e8f789722957c6be507e51aef5934b297452929e6d87"
             }
         ]
     },

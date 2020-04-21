@@ -32,6 +32,7 @@ upgradable_repository(
     build_file = "@//third_party:glfw3_osx.BUILD",
     release = "glfw-{tag_digits}.bin.MACOS.zip",
     remote = "git://github.com/glfw/glfw.git",
+    strip_prefix = "glfw-{tag_digits}.bin.MACOS",
     tag = "~3",
 )
 
