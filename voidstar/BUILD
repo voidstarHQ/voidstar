@@ -28,7 +28,7 @@ cc_library(
 cc_library(
     name = "indices",
     hdrs = ["indices.h"],
-    deps = ["@glew"],
+    deps = ["//third_party:glew"],
 )
 
 cc_library(
