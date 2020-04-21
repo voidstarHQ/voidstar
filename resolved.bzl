@@ -91,19 +91,19 @@ resolved = [
         "original_rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
         "original_attributes": {
             "name": "bazel_upgradable",
-            "url": "https://github.com/fenollp/bazel_upgradable/archive/master.zip",
-            "strip_prefix": "bazel_upgradable-master"
+            "url": "https://github.com/fenollp/bazel_upgradable/archive/0.1.1.zip",
+            "strip_prefix": "bazel_upgradable-0.1.1"
         },
         "repositories": [
             {
                 "rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
                 "attributes": {
-                    "url": "https://github.com/fenollp/bazel_upgradable/archive/master.zip",
+                    "url": "https://github.com/fenollp/bazel_upgradable/archive/0.1.1.zip",
                     "urls": [],
-                    "sha256": "54c243e96358113d659994881e55090ed6e7db2c0262343109a78319d4bcd70b",
+                    "sha256": "55ebd3df408f239f59f4a7c8e97130c4ea16809372bd49b8fa0a5b8574f32455",
                     "netrc": "",
                     "canonical_id": "",
-                    "strip_prefix": "bazel_upgradable-master",
+                    "strip_prefix": "bazel_upgradable-0.1.1",
                     "type": "",
                     "patches": [],
                     "patch_tool": "",
@@ -116,7 +116,7 @@ resolved = [
                     "workspace_file_content": "",
                     "name": "bazel_upgradable"
                 },
-                "output_tree_hash": "0612603fcc06f4ec4d9489e5a0c89ebebd6c36088c58c4eb7b4b7daa884248d4"
+                "output_tree_hash": "a4dcfba962ce40b9029ae4ee611273e7bb567e3ec973f83f700b4cef8352dae8"
             }
         ]
     },
@@ -127,6 +127,7 @@ resolved = [
             "build_file": "//third_party:glew.BUILD",
             "release": "{tag}.tgz",
             "remote": "git://github.com/nigels-com/glew.git",
+            "strip_prefix": "glew-{tag_digits}",
             "tag": "<=2",
             "type": "tar.gz"
         },
@@ -151,7 +152,7 @@ resolved = [
                     "release": "{tag}.tgz",
                     "remote": "git://github.com/nigels-com/glew.git",
                     "sha256": "04de91e7e6763039bc11940095cd9c7f880baba82196a7765f727ac05a993c95",
-                    "strip_prefix": "",
+                    "strip_prefix": "glew-2.1.0",
                     "tag": "<=2",
                     "type": "tar.gz",
                     "urls": [
@@ -159,7 +160,7 @@ resolved = [
                     ],
                     "name": "glew"
                 },
-                "output_tree_hash": "bc0edc6ac1b1f0195eece677364594ce31e6a9b748a7443946974d724cc2c44d"
+                "output_tree_hash": "f79fc7ceaa4bad7e02da40557fa5e95882317ef0ea85453980050213771f1f5c"
             }
         ]
     },
@@ -170,7 +171,7 @@ resolved = [
             "build_file": "//third_party:glew_win64.BUILD",
             "release": "{tag}-win32.zip",
             "remote": "git://github.com/nigels-com/glew.git",
-            "strip_prefix": "glew-2.1.0",
+            "strip_prefix": "glew-{tag_digits}",
             "tag": "<=2"
         },
         "repositories": [
@@ -393,16 +394,16 @@ resolved = [
                     "branch": "",
                     "release": "",
                     "remote": "git://github.com/bazelbuild/rules_cc.git",
-                    "sha256": "6b4f61176c8f29173886e3625ff4488c4a708ef871b6f6dd4c0c09478bb3fca2",
-                    "strip_prefix": "rules_cc-77099ee80d15004ddbac96234761c0a564479131",
+                    "sha256": "504b26126c786749fc2e92c395de6da8a17b0b0bfcdcd500ddac332379b0d831",
+                    "strip_prefix": "rules_cc-a74452e9109e28e70c9c6632799c8c37905776fa",
                     "tag": "",
                     "type": "tar.gz",
                     "urls": [
-                        "https://github.com/bazelbuild/rules_cc/archive/77099ee80d15004ddbac96234761c0a564479131.tar.gz"
+                        "https://github.com/bazelbuild/rules_cc/archive/a74452e9109e28e70c9c6632799c8c37905776fa.tar.gz"
                     ],
                     "name": "rules_cc"
                 },
-                "output_tree_hash": "6b681b20946d243322193eee8349f04d7ce23cbb8ec1aaf4dfb33f2dcf90ffa9"
+                "output_tree_hash": "29e88954503aa9cfc8b7d1bcbfac5fceac9028c09378d8447a9cd60b12378815"
             }
         ]
     },
