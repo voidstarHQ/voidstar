@@ -1,8 +1,10 @@
-// https://www.shadertoy.com/view/XsyyzW
+// https://www.shadertoy.com/view/wsjyDV
+// Inspired from https://www.shadertoy.com/view/XsyyzW
 // Pi by Plouffe spigot algorithm:
 // See also (en & fr) https://en.wikipedia.org/wiki/Bailey%E2%80%93Borwein%E2%80%93Plouffe_formula
 // Adapted from C code:  http://www.experimentalmath.info/bbp-codes/piqpr8.c
 // Another PI method (not parallel): https://www.shadertoy.com/view/MdtXWj
+// See also https://github.com/voidstarHQ/voidstar
 
 #define double float
 #define pow16(x) exp2(4.*(x))
@@ -78,12 +80,12 @@ float digit(int id) {
   return fract(pid);// NB: pid always <0 ?
 }
 
-vec2 S = 32./vec2(2,1);             // character size
-#define W ivec2(iResolution.xy/S)   // size of display char matrix
 
 void mainImage( out vec4 O, vec2 U ) {
-    ivec2 iU = ivec2(U); // cell index
-    if ( iU.x>=W.x || iU.y>=W.y ) return;
+    O -= O;
+    ivec2 iU = ivec2(U/8.);
+    ivec2 iW = ivec2(iResolution.xy/32.);
+    if (iU.x>=iW.x || iU.y>=iW.y) return;
 
     // Since only the fractional part is accurate,
     // extracting the wanted digit requires that one removes
@@ -92,7 +94,7 @@ void mainImage( out vec4 O, vec2 U ) {
     // (in theory, the next few digits up to the accuracy of
     // the calculations used would also be accurate).
     //float r = 16. * digit(0 + iU.x + W.x*iU.y);
-    float r = digit(0 + iU.x + W.x*iU.y);
+    float r = digit(0 + iU.x + iW.x*iU.y);
     float g = fract(100. * r);
     float b = fract(100. * g);
 
