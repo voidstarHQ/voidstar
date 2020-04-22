@@ -15,5 +15,9 @@ cc_library(
         # "_GLFW_USE_OPENGL",
     ],
     includes = ["include"],
-    # deps = ["@khronos_opengl_registry//:gl_headers"],
+    linkopts = [
+        "-framework Cocoa",
+        "-framework IOKit",
+        "-framework CoreFoundation",
+    ],
 )
