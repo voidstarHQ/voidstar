@@ -21,18 +21,7 @@ LOADERS = [
 
 cc_library(
     name = "loaders",
-    deps = select({
-        "//third_party:windows": [
-            ":loader_fd",
-            ":loader_file",
-            # ":loader_mmap", # TODO
-        ],
-        "//conditions:default": [
-            ":loader_fd",
-            ":loader_file",
-            ":loader_mmap",
-        ],
-    }),
+    deps = [":loader_" + loader for loader in LOADERS],
 )
 
 [
