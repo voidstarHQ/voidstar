@@ -1,81 +1,11 @@
 sudo: false
 language: cpp
-compiler:
-- clang
-- gcc
-os:
-- osx
-- linux
 
 addons:
   apt:
     packages:
-    - libglew-dev
-    - xorg-dev
-    - libgl1-mesa-dev
-    - libc++-dev
     - cppcheck
 
-before_install:
-- openssl aes-256-cbc -K $encrypted_b87f4dd04cd0_key -iv $encrypted_b87f4dd04cd0_iv -in travis-miners.enc -out travis-miners -d
-
-install:
-- |
-  case "$TRAVIS_OS_NAME" in
-    'osx')
-      travis_wait 15 brew update
-      travis_wait 15 brew install glew
-      curl -#fSLo ./bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-darwin-amd64 && chmod +x ./bazel
-      ;;
-    'linux')
-      curl -#fSLo ./bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 && chmod +x ./bazel
-      ;;
-  esac
-
-before_script:
-- ./bazel --version || true
-- $CC --version || true
-- $CXX --version || true
-
 script:
-- ./bazel build //voidstar
-- ./bazel-bin/voidstar/voidstar -h
-- ./bazel-bin/voidstar/voidstar --help
-- ./bazel-bin/voidstar/voidstar -l
-- ./bazel-bin/voidstar/voidstar --list
-#- ./bazel-bin/voidstar/voidstar $(echo */)
-- mv -v bazel-bin/voidstar/voidstar "bazel-bin/voidstar/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
-- if [[ "$TRAVIS_OS_NAME" = 'linux' ]]; then cppcheck --error-exitcode=1 --enable=all -Ivoidstar/include/ voids tar/; fi
-
-after_success:
-- |
-  if [[ "$TRAVIS_SECURE_ENV_VARS" == 'true' ]] && [[ "$TRAVIS_BRANCH" == 'master' ]] && [[ "$TRAVIS_PULL_REQUEST" == 'false' ]] && [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then
-    major=v1
-    minor="$(($(git describe --tags | grep $major | cut -d. -f2) + 1))"
-    tag=$major.$minor.$TRAVIS_BUILD_ID
-    echo Tag: $tag
-    msg="$(git log -1 --pretty=%B | head -n 1)"
-    echo "Message: $msg"
-    echo Commit: $TRAVIS_COMMIT
-    if [[ 0 -ne "$(git tag --contains $TRAVIS_COMMIT | wc -l)" ]]; then echo 'Already tagged this commit!' && exit 0; fi
-    git config --global user.email 'pierrefenoll+travis-voidstar@gmail.com'
-    git config --global user.name 'Autotag'
-    git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG.git
-    git tag -a $tag -m "$msg" $TRAVIS_COMMIT
-    chmod 600 travis-miners
-    eval `ssh-agent -s`
-    ssh-add travis-miners
-    echo Tagging $TRAVIS_COMMIT with $tag
-    git push --tags || true
-  fi
-
-deploy:
-  provider: releases
-  api_key:
-    secure: cu/xvTwEXo4SD9BUb84dRSBCu8NB5KaHEFhERVlwGd9feKllpRpo1Vaflwzmoa/JEpdq5cgIV4b4f8OUtmPHlCeHq0nq6l7+Sl0p0yW0juSH0rDvJgJTde+Rma70RKVjz4mgtgLHa/PKNBHbdPl3kmVQ/aUZtF1qYN6ObiS+a+gIFQcUX0IQfJhBHRLxmc94ozW/9FxXzz0zhENeE8PWAMhAWdmxHnlYQPBuWw6EYsbzhD5s1lkywzBNprJ+XTqtc7dgTUUwZ7UkkhpQ4RrfRzjJUpKb2pjDo+8WZhsCjYnQRTCquKF4eoDM2barD/KuzRx/W+pD+eLZG7NLlm4t592mVwO+p9py330+UgS8JdNl+GJfq9QrK23Uo6FMaG/SoHO1qFd5J5RHdFO0QhCKj/BxSirayc0Jv4e04X7a8ssasIX19KpINiZO/kQZAhioumm7UXLo6cKn1nzPbPkZJ7efvKkauSMCkQgd/UZ07P3ZxgEYn9eU3KLohNq1HFxCoBsCwSXSqSkUAVRA0QAgJBUCeD/ZCuRi5icgbi7AT/OeiP0YXoi1o6aGqMIp5AQ3ysSOosJRuwSjbeZ1YgxonqVYATH1jJPg0fzyPASLGIx90UN8MmBxe/CXk0gNOrf3TTYYgdWErwB1lRcbb0fZvYfu/FDb3vp2tQjTrM/Q+qY=
-  skip_cleanup: true
-  overwrite: true
-  file_glob: true
-  file: bazel-bin/voidstar/voidstar-*
-  on:
-    tags: true
+# - mv -v bazel-bin/voidstar/voidstar "bazel-bin/voidstar/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
+- cppcheck --error-exitcode=1 --enable=all -Ivoidstar/include/ voids tar/

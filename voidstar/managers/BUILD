@@ -28,11 +28,11 @@ cc_library(
     name = "manager_glfw3",
     srcs = ["glfw3.cc"],
     hdrs = ["glfw3.h"],
-    linkopts = ["-lGLEW"],
     deps = [
         ":manager",
-        "@com_github_gtruc_glm//:glm",
-        "@glfw",
+        "//third_party:glew",
+        "//third_party:glfw",
+        "@glm",
         "@khronos_opengl_registry//:gl_headers",
     ],
     alwayslink = 1,  # For registration

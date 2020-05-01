@@ -1,13 +1,12 @@
 #include <cstdint>
 #include <fstream>
-#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <memory>
 #include <vector>
 
-#define GLEW_STATIC
-#include <GL/glew.h>
-
+#include "GL/glew.h"
+#include "glm/gtc/matrix_transform.hpp"
+//
 #include "include/GLFW/glfw3.h"
 
 using Floats = std::vector<GLfloat>;
@@ -438,7 +437,8 @@ int main(int argc, const char* argv[]) {
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
     glDrawArrays(GL_POINTS, 0, POINTS);
-    // std::cerr << "#elements: " << elements.size() << " " << elements[0] << "-"
+    // std::cerr << "#elements: " << elements.size() << " " << elements[0] <<
+    // "-"
     // << elements.back() << std::endl;
     // glDrawRangeElements(GL_POINTS, elements[0], elements.back(),
     //                     elements.size(), GL_UNSIGNED_INT, &elements[0]);

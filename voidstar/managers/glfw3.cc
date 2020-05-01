@@ -1,8 +1,5 @@
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-// This comments prevents clang-format from messing up includes.
-
+#include "GL/glew.h"
+// This comments prevents clang-format from reordering includes
 #include "voidstar/managers/glfw3.h"
 
 std::shared_ptr<GLFW3Manager> GLFW3Manager::instance_;

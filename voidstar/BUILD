@@ -18,11 +18,17 @@ cc_library(
         "size2str.cc",
     ],
     hdrs = [
-        "indices.h",
         "registrar.h",
         "size2str.h",
         "types.h",
     ],
+    deps = [":indices"],
+)
+
+cc_library(
+    name = "indices",
+    hdrs = ["indices.h"],
+    deps = ["//third_party:glew"],
 )
 
 cc_library(
