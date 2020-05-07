@@ -4,8 +4,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "bazel_upgradable",
-    strip_prefix = "bazel_upgradable-0.1.1",
-    url = "https://github.com/fenollp/bazel_upgradable/archive/0.1.1.zip",
+    strip_prefix = "bazel_upgradable-0.2.0",
+    url = "https://github.com/fenollp/bazel_upgradable/archive/0.2.0.zip",
 )
 
 load("@bazel_upgradable//:rule.bzl", "upgradable_repository")
