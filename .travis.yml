@@ -8,4 +8,4 @@ addons:
 
 script:
 # - mv -v bazel-bin/voidstar/voidstar "bazel-bin/voidstar/voidstar-$(git describe --abbrev --dirty --always --tags)-$TRAVIS_OS_NAME-$(basename $CC)"
-- cppcheck --error-exitcode=1 --enable=all -Ivoidstar/include/ voids tar/
+- cppcheck --error-exitcode=1 --enable=all voidstar/
