@@ -1,0 +1,13 @@
+on: push
+name: Snap
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  build_snap:
+    name: Build on ubuntu
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: samuelmeuli/action-snapcraft@v1
+    - run: snapcraft
