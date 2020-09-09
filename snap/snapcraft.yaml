@@ -43,12 +43,17 @@ confinement: devmode
 apps:
   voidstar:
     command: voidstar
+    environment:
+      # https://forum.snapcraft.io/t/opengl-error-mesa-loader-fails/15197/2
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-gl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/xorg
+      LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
     plugs:
       - home  # to read files in $HOME
       - network  # to read URLs
       - opengl  # to access rendering hardware
       - optical-drive  # to read CDs
       - removable-media  # to read USB keys
+      - wayland
       - x11  # to create windows
 
 parts:
@@ -62,5 +67,11 @@ parts:
     - make
     - xorg-dev
     stage-packages:
+    - libdri2-1
+    - libdrm2
     - libgl1-mesa-dev
+    - libgl1-mesa-glx
+    - libgles2-mesa
     - xorg-dev
+    after:
+    - desktop-glib-only  # https://snapcraft.io/docs/gpu-support
