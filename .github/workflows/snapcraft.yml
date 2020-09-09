@@ -10,4 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: samuelmeuli/action-snapcraft@v1
-    - run: snapcraft
+      with:
+        use_lxd: true
+    - name: Build snap
+      run: sg lxd -c 'snapcraft --use-lxd'
