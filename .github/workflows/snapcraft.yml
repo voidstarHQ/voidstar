@@ -20,5 +20,5 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: snapped
-        path: snap/*.snap
+        path: '*.snap'
         if-no-files-found: error
