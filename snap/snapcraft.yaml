@@ -73,5 +73,5 @@ parts:
     - libgl1-mesa-glx
     - libgles2-mesa
     - xorg-dev
-    after:
-    - desktop-glib-only  # https://snapcraft.io/docs/gpu-support
+    # after:
+    # - desktop-glib-only  # https://snapcraft.io/docs/gpu-support
