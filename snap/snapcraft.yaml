@@ -44,21 +44,22 @@ apps:
   voidstar:
     command: voidstar
     plugs:
-      - opengl  # to access rendering hardware
-      - x11  # to create windows
       - home  # to read files in $HOME
-      - removable-media  # to read USB keys
-      - optical-drive  # to read CDs
       - network  # to read URLs
+      - opengl  # to access rendering hardware
+      - optical-drive  # to read CDs
+      - removable-media  # to read USB keys
+      - x11  # to create windows
 
 parts:
   voidstar:
     plugin: make
     source: .
     build-packages:
-    - make
+    - curl
     - g++
     - libgl1-mesa-dev
+    - make
     - xorg-dev
     stage-packages:
     - libgl1-mesa-dev
