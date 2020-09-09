@@ -5,12 +5,20 @@ env:
   BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build_snap:
-    name: Build on ubuntu
+    name: Build snap on ubuntu
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
     - uses: samuelmeuli/action-snapcraft@v1
       with:
         use_lxd: true
+
     - name: Build snap
       run: sg lxd -c 'snapcraft --use-lxd'
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: snapped
+        path: snap/*.snap
+        if-no-files-found: error
