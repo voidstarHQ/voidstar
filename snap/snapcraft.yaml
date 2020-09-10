@@ -1,0 +1,77 @@
+name: voidstar
+version: git
+summary: void* casts files onto 2D/3D colored spaces for your mind blowing needs # 79 char long summary
+description: |
+  Usage:
+    voidstar  [OPTIONS]  FILE...
+
+      -l, --list         list backends
+      -u, --ui           choose ui mode
+      -a, --algorithm    algorithm to apply
+
+      -x, --width        window width
+      -y, --height       window height
+      -f, --fullscreen   start on fullscreen
+          --keep-chrome  show title bar & allow resizing
+
+      -w, --sliding      length of sliding window
+      -s, --slide-step   amount of points slid
+      -m, --move         move sliding window forward
+      -n, --spin         don't spin shape on itself
+
+      -b, --begin        begin offset for the range
+      -e, --end          end offset for the range (0: till end of file)
+
+      -h, --help         this help
+
+    # Press H and L to switch between files
+    # Use A W S D Z X and your mouse to move in the 3D space
+    # Press F for full screen
+    # Use the arrows to slide and enlarge the sliding window
+    # Press M to slide the window to the end
+    # Use > to slide faster, < to slow down
+    # SPACE to toggle spinning the shape
+    # Press O to reset the camera position
+    # ESC to quit
+
+
+grade: stable
+base: core20
+# confinement: strict
+confinement: devmode
+
+apps:
+  voidstar:
+    command: voidstar
+    environment:
+      # https://forum.snapcraft.io/t/opengl-error-mesa-loader-fails/15197/2
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-gl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/xorg
+      LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+    plugs:
+      - home  # to read files in $HOME
+      - network  # to read URLs
+      - opengl  # to access rendering hardware
+      - optical-drive  # to read CDs
+      - removable-media  # to read USB keys
+      - wayland
+      - x11  # to create windows
+
+parts:
+  voidstar:
+    plugin: make
+    source: .
+    build-packages:
+    - curl
+    - g++
+    - libgl1-mesa-dev
+    - make
+    - xorg-dev
+    stage-packages:
+    - libdri2-1
+    - libdrm2
+    - libgl1-mesa-dev
+    - libgl1-mesa-glx
+    - libgles2-mesa
+    - xorg-dev
+    # after:
+    # - desktop-glib-only  # https://snapcraft.io/docs/gpu-support
