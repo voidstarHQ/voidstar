@@ -61,11 +61,12 @@ parts:
     plugin: make
     source: .
     build-packages:
-    - curl
     - g++
     - libgl1-mesa-dev
     - make
     - xorg-dev
+    build-snaps:
+    - bazelisk
     stage-packages:
     - libdri2-1
     - libdrm2
