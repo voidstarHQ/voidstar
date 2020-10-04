@@ -1,5 +1,5 @@
 name: voidstar
-version: git
+version: v1.30.0 # FIXME: 'git'
 summary: void* casts files onto 2D/3D colored spaces for your mind blowing needs # 79 char long summary
 description: |
   Usage:
@@ -37,8 +37,7 @@ description: |
 
 grade: stable
 base: core20
-# confinement: strict
-confinement: devmode
+confinement: strict
 
 apps:
   voidstar:
@@ -48,13 +47,13 @@ apps:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-gl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/xorg
       LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
     plugs:
-      - home  # to read files in $HOME
-      - network  # to read URLs
-      - opengl  # to access rendering hardware
-      - optical-drive  # to read CDs
-      - removable-media  # to read USB keys
-      - wayland
-      - x11  # to create windows
+    - home  # to read files in $HOME
+    - network  # to read URLs
+    - opengl  # to access rendering hardware
+    - optical-drive  # to read CDs
+    - removable-media  # to read USB keys
+    - wayland
+    - x11  # to create windows
 
 parts:
   voidstar:
