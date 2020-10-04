@@ -1,7 +1,4 @@
-travis-miners
-
-/parts
-/prime
+# Snap
 /snap/.snapcraft
-/stage
 /voidstar_*.snap
+/bazelisk
