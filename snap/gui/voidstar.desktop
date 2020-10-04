@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Version=1.14.238936273
+Version=v1.30.0
 Name=voidstar
 Comment=Launch voidstar
-Exec=bin/voidstar
+Exec=voidstar
 Terminal=true
