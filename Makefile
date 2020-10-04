@@ -1,10 +1,13 @@
-BAZEL = ./bazelisk
+BAZEL ?= ./bazelisk
 
 voidstar: $(BAZEL)
 	$(BAZEL) build $@
 
 $(BAZEL):
-	curl -fsSLo $@ https://github.com/bazelbuild/bazelisk/releases/download/v1.6.1/bazelisk-linux-amd64 && chmod +x $@
+	curl -fsSLo $@ $$( \
+	  curl --silent --location --head --output /dev/null --write-out '%{url_effective}' -- https://github.com/bazelbuild/bazelisk/releases/latest \
+	  | sed 's%/tag/%/download/%;s%$$%/bazelisk-linux-amd64%' ) \
+	  && chmod +x $@
 
 install: DESTDIR ?= .
 install:
