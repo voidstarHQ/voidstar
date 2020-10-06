@@ -23,44 +23,44 @@ jobs:
     - uses: actions/checkout@v2
     - run: bazelisk build voidstar
 
-  build_on_windows:
-    name: Build on windows
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v2
+  # build_on_windows: FIXME
+  #   name: Build on windows
+  #   runs-on: windows-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    # Trying to install & use GCC
-    # From https://github.com/onqtam/doctest/pull/285/files
-    - name: Install (Windows)
-      shell: powershell
-      run: |
-        Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-        scoop install ninja --global
-        #if ("${{ matrix.compiler }}".StartsWith("clang")) {
-        #  scoop install llvm --global
-        #}
-        #if ("${{ matrix.compiler }}" -eq "gcc") {
-          # Chocolatey GCC is broken on the windows-2019 image.
-          # See: https://github.com/DaanDeMeyer/doctest/runs/231595515
-          # See: https://github.community/t5/GitHub-Actions/Something-is-wrong-with-the-chocolatey-installed-version-of-gcc/td-p/32413
-          scoop install gcc --global
-          echo "::set-env name=CC::gcc"
-          echo "::set-env name=CXX::g++"
-        #} elseif ("${{ matrix.compiler }}" -eq "clang") {
-        #  echo "::set-env name=CC::clang"
-        #  echo "::set-env name=CXX::clang++"
-        #} else {
-        #  echo "::set-env name=CC::${{ matrix.compiler }}"
-        #  echo "::set-env name=CXX::${{ matrix.compiler }}"
-        #}
-        # Scoop modifies the PATH so we make the modified PATH global.
-        echo "::set-env name=PATH::$env:PATH"
-    - name: Configure x64
-      run: .github\workflows\vsenv.bat -arch=x64 -host_arch=x64
+  #   # Trying to install & use GCC
+  #   # From https://github.com/onqtam/doctest/pull/285/files
+  #   - name: Install (Windows)
+  #     shell: powershell
+  #     run: |
+  #       Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+  #       scoop install ninja --global
+  #       #if ("${{ matrix.compiler }}".StartsWith("clang")) {
+  #       #  scoop install llvm --global
+  #       #}
+  #       #if ("${{ matrix.compiler }}" -eq "gcc") {
+  #         # Chocolatey GCC is broken on the windows-2019 image.
+  #         # See: https://github.com/DaanDeMeyer/doctest/runs/231595515
+  #         # See: https://github.community/t5/GitHub-Actions/Something-is-wrong-with-the-chocolatey-installed-version-of-gcc/td-p/32413
+  #         scoop install gcc --global
+  #         echo "::set-env name=CC::gcc"
+  #         echo "::set-env name=CXX::g++"
+  #       #} elseif ("${{ matrix.compiler }}" -eq "clang") {
+  #       #  echo "::set-env name=CC::clang"
+  #       #  echo "::set-env name=CXX::clang++"
+  #       #} else {
+  #       #  echo "::set-env name=CC::${{ matrix.compiler }}"
+  #       #  echo "::set-env name=CXX::${{ matrix.compiler }}"
+  #       #}
+  #       # Scoop modifies the PATH so we make the modified PATH global.
+  #       echo "::set-env name=PATH::$env:PATH"
+  #   - name: Configure x64
+  #     run: .github\workflows\vsenv.bat -arch=x64 -host_arch=x64
 
-    - shell: bash
-      run: |
-        gcc --version || true
-        clang --version || true
+  #   - shell: bash
+  #     run: |
+  #       gcc --version || true
+  #       clang --version || true
 
-    - run: bazelisk build voidstar
+  #   - run: bazelisk build voidstar

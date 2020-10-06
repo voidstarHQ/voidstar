@@ -1,5 +1,5 @@
 name: voidstar
-version: v1.30.0 # FIXME: 'git'
+version: v1.31.0 # FIXME: 'git'
 summary: void* casts files onto 2D/3D colored spaces for your mind blowing needs # 79 char long summary
 description: |
   Usage:
@@ -38,14 +38,20 @@ description: |
 grade: stable
 base: core20
 confinement: strict
+architectures:
+- build-on: amd64
+  run-on: [amd64, i386]
+- build-on: arm64
+- build-on: armhf
 
 apps:
   voidstar:
     command: voidstar
     environment:
       # https://forum.snapcraft.io/t/opengl-error-mesa-loader-fails/15197/2
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-gl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/xorg
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-gl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/xorg
       LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+      MESA_GLSL_CACHE_DIR: $SNAP_USER_DATA
     plugs:
     - home  # to read files in $HOME
     - network  # to read URLs
@@ -71,6 +77,24 @@ parts:
     - libgl1-mesa-dev
     - libgl1-mesa-glx
     - libgles2-mesa
+    - libglu1-mesa
     - xorg-dev
-    # after:
-    # - desktop-glib-only  # https://snapcraft.io/docs/gpu-support
+    after:
+    - desktop-glib-only  # https://snapcraft.io/docs/gpu-support
+
+  # This part installs the glib dependencies and a `desktop-launch` script to initialise
+  # desktop-specific features such as OpenGL, fonts, themes and the XDG environment.
+  #
+  # It is copied from the snapcraft desktop helpers project and the `source` key is
+  # changed to point to https://github.com/ubuntu/snapcraft-desktop-helpers.git
+  # Please periodically check the desktop helpers repo for updates and copy the changes.
+  #    https://github.com/ubuntu/snapcraft-desktop-helpers/blob/master/snapcraft.yaml
+  #
+  desktop-glib-only:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: glib-only
+    plugin: make
+    build-packages:
+    - libglib2.0-dev
+    stage-packages:
+    - libglib2.0-bin
