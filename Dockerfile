@@ -9,40 +9,23 @@ RUN set -ux \
         build-essential \
         ca-certificates \
         curl \
-        # ffmpeg \
         git \
         wget \
         unzip \
         tar \
         gzip \
-        # python3-dev \
         python3 \
-        # python3-opencv \
-        # python3-pip \
         mesa-common-dev \
         libegl1-mesa-dev \
         libgles2-mesa-dev \
         mesa-utils \
-        # libopencv-core-dev \
-        # libopencv-highgui-dev \
-        # libopencv-imgproc-dev \
-        # libopencv-video-dev \
-        # libopencv-calib3d-dev \
-        # libopencv-features2d-dev \
         software-properties-common \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
  && add-apt-repository -y ppa:openjdk-r/ppa \
  && apt update \
  && apt install -y --no-install-recommends \
         openjdk-8-jdk
-# RUN set -ux \
-#  && pip3 install --upgrade setuptools \
-#  && pip3 install wheel \
-#  && pip3 install future \
-#  && pip3 install six==1.14.0
-#  # && pip3 install tensorflow==1.14.0 \
-#  # && pip3 install tf_slim
-ARG BAZEL_VERSION=3.4.1
+ARG BAZEL_VERSION=4.0.0
 RUN set -ux \
  && mkdir /bazel \
  && wget --no-check-certificate -O /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh" \
@@ -73,7 +56,6 @@ FROM scratch AS sync
 COPY --from=sync-then-fmt /app/resolved.bzl /
 
 FROM base AS builder
-# ENV DRI_PRIME=1
 # ARG USE_BAZEL_VERSION=3.4.0
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
