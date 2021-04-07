@@ -3,38 +3,51 @@
 FROM ubuntu:20.04 AS base
 WORKDIR /app
 ENV DEBIAN_FRONTEND=noninteractive
-RUN set -ux \
+RUN \
+    set -ux \
+    # https://github.com/moby/buildkit/blob/df49b648c8bfef657ba99543390516a3f518d22a/frontend/dockerfile/docs/syntax.md#example-cache-apt-packages
+ && rm -f /etc/apt/apt.conf.d/docker-clean \
+ && echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' >/etc/apt/apt.conf.d/keep-cache
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/lib/apt \
+    set -ux \
  && apt update \
  && apt install -y --no-install-recommends \
         build-essential \
         ca-certificates \
         curl \
         git \
-        wget \
         unzip \
         tar \
         gzip \
         python3 \
-        mesa-common-dev \
-        libegl1-mesa-dev \
-        libgles2-mesa-dev \
-        mesa-utils \
+        libgl1-mesa-dev \
+        xorg-dev \
         software-properties-common \
- && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
+ && update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/lib/apt \
+    set -ux \
  && add-apt-repository -y ppa:openjdk-r/ppa \
  && apt update \
  && apt install -y --no-install-recommends \
         openjdk-8-jdk
 ARG BAZEL_VERSION=4.0.0
-RUN set -ux \
+RUN \
+    --mount=type=cache,target=/root/.cache/bazel \
+    set -ux \
  && mkdir /bazel \
- && wget --no-check-certificate -O /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh" \
- && wget --no-check-certificate -O /bazel/LICENSE.txt "https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE" \
+ && curl -fsSLo /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh" \
+ && curl -fsSLo /bazel/LICENSE.txt "https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE" \
  && chmod +x /bazel/installer.sh \
  && /bazel/installer.sh \
- && rm /bazel/installer.sh
+ && rm /bazel/installer.sh \
+ && bazel version
 COPY . .
 
+# sync
 FROM base AS sync-then-fmt
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
@@ -55,14 +68,13 @@ RUN \
 FROM scratch AS sync
 COPY --from=sync-then-fmt /app/resolved.bzl /
 
+# voidstar
 FROM base AS builder
-# ARG USE_BAZEL_VERSION=3.4.0
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
-    # --mount=type=cache,target=/root/.cache/bazelisk \
     set -ux \
- # && USE_BAZEL_VERSION=${USE_BAZEL_VERSION} make
- && bazel build voidstar
-
+ && bazel build voidstar \
+ # Necessary as COPY --from does not follow symlinks
+ && cp /app/bazel-bin/voidstar/voidstar /
 FROM scratch AS voidstar
-COPY --from=builder ./bazel-bin/voidstar/voidstar /
+COPY --from=builder /voidstar /

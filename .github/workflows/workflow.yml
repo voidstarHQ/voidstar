@@ -23,9 +23,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install
-      run: sudo apt update && sudo apt-get install -y libgl1-mesa-dev xorg-dev
-    - run: bazelisk build voidstar
+    - uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar . --progress=plain
+    - run: ./bin/voidstar --help
+
 
   build_on_macos:
     name: Build on macos
@@ -36,6 +40,7 @@ jobs:
         python-version: '3.x'
     - uses: actions/checkout@v2
     - run: bazelisk build voidstar
+    - run: ./bazel-bin/voidstar/voidstar --help
 
   # build_on_windows: FIXME
   #   name: Build on windows
