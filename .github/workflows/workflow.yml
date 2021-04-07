@@ -1,9 +1,23 @@
-on: push
 name: Build
+on:
+  push: {}
+
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
+  bazel-sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - run: DOCKER_BUILDKIT=1 docker build -o=. --target=sync . --progress=plain
+    - run: git --no-pager diff && [[ 0 -eq $(git --no-pager diff --name-only | wc -l) ]]
+
   build_on_ubuntu:
     name: Build on ubuntu
     runs-on: ubuntu-latest
