@@ -1,4 +1,6 @@
-# Snap
 /snap/.snapcraft
 /voidstar_*.snap
+
 /bazelisk
+
+/bin/*

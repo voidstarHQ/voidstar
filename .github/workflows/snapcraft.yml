@@ -6,7 +6,7 @@ env:
 jobs:
   build_snap:
     name: Build snap on ubuntu
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04 # FIXME: https://github.com/samuelmeuli/action-snapcraft/issues/24
     steps:
     - uses: actions/checkout@v2
 
