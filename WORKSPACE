@@ -12,11 +12,13 @@ load("@bazel_upgradable//:rule.bzl", "upgradable_repository")
 
 upgradable_repository(
     name = "rules_cc",
+    branch = "main",
     remote = "git://github.com/bazelbuild/rules_cc.git",
 )
 
 upgradable_repository(
     name = "khronos_opengl_registry",
+    branch = "main",
     build_file = "@//third_party:gl.BUILD",
     remote = "git://github.com/KhronosGroup/OpenGL-Registry.git",
 )
