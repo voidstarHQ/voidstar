@@ -15,15 +15,16 @@ static void usage(const char* prgname) {
     -u, --ui           choose ui mode
     -a, --algorithm    algorithm to apply
 
-    -x, --width        window width
-    -y, --height       window height
+    -x, --width        window width [default: 800]
+    -y, --height       window height [default: 600]
     -f, --fullscreen   start on fullscreen
         --keep-chrome  show title bar & allow resizing
+        --exit-at-fin  terminate when show's over
 
     -w, --sliding      length of sliding window
     -s, --slide-step   amount of points slid
     -m, --move         move sliding window forward
-    -n, --spin         don't spin shape on itself
+    -n, --no-spin      don't spin shape on itself
 
     -b, --begin        begin offset for the range
     -e, --end          end offset for the range (0: till end of file)
@@ -54,19 +55,20 @@ static void listComponents() {
 }
 
 std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
-  static auto short_options = ":a:b:e:fmn_hls:w:u:x:y:";
+  static auto short_options = ":a:b:e:fmn12hls:w:u:x:y:";
   static const struct option long_options[] = {{"algorithm", 1, 0, 'a'},
                                                {"begin", 1, 0, 'b'},
                                                {"end", 1, 0, 'e'},
                                                {"fullscreen", 0, 0, 'f'},
-                                               {"keep-chrome", 0, 0, '_'},
+                                               {"keep-chrome", 0, 0, '1'},
+                                               {"exit-at-fin", 0, 0, '2'},
                                                {"height", 1, 0, 'y'},
                                                {"help", 0, 0, 'h'},
                                                {"list", 0, 0, 'l'},
                                                {"slide-step", 1, 0, 's'},
                                                {"sliding", 1, 0, 'w'},
                                                {"move", 0, 0, 'm'},
-                                               {"spin", 0, 0, 'n'},
+                                               {"no-spin", 0, 0, 'n'},
                                                {"ui", 1, 0, 'u'},
                                                {"width", 1, 0, 'x'},
                                                {NULL, 0, 0, 0}};
@@ -120,8 +122,11 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
       case 'y':
         args->height = std::stoul(optarg);
         break;
-      case '_':
+      case '1':
         args->keep_chrome = true;
+        break;
+      case '2':
+        args->exit_at_fin = true;
         break;
       case '?':
         std::cerr << "Unknown option '" << (char)optopt << "'" << std::endl;

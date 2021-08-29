@@ -23,6 +23,7 @@ struct Arguments {
   size_t sliding_step_factor = 1;
   bool move_window = false;
   bool spin_shape = true;
+  bool exit_at_fin = false;
 };
 
 std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]);
