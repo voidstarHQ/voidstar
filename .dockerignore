@@ -1,1 +1,7 @@
-.gitignore
+*
+!/.bazelrc
+!/BUILD
+!/resolved.bzl
+!/third_party
+!/voidstar
+!/WORKSPACE

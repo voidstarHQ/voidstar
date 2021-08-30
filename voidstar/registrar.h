@@ -2,7 +2,6 @@
 
 #include <cassert>
 #include <functional>
-// #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
@@ -24,7 +23,6 @@
   FOR##FactoryFunc Registered##FOR(const std::string& name);             \
   const std::map<const std::string, FOR##FactoryFunc>& RegistryFor##FOR()
 
-// std::cerr << "Registering" #KLASS "(" NAME ")\n";
 #define REGISTRY_REGISTER_FOR(FOR, NAME, KLASS, FACT)      \
   void __attribute__((constructor)) Registering##KLASS() { \
     auto factory = [] FACT;                                \
@@ -36,7 +34,6 @@
   REGISTRY_IMPLEMENTATION_FOR(MyType);
 */
 
-// std::cerr << "RegistrarOfMany" #FOR ": " << registrar.size() << std::endl;
 #define REGISTRY_IMPLEMENTATION_FOR(FOR)                                       \
   std::map<const std::string, FOR##FactoryFunc>& RegistrarOfMany##FOR() {      \
     static std::map<const std::string, FOR##FactoryFunc> registrar;            \
