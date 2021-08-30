@@ -282,6 +282,8 @@ void GLFW3Manager::run() {
     if (events_->keyPressed('F')) ToggleFullscreen();
     if (events_->keyPressed('H')) loadPrevFile();
     if (events_->keyPressed('L')) loadNextFile();
+    if (!args_->move_window && args_->exit_at_fin)
+      glfwSetWindowShouldClose(window_, GLFW_TRUE);
   }
   glfwTerminate();
 }

@@ -39,15 +39,16 @@ Usage:
     -u, --ui           choose ui mode
     -a, --algorithm    algorithm to apply
 
-    -x, --width        window width
-    -y, --height       window height
+    -x, --width        window width [default: 800]
+    -y, --height       window height [default: 600]
     -f, --fullscreen   start on fullscreen
         --keep-chrome  show title bar & allow resizing
+        --exit-at-fin  terminate when show's over
 
     -w, --sliding      length of sliding window
     -s, --slide-step   amount of points slid
     -m, --move         move sliding window forward
-    -n, --spin         don't spin shape on itself
+    -n, --no-spin      don't spin shape on itself
 
     -b, --begin        begin offset for the range
     -e, --end          end offset for the range (0: till end of file)
