@@ -23,7 +23,7 @@ COPTS = [
     "-Wcast-qual",
     "-Wstringop-overflow=4",
     "-Wconversion",
-    "-Warith-conversion",
+    # "-Warith-conversion", re-enable on GCC>=10
     "-Wlogical-op",
     "-Wduplicated-cond",
     "-Wduplicated-branches",
@@ -40,11 +40,11 @@ COPTS = [
     "-D_FORTIFY_SOURCE=2",
     ###
     "-fstack-protector-strong",
-    "-fstack-clash-protection",
+    # "-fstack-clash-protection", GCC-only
     "-fPIE",
     ###
-    "-Wl,-z,relro",
-    "-Wl,-z,now",
-    "-Wl,-z,noexecstack",
-    "-Wl,-z,separate-code",
+    # "-Wl,-z,relro", GCC-only
+    # "-Wl,-z,now", GCC-only
+    # "-Wl,-z,noexecstack", GCC-only
+    # "-Wl,-z,separate-code", GCC-only
 ]
