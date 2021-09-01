@@ -45,7 +45,12 @@ void MmapLoader::load() {
     if (fd_ < 0) throw std::runtime_error("Impossible to read file");
   }
 
-  size_ = lseek(fd_, 0, SEEK_END);
+  auto fdsize = lseek(fd_, 0, SEEK_END);
+  if (fdsize == -1) throw std::invalid_argument("Cannot read file");
+  if (fdsize > std::numeric_limits<u32>::max())
+    size_ = std::numeric_limits<u32>::max();
+  else
+    size_ = static_cast<u32>(fdsize);
   lseek(fd_, 0, SEEK_SET);
 
   auto base = mmap(0, size_, PROT_READ, MAP_PRIVATE, fd_, 0);

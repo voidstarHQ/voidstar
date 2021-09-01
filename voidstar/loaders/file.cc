@@ -34,7 +34,13 @@ void FileLoader::load() {
   is_.open(path_, std::ios::in | std::ios::binary);
   if (!is_.good()) throw std::invalid_argument("Failed to open file");
 
-  size_ = is_.tellg();
+  auto fsize = is_.tellg();
+  if (fsize == -1) throw std::invalid_argument("Cannot read file");
+  if (fsize > std::numeric_limits<u32>::max())
+    size_ = std::numeric_limits<u32>::max();
+  else
+    size_ = static_cast<u32>(fsize);
+
   data_.reserve(size_);
   is_.seekg(0);
   is_.read(&data_[0], size_);

@@ -78,6 +78,7 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
   int c;
   int errors = 0;
   int opt_index;
+  unsigned long result;
   auto args = std::make_shared<Arguments>();
 
   while ((c = getopt_long(argc, argv, short_options, long_options,
@@ -87,10 +88,22 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
         args->algo = optarg;
         break;
       case 'b':
-        args->range_begin = std::stoull(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->range_begin = static_cast<u32>(result);
         break;
       case 'e':
-        args->range_end = std::stoull(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->range_end = static_cast<u32>(result);
         break;
       case 'f':
         args->fullscreen = true;
@@ -108,19 +121,43 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
         args->spin_shape = false;
         break;
       case 's':
-        args->sliding_step = std::stoul(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->sliding_step = static_cast<u32>(result);
         break;
       case 'u':
         args->manager = optarg;
         break;
       case 'w':
-        args->sliding_window_length = std::stoul(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->sliding_window_length = static_cast<u32>(result);
         break;
       case 'x':
-        args->width = std::stoul(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->width = static_cast<u32>(result);
         break;
       case 'y':
-        args->height = std::stoul(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->height = static_cast<u32>(result);
         break;
       case '1':
         args->keep_chrome = true;
