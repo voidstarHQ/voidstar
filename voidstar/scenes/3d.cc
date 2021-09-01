@@ -2,6 +2,7 @@
 #include "voidstar/scenes/scene.h"
 #include "voidstar/shaders/fragment.h"
 #include "voidstar/shaders/vertex_3d.h"
+#include "voidstar/size2str.h"
 
 class Scene3D : public Scene {
  public:
@@ -112,7 +113,7 @@ void Scene3D::load_buffers() {
                         3 * sizeof(GLfloat),  // stride
                         NULL                  // array buffer offset
   );
-  std::cerr << "Loaded " << vertices_.size() / 3 << " vertices.\n";
+  std::cerr << "Loaded " << size2str(vertices_.size() / 3) << " vertices.\n";
 
   // colors
   glGenBuffers(1, &cbo_);
@@ -126,7 +127,7 @@ void Scene3D::load_buffers() {
                         3 * sizeof(GLfloat),  // stride
                         NULL                  // array buffer offset
   );
-  std::cerr << "Loaded " << colors_.size() / 3 << " colors.\n";
+  std::cerr << "Loaded " << size2str(colors_.size() / 3) << " colors.\n";
 
   // indices
   const auto right = std::min(indices_.end(), 8192 + indices_.begin());
@@ -135,7 +136,7 @@ void Scene3D::load_buffers() {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, Size(selected_), &selected_[0],
                GL_STATIC_DRAW);
-  std::cerr << "Loaded " << selected_.size() << " elements.\n";
+  std::cerr << "Loaded " << size2str(selected_.size()) << " elements.\n";
 
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
