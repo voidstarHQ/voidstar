@@ -1,4 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
+load("//:variables.bzl", "COPTS")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -9,6 +10,7 @@ cc_library(
         "loader.h",
         "uri.h",
     ],
+    copts = COPTS,
     deps = ["//voidstar:framework"],
     alwayslink = 1,  # For registration
 )
@@ -21,6 +23,7 @@ LOADERS = [
 
 cc_library(
     name = "loaders",
+    copts = COPTS,
     deps = [":loader_" + loader for loader in LOADERS],
 )
 
@@ -28,6 +31,7 @@ cc_library(
     cc_library(
         name = "loader_" + loader,
         srcs = [loader + ".cc"],
+        copts = COPTS,
         deps = [":loader"],
         alwayslink = 1,  # For registration
     )
