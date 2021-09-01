@@ -7,7 +7,7 @@
 
 REGISTRY_IMPLEMENTATION_FOR(Meta)
 
-static void usage(const char* prgname) {
+static void usage(const char* prgname __unused) {
   std::cout << R"(Usage:
   voidstar  [OPTIONS]  FILE...
 

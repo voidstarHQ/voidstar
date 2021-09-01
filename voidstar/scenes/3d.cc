@@ -188,7 +188,7 @@ void Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
   load_buffers();
 }
 
-bool Scene3D::update(float elapsedTime) {
+bool Scene3D::update(float elapsedTime __unused) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, Size(selected_), &selected_[0],
                GL_STATIC_DRAW);
