@@ -5,7 +5,7 @@
 #include <cassert>
 #include <iostream>
 
-REGISTRY_IMPLEMENTATION_FOR(Meta);
+REGISTRY_IMPLEMENTATION_FOR(Meta)
 
 static void usage(const char* prgname) {
   std::cout << R"(Usage:

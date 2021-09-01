@@ -19,4 +19,4 @@ class Algo3DSphereFull : public Algo3DSphere {
     return true;
   }
 };
-REGISTER_ALGORITHM(Algo3DSphereFull);
+REGISTER_ALGORITHM(Algo3DSphereFull)

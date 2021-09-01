@@ -31,7 +31,7 @@
 
 /*
   Implement registry (in my_type.cc):
-  REGISTRY_IMPLEMENTATION_FOR(MyType);
+  REGISTRY_IMPLEMENTATION_FOR(MyType)
 */
 
 #define REGISTRY_IMPLEMENTATION_FOR(FOR)                                       \

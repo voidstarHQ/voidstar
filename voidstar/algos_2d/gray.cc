@@ -21,4 +21,4 @@ class Algo2DGrayscale : public Algo2D {
     return true;
   }
 };
-REGISTER_ALGORITHM(Algo2DGrayscale);
+REGISTER_ALGORITHM(Algo2DGrayscale)

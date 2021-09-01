@@ -123,4 +123,4 @@ class GLFW3Manager : public Manager {
   // FoV is the level of zoom. 80° = very wide angle, huge deformations.
   // 60° - 45°: standard. 20°: big zoom.
 };
-REGISTER_MANAGER(GLFW3Manager);
+REGISTER_MANAGER(GLFW3Manager)

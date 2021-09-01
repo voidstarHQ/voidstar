@@ -43,7 +43,7 @@ class Scene2D : public Scene {
   Floats vertices_;
   Floats colors_;
 };
-REGISTER_SCENE(Scene2D);
+REGISTER_SCENE(Scene2D)
 
 void Scene2D::load_shaders() {
   // Build and compile our shader program

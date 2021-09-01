@@ -31,4 +31,4 @@ class Algo3DCubeContiFrebet : public Algo3DCube {
     return true;
   }
 };
-REGISTER_ALGORITHM(Algo3DCubeContiFrebet);
+REGISTER_ALGORITHM(Algo3DCubeContiFrebet)

@@ -26,7 +26,7 @@ class FdLoader : public Loader {
  protected:
   int fd_;
 };
-REGISTER_LOADER(FdLoader);
+REGISTER_LOADER(FdLoader)
 
 void FdLoader::load() { throw std::runtime_error("TODO"); }
 

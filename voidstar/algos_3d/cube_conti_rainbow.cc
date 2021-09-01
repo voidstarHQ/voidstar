@@ -29,4 +29,4 @@ class Algo3DCubeContiRainbow : public Algo3DCube {
     return true;
   }
 };
-REGISTER_ALGORITHM(Algo3DCubeContiRainbow);
+REGISTER_ALGORITHM(Algo3DCubeContiRainbow)

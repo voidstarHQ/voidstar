@@ -19,4 +19,4 @@ class Algo3DCubeFull : public Algo3DCube {
     return true;
   }
 };
-REGISTER_ALGORITHM(Algo3DCubeFull);
+REGISTER_ALGORITHM(Algo3DCubeFull)

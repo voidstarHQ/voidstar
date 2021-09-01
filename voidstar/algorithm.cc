@@ -4,8 +4,8 @@
 
 #include "voidstar/size2str.h"
 
-REGISTRY_IMPLEMENTATION_FOR(Algorithm);
-REGISTER_META("algorithms", Algorithm);
+REGISTRY_IMPLEMENTATION_FOR(Algorithm)
+REGISTER_META("algorithms", Algorithm)
 
 size_t Size(const Floats& v) { return sizeof(GLfloat) * v.size(); }
 size_t Size(const VertIndices& v) { return sizeof(Index) * v.size(); }

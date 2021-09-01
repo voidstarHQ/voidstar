@@ -46,7 +46,7 @@ class Scene3D : public Scene {
   Floats vertices_;
   Floats colors_;
 };
-REGISTER_SCENE(Scene3D);
+REGISTER_SCENE(Scene3D)
 
 void Scene3D::load_shaders() {
   // Build and compile our shader program
