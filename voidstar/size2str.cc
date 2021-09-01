@@ -6,7 +6,7 @@
 std::string size2str(size_t size) {
   const auto digits = std::ceil(std::log10(size));
   const auto nonits = static_cast<int>(std::ceil(digits / 3) -1);
-  std::string str(static_cast<int>(digits)+nonits, '*');
+  std::string str(static_cast<size_t>(digits)+nonits, '*');
 
   int written = 0;
   for (size_t pos = str.length()-1; pos!=0; pos--) {

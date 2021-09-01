@@ -37,7 +37,7 @@ COPTS = [
     # "-Wstack-usage=1000000", TODO: GCC-only
     # "-Wcast-align=strict", TODO: GCC-only
     ###
-    "-D_FORTIFY_SOURCE=2",
+    # "-D_FORTIFY_SOURCE=2", TODO: use when not already =1
     ###
     "-fstack-protector-strong",
     # "-fstack-clash-protection", TODO: GCC-only
