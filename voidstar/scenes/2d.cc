@@ -36,9 +36,9 @@ class Scene2D : public Scene {
   GLuint vbo_ = 0;
   GLuint cbo_ = 0;
 
-  size_t width_;
-  size_t height_;
-  size_t n_points_;
+  u32 width_;
+  u32 height_;
+  u32 n_points_;
 
   Floats vertices_;
   Floats colors_;

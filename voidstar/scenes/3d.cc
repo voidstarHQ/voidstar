@@ -38,9 +38,9 @@ class Scene3D : public Scene {
   GLuint cbo_ = 0;
   GLuint ebo_ = 0;
 
-  size_t width_;
-  size_t height_;
-  size_t depth_;
+  u32 width_;
+  u32 height_;
+  u32 depth_;
   size_t n_points_;
 
   Floats vertices_;
@@ -202,7 +202,7 @@ void Scene3D::render() {
 
   // draw only the VAO's points we colored
   auto mM = std::minmax_element(selected_.begin(), selected_.end());
-  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, selected_.size(),
+  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, static_cast<u32>(selected_.size()),
                       GL_UNSIGNED_INT, NULL);
 
   // unbind the VAO and the program

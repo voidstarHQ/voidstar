@@ -26,7 +26,7 @@ class MmapLoader : public Loader {
   virtual void free() final;
 
   virtual const u8* data() final { return data_; }
-  virtual const u8* dataChunk(size_t offset, size_t size) final {
+  virtual const u8* dataChunk(u32 offset, u32 size) final {
     if (size_ < offset + size)
       throw std::out_of_range("Trying to read data out of bound");
     return data() + offset;

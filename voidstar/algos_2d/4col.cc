@@ -32,14 +32,14 @@ class Algo2DFourColors : public Algo2D {
   Algo2DFourColors() {}
   virtual ~Algo2DFourColors() {}
 
-  virtual bool apply(Floats& vertices, Floats& colors, size_t width,
-                     size_t height) final {
+  virtual bool apply(Floats& vertices, Floats& colors, u32 width,
+                     u32 height) final {
     make_vertices(vertices, width, height);
 
-    const size_t chunk_size = width * height;
+    const u32 chunk_size = width * height;
     const u8* data = loader_->dataChunk(0, chunk_size);
     size_t pos = 0;
-    for (size_t i = 0; i < chunk_size; ++i) {
+    for (u32 i = 0; i < chunk_size; ++i) {
       auto c = RGBColor(data[i]);
       colors[pos++] = c.r;
       colors[pos++] = c.g;

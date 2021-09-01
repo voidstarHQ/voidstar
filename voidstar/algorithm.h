@@ -13,7 +13,7 @@ size_t Size(const VertIndices& v);
 
 class Algorithm {
  public:
-  Algorithm(size_t min_size = 0, size_t max_size = 0)
+  Algorithm(u32 min_size = 0, u32 max_size = 0)
       : min_data_size_(min_size),
         max_data_size_(max_size),
         loader_(0),
@@ -24,17 +24,17 @@ class Algorithm {
   virtual void use(std::shared_ptr<Loader> loader,
                    std::shared_ptr<DataRange> range = NULL);
 
-  const u8* loadDataRange(const DataRange& range, size_t& size);
+  const u8* loadDataRange(const DataRange& range, u32& size);
 
-  inline const u8* loadDataRange(size_t& size) {
+  inline const u8* loadDataRange(u32& size) {
     return loadDataRange(*range_, size);
   }
   inline std::shared_ptr<DataRange> range() { return range_; }
   inline std::shared_ptr<Loader> loader() { return loader_; }
 
  protected:
-  size_t min_data_size_;
-  size_t max_data_size_;
+  u32 min_data_size_;
+  u32 max_data_size_;
   std::shared_ptr<Loader> loader_;
   std::shared_ptr<DataRange> range_;
 };

@@ -18,8 +18,8 @@ class FdLoader : public Loader {
   virtual void free() final;
 
   virtual const u8* data() final { throw std::runtime_error("TODO"); }
-  virtual const u8* dataChunk(size_t offset __unused,
-                              size_t size __unused) final {
+  virtual const u8* dataChunk(u32 offset __unused,
+                              u32 size __unused) final {
     throw std::runtime_error("TODO");
   }
 

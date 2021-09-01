@@ -19,7 +19,7 @@ class FileLoader : public Loader {
   virtual const u8* data() final {
     return reinterpret_cast<const u8*>(data_.data());
   }
-  virtual const u8* dataChunk(size_t offset, size_t size __unused) final {
+  virtual const u8* dataChunk(u32 offset, u32 size __unused) final {
     return data() + offset;
   }
 

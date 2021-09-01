@@ -176,7 +176,7 @@ bool GLFW3Manager::updateFirst(float deltaTime, glm::mat4* MVP) {
     args_->sliding_step_factor *= 2;
   if (events_->keyPressed(','))  // FIXME: '<'
     args_->sliding_step_factor =
-        std::max<size_t>(1, args_->sliding_step_factor / 2);
+        std::max<u32>(1, args_->sliding_step_factor / 2);
 
   const glm::mat4 projection = glm::perspective(
       // TODO: change field of view when scrolling
@@ -258,7 +258,7 @@ void GLFW3Manager::run() {
 
     // update the scene based on the time elapsed since last update
     double thisTime = glfwGetTime();
-    float elapsedTime = thisTime - lastTime;
+    float elapsedTime = static_cast<float>(thisTime - lastTime);
     glm::mat4 MVP;
     bool redraw = updateFirst(elapsedTime, &MVP);
     if (redraw) {
