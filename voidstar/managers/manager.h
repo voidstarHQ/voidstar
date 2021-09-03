@@ -63,10 +63,13 @@ class Manager {
   }
 
   bool slide_window(VertIndices& selected, const VertIndices& indices) {
-    auto left = indices.begin() + sliding_window_offset_;
-    if (left > indices.end()) left = indices.end() - sliding_window_offset_;
+    using offset_t = VertIndices::const_iterator::difference_type;
+    const offset_t woffset = static_cast<offset_t>(sliding_window_offset_);
+    const offset_t wlength = static_cast<offset_t>(sliding_window_length_);
+    auto left = indices.begin() + woffset;
     if (left < indices.begin()) left = indices.begin();
-    auto right = std::min(indices.end(), left + sliding_window_length_);
+    if (left > indices.end()) left = indices.end() - woffset;
+    auto right = std::min(indices.end(), left + wlength);
     if (sliding_window_left_ != &left[0] ||
         sliding_window_right_ != &right[0]) {
       selected.assign(left, right);

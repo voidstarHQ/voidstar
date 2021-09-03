@@ -58,8 +58,8 @@ class GLFW3Manager final : public Manager {
   GLFW3Manager(std::shared_ptr<Arguments>& args)
       : Manager(args),
         window_(nullptr),
-        viewport_width_(args->width),
-        viewport_height_(args->height) {
+        viewport_width_(static_cast<int>(args->width)),
+        viewport_height_(static_cast<int>(args->height)) {
     resetFloats();
   }
   virtual ~GLFW3Manager() {}

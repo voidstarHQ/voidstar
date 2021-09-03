@@ -8,7 +8,9 @@ void onFramebufferResize(GLFWwindow* window __unused, int width, int height) {
   glViewport(0, 0, width, height);
   GLFW3Manager::instance()->viewport(width, height);
   auto scene = GLFW3Manager::instance()->scene();
-  scene->resize(width, height);
+  assertm(width>0 && width<=std::numeric_limits<u32>::max(), "resizing to bad viewport width");
+  assertm(height>0 && height<=std::numeric_limits<u32>::max(), "resizing to bad viewport height");
+  scene->resize(static_cast<u32>(width), static_cast<u32>(height));
 }
 
 static void onError(int errorCode __unused, const char* msg) {
@@ -43,8 +45,12 @@ void GLFW3Manager::init() {
     monitor = glfwGetPrimaryMonitor();
   }
 
+  if (args_->width > std::numeric_limits<int>::max())
+    throw std::invalid_argument("window width too large");
+  if (args_->height > std::numeric_limits<int>::max())
+    throw std::invalid_argument("window height too large");
   // Create a GLFWwindow object that we can use for GLFW's functions
-  window_ = glfwCreateWindow(args_->width, args_->height, args_->name.c_str(),
+  window_ = glfwCreateWindow(static_cast<int>(args_->width), static_cast<int>(args_->height), args_->name.c_str(),
                              monitor, nullptr);
   if (!window_) {
     std::cerr << "Failed to open GLFW window.\n";
@@ -229,7 +235,7 @@ bool GLFW3Manager::updateFirst(float deltaTime, glm::mat4* MVP) {
 
 void GLFW3Manager::run() {
   const bool is3D = scene_->type() == "Scene3D";
-  GLuint uMVP = 0;
+  GLint uMVP = 0;
   if (is3D) {
     // Get uniform uMVP slot within shader program
     uMVP = glGetUniformLocation(scene_->program(), "uMVP");
@@ -290,16 +296,28 @@ void GLFW3Manager::run() {
 
 GlfwKeyboardEvents::~GlfwKeyboardEvents() {}
 
-bool GlfwKeyboardEvents::keyDown(int key) { return current_->keys[key]; }
+bool GlfwKeyboardEvents::keyDown(int key) {
+  assert(key>=0);
+  const auto k = static_cast<size_t>(key);
+  return current_->keys[k];
+}
 
-bool GlfwKeyboardEvents::keyUp(int key) { return !current_->keys[key]; }
+bool GlfwKeyboardEvents::keyUp(int key) {
+  assert(key>=0);
+  const auto k = static_cast<size_t>(key);
+  return !current_->keys[k];
+}
 
 bool GlfwKeyboardEvents::keyPressed(int key) {
-  return current_->keys[key] && !previous_->keys[key];
+  assert(key>=0);
+  const auto k = static_cast<size_t>(key);
+  return current_->keys[k] && !previous_->keys[k];
 }
 
 bool GlfwKeyboardEvents::keyReleased(int key) {
-  return !current_->keys[key] && previous_->keys[key];
+  assert(key>=0);
+  const auto k = static_cast<size_t>(key);
+  return !current_->keys[k] && previous_->keys[k];
 }
 
 void GlfwKeyboardEvents::update() {
@@ -310,6 +328,7 @@ void GlfwKeyboardEvents::update() {
 void GlfwKeyboardEvents::process(int key, int scancode, int action, int mods) {
   (void)scancode;
   if (key < 0) return;
-  current_->keys[key] = action != GLFW_RELEASE;
+  const auto k = static_cast<size_t>(key);
+  current_->keys[k] = (action != GLFW_RELEASE);
   current_->rawmods = mods;
 }

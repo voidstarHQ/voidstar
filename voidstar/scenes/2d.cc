@@ -9,7 +9,7 @@ class Scene2D : public Scene {
       : Scene("Scene2D"),
         width_(256),
         height_(256),
-        n_points_(width_ * height_) {
+    n_points_(static_cast<GLsizei>(width_) * static_cast<GLsizei>(height_)){
     reset_points();
   }
   virtual ~Scene2D() { unload(); }
@@ -25,8 +25,8 @@ class Scene2D : public Scene {
   void load_shaders();
   void load_buffers();
   void reset_points() {
-    vertices_ = Floats(3 * n_points_);
-    colors_ = Floats(3 * n_points_);
+    vertices_ = Floats(3 * static_cast<size_t>(n_points_));
+    colors_ = Floats(3 * static_cast<size_t>(n_points_));
     // selected_.clear();
     indices_.clear();
   }
@@ -38,7 +38,7 @@ class Scene2D : public Scene {
 
   u32 width_;
   u32 height_;
-  u32 n_points_;
+  GLsizei n_points_;
 
   Floats vertices_;
   Floats colors_;
