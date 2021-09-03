@@ -4,10 +4,10 @@
 #include <iostream>
 #include <memory>
 
-#include "voidstar/size2str.h"
 #include "voidstar/algorithm.h"
 #include "voidstar/arguments.h"
 #include "voidstar/registrar.h"
+#include "voidstar/size2str.h"
 
 class Scene {
  public:
@@ -22,15 +22,15 @@ class Scene {
   virtual void reload() {}
 
   virtual void resize(u32 viewport_width, u32 viewport_height) {
-    const float aspect_ratio = static_cast<float>(viewport_width) / static_cast<float>(viewport_height);
-    std::cout << "aspect: " << aspect_ratio
-              << " (" << size2str(viewport_width)
-               << 'x' << size2str(viewport_height)
-               << ")\n";
+    const float aspect_ratio = static_cast<float>(viewport_width) /
+                               static_cast<float>(viewport_height);
+    std::cout << "aspect: " << aspect_ratio << " (" << size2str(viewport_width)
+              << 'x' << size2str(viewport_height) << ")\n";
   }
 
   GLint program() const {
-    assertm(program_<=std::numeric_limits<GLint>::max(), "program ID overflows");
+    assertm(program_ <= std::numeric_limits<GLint>::max(),
+            "program ID overflows");
     return static_cast<GLint>(program_);
   }
   inline std::string type() const { return type_; }

@@ -13,13 +13,11 @@ class FileLoader final : public Loader {
     return ("file" == Uri<>::parse(uri).protocol);
   };
 
-  virtual void load() ;
-  virtual void free() ;
+  virtual void load();
+  virtual void free();
 
-  virtual const u8* data()  {
-    return reinterpret_cast<const u8*>(data_.data());
-  }
-  virtual const u8* dataChunk(u32 offset, u32 size __unused)  {
+  virtual const u8* data() { return reinterpret_cast<const u8*>(data_.data()); }
+  virtual const u8* dataChunk(u32 offset, u32 size __unused) {
     return data() + offset;
   }
 

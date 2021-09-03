@@ -10,8 +10,7 @@ class Algo3DCube : public Algo3D {
                      u32 width, u32 height, u32 depth) = 0;
 
  protected:
-  u32 make_vertices(Floats& vertices, u32 width, u32 height,
-                       u32 depth) {
+  u32 make_vertices(Floats& vertices, u32 width, u32 height, u32 depth) {
     const float w = static_cast<float>(width) / 2;
     const float h = static_cast<float>(height) / 2;
     const float d = static_cast<float>(depth) / 2;

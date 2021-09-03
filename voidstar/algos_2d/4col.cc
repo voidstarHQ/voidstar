@@ -32,8 +32,7 @@ class Algo2DFourColors final : public Algo2D {
   Algo2DFourColors() {}
   virtual ~Algo2DFourColors() {}
 
-  virtual bool apply(Floats& vertices, Floats& colors, u32 width,
-                     u32 height)  {
+  virtual bool apply(Floats& vertices, Floats& colors, u32 width, u32 height) {
     make_vertices(vertices, width, height);
 
     const u32 chunk_size = width * height;

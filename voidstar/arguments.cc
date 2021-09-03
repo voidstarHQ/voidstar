@@ -56,22 +56,16 @@ static void listComponents() {
 
 std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
   static auto short_options = ":a:b:e:fmn12hls:w:u:x:y:";
-  static const struct option long_options[] = {{"algorithm", 1, 0, 'a'},
-                                               {"begin", 1, 0, 'b'},
-                                               {"end", 1, 0, 'e'},
-                                               {"fullscreen", 0, 0, 'f'},
-                                               {"keep-chrome", 0, 0, '1'},
-                                               {"exit-at-fin", 0, 0, '2'},
-                                               {"height", 1, 0, 'y'},
-                                               {"help", 0, 0, 'h'},
-                                               {"list", 0, 0, 'l'},
-                                               {"slide-step", 1, 0, 's'},
-                                               {"sliding", 1, 0, 'w'},
-                                               {"move", 0, 0, 'm'},
-                                               {"no-spin", 0, 0, 'n'},
-                                               {"ui", 1, 0, 'u'},
-                                               {"width", 1, 0, 'x'},
-                                               {NULL, 0, 0, 0}};
+  static const struct option long_options[] = {
+      {"algorithm", 1, 0, 'a'},   {"begin", 1, 0, 'b'},
+      {"end", 1, 0, 'e'},         {"fullscreen", 0, 0, 'f'},
+      {"keep-chrome", 0, 0, '1'}, {"exit-at-fin", 0, 0, '2'},
+      {"height", 1, 0, 'y'},      {"help", 0, 0, 'h'},
+      {"list", 0, 0, 'l'},        {"slide-step", 1, 0, 's'},
+      {"sliding", 1, 0, 'w'},     {"move", 0, 0, 'm'},
+      {"no-spin", 0, 0, 'n'},     {"ui", 1, 0, 'u'},
+      {"width", 1, 0, 'x'},       {NULL, 0, 0, 0},
+  };
 
   bool list = false;
   bool end = false;
@@ -90,7 +84,8 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
       case 'b':
         result = std::stoul(optarg);
         if (result > std::numeric_limits<u32>::max()) {
-          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
           errors++;
           break;
         }
@@ -99,7 +94,8 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
       case 'e':
         result = std::stoul(optarg);
         if (result > std::numeric_limits<u32>::max()) {
-          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
           errors++;
           break;
         }
@@ -123,7 +119,8 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
       case 's':
         result = std::stoul(optarg);
         if (result > std::numeric_limits<u32>::max()) {
-          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
           errors++;
           break;
         }
@@ -135,7 +132,8 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
       case 'w':
         result = std::stoul(optarg);
         if (result > std::numeric_limits<u32>::max()) {
-          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
           errors++;
           break;
         }
@@ -144,7 +142,8 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
       case 'x':
         result = std::stoul(optarg);
         if (result > std::numeric_limits<u32>::max()) {
-          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
           errors++;
           break;
         }
@@ -153,7 +152,8 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
       case 'y':
         result = std::stoul(optarg);
         if (result > std::numeric_limits<u32>::max()) {
-          std::cerr << "Option '" << (char)optopt << "=" << optarg << "' too large!" << std::endl;
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
           errors++;
           break;
         }

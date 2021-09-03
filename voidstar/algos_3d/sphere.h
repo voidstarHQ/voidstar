@@ -13,8 +13,7 @@ class Algo3DSphere : public Algo3D {
                      u32 width, u32 height, u32 depth) = 0;
 
  protected:
-  u32 make_vertices(Floats& vertices, u32 width, u32 height,
-                       u32 depth) {
+  u32 make_vertices(Floats& vertices, u32 width, u32 height, u32 depth) {
     const double w = static_cast<double>(width) / 2;
     const double h = static_cast<double>(height) / 2;
     const double d = static_cast<double>(depth) / 2;
@@ -30,8 +29,10 @@ class Algo3DSphere : public Algo3D {
     for (double r = 0.0f; r < R; r += step_radius)
       for (double theta = 0.0f; theta < Theta; theta += step_angle)
         for (double phi = 0.0f; phi < Phi; phi += step_angle) {
-          vertices[pos++] = static_cast<float>(r * std::sin(theta) * std::cos(phi) / w);
-          vertices[pos++] = static_cast<float>(r * std::sin(theta) * std::sin(phi) / h);
+          vertices[pos++] =
+              static_cast<float>(r * std::sin(theta) * std::cos(phi) / w);
+          vertices[pos++] =
+              static_cast<float>(r * std::sin(theta) * std::sin(phi) / h);
           vertices[pos++] = static_cast<float>(r * std::cos(theta) / d);
         }
 

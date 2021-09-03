@@ -3,12 +3,12 @@
 #include <bitset>
 #include <memory>
 
+#include "GLFW/glfw3.h"
+
 #define GLM_FORCE_RADIANS
 // functions taking degrees as a parameter are deprecated
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-
-#include "GLFW/glfw3.h"
 #include "voidstar/managers/manager.h"
 #include "voidstar/types.h"
 

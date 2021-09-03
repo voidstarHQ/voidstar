@@ -7,8 +7,7 @@ class Algo2DEntropy final : public Algo2D {
   Algo2DEntropy() {}
   virtual ~Algo2DEntropy() {}
 
-  virtual bool apply(Floats& vertices, Floats& colors, u32 width,
-                     u32 height)  {
+  virtual bool apply(Floats& vertices, Floats& colors, u32 width, u32 height) {
     make_vertices(vertices, width, height);
 
     const u32 chunk_size = width * height;

@@ -8,8 +8,10 @@ void onFramebufferResize(GLFWwindow* window __unused, int width, int height) {
   glViewport(0, 0, width, height);
   GLFW3Manager::instance()->viewport(width, height);
   auto scene = GLFW3Manager::instance()->scene();
-  assertm(width>0 && width<=std::numeric_limits<u32>::max(), "resizing to bad viewport width");
-  assertm(height>0 && height<=std::numeric_limits<u32>::max(), "resizing to bad viewport height");
+  assertm(width > 0 && width <= std::numeric_limits<u32>::max(),
+          "resizing to bad viewport width");
+  assertm(height > 0 && height <= std::numeric_limits<u32>::max(),
+          "resizing to bad viewport height");
   scene->resize(static_cast<u32>(width), static_cast<u32>(height));
 }
 
@@ -50,8 +52,9 @@ void GLFW3Manager::init() {
   if (args_->height > std::numeric_limits<int>::max())
     throw std::invalid_argument("window height too large");
   // Create a GLFWwindow object that we can use for GLFW's functions
-  window_ = glfwCreateWindow(static_cast<int>(args_->width), static_cast<int>(args_->height), args_->name.c_str(),
-                             monitor, nullptr);
+  window_ = glfwCreateWindow(static_cast<int>(args_->width),
+                             static_cast<int>(args_->height),
+                             args_->name.c_str(), monitor, nullptr);
   if (!window_) {
     std::cerr << "Failed to open GLFW window.\n";
     getchar();
@@ -297,25 +300,25 @@ void GLFW3Manager::run() {
 GlfwKeyboardEvents::~GlfwKeyboardEvents() {}
 
 bool GlfwKeyboardEvents::keyDown(int key) {
-  assert(key>=0);
+  assert(key >= 0);
   const auto k = static_cast<size_t>(key);
   return current_->keys[k];
 }
 
 bool GlfwKeyboardEvents::keyUp(int key) {
-  assert(key>=0);
+  assert(key >= 0);
   const auto k = static_cast<size_t>(key);
   return !current_->keys[k];
 }
 
 bool GlfwKeyboardEvents::keyPressed(int key) {
-  assert(key>=0);
+  assert(key >= 0);
   const auto k = static_cast<size_t>(key);
   return current_->keys[k] && !previous_->keys[k];
 }
 
 bool GlfwKeyboardEvents::keyReleased(int key) {
-  assert(key>=0);
+  assert(key >= 0);
   const auto k = static_cast<size_t>(key);
   return !current_->keys[k] && previous_->keys[k];
 }
@@ -325,7 +328,8 @@ void GlfwKeyboardEvents::update() {
   glfwPollEvents();
 }
 
-void GlfwKeyboardEvents::process(int key, int scancode __unused, int action, int mods) {
+void GlfwKeyboardEvents::process(int key, int scancode __unused, int action,
+                                 int mods) {
   if (key < 0) return;
   const auto k = static_cast<size_t>(key);
   current_->keys[k] = (action != GLFW_RELEASE);

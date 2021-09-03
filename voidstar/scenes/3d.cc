@@ -203,8 +203,9 @@ void Scene3D::render() {
 
   // draw only the VAO's points we colored
   auto mM = std::minmax_element(selected_.begin(), selected_.end());
-  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, static_cast<u32>(selected_.size()),
-                      GL_UNSIGNED_INT, NULL);
+  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second,
+                      static_cast<u32>(selected_.size()), GL_UNSIGNED_INT,
+                      NULL);
 
   // unbind the VAO and the program
   glBindVertexArray(0);

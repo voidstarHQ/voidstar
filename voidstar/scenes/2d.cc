@@ -9,7 +9,8 @@ class Scene2D : public Scene {
       : Scene("Scene2D"),
         width_(256),
         height_(256),
-    n_points_(static_cast<GLsizei>(width_) * static_cast<GLsizei>(height_)){
+        n_points_(static_cast<GLsizei>(width_) *
+                  static_cast<GLsizei>(height_)) {
     reset_points();
   }
   virtual ~Scene2D() { unload(); }

@@ -4,8 +4,7 @@ class Algo2DGrayscale final : public Algo2D {
  public:
   Algo2DGrayscale() {}
   virtual ~Algo2DGrayscale() {}
-  virtual bool apply(Floats& vertices, Floats& colors, u32 width,
-                     u32 height)  {
+  virtual bool apply(Floats& vertices, Floats& colors, u32 width, u32 height) {
     make_vertices(vertices, width, height);
 
     const u32 chunk_size = width * height;

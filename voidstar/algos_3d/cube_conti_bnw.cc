@@ -6,7 +6,7 @@ class Algo3DCubeContiBnW final : public Algo3DCube {
   virtual ~Algo3DCubeContiBnW() {}
 
   virtual bool apply(Floats& vertices, Floats& colors, VertIndices& indices,
-                     u32 width, u32 height, u32 depth)  {
+                     u32 width, u32 height, u32 depth) {
     make_vertices(vertices, width, height, depth);
 
     u32 size;

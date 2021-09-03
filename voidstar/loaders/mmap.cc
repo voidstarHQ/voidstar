@@ -10,7 +10,7 @@ class MmapLoader final : public Loader {
  public:
   MmapLoader(int fd) : Loader(true), fd_(fd) {}
   MmapLoader(const std::string& path) : Loader(false), path_(path) {}
-  virtual ~MmapLoader()  {
+  virtual ~MmapLoader() {
     if (data_) free();
   }
 
@@ -22,11 +22,11 @@ class MmapLoader final : public Loader {
     return false;
   };
 
-  virtual void load() ;
-  virtual void free() ;
+  virtual void load();
+  virtual void free();
 
-  virtual const u8* data()  { return data_; }
-  virtual const u8* dataChunk(u32 offset, u32 size)  {
+  virtual const u8* data() { return data_; }
+  virtual const u8* dataChunk(u32 offset, u32 size) {
     if (size_ < offset + size)
       throw std::out_of_range("Trying to read data out of bound");
     return data() + offset;
