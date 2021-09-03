@@ -1,12 +1,12 @@
 #include "voidstar/algos_3d/cube.h"
 
-class Algo3DCubeContiFrebet : public Algo3DCube {
+class Algo3DCubeContiFrebet final : public Algo3DCube {
  public:
   Algo3DCubeContiFrebet() {}
   virtual ~Algo3DCubeContiFrebet() {}
 
   virtual bool apply(Floats& vertices, Floats& colors, VertIndices& indices,
-                     u32 width, u32 height, u32 depth) final {
+                     u32 width, u32 height, u32 depth)  {
     make_vertices(vertices, width, height, depth);
 
     u32 size;

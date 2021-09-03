@@ -53,7 +53,7 @@ class GlfwKeyboardEvents : public Events {
   std::shared_ptr<GlfwKeyboardState> previous_;
 };
 
-class GLFW3Manager : public Manager {
+class GLFW3Manager final : public Manager {
  public:
   GLFW3Manager(std::shared_ptr<Arguments>& args)
       : Manager(args),
@@ -67,7 +67,7 @@ class GLFW3Manager : public Manager {
   virtual void init() override;
   virtual void run() override;
 
-  virtual std::shared_ptr<Events> getEvents() final { return events_; }
+  virtual std::shared_ptr<Events> getEvents() { return events_; }
 
   virtual void ToggleFullscreen() override;
 

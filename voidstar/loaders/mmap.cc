@@ -6,11 +6,11 @@
 #include "voidstar/loaders/loader.h"
 #include "voidstar/loaders/uri.h"
 
-class MmapLoader : public Loader {
+class MmapLoader final : public Loader {
  public:
   MmapLoader(int fd) : Loader(true), fd_(fd) {}
   MmapLoader(const std::string& path) : Loader(false), path_(path) {}
-  virtual ~MmapLoader() final {
+  virtual ~MmapLoader()  {
     if (data_) free();
   }
 
@@ -22,11 +22,11 @@ class MmapLoader : public Loader {
     return false;
   };
 
-  virtual void load() final;
-  virtual void free() final;
+  virtual void load() ;
+  virtual void free() ;
 
-  virtual const u8* data() final { return data_; }
-  virtual const u8* dataChunk(u32 offset, u32 size) final {
+  virtual const u8* data()  { return data_; }
+  virtual const u8* dataChunk(u32 offset, u32 size)  {
     if (size_ < offset + size)
       throw std::out_of_range("Trying to read data out of bound");
     return data() + offset;

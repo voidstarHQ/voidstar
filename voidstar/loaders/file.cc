@@ -4,7 +4,7 @@
 #include "voidstar/loaders/uri.h"
 #include "voidstar/types.h"
 
-class FileLoader : public Loader {
+class FileLoader final : public Loader {
  public:
   FileLoader(const std::string& path) : Loader(false), path_(path) {}
   virtual ~FileLoader() {}
@@ -13,13 +13,13 @@ class FileLoader : public Loader {
     return ("file" == Uri<>::parse(uri).protocol);
   };
 
-  virtual void load() final;
-  virtual void free() final;
+  virtual void load() ;
+  virtual void free() ;
 
-  virtual const u8* data() final {
+  virtual const u8* data()  {
     return reinterpret_cast<const u8*>(data_.data());
   }
-  virtual const u8* dataChunk(u32 offset, u32 size __unused) final {
+  virtual const u8* dataChunk(u32 offset, u32 size __unused)  {
     return data() + offset;
   }
 

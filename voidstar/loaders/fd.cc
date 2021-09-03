@@ -5,7 +5,7 @@
 #include "voidstar/loaders/loader.h"
 #include "voidstar/types.h"
 
-class FdLoader : public Loader {
+class FdLoader final : public Loader {
  public:
   FdLoader(const std::string& fd) : Loader(true) {
     if (fd == "-") fd_ = STDIN_FILENO;
@@ -14,12 +14,12 @@ class FdLoader : public Loader {
 
   static bool CanLoad(const std::string& uri) { return ("-" == uri); };
 
-  virtual void load() final;
-  virtual void free() final;
+  virtual void load() ;
+  virtual void free() ;
 
-  virtual const u8* data() final { throw std::runtime_error("TODO"); }
+  virtual const u8* data()  { throw std::runtime_error("TODO"); }
   virtual const u8* dataChunk(u32 offset __unused,
-                              u32 size __unused) final {
+                              u32 size __unused)  {
     throw std::runtime_error("TODO");
   }
 

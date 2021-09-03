@@ -2,13 +2,13 @@
 
 #include "voidstar/algos_2d/algo_2d.h"
 
-class Algo2DEntropy : public Algo2D {
+class Algo2DEntropy final : public Algo2D {
  public:
   Algo2DEntropy() {}
   virtual ~Algo2DEntropy() {}
 
   virtual bool apply(Floats& vertices, Floats& colors, u32 width,
-                     u32 height) final {
+                     u32 height)  {
     make_vertices(vertices, width, height);
 
     const u32 chunk_size = width * height;

@@ -1,12 +1,12 @@
 #include "voidstar/algos_3d/sphere.h"
 
-class Algo3DSphereContiBnW : public Algo3DSphere {
+class Algo3DSphereContiBnW final : public Algo3DSphere {
  public:
   Algo3DSphereContiBnW() {}
   virtual ~Algo3DSphereContiBnW() {}
 
   virtual bool apply(Floats& vertices, Floats& colors, VertIndices& indices,
-                     u32 width, u32 height, u32 depth) final {
+                     u32 width, u32 height, u32 depth)  {
     make_vertices(vertices, width, height, depth);
 
     u32 size;

@@ -1,11 +1,11 @@
 #include "voidstar/algos_2d/algo_2d.h"
 
-class Algo2DGrayscale : public Algo2D {
+class Algo2DGrayscale final : public Algo2D {
  public:
   Algo2DGrayscale() {}
-  virtual ~Algo2DGrayscale() final {}
+  virtual ~Algo2DGrayscale() {}
   virtual bool apply(Floats& vertices, Floats& colors, u32 width,
-                     u32 height) final {
+                     u32 height)  {
     make_vertices(vertices, width, height);
 
     const u32 chunk_size = width * height;
