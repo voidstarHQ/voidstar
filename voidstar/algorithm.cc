@@ -4,8 +4,8 @@
 
 #include "voidstar/size2str.h"
 
-REGISTRY_IMPLEMENTATION_FOR(Algorithm);
-REGISTER_META("algorithms", Algorithm);
+REGISTRY_IMPLEMENTATION_FOR(Algorithm)
+REGISTER_META("algorithms", Algorithm)
 
 size_t Size(const Floats& v) { return sizeof(GLfloat) * v.size(); }
 size_t Size(const VertIndices& v) { return sizeof(Index) * v.size(); }
@@ -24,9 +24,9 @@ void Algorithm::use(std::shared_ptr<Loader> loader,
   }
 }
 
-const u8* Algorithm::loadDataRange(const DataRange& range, size_t& size) {
+const u8* Algorithm::loadDataRange(const DataRange& range, u32& size) {
   if (max_data_size_)
-    size = std::min<size_t>(range.size(), max_data_size_);
+    size = std::min<u32>(range.size(), max_data_size_);
   else
     size = range.size();
   std::cerr << "read " << size2str(size) << " bytes" << std::endl;

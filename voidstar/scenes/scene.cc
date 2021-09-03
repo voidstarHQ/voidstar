@@ -1,6 +1,6 @@
 #include "voidstar/scenes/scene.h"
 
-REGISTRY_IMPLEMENTATION_FOR(Scene);
+REGISTRY_IMPLEMENTATION_FOR(Scene)
 
 void Scene::load(std::shared_ptr<Algorithm> algo) {
   if (type_ != algo->sceneType())

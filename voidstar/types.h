@@ -1,20 +1,16 @@
 #pragma once
 
-#include <stdint.h>
-
 #include <cstddef>
+#include <cstdint>
 #include <stdexcept>
 
 typedef uint8_t u8;
-typedef uint16_t u16;
 typedef uint32_t u32;
-typedef uint64_t u64;
-
-typedef int8_t s8;
-typedef int16_t s16;
-typedef int32_t s32;
-typedef int64_t s64;
 
 #ifndef __unused
 #define __unused __attribute__((unused))
 #endif
+
+#define NDEBUG
+#include <cassert>
+#define assertm(exp, msg) assert((msg __unused, exp))

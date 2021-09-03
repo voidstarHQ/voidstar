@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-REGISTRY_IMPLEMENTATION_FOR(Manager);
-REGISTER_META("managers", Manager);
+REGISTRY_IMPLEMENTATION_FOR(Manager)
+REGISTER_META("managers", Manager)
 
 void Manager::loadScene(std::shared_ptr<Scene> scene) {
   // XXX delete scene prior to creating a new one

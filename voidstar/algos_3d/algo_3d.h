@@ -10,5 +10,5 @@ class Algo3D : public Algorithm {
   virtual std::string sceneType() const final { return kSceneType; }
 
   virtual bool apply(Floats& vertices, Floats& colors, VertIndices& selected,
-                     size_t width, size_t height, size_t depth) = 0;
+                     u32 width, u32 height, u32 depth) = 0;
 };

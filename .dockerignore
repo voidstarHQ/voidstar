@@ -2,6 +2,7 @@
 !/.bazelrc
 !/BUILD
 !/resolved.bzl
+!/variables.bzl
 !/third_party
 !/voidstar
 !/WORKSPACE

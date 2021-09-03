@@ -1,10 +1,12 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
+load("//:variables.bzl", "COPTS")
 
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "algo_3d",
     hdrs = ["algo_3d.h"],
+    copts = COPTS,
     deps = [
         "//voidstar:algorithm",
         "//voidstar:arguments",
@@ -27,6 +29,7 @@ SPHERES = [
 
 cc_library(
     name = "algos_3d",
+    copts = COPTS,
     deps = [":" + algo for algo in CUBES + SPHERES],
 )
 
@@ -34,6 +37,7 @@ cc_library(
     cc_library(
         name = algo,
         srcs = [algo + ".cc"],
+        copts = COPTS,
         deps = [
             ":algo_3d",
             ":cube",
@@ -46,12 +50,14 @@ cc_library(
 cc_library(
     name = "cube",
     hdrs = ["cube.h"],
+    copts = COPTS,
 )
 
 [
     cc_library(
         name = algo,
         srcs = [algo + ".cc"],
+        copts = COPTS,
         deps = [
             ":algo_3d",
             ":sphere",
@@ -64,4 +70,5 @@ cc_library(
 cc_library(
     name = "sphere",
     hdrs = ["sphere.h"],
+    copts = COPTS,
 )

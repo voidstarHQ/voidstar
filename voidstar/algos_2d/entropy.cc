@@ -2,22 +2,21 @@
 
 #include "voidstar/algos_2d/algo_2d.h"
 
-class Algo2DEntropy : public Algo2D {
+class Algo2DEntropy final : public Algo2D {
  public:
   Algo2DEntropy() {}
   virtual ~Algo2DEntropy() {}
 
-  virtual bool apply(Floats& vertices, Floats& colors, size_t width,
-                     size_t height) final {
+  virtual bool apply(Floats& vertices, Floats& colors, u32 width, u32 height) {
     make_vertices(vertices, width, height);
 
-    const size_t chunk_size = width * height;
+    const u32 chunk_size = width * height;
     const u8* data = loader_->dataChunk(0, chunk_size);
     size_t pos = 0;
-    for (size_t i = 0; i < chunk_size; ++i) {
-      auto e = entropy(data, chunk_size, i, 32, 256);
-      float r = (e > 0.5f) ? curve(e - 0.5f) : 0.0f;
-      float b = std::pow(e, 2);
+    for (u32 i = 0; i < chunk_size; ++i) {
+      const float e = entropy(data, chunk_size, i, 32, 256);
+      const float r = (e > 0.5f) ? curve(e - 0.5f) : 0.0f;
+      const float b = std::pow(e, 2.f);
       colors[pos++] = r;
       colors[pos++] = 0.0f;
       colors[pos++] = b;
@@ -29,7 +28,7 @@ class Algo2DEntropy : public Algo2D {
  private:
   // github.com/cortesi/scurve/blob/a59e8335c48a7cda7043fbd1b28bcae1abc9645d/binvis#L58
 
-  inline float entropy(const u8* data, size_t len, size_t offset,
+  inline float entropy(const u8* data, u32 len, u32 offset,
                        size_t blocksize = 32, size_t n_symbols = 256) {
     if (len < blocksize)
       throw std::range_error("Data length must be larger than block size.");
@@ -44,7 +43,7 @@ class Algo2DEntropy : public Algo2D {
       start = offset - half_block;
 
     std::vector<float> hist(n_symbols, 0.0f);
-    for (size_t i = start; i < start + blocksize; ++i) hist[data[i]]++;
+    for (auto i = start; i < start + blocksize; ++i) hist[data[i]]++;
 
     auto Blocksize = static_cast<float>(blocksize);
     auto base = static_cast<float>(std::min(blocksize, n_symbols));
@@ -62,8 +61,8 @@ class Algo2DEntropy : public Algo2D {
   }
 
   inline float curve(float v) {
-    float f = std::pow(4 * (v - std::pow(v, 2)), 4);
+    float f = std::pow(4.f * (v - std::pow(v, 2.f)), 4.f);
     return std::max(f, 0.0f);
   }
 };
-REGISTER_ALGORITHM(Algo2DEntropy);
+REGISTER_ALGORITHM(Algo2DEntropy)

@@ -2,6 +2,7 @@
 #include "voidstar/scenes/scene.h"
 #include "voidstar/shaders/fragment.h"
 #include "voidstar/shaders/vertex_3d.h"
+#include "voidstar/size2str.h"
 
 class Scene3D : public Scene {
  public:
@@ -38,15 +39,15 @@ class Scene3D : public Scene {
   GLuint cbo_ = 0;
   GLuint ebo_ = 0;
 
-  size_t width_;
-  size_t height_;
-  size_t depth_;
+  u32 width_;
+  u32 height_;
+  u32 depth_;
   size_t n_points_;
 
   Floats vertices_;
   Floats colors_;
 };
-REGISTER_SCENE(Scene3D);
+REGISTER_SCENE(Scene3D)
 
 void Scene3D::load_shaders() {
   // Build and compile our shader program
@@ -112,7 +113,7 @@ void Scene3D::load_buffers() {
                         3 * sizeof(GLfloat),  // stride
                         NULL                  // array buffer offset
   );
-  std::cerr << "Loaded " << vertices_.size() / 3 << " vertices.\n";
+  std::cerr << "Loaded " << size2str(vertices_.size() / 3) << " vertices.\n";
 
   // colors
   glGenBuffers(1, &cbo_);
@@ -126,7 +127,7 @@ void Scene3D::load_buffers() {
                         3 * sizeof(GLfloat),  // stride
                         NULL                  // array buffer offset
   );
-  std::cerr << "Loaded " << colors_.size() / 3 << " colors.\n";
+  std::cerr << "Loaded " << size2str(colors_.size() / 3) << " colors.\n";
 
   // indices
   const auto right = std::min(indices_.end(), 8192 + indices_.begin());
@@ -135,7 +136,7 @@ void Scene3D::load_buffers() {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, Size(selected_), &selected_[0],
                GL_STATIC_DRAW);
-  std::cerr << "Loaded " << selected_.size() << " elements.\n";
+  std::cerr << "Loaded " << size2str(selected_.size()) << " elements.\n";
 
   glBindVertexArray(0);  // Unbind VAO (it's always a good thing to unbind any
                          // buffer/array to prevent strange bugs)
@@ -188,7 +189,7 @@ void Scene3D::load(std::shared_ptr<Algorithm> algorithm) {
   load_buffers();
 }
 
-bool Scene3D::update(float elapsedTime) {
+bool Scene3D::update(float elapsedTime __unused) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, Size(selected_), &selected_[0],
                GL_STATIC_DRAW);
@@ -202,8 +203,9 @@ void Scene3D::render() {
 
   // draw only the VAO's points we colored
   auto mM = std::minmax_element(selected_.begin(), selected_.end());
-  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second, selected_.size(),
-                      GL_UNSIGNED_INT, NULL);
+  glDrawRangeElements(GL_POINTS, *mM.first, *mM.second,
+                      static_cast<u32>(selected_.size()), GL_UNSIGNED_INT,
+                      NULL);
 
   // unbind the VAO and the program
   glBindVertexArray(0);

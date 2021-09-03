@@ -3,12 +3,12 @@
 #include <bitset>
 #include <memory>
 
+#include "GLFW/glfw3.h"
+
 #define GLM_FORCE_RADIANS
 // functions taking degrees as a parameter are deprecated
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-
-#include "GLFW/glfw3.h"
 #include "voidstar/managers/manager.h"
 #include "voidstar/types.h"
 
@@ -53,13 +53,13 @@ class GlfwKeyboardEvents : public Events {
   std::shared_ptr<GlfwKeyboardState> previous_;
 };
 
-class GLFW3Manager : public Manager {
+class GLFW3Manager final : public Manager {
  public:
   GLFW3Manager(std::shared_ptr<Arguments>& args)
       : Manager(args),
         window_(nullptr),
-        viewport_width_(args->width),
-        viewport_height_(args->height) {
+        viewport_width_(static_cast<int>(args->width)),
+        viewport_height_(static_cast<int>(args->height)) {
     resetFloats();
   }
   virtual ~GLFW3Manager() {}
@@ -67,7 +67,7 @@ class GLFW3Manager : public Manager {
   virtual void init() override;
   virtual void run() override;
 
-  virtual std::shared_ptr<Events> getEvents() final { return events_; }
+  virtual std::shared_ptr<Events> getEvents() override { return events_; }
 
   virtual void ToggleFullscreen() override;
 
@@ -123,4 +123,4 @@ class GLFW3Manager : public Manager {
   // FoV is the level of zoom. 80° = very wide angle, huge deformations.
   // 60° - 45°: standard. 20°: big zoom.
 };
-REGISTER_MANAGER(GLFW3Manager);
+REGISTER_MANAGER(GLFW3Manager)

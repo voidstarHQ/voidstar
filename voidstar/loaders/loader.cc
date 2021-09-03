@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-REGISTRY_IMPLEMENTATION_FOR(Loader);
+REGISTRY_IMPLEMENTATION_FOR(Loader)
 
 std::shared_ptr<Loader> Loader::fromURI(const std::string& uri) {
   for (const auto& [name, loaderFactory] : RegistryForLoader()) {

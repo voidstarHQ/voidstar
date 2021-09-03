@@ -5,9 +5,9 @@
 #include <cassert>
 #include <iostream>
 
-REGISTRY_IMPLEMENTATION_FOR(Meta);
+REGISTRY_IMPLEMENTATION_FOR(Meta)
 
-static void usage(const char* prgname) {
+static void usage(const char* prgname __unused) {
   std::cout << R"(Usage:
   voidstar  [OPTIONS]  FILE...
 
@@ -56,28 +56,23 @@ static void listComponents() {
 
 std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
   static auto short_options = ":a:b:e:fmn12hls:w:u:x:y:";
-  static const struct option long_options[] = {{"algorithm", 1, 0, 'a'},
-                                               {"begin", 1, 0, 'b'},
-                                               {"end", 1, 0, 'e'},
-                                               {"fullscreen", 0, 0, 'f'},
-                                               {"keep-chrome", 0, 0, '1'},
-                                               {"exit-at-fin", 0, 0, '2'},
-                                               {"height", 1, 0, 'y'},
-                                               {"help", 0, 0, 'h'},
-                                               {"list", 0, 0, 'l'},
-                                               {"slide-step", 1, 0, 's'},
-                                               {"sliding", 1, 0, 'w'},
-                                               {"move", 0, 0, 'm'},
-                                               {"no-spin", 0, 0, 'n'},
-                                               {"ui", 1, 0, 'u'},
-                                               {"width", 1, 0, 'x'},
-                                               {NULL, 0, 0, 0}};
+  static const struct option long_options[] = {
+      {"algorithm", 1, 0, 'a'},   {"begin", 1, 0, 'b'},
+      {"end", 1, 0, 'e'},         {"fullscreen", 0, 0, 'f'},
+      {"keep-chrome", 0, 0, '1'}, {"exit-at-fin", 0, 0, '2'},
+      {"height", 1, 0, 'y'},      {"help", 0, 0, 'h'},
+      {"list", 0, 0, 'l'},        {"slide-step", 1, 0, 's'},
+      {"sliding", 1, 0, 'w'},     {"move", 0, 0, 'm'},
+      {"no-spin", 0, 0, 'n'},     {"ui", 1, 0, 'u'},
+      {"width", 1, 0, 'x'},       {NULL, 0, 0, 0},
+  };
 
   bool list = false;
   bool end = false;
   int c;
   int errors = 0;
   int opt_index;
+  unsigned long result;
   auto args = std::make_shared<Arguments>();
 
   while ((c = getopt_long(argc, argv, short_options, long_options,
@@ -87,10 +82,24 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
         args->algo = optarg;
         break;
       case 'b':
-        args->range_begin = std::stoull(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->range_begin = static_cast<u32>(result);
         break;
       case 'e':
-        args->range_end = std::stoull(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->range_end = static_cast<u32>(result);
         break;
       case 'f':
         args->fullscreen = true;
@@ -108,19 +117,47 @@ std::shared_ptr<Arguments> parseArgs(int argc, char* argv[]) {
         args->spin_shape = false;
         break;
       case 's':
-        args->sliding_step = std::stoul(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->sliding_step = static_cast<u32>(result);
         break;
       case 'u':
         args->manager = optarg;
         break;
       case 'w':
-        args->sliding_window_length = std::stoul(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->sliding_window_length = static_cast<u32>(result);
         break;
       case 'x':
-        args->width = std::stoul(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->width = static_cast<u32>(result);
         break;
       case 'y':
-        args->height = std::stoul(optarg);
+        result = std::stoul(optarg);
+        if (result > std::numeric_limits<u32>::max()) {
+          std::cerr << "Option '" << (char)optopt << "=" << optarg
+                    << "' too large!" << std::endl;
+          errors++;
+          break;
+        }
+        args->height = static_cast<u32>(result);
         break;
       case '1':
         args->keep_chrome = true;

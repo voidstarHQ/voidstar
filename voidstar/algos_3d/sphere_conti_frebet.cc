@@ -1,20 +1,20 @@
 #include "voidstar/algos_3d/sphere.h"
 
-class Algo3DSphereContiFrebet : public Algo3DSphere {
+class Algo3DSphereContiFrebet final : public Algo3DSphere {
  public:
   Algo3DSphereContiFrebet() {}
   virtual ~Algo3DSphereContiFrebet() {}
 
   virtual bool apply(Floats& vertices, Floats& colors, VertIndices& indices,
-                     size_t width, size_t height, size_t depth) final {
+                     u32 width, u32 height, u32 depth) {
     make_vertices(vertices, width, height, depth);
 
-    size_t size;
+    u32 size;
     const u8* data = loadDataRange(size);
     u8 x = data[0];
     u8 y = data[1];
 
-    for (size_t i = 2; i + 3 < size; ++i) {
+    for (u32 i = 2; i + 3 < size; ++i) {
       u8 z = data[i];
       Index id = x + y * height + z * depth * height;
       // float r = std::sqrt(std::pow(static_cast<float>(x), 2.0f) +
@@ -35,4 +35,4 @@ class Algo3DSphereContiFrebet : public Algo3DSphere {
     return true;
   }
 };
-REGISTER_ALGORITHM(Algo3DSphereContiFrebet);
+REGISTER_ALGORITHM(Algo3DSphereContiFrebet)

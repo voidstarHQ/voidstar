@@ -14,8 +14,8 @@ class Loader {
   virtual void free() = 0;
 
   virtual const u8* data() = 0;
-  virtual const u8* dataChunk(size_t offset, size_t size) = 0;
-  virtual const u8* nextDataChunk(size_t size) {
+  virtual const u8* dataChunk(u32 offset, u32 size) = 0;
+  virtual const u8* nextDataChunk(u32 size) {
     auto chunk = dataChunk(offset_, size);
     offset_ += size;
     return chunk;
@@ -23,15 +23,15 @@ class Loader {
 
   static std::shared_ptr<Loader> fromURI(const std::string& uri);
 
-  void offset(size_t offset) { offset_ = offset; }
-  size_t offset() const { return offset_; }
-  size_t size() const { return size_; }
+  void offset(u32 offset) { offset_ = offset; }
+  u32 offset() const { return offset_; }
+  u32 size() const { return size_; }
   bool isStream() { return stream_; }
 
  protected:
   bool stream_;
-  size_t size_;
-  size_t offset_;
+  u32 size_;
+  u32 offset_;
 };
 
 REGISTRY_DECLARATION_FOR(

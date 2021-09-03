@@ -1,20 +1,20 @@
 #include "voidstar/algos_3d/cube.h"
 
-class Algo3DCubeContiFrebet : public Algo3DCube {
+class Algo3DCubeContiFrebet final : public Algo3DCube {
  public:
   Algo3DCubeContiFrebet() {}
   virtual ~Algo3DCubeContiFrebet() {}
 
   virtual bool apply(Floats& vertices, Floats& colors, VertIndices& indices,
-                     size_t width, size_t height, size_t depth) final {
+                     u32 width, u32 height, u32 depth) {
     make_vertices(vertices, width, height, depth);
 
-    size_t size;
+    u32 size;
     const u8* data = loadDataRange(size);
     u8 x = data[0];
     u8 y = data[1];
 
-    for (size_t i = 2; i + 3 < size; ++i) {
+    for (u32 i = 2; i + 3 < size; ++i) {
       u8 z = data[i];
       Index id = (y * width + x) * depth + z;
       Index idx = 3 * id;
@@ -31,4 +31,4 @@ class Algo3DCubeContiFrebet : public Algo3DCube {
     return true;
   }
 };
-REGISTER_ALGORITHM(Algo3DCubeContiFrebet);
+REGISTER_ALGORITHM(Algo3DCubeContiFrebet)
