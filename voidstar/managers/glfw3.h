@@ -67,7 +67,7 @@ class GLFW3Manager final : public Manager {
   virtual void init() override;
   virtual void run() override;
 
-  virtual std::shared_ptr<Events> getEvents() { return events_; }
+  virtual std::shared_ptr<Events> getEvents() override { return events_; }
 
   virtual void ToggleFullscreen() override;
 

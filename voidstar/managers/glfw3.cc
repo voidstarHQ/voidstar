@@ -325,8 +325,7 @@ void GlfwKeyboardEvents::update() {
   glfwPollEvents();
 }
 
-void GlfwKeyboardEvents::process(int key, int scancode, int action, int mods) {
-  (void)scancode;
+void GlfwKeyboardEvents::process(int key, int scancode __unused, int action, int mods) {
   if (key < 0) return;
   const auto k = static_cast<size_t>(key);
   current_->keys[k] = (action != GLFW_RELEASE);
