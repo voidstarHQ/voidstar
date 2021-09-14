@@ -25,6 +25,7 @@ upgradable_repository(
 
 upgradable_repository(
     name = "glfw",
+    branch = "3.3-stable",
     build_file = "@//third_party:glfw3.BUILD",
     remote = "git://github.com/glfw/glfw.git",
 )

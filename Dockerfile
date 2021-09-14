@@ -16,15 +16,16 @@ RUN \
  && apt install -y --no-install-recommends \
         build-essential \
         ca-certificates \
+        clang \
         curl \
         git \
-        unzip \
-        tar \
         gzip \
-        python3 \
         libgl1-mesa-dev \
-        xorg-dev \
+        python3 \
         software-properties-common \
+        tar \
+        unzip \
+        xorg-dev \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 RUN \
     --mount=type=cache,target=/var/cache/apt \
@@ -68,8 +69,19 @@ RUN \
 FROM scratch AS sync
 COPY --from=sync-then-fmt /app/resolved.bzl /
 
-# voidstar
-FROM base AS builder
+# voidstar Clang
+FROM base AS builder-clang
+RUN \
+    --mount=type=cache,target=/root/.cache/bazel \
+    set -ux \
+ && bazel build --repo_env=CC=clang voidstar \
+ # Necessary as COPY --from does not follow symlinks
+ && cp /app/bazel-bin/voidstar/voidstar /
+FROM scratch AS voidstar-clang
+COPY --from=builder-clang /voidstar /
+
+# voidstar GCC
+FROM base AS builder-gcc
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
     set -ux \
@@ -77,4 +89,4 @@ RUN \
  # Necessary as COPY --from does not follow symlinks
  && cp /app/bazel-bin/voidstar/voidstar /
 FROM scratch AS voidstar
-COPY --from=builder /voidstar /
+COPY --from=builder-gcc /voidstar /
