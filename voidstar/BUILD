@@ -20,6 +20,7 @@ cc_library(
         "size2str.cc",
     ],
     hdrs = [
+        "flags.h",
         "registrar.h",
         "size2str.h",
         "types.h",
