@@ -67,8 +67,8 @@ class Manager {
     const offset_t woffset = static_cast<offset_t>(sliding_window_offset_);
     const offset_t wlength = static_cast<offset_t>(sliding_window_length_);
     auto left = indices.begin() + woffset;
-    if (left < indices.begin()) left = indices.begin();
     if (left > indices.end()) left = indices.end() - woffset;
+    if (left < indices.begin()) left = indices.begin();
     auto right = std::min(indices.end(), left + wlength);
     if (sliding_window_left_ != &left[0] ||
         sliding_window_right_ != &right[0]) {
