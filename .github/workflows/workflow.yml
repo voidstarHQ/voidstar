@@ -35,6 +35,11 @@ jobs:
         DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain || \
         DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain || \
         DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain || \
         DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain
 
   build_on_ubuntu_with_clang:
@@ -50,6 +55,11 @@ jobs:
     - run: ./bin/voidstar --help
     - name: Test video
       run: |
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain || \
+        DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain || \
         DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain || \
         DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain || \
         DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain || \
