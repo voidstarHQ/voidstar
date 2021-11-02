@@ -1,8 +1,10 @@
 *
 !/.bazelrc
 !/BUILD
+!/data/
 !/resolved.bzl
-!/variables.bzl
 !/third_party
+!/variables.bzl
 !/voidstar
 !/WORKSPACE
+!/xvfb.sh
