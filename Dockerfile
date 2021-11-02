@@ -103,9 +103,11 @@ COPY --from=xvfb-gcc /app/video.webm /
 
 # xvfb Clang
 FROM builder-clang AS xvfb-clang
-RUN \
-    set -ux \
- && BIN=/voidstar ./xvfb.sh
+ARG WxHxD=800x600x24
+ARG BIN=/voidstar
+ARG FILE=./data/BigPictureBG.tga
+ARG OUT=video.webm
+RUN ./xvfb.sh
 FROM scratch AS video-clang
 COPY --from=xvfb-clang /app/video.webm /
 
