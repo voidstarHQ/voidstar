@@ -229,8 +229,11 @@ bool GLFW3Manager::updateFirst(float deltaTime, glm::mat4* MVP) {
       // User loaded a different file
       file_changed || false) {
     if (args_->move_window) slide_window_right();
-    bool slid = slide_window(scene_->selected(), scene_->indices());
-    if (!slid && args_->move_window) args_->move_window = false;
+    auto slid = slide_window(scene_->selected(), scene_->indices());
+    if (previously_slid_ != slid)
+      std::cout << "#selected: " << slid << std::endl;
+    previously_slid_ = slid;
+    if (slid < 1 && args_->move_window) args_->move_window = false;
   }
 
   return true;

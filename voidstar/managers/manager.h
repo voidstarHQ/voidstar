@@ -7,7 +7,6 @@
 #include "voidstar/managers/events.h"
 #include "voidstar/registrar.h"
 #include "voidstar/scenes/scene.h"
-#include "voidstar/size2str.h"
 
 class Manager {
  public:
@@ -62,7 +61,8 @@ class Manager {
                                  : args_->sliding_window_length;
   }
 
-  bool slide_window(VertIndices& selected, const VertIndices& indices) {
+  size_t previously_slid_ = 0;
+  size_t slide_window(VertIndices& selected, const VertIndices& indices) {
     using offset_t = VertIndices::const_iterator::difference_type;
     const offset_t woffset = static_cast<offset_t>(sliding_window_offset_);
     const offset_t wlength = static_cast<offset_t>(sliding_window_length_);
@@ -75,10 +75,9 @@ class Manager {
       selected.assign(left, right);
       sliding_window_left_ = &left[0];
       sliding_window_right_ = &right[0];
-      std::cout << "#selected: " << size2str(selected.size()) << std::endl;
-      return true;
+      return selected.size();
     }
-    return false;
+    return 0;
   }
 
  protected:

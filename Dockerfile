@@ -18,6 +18,7 @@ RUN \
         ca-certificates \
         clang \
         curl \
+        ffmpeg \
         git \
         gzip \
         libgl1-mesa-dev \
@@ -25,7 +26,9 @@ RUN \
         software-properties-common \
         tar \
         unzip \
+        xauth \
         xorg-dev \
+        xvfb \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 RUN \
     --mount=type=cache,target=/var/cache/apt \
@@ -77,8 +80,6 @@ RUN \
  && bazel build --repo_env=CC=clang voidstar \
  # Necessary as COPY --from does not follow symlinks
  && cp /app/bazel-bin/voidstar/voidstar /
-FROM scratch AS voidstar-clang
-COPY --from=builder-clang /voidstar /
 
 # voidstar GCC
 FROM base AS builder-gcc
@@ -88,5 +89,31 @@ RUN \
  && bazel build voidstar \
  # Necessary as COPY --from does not follow symlinks
  && cp /app/bazel-bin/voidstar/voidstar /
+
+
+# xvfb GCC
+FROM builder-gcc AS xvfb-gcc
+ARG WxHxD=800x600x24
+ARG BIN=/voidstar
+ARG FILE=./data/BigPictureBG.tga
+ARG OUT=video.webm
+RUN ./xvfb.sh
+FROM scratch AS video-gcc
+COPY --from=xvfb-gcc /app/video.webm /
+
+# xvfb Clang
+FROM builder-clang AS xvfb-clang
+ARG WxHxD=800x600x24
+ARG BIN=/voidstar
+ARG FILE=./data/BigPictureBG.tga
+ARG OUT=video.webm
+RUN ./xvfb.sh
+FROM scratch AS video-clang
+COPY --from=xvfb-clang /app/video.webm /
+
+
+FROM scratch AS voidstar-clang
+COPY --from=builder-clang /voidstar /
+
 FROM scratch AS voidstar
 COPY --from=builder-gcc /voidstar /

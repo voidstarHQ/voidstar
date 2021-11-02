@@ -29,6 +29,11 @@ jobs:
     - uses: actions/checkout@v2
     - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar . --progress=plain
     - run: ./bin/voidstar --help
+    - uses: Wandalen/wretry.action@v1.0.11
+      with:
+        command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain
+        attempt_limit: 20
+        attempt_delay: 1000
 
   build_on_ubuntu_with_clang:
     name: Build on ubuntu with Clang
@@ -41,7 +46,11 @@ jobs:
     - uses: actions/checkout@v2
     - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar-clang . --progress=plain
     - run: ./bin/voidstar --help
-
+    - uses: Wandalen/wretry.action@v1.0.11
+      with:
+        command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain
+        attempt_limit: 20
+        attempt_delay: 1000
 
   build_on_macos:
     name: Build on macos
