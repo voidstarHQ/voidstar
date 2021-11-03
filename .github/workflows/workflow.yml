@@ -7,50 +7,50 @@ env:
   BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  bazel-sync:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
-    - run: DOCKER_BUILDKIT=1 docker build -o=. --target=sync . --progress=plain
-    - run: git --no-pager diff && [[ 0 -eq $(git --no-pager diff --name-only | wc -l) ]]
+  # bazel-sync:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: docker/login-action@v1
+  #     with:
+  #       username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #   - uses: actions/checkout@v2
+  #   - run: DOCKER_BUILDKIT=1 docker build -o=. --target=sync . --progress=plain
+  #   - run: git --no-pager diff && [[ 0 -eq $(git --no-pager diff --name-only | wc -l) ]]
 
-  build_on_ubuntu_with_gcc:
-    name: Build on ubuntu with GCC
-    runs-on: ubuntu-latest
-    steps:
-    - uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
-    - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar . --progress=plain
-    - run: ./bin/voidstar --help
-    - uses: Wandalen/wretry.action@v1.0.11
-      with:
-        command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain
-        attempt_limit: 20
-        attempt_delay: 1000
+  # build_on_ubuntu_with_gcc:
+  #   name: Build on ubuntu with GCC
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: docker/login-action@v1
+  #     with:
+  #       username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #   - uses: actions/checkout@v2
+  #   - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar . --progress=plain
+  #   - run: ./bin/voidstar --help
+  #   - uses: Wandalen/wretry.action@v1.0.11
+  #     with:
+  #       command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain
+  #       attempt_limit: 20
+  #       attempt_delay: 1000
 
-  build_on_ubuntu_with_clang:
-    name: Build on ubuntu with Clang
-    runs-on: ubuntu-latest
-    steps:
-    - uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
-    - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar-clang . --progress=plain
-    - run: ./bin/voidstar --help
-    - uses: Wandalen/wretry.action@v1.0.11
-      with:
-        command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain
-        attempt_limit: 20
-        attempt_delay: 1000
+  # build_on_ubuntu_with_clang:
+  #   name: Build on ubuntu with Clang
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: docker/login-action@v1
+  #     with:
+  #       username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #   - uses: actions/checkout@v2
+  #   - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar-clang . --progress=plain
+  #   - run: ./bin/voidstar --help
+  #   - uses: Wandalen/wretry.action@v1.0.11
+  #     with:
+  #       command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain
+  #       attempt_limit: 20
+  #       attempt_delay: 1000
 
   build_on_macos:
     name: Build on macos
