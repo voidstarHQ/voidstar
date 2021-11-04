@@ -127,6 +127,7 @@ jobs:
     - name: Work around windows compiler # TODO: a specific bazel --config
       run: |
         grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
+        echo "build --cxxopt='-std:c++17'" >>.bazelrc
         grep -vE 'fstack-protector-strong|fPIE' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
     - run: bazel build voidstar --strip=always --compiler=clang-cl
     - run: ls -lha ./bazel-bin/voidstar/
