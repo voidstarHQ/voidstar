@@ -102,7 +102,8 @@ jobs:
       with:
         path: "~/.cache/bazel"
         key: bazel
-    - run: bazel build voidstar --strip=always
+    - run: bazel build voidstar
+    - run: strip ./bazel-bin/voidstar/voidstar
     - run: ./bazel-bin/voidstar/voidstar --help
     - uses: actions/upload-artifact@v2
       with:
@@ -129,8 +130,9 @@ jobs:
         grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
         echo "build --cxxopt='-std:c++17'" >>.bazelrc
         grep -vE 'fstack-protector-strong|fPIE' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
-    - run: bazel build voidstar --strip=always --compiler=clang-cl
+    - run: bazel build voidstar --compiler=clang-cl
     - run: ls -lha ./bazel-bin/voidstar/
+    - run: strip ./bazel-bin/voidstar/voidstar.exe
     - run: ./bazel-bin/voidstar/voidstar.exe --help
     - uses: actions/upload-artifact@v2
       with:
