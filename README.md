@@ -1,4 +1,4 @@
-# VoidStar [![Snap Status](https://build.snapcraft.io/badge/fenollp/voidstar.svg)](https://build.snapcraft.io/user/fenollp/voidstar) [Coverity](https://scan.coverity.com/projects/fenollp-voidstar?tab=overview)
+# void*
 
 Browse data using Corti's 2D projector as well as 3D variants.
 
@@ -27,8 +27,7 @@ The actual file being represented below [is data/BigPictureBG.tga](http://www.do
 ## Usage
 
 ```shell
-bazel build voidstar
-./bazel-bin/voidstar/voidstar --move bazel-bin/voidstar/voidstar data/*
+voidstar --move bazel-bin/voidstar/voidstar data/*
 ```
 
 ```
@@ -70,43 +69,40 @@ Usage:
 
 ## Installing
 
-### docker
-
-Known to work with
-* ubuntu 18.10 + docker 18.09.0
-
-```
-docker build -f Dockerfile.dev -t voiddev .
-mv your/interesting/files/* data/
-./docker-dev.sh
-```
-
 ### on MacOS
 
-1. Download one of the `osx` files of [the latest release](https://github.com/fenollp/voidstar/releases/latest)
-1. Open Terminal.app (you can search for it in Spotlight)
+1. Download one of the `macos` files of [the latest release](https://github.com/fenollp/voidstar/releases/latest)
+1. Open `Terminal.app` (you can search for it in Spotlight)
 1. Type `chmod u+x ` then drag and drop the file you downloaded then press ENTER (now this file can be executed)
 1. Now drag and drop your executable then drag a file you want to look at (e.g. `data/dragon.vox`) then press ENTER
+  * your Terminal command should look like `/Users/you/Downloads/voidstar some_file.xyz`
 1. A window should appear. Move your mouse and play with your keyboard's arrows. You should see some colored dots in 3D.
-
-### on any Linux distribution
-
-`snap install voidstar`
-
-This relies on [snaps](https://snapcraft.io/docs/core/install).
-
-
-## Requirements
-
-* A C++ compiler
-* `bazel` that you can use through [bazelisk](https://github.com/bazelbuild/bazelisk)
 
 ### Windows
 
 https://github.com/fenollp/voidstar/issues/2
 
-### Debian
+### with Docker
 
 ```shell
-sudo apt-get install mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev xorg-dev
+DOCKER_BUILDKIT=1 docker build -o=/usr/local/bin https://github.com/voidstarHQ/voidstar.git
 ```
+
+### on any Linux distribution
+
+```shell
+snap install voidstar
+```
+
+This relies on [snaps](https://snapcraft.io/docs/core/install).
+
+
+## Hacking
+
+```shell
+bazel build voidstar
+./bazel-bin/voidstar/voidstar --move bazel-bin/voidstar/voidstar data/*
+```
+
+* A C++ compiler
+* `bazel` that you can use through [bazelisk](https://github.com/bazelbuild/bazelisk)
