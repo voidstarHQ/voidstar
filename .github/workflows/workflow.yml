@@ -130,7 +130,15 @@ jobs:
         grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
         echo "build --cxxopt='-std:c++17'" >>.bazelrc
         echo "build --cxxopt='/std:c++17'" >>.bazelrc
-        grep -vE 'fstack-protector-strong|fPIE' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
+        echo 'COPTS = []' >variables.bzl
+        # grep -vF 'fstack-protector-strong' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
+        # grep -vF 'fPIE' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
+        # grep -vF 'O2' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
+        # grep -vF 'Werror' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
+        # grep -vF 'Wall' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
+        # grep -vF 'Wextra' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
+        # grep -vF 'Wpedantic' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
+        # grep -vF 'Wformat=2' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
     - run: bazel build voidstar --verbose_failures -s #--compiler=clang-cl
     - run: ls -lha ./bazel-bin/voidstar/
     - run: strip ./bazel-bin/voidstar/voidstar.exe
