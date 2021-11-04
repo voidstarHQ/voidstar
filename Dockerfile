@@ -77,7 +77,7 @@ FROM base AS builder-clang
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
     set -ux \
- && bazel build --repo_env=CC=clang voidstar \
+ && bazel build --strip=always --repo_env=CC=clang voidstar \
  # Necessary as COPY --from does not follow symlinks
  && cp /app/bazel-bin/voidstar/voidstar /
 
@@ -86,7 +86,7 @@ FROM base AS builder-gcc
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
     set -ux \
- && bazel build voidstar \
+ && bazel build --strip=always voidstar \
  # Necessary as COPY --from does not follow symlinks
  && cp /app/bazel-bin/voidstar/voidstar /
 

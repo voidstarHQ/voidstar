@@ -102,7 +102,7 @@ jobs:
       with:
         path: "~/.cache/bazel"
         key: bazel
-    - run: bazel build voidstar
+    - run: bazel build --strip=always voidstar
     - run: ./bazel-bin/voidstar/voidstar --help
     - uses: actions/upload-artifact@v2
       with:
@@ -124,7 +124,7 @@ jobs:
       with:
         path: "~/.cache/bazel"
         key: bazel
-    - run: bazel build voidstar
+    - run: bazel build --strip=always voidstar
     - run: ls -lha ./bazel-bin/voidstar/
     - run: ./bazel-bin/voidstar/voidstar.exe --help
 
