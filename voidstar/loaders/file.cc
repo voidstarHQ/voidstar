@@ -17,7 +17,7 @@ class FileLoader final : public Loader {
   virtual void free();
 
   virtual const u8* data() { return reinterpret_cast<const u8*>(data_.data()); }
-  virtual const u8* dataChunk(u32 offset, u32 size __unused) {
+  virtual const u8* dataChunk(u32 offset, u32 size UNUSED) {
     return data() + offset;
   }
 
