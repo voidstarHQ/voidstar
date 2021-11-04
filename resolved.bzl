@@ -376,6 +376,46 @@ resolved = [
     {
         "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
         "original_attributes": {
+            "name": "mman_win32",
+            "build_file": "//third_party:mman_win32.BUILD",
+            "remote": "git://github.com/klauspost/mman-win32.git",
+        },
+        "repositories": [
+            {
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
+                "attributes": {
+                    "urls": [
+                        "https://github.com/klauspost/mman-win32/archive/7952ba1dc02451a9f2227108983f9747c6d1f3d1.tar.gz",
+                    ],
+                    "sha256": "62d1046c1e033ca05f1af1222fda5ee1bfe9cd790886c37ec09783232cbacda1",
+                    "netrc": "",
+                    "auth_patterns": {},
+                    "canonical_id": "",
+                    "strip_prefix": "mman-win32-7952ba1dc02451a9f2227108983f9747c6d1f3d1",
+                    "type": "tar.gz",
+                    "patches": [],
+                    "patch_tool": "",
+                    "patch_args": [
+                        "-p0",
+                    ],
+                    "patch_cmds": [],
+                    "patch_cmds_win": [],
+                    "build_file": "//third_party:mman_win32.BUILD",
+                    "build_file_content": "",
+                    "workspace_file_content": "",
+                    "branch": "",
+                    "release": "",
+                    "remote": "git://github.com/klauspost/mman-win32.git",
+                    "tag": "",
+                    "name": "mman_win32",
+                },
+                "output_tree_hash": "e5ee79353fa0658512a13f2d67326cf5c757095b21d10998fa24cd6aa375dc76",
+            },
+        ],
+    },
+    {
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
+        "original_attributes": {
             "name": "rules_cc",
             "branch": "main",
             "remote": "git://github.com/bazelbuild/rules_cc.git",
