@@ -129,8 +129,9 @@ jobs:
       run: |
         grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
         echo "build --cxxopt='-std:c++17'" >>.bazelrc
+        echo "build --cxxopt='/std:c++17'" >>.bazelrc
         grep -vE 'fstack-protector-strong|fPIE' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
-    - run: bazel build voidstar --compiler=clang-cl
+    - run: bazel build voidstar --compiler=clang-cl --verbose_failures -s
     - run: ls -lha ./bazel-bin/voidstar/
     - run: strip ./bazel-bin/voidstar/voidstar.exe
     - run: ./bazel-bin/voidstar/voidstar.exe --help
