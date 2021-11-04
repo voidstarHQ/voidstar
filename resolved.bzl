@@ -51,7 +51,7 @@ resolved = [
         "original_rule_class": "local_repository",
         "original_attributes": {
             "name": "bazel_tools",
-            "path": "/root/.cache/bazel/_bazel_root/install/1a4a2fac02d50c77031d44c0d91b8920/embedded_tools",
+            "path": "/root/.cache/bazel/_bazel_root/install/ee8d7e4b6774884ed2cd0aece6fc9fda/embedded_tools",
         },
         "native": "local_repository(name = \"bazel_tools\", path = __embedded_dir__ + \"/\" + \"embedded_tools\")",
     },
@@ -476,10 +476,10 @@ resolved = [
             "generator_function": "maybe",
             "generator_location": None,
             "urls": [
-                "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.5/java_tools_javac11_darwin-v10.5.zip",
-                "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.5/java_tools_javac11_darwin-v10.5.zip",
+                "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_darwin-v10.6.zip",
+                "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_darwin-v10.6.zip",
             ],
-            "sha256": "95aae0a32a170c72a68abb0b9dd6bac7ea3e08c504a5d8c6e8bf7ac51628c98f",
+            "sha256": "d15b05d2061382748f779dc566537ea567a46bcba6fa34b56d7cb6e6d668adab",
         },
         "repositories": [
             {
@@ -487,10 +487,10 @@ resolved = [
                 "attributes": {
                     "url": "",
                     "urls": [
-                        "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.5/java_tools_javac11_darwin-v10.5.zip",
-                        "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.5/java_tools_javac11_darwin-v10.5.zip",
+                        "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_darwin-v10.6.zip",
+                        "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_darwin-v10.6.zip",
                     ],
-                    "sha256": "95aae0a32a170c72a68abb0b9dd6bac7ea3e08c504a5d8c6e8bf7ac51628c98f",
+                    "sha256": "d15b05d2061382748f779dc566537ea567a46bcba6fa34b56d7cb6e6d668adab",
                     "netrc": "",
                     "auth_patterns": {},
                     "canonical_id": "",
@@ -507,7 +507,7 @@ resolved = [
                     "workspace_file_content": "",
                     "name": "remote_java_tools_darwin",
                 },
-                "output_tree_hash": "1f535000ed11b54c6295e067f10a3e0d10036e547ef1d954ed2af144584ed29a",
+                "output_tree_hash": "49fc46f867fcba1c546a3066a79e8e103dc241a3d619698a29e30e7176e29a24",
             },
         ],
     },
@@ -519,10 +519,10 @@ resolved = [
             "generator_function": "maybe",
             "generator_location": None,
             "urls": [
-                "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.5/java_tools_javac11_linux-v10.5.zip",
-                "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.5/java_tools_javac11_linux-v10.5.zip",
+                "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_linux-v10.6.zip",
+                "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_linux-v10.6.zip",
             ],
-            "sha256": "355c27c603e8fc64bb0e2d7f809741f42576d5f4540f9ce28fd55922085af639",
+            "sha256": "085c0ba53ba764e81d4c195524f3c596085cbf9cdc01dd8e6d2ae677e726af35",
         },
         "repositories": [
             {
@@ -530,10 +530,10 @@ resolved = [
                 "attributes": {
                     "url": "",
                     "urls": [
-                        "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.5/java_tools_javac11_linux-v10.5.zip",
-                        "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.5/java_tools_javac11_linux-v10.5.zip",
+                        "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_linux-v10.6.zip",
+                        "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_linux-v10.6.zip",
                     ],
-                    "sha256": "355c27c603e8fc64bb0e2d7f809741f42576d5f4540f9ce28fd55922085af639",
+                    "sha256": "085c0ba53ba764e81d4c195524f3c596085cbf9cdc01dd8e6d2ae677e726af35",
                     "netrc": "",
                     "auth_patterns": {},
                     "canonical_id": "",
@@ -550,7 +550,7 @@ resolved = [
                     "workspace_file_content": "",
                     "name": "remote_java_tools_linux",
                 },
-                "output_tree_hash": "f8a3afbc9080ca0fe5a69752653af6a25ecadbb1f3b73d0e754d6bfb47515256",
+                "output_tree_hash": "3d6b134e7235e4e7e2202d0937fedd9996dcade9b230c35766e8823a991ed77f",
             },
         ],
     },
@@ -562,10 +562,10 @@ resolved = [
             "generator_function": "maybe",
             "generator_location": None,
             "urls": [
-                "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.5/java_tools_javac11_windows-v10.5.zip",
-                "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.5/java_tools_javac11_windows-v10.5.zip",
+                "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_windows-v10.6.zip",
+                "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_windows-v10.6.zip",
             ],
-            "sha256": "0b4469ca1a9b3f26cb82fb0f4fd00096f0d839ec2fae097e7bdbb982e3a95a59",
+            "sha256": "873f1e53d1fa9c8e46b717673816cd822bb7acc474a194a18ff849fd8fa6ff00",
         },
         "repositories": [
             {
@@ -573,10 +573,10 @@ resolved = [
                 "attributes": {
                     "url": "",
                     "urls": [
-                        "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.5/java_tools_javac11_windows-v10.5.zip",
-                        "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.5/java_tools_javac11_windows-v10.5.zip",
+                        "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_windows-v10.6.zip",
+                        "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_windows-v10.6.zip",
                     ],
-                    "sha256": "0b4469ca1a9b3f26cb82fb0f4fd00096f0d839ec2fae097e7bdbb982e3a95a59",
+                    "sha256": "873f1e53d1fa9c8e46b717673816cd822bb7acc474a194a18ff849fd8fa6ff00",
                     "netrc": "",
                     "auth_patterns": {},
                     "canonical_id": "",
@@ -593,7 +593,7 @@ resolved = [
                     "workspace_file_content": "",
                     "name": "remote_java_tools_windows",
                 },
-                "output_tree_hash": "f46c859df959d9a59eb083e80c058cc032d2d7a4d48a07c8ba5d018b7541c112",
+                "output_tree_hash": "f4072a360f9f9904cebaa26cc2fa58ac5de16312eab7733eebc077f89f011f49",
             },
         ],
     },
@@ -818,6 +818,52 @@ resolved = [
                     "name": "remotejdk11_macos",
                 },
                 "output_tree_hash": "2f3bfc507eead96dd03783b6346c346e0b40050ab8b467b1aa203cd38742c15e",
+            },
+        ],
+    },
+    {
+        "original_rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+        "original_attributes": {
+            "name": "remotejdk11_macos_aarch64",
+            "generator_name": "remotejdk11_macos_aarch64",
+            "generator_function": "maybe",
+            "generator_location": None,
+            "urls": [
+                "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz",
+                "https://cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz",
+            ],
+            "sha256": "3dcc636e64ae58b922269c2dc9f20f6f967bee90e3f6847d643c4a566f1e8d8a",
+            "strip_prefix": "zulu11.45.27-ca-jdk11.0.10-macosx_aarch64",
+            "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        },
+        "repositories": [
+            {
+                "rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+                "attributes": {
+                    "url": "",
+                    "urls": [
+                        "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz",
+                        "https://cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz",
+                    ],
+                    "sha256": "3dcc636e64ae58b922269c2dc9f20f6f967bee90e3f6847d643c4a566f1e8d8a",
+                    "netrc": "",
+                    "auth_patterns": {},
+                    "canonical_id": "",
+                    "strip_prefix": "zulu11.45.27-ca-jdk11.0.10-macosx_aarch64",
+                    "type": "",
+                    "patches": [],
+                    "patch_tool": "",
+                    "patch_args": [
+                        "-p0",
+                    ],
+                    "patch_cmds": [],
+                    "patch_cmds_win": [],
+                    "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+                    "build_file_content": "",
+                    "workspace_file_content": "",
+                    "name": "remotejdk11_macos_aarch64",
+                },
+                "output_tree_hash": "e61b7bbf220e5f3b7c0c6f3f37d3e0261b1f64d196d28629232a42adbd06b1e3",
             },
         ],
     },
@@ -1092,6 +1138,52 @@ resolved = [
     {
         "original_rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
         "original_attributes": {
+            "name": "remotejdk15_macos_aarch64",
+            "generator_name": "remotejdk15_macos_aarch64",
+            "generator_function": "maybe",
+            "generator_location": None,
+            "urls": [
+                "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.29.15-ca-jdk15.0.2-macosx_aarch64.tar.gz",
+                "https://cdn.azul.com/zulu/bin/zulu15.29.15-ca-jdk15.0.2-macosx_aarch64.tar.gz",
+            ],
+            "sha256": "2613c3f15eef6b6ecd0fd102da92282b985e4573905dc902f1783d8059c1efc5",
+            "strip_prefix": "zulu15.29.15-ca-jdk15.0.2-macosx_aarch64",
+            "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        },
+        "repositories": [
+            {
+                "rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+                "attributes": {
+                    "url": "",
+                    "urls": [
+                        "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.29.15-ca-jdk15.0.2-macosx_aarch64.tar.gz",
+                        "https://cdn.azul.com/zulu/bin/zulu15.29.15-ca-jdk15.0.2-macosx_aarch64.tar.gz",
+                    ],
+                    "sha256": "2613c3f15eef6b6ecd0fd102da92282b985e4573905dc902f1783d8059c1efc5",
+                    "netrc": "",
+                    "auth_patterns": {},
+                    "canonical_id": "",
+                    "strip_prefix": "zulu15.29.15-ca-jdk15.0.2-macosx_aarch64",
+                    "type": "",
+                    "patches": [],
+                    "patch_tool": "",
+                    "patch_args": [
+                        "-p0",
+                    ],
+                    "patch_cmds": [],
+                    "patch_cmds_win": [],
+                    "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+                    "build_file_content": "",
+                    "workspace_file_content": "",
+                    "name": "remotejdk15_macos_aarch64",
+                },
+                "output_tree_hash": "3f66d0b1c8539a88c74566bbb7794a4861a5e2d43fe57da47d5041b9038863ff",
+            },
+        ],
+    },
+    {
+        "original_rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+        "original_attributes": {
             "name": "remotejdk15_win",
             "generator_name": "remotejdk15_win",
             "generator_function": "maybe",
@@ -1227,16 +1319,16 @@ resolved = [
         "original_rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
         "original_attributes": {
             "name": "android_tools",
-            "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.19.0rc3.tar.gz",
-            "sha256": "ea5c0589a01e2a9f43c20e5c145d3530e3b3bdbe7322789bc5da38d0ca49b837",
+            "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.23.0.tar.gz",
+            "sha256": "ed5290594244c2eeab41f0104519bcef51e27c699ff4b379fcbd25215270513e",
         },
         "repositories": [
             {
                 "rule_class": "@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
                 "attributes": {
-                    "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.19.0rc3.tar.gz",
+                    "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.23.0.tar.gz",
                     "urls": [],
-                    "sha256": "ea5c0589a01e2a9f43c20e5c145d3530e3b3bdbe7322789bc5da38d0ca49b837",
+                    "sha256": "ed5290594244c2eeab41f0104519bcef51e27c699ff4b379fcbd25215270513e",
                     "netrc": "",
                     "auth_patterns": {},
                     "canonical_id": "",
@@ -1253,7 +1345,7 @@ resolved = [
                     "workspace_file_content": "",
                     "name": "android_tools",
                 },
-                "output_tree_hash": "0c20b8b63dcadbe472899ac021ece0b532d42d89de5a1e93d841ead07b4a9c87",
+                "output_tree_hash": "c930d7dceb51bffcabf3b937613a350aa13b46ee29959d6787d1e7d59a180abd",
             },
         ],
     },
@@ -1268,7 +1360,7 @@ resolved = [
         "original_rule_class": "local_repository",
         "original_attributes": {
             "name": "platforms",
-            "path": "/root/.cache/bazel/_bazel_root/install/1a4a2fac02d50c77031d44c0d91b8920/platforms",
+            "path": "/root/.cache/bazel/_bazel_root/install/ee8d7e4b6774884ed2cd0aece6fc9fda/platforms",
         },
         "native": "local_repository(name = \"platforms\", path = __embedded_dir__ + \"/\" + \"platforms\")",
     },
