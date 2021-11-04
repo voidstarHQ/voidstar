@@ -97,7 +97,7 @@ jobs:
     #   with:
     #     python-version: '3.x'
     - uses: actions/checkout@v2
-    - uses: bazelbuild/setup-bazelisk@v1
+    # - uses: bazelbuild/setup-bazelisk@v1
     - uses: actions/cache@v2
       with:
         path: "~/.cache/bazel"
@@ -124,42 +124,19 @@ jobs:
       with:
         path: "~/.cache/bazel"
         key: bazel
+    - name: Work around windows compiler # TODO: a specific bazel --config
+    - run: |
+        grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
+        grep -vE 'fstack-protector-strong|fPIE' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
     - run: bazel build voidstar --strip=always --compiler=clang-cl
     - run: ls -lha ./bazel-bin/voidstar/
     - run: ./bazel-bin/voidstar/voidstar.exe --help
-
-  #   # Trying to install & use GCC
-  #   # From https://github.com/onqtam/doctest/pull/285/files
-  #   - name: Install (Windows)
-  #     shell: powershell
-  #     run: |
-  #       Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-  #       scoop install ninja --global
-  #       #if ("${{ matrix.compiler }}".StartsWith("clang")) {
-  #       #  scoop install llvm --global
-  #       #}
-  #       #if ("${{ matrix.compiler }}" -eq "gcc") {
-  #         # Chocolatey GCC is broken on the windows-2019 image.
-  #         # See: https://github.com/DaanDeMeyer/doctest/runs/231595515
-  #         # See: https://github.community/t5/GitHub-Actions/Something-is-wrong-with-the-chocolatey-installed-version-of-gcc/td-p/32413
-  #         scoop install gcc --global
-  #         echo "::set-env name=CC::gcc"
-  #         echo "::set-env name=CXX::g++"
-  #       #} elseif ("${{ matrix.compiler }}" -eq "clang") {
-  #       #  echo "::set-env name=CC::clang"
-  #       #  echo "::set-env name=CXX::clang++"
-  #       #} else {
-  #       #  echo "::set-env name=CC::${{ matrix.compiler }}"
-  #       #  echo "::set-env name=CXX::${{ matrix.compiler }}"
-  #       #}
-  #       # Scoop modifies the PATH so we make the modified PATH global.
-  #       echo "::set-env name=PATH::$env:PATH"
-  #   - name: Configure x64
-  #     run: .github\workflows\vsenv.bat -arch=x64 -host_arch=x64
-
-  #   - shell: bash
-  #     run: |
-  #       gcc --version || true
-  #       clang --version || true
-
-  #   - run: bazelisk build voidstar
+    - uses: actions/upload-artifact@v2
+      with:
+        name: voidstar_windows-latest
+        path: ./bazel-bin/voidstar/voidstar.exe
+    - run: mv ./bazel-bin/voidstar/voidstar.exe voidstar_clang_windows.exe
+    - uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: voidstar_clang_windows.exe
