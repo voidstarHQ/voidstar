@@ -5,6 +5,11 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  USE_BAZEL_VERSION: '4.2.1'
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   bazel-sync:
@@ -88,11 +93,16 @@ jobs:
     name: Build on macos
     runs-on: macos-latest
     steps:
-    - uses: actions/setup-python@v1
-      with:
-        python-version: '3.x'
+    # - uses: actions/setup-python@v1
+    #   with:
+    #     python-version: '3.x'
     - uses: actions/checkout@v2
-    - run: bazelisk build voidstar
+    - uses: bazelbuild/setup-bazelisk@v1
+    - uses: actions/cache@v2
+      with:
+        path: "~/.cache/bazel"
+        key: bazel
+    - run: bazel build voidstar
     - run: ./bazel-bin/voidstar/voidstar --help
     - uses: actions/upload-artifact@v2
       with:
@@ -104,11 +114,19 @@ jobs:
       with:
         files: voidstar_clang_macos
 
-  # build_on_windows: FIXME
-  #   name: Build on windows
-  #   runs-on: windows-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
+  build_on_windows:
+    name: Build on windows
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: bazelbuild/setup-bazelisk@v1
+    - uses: actions/cache@v2
+      with:
+        path: "~/.cache/bazel"
+        key: bazel
+    - run: bazel build voidstar
+    - run: ls -lha ./bazel-bin/voidstar/
+    - run: ./bazel-bin/voidstar/voidstar.exe --help
 
   #   # Trying to install & use GCC
   #   # From https://github.com/onqtam/doctest/pull/285/files

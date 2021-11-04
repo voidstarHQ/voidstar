@@ -38,7 +38,7 @@ RUN \
  && apt update \
  && apt install -y --no-install-recommends \
         openjdk-8-jdk
-ARG BAZEL_VERSION=4.0.0
+ARG BAZEL_VERSION=4.2.1
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
     set -ux \
