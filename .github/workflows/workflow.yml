@@ -39,17 +39,17 @@ jobs:
         attempt_limit: 20
         attempt_delay: 1000
     - run: mv ./bin/voidstar voidstar_gcc_ubuntu
-    - run: mv ./video.webm voidstar_gcc_ubuntu.webm
+    - run: mv ./video.webm video_gcc_ubuntu.webm
     - uses: actions/upload-artifact@v2
       with:
         name: video-gcc_ubuntu
-        path: ./voidstar_gcc_ubuntu.webm
+        path: ./video_gcc_ubuntu.webm
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           voidstar_gcc_ubuntu
-          voidstar_gcc_ubuntu.webm
+          video_gcc_ubuntu.webm
 
   build_on_ubuntu_with_clang:
     name: Build on ubuntu with Clang
@@ -72,17 +72,17 @@ jobs:
         attempt_limit: 20
         attempt_delay: 1000
     - run: mv ./bin/voidstar voidstar_clang_ubuntu
-    - run: mv ./video.webm voidstar_clang_ubuntu.webm
+    - run: mv ./video.webm video_clang_ubuntu.webm
     - uses: actions/upload-artifact@v2
       with:
         name: video-clang_ubuntu
-        path: ./voidstar_clang_ubuntu.webm
+        path: ./video_clang_ubuntu.webm
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           voidstar_clang_ubuntu
-          voidstar_clang_ubuntu.webm
+          video_clang_ubuntu.webm
 
   build_on_macos:
     name: Build on macos
