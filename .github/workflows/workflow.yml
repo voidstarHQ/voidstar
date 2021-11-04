@@ -120,7 +120,6 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - run: "C:/Program Files/LLVM/bin/clang-cl.exe" --version
     - uses: bazelbuild/setup-bazelisk@v1
     - uses: actions/cache@v2
       with:
@@ -132,7 +131,7 @@ jobs:
         echo "build --cxxopt='-std:c++17'" >>.bazelrc
         echo "build --cxxopt='/std:c++17'" >>.bazelrc
         grep -vE 'fstack-protector-strong|fPIE' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
-    - run: bazel build voidstar --compiler=clang-cl --verbose_failures -s
+    - run: bazel build voidstar --verbose_failures -s #--compiler=clang-cl
     - run: ls -lha ./bazel-bin/voidstar/
     - run: strip ./bazel-bin/voidstar/voidstar.exe
     - run: ./bazel-bin/voidstar/voidstar.exe --help
