@@ -1,6 +1,9 @@
-# syntax=docker/dockerfile:1@sha256:42399d4635eddd7a9b8a24be879d2f9a930d0ed040a61324cfdf59ef1357b3b2
+# syntax=docker.io/docker/dockerfile:1@sha256:42399d4635eddd7a9b8a24be879d2f9a930d0ed040a61324cfdf59ef1357b3b2
 
-FROM ubuntu:20.04@sha256:82becede498899ec668628e7cb0ad87b6e1c371cb8a1e597d83a47fac21d6af3 AS base
+FROM --platform=$BUILDPLATFORM docker.io/whilp/buildifier@sha256:67da91fdddd40e9947153bc9157ab9103c141fcabcdbf646f040ba7a763bc531 AS buildifier
+FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu:20.04@sha256:82becede498899ec668628e7cb0ad87b6e1c371cb8a1e597d83a47fac21d6af3 AS ubuntu
+
+FROM ubuntu AS base
 WORKDIR /app
 ENV DEBIAN_FRONTEND=noninteractive
 RUN \
@@ -63,10 +66,9 @@ RUN \
     # Ideally we'd be executing buildifier from within the context of its
     # container but it turns out to need a shell:
     #17 [sync-fmt 2/2] RUN     --mount=from=sync-nofmt,source=/app/resolved.bzl,target=/resolved.bzl,readwrite   /buildifier -lint=fix /resolved.bzl
-    #17 sha256:40d4dd8f67b52312e1515cc06559ee703c9944322416f9aa5c0566f1c541d836
     #17 0.441 container_linux.go:367: starting container process caused: exec: "/bin/sh": stat /bin/sh: no such file or directory
     #17 ERROR: executor failed running [/bin/sh -c /buildifier -lint=fix /resolved.bzl]: exit code: 1
-    --mount=from=whilp/buildifier,source=/buildifier,target=/buildifier \
+    --mount=from=buildifier,source=/buildifier,target=/buildifier \
     set -ux \
  && /buildifier -lint=fix resolved.bzl
 FROM scratch AS sync

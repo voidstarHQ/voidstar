@@ -6,4 +6,5 @@ cc_library(
     name = "mman_win32",
     srcs = ["mman.c"],
     hdrs = ["mman.h"],
+    visibility = ["//visibility:public"],
 )

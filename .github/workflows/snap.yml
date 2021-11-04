@@ -10,15 +10,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: samuelmeuli/action-snapcraft@v1
-      with:
-        use_lxd: true
+    # - uses: samuelmeuli/action-snapcraft@v1
+    #   with:
+    #     use_lxd: true
 
-    - name: Build snap
-      run: sg lxd -c 'snapcraft --use-lxd'
+    # - name: Build snap
+    #   run: sg lxd -c 'snapcraft --use-lxd'
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: snapped
-        path: '*.snap'
-        if-no-files-found: error
+    # - uses: actions/upload-artifact@v2
+    #   with:
+    #     name: snapped
+    #     path: '*.snap'
+    #     if-no-files-found: error
