@@ -63,6 +63,7 @@ Usage:
   # Use > to slide faster, < to slow down
   # SPACE to toggle spinning the shape
   # Press O to reset the camera position
+  # Use B to change background color
   # ESC to quit
 
 ```
