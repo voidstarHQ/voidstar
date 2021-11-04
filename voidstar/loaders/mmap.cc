@@ -1,7 +1,12 @@
 #include <fcntl.h>
-#include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#ifdef _WIN32
+#include "mman.h"
+#else
+#include <sys/mman.h>
+#endif
 
 #include "voidstar/loaders/loader.h"
 #include "voidstar/loaders/uri.h"
@@ -63,8 +68,8 @@ void MmapLoader::load() {
 
 void MmapLoader::free() {
   munmap(data_, size_);
+  data_ = nullptr;
   offset_ = 0;
-  data_ = 0;
   size_ = 0;
   // fd?
   // close(fd_)
