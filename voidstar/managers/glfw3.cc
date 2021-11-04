@@ -251,14 +251,23 @@ void GLFW3Manager::run() {
     glfwSetCursorPos(window_, viewport_width_ / 2, viewport_height_ / 2);
   }
 
+  static constexpr float bgColors[][3] = {
+      {0, 0, 0},           // black
+      {1, 0, 0},           // R
+      {0, 1, 0},           // G
+      {0, 0, 1},           // B
+      {0.2f, 0.3f, 0.3f},  // gray
+      {1, 1, 1},           // white
+  };
+  size_t bgi = 0;
+
   double lastTime = glfwGetTime();
   while (!glfwWindowShouldClose(window_)) {
     // process pending events
     events_->update();
 
     // Clear the colorbuffer
-    glClearColor(0, 0, 0, 1);
-    // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(bgColors[bgi][0], bgColors[bgi][1], bgColors[bgi][2], 1);
     if (is3D) {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     } else {
@@ -290,10 +299,12 @@ void GLFW3Manager::run() {
     if (is3D)
       glfwSetCursorPos(window_, viewport_width_ / 2, viewport_height_ / 2);
     if (events_->keyPressed(GLFW_KEY_ESCAPE))
-      glfwSetWindowShouldClose(window_, GL_TRUE);
+      glfwSetWindowShouldClose(window_, GLFW_TRUE);
     if (events_->keyPressed('F')) ToggleFullscreen();
     if (events_->keyPressed('H')) loadPrevFile();
     if (events_->keyPressed('L')) loadNextFile();
+    if (events_->keyPressed('B'))
+      bgi = (bgi + 1) % (sizeof(bgColors) / sizeof(bgColors[0]));
     if (!args_->move_window && args_->exit_at_fin)
       glfwSetWindowShouldClose(window_, GLFW_TRUE);
   }
