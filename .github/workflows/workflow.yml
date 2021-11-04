@@ -98,10 +98,11 @@ jobs:
       with:
         name: voidstar_macos-latest
         path: ./bazel-bin/voidstar/voidstar
+    - run: mv ./bazel-bin/voidstar/voidstar voidstar_clang_macos
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ./bazel-bin/voidstar/voidstar
+        files: voidstar_clang_macos
 
   # build_on_windows: FIXME
   #   name: Build on windows
