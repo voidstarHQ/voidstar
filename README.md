@@ -78,10 +78,6 @@ Usage:
   * your Terminal command should look like `/Users/you/Downloads/voidstar_clang_macos some_file.xyz`
 1. A window should appear. Move your mouse and play with your keyboard's arrows. You should see some colored dots in 3D.
 
-### Windows
-
-https://github.com/fenollp/voidstar/issues/2
-
 ### with Docker
 
 ```shell
