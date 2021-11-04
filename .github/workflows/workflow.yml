@@ -42,7 +42,7 @@ jobs:
     - run: mv ./video.webm voidstar_gcc_ubuntu.webm
     - uses: actions/upload-artifact@v2
       with:
-        name: voidstar_video-gcc_ubuntu
+        name: video-gcc_ubuntu
         path: ./voidstar_gcc_ubuntu.webm
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
@@ -75,7 +75,7 @@ jobs:
     - run: mv ./video.webm voidstar_clang_ubuntu.webm
     - uses: actions/upload-artifact@v2
       with:
-        name: voidstar_video-clang_ubuntu
+        name: video-clang_ubuntu
         path: ./voidstar_clang_ubuntu.webm
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
