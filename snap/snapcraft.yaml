@@ -33,6 +33,7 @@ description: |
     # Use > to slide faster, < to slow down
     # SPACE to toggle spinning the shape
     # Press O to reset the camera position
+    # Use B to change background color
     # ESC to quit
 
 
@@ -43,7 +44,7 @@ architectures:
 - build-on: amd64
   run-on: [amd64, i386]
 - build-on: arm64
-- build-on: armhf
+# - build-on: armhf # TODO: https://github.com/koenvervloesem/bazel-on-arm/releases
 
 apps:
   voidstar:
