@@ -12,108 +12,108 @@ defaults:
     shell: bash
 
 jobs:
-  bazel-sync:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
-    - run: DOCKER_BUILDKIT=1 docker build -o=. --target=sync . --progress=plain
-    - run: git --no-pager diff && [[ 0 -eq $(git --no-pager diff --name-only | wc -l) ]]
+  # bazel-sync:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: docker/login-action@v1
+  #     with:
+  #       username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #   - uses: actions/checkout@v2
+  #   - run: DOCKER_BUILDKIT=1 docker build -o=. --target=sync . --progress=plain
+  #   - run: git --no-pager diff && [[ 0 -eq $(git --no-pager diff --name-only | wc -l) ]]
 
-  build_on_ubuntu_with_gcc:
-    name: on ubuntu with GCC
-    runs-on: ubuntu-latest
-    steps:
-    - uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
-    - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar . --progress=plain
-    - run: ./bin/voidstar --help
-    - uses: actions/upload-artifact@v2
-      with:
-        name: voidstar_gcc_ubuntu
-        path: ./bin/voidstar
-    - uses: Wandalen/wretry.action@v1.0.11
-      with:
-        command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain
-        attempt_limit: 20
-        attempt_delay: 1000
-    - run: mv ./bin/voidstar voidstar_gcc_ubuntu
-    - run: mv ./video.webm video_gcc_ubuntu.webm
-    - uses: actions/upload-artifact@v2
-      with:
-        name: video-gcc_ubuntu
-        path: ./video_gcc_ubuntu.webm
-    - uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: |
-          voidstar_gcc_ubuntu
-          video_gcc_ubuntu.webm
+  # build_on_ubuntu_with_gcc:
+  #   name: on ubuntu with GCC
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: docker/login-action@v1
+  #     with:
+  #       username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #   - uses: actions/checkout@v2
+  #   - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar . --progress=plain
+  #   - run: ./bin/voidstar --help
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: voidstar_gcc_ubuntu
+  #       path: ./bin/voidstar
+  #   - uses: Wandalen/wretry.action@v1.0.11
+  #     with:
+  #       command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain
+  #       attempt_limit: 20
+  #       attempt_delay: 1000
+  #   - run: mv ./bin/voidstar voidstar_gcc_ubuntu
+  #   - run: mv ./video.webm video_gcc_ubuntu.webm
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: video-gcc_ubuntu
+  #       path: ./video_gcc_ubuntu.webm
+  #   - uses: softprops/action-gh-release@v1
+  #     if: startsWith(github.ref, 'refs/tags/')
+  #     with:
+  #       files: |
+  #         voidstar_gcc_ubuntu
+  #         video_gcc_ubuntu.webm
 
-  build_on_ubuntu_with_clang:
-    name: on ubuntu with Clang
-    runs-on: ubuntu-latest
-    steps:
-    - uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
-    - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar-clang . --progress=plain
-    - run: ./bin/voidstar --help
-    - uses: actions/upload-artifact@v2
-      with:
-        name: voidstar_clang_ubuntu
-        path: ./bin/voidstar
-    - uses: Wandalen/wretry.action@v1.0.11
-      with:
-        command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain
-        attempt_limit: 20
-        attempt_delay: 1000
-    - run: mv ./bin/voidstar voidstar_clang_ubuntu
-    - run: mv ./video.webm video_clang_ubuntu.webm
-    - uses: actions/upload-artifact@v2
-      with:
-        name: video-clang_ubuntu
-        path: ./video_clang_ubuntu.webm
-    - uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: |
-          voidstar_clang_ubuntu
-          video_clang_ubuntu.webm
+  # build_on_ubuntu_with_clang:
+  #   name: on ubuntu with Clang
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: docker/login-action@v1
+  #     with:
+  #       username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #   - uses: actions/checkout@v2
+  #   - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar-clang . --progress=plain
+  #   - run: ./bin/voidstar --help
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: voidstar_clang_ubuntu
+  #       path: ./bin/voidstar
+  #   - uses: Wandalen/wretry.action@v1.0.11
+  #     with:
+  #       command: DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain
+  #       attempt_limit: 20
+  #       attempt_delay: 1000
+  #   - run: mv ./bin/voidstar voidstar_clang_ubuntu
+  #   - run: mv ./video.webm video_clang_ubuntu.webm
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: video-clang_ubuntu
+  #       path: ./video_clang_ubuntu.webm
+  #   - uses: softprops/action-gh-release@v1
+  #     if: startsWith(github.ref, 'refs/tags/')
+  #     with:
+  #       files: |
+  #         voidstar_clang_ubuntu
+  #         video_clang_ubuntu.webm
 
-  build_on_macos:
-    name: on macos
-    runs-on: macos-latest
-    steps:
-    # - uses: actions/setup-python@v1
-    #   with:
-    #     python-version: '3.x'
-    - uses: actions/checkout@v2
-    # - uses: bazelbuild/setup-bazelisk@v1
-    - uses: actions/cache@v2
-      with:
-        path: "~/.cache/bazel"
-        key: bazel
-    - run: bazel build voidstar
-    - run: strip ./bazel-bin/voidstar/voidstar
-    - run: ./bazel-bin/voidstar/voidstar --help
-    - uses: actions/upload-artifact@v2
-      with:
-        name: voidstar_macos-latest
-        path: ./bazel-bin/voidstar/voidstar
-    - run: mv ./bazel-bin/voidstar/voidstar voidstar_clang_macos
-    - uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: voidstar_clang_macos
+  # build_on_macos:
+  #   name: on macos
+  #   runs-on: macos-latest
+  #   steps:
+  #   # - uses: actions/setup-python@v1
+  #   #   with:
+  #   #     python-version: '3.x'
+  #   - uses: actions/checkout@v2
+  #   # - uses: bazelbuild/setup-bazelisk@v1
+  #   - uses: actions/cache@v2
+  #     with:
+  #       path: "~/.cache/bazel"
+  #       key: bazel
+  #   - run: bazel build voidstar
+  #   - run: strip ./bazel-bin/voidstar/voidstar
+  #   - run: ./bazel-bin/voidstar/voidstar --help
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: voidstar_macos-latest
+  #       path: ./bazel-bin/voidstar/voidstar
+  #   - run: mv ./bazel-bin/voidstar/voidstar voidstar_clang_macos
+  #   - uses: softprops/action-gh-release@v1
+  #     if: startsWith(github.ref, 'refs/tags/')
+  #     with:
+  #       files: voidstar_clang_macos
 
   build_on_windows:
     name: on windows
