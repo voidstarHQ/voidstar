@@ -18,7 +18,7 @@ cc_library(
 LOADERS = {
     "fd": [],
     "file": [],
-    "mmap": ["@mman_win32"],
+    "mmap": ["//third_party:mman"],
 }
 
 cc_library(
