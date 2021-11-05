@@ -128,8 +128,8 @@ jobs:
     - name: Work around windows compiler # TODO: a specific bazel --config
       run: |
         grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
-        # echo "build --cxxopt='-std:c++17'" >>.bazelrc
-        echo "build --cxxopt='/std:c++17'" >>.bazelrc
+        echo "build --cxxopt='-std:c++17'" >>.bazelrc
+        # echo "build --cxxopt='/std:c++17'" >>.bazelrc
         echo 'COPTS = []' >variables.bzl
         # grep -vF 'fstack-protector-strong' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
         # grep -vF 'fPIE' variables.bzl >variables.bzl~ && mv variables.bzl~ variables.bzl
