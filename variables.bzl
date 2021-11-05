@@ -1,5 +1,4 @@
 COPTS = [
-    # "-Wno-c++98-c++11-compat", # It seems -Wc++98-compat is automatic with Windows host
     ### https://airbus-seclab.github.io/c-compiler-security/#gcc-tldr
     "-O2",
     ###
