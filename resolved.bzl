@@ -124,6 +124,46 @@ resolved = [
     {
         "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
         "original_attributes": {
+            "name": "getopt",
+            "build_file": "//third_party:getopt.BUILD",
+            "remote": "git://github.com/skandhurkat/Getopt-for-Visual-Studio.git",
+        },
+        "repositories": [
+            {
+                "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
+                "attributes": {
+                    "urls": [
+                        "https://github.com/skandhurkat/Getopt-for-Visual-Studio/archive/6567b18432b1b4dc0e71f71b8601df28c1ac09f8.tar.gz",
+                    ],
+                    "sha256": "f761fed17ba13ff4a0b327bc76a050a6f3e992b55205446872943751173f1f6e",
+                    "netrc": "",
+                    "auth_patterns": {},
+                    "canonical_id": "",
+                    "strip_prefix": "Getopt-for-Visual-Studio-6567b18432b1b4dc0e71f71b8601df28c1ac09f8",
+                    "type": "tar.gz",
+                    "patches": [],
+                    "patch_tool": "",
+                    "patch_args": [
+                        "-p0",
+                    ],
+                    "patch_cmds": [],
+                    "patch_cmds_win": [],
+                    "build_file": "//third_party:getopt.BUILD",
+                    "build_file_content": "",
+                    "workspace_file_content": "",
+                    "branch": "",
+                    "release": "",
+                    "remote": "git://github.com/skandhurkat/Getopt-for-Visual-Studio.git",
+                    "tag": "",
+                    "name": "getopt",
+                },
+                "output_tree_hash": "23696d6ee9cf58490c2a18e34fa84faccbc49afa1c1655abd655a7a5cc125f25",
+            },
+        ],
+    },
+    {
+        "original_rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
+        "original_attributes": {
             "name": "glew",
             "strip_prefix": "glew-{tag_digits}",
             "type": "tar.gz",

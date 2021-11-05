@@ -1,9 +1,13 @@
-#include "voidstar/arguments.h"
-
-#include <getopt.h>
-
 #include <cassert>
 #include <iostream>
+
+#ifdef _WIN32
+#include "getopt.h"
+#else
+#include <getopt.h>
+#endif
+
+#include "voidstar/arguments.h"
 
 REGISTRY_IMPLEMENTATION_FOR(Meta)
 

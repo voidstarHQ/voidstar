@@ -41,3 +41,11 @@ cc_library(
         "//conditions:default": [],
     }),
 )
+
+cc_library(
+    name = "getopt",
+    deps = select({
+        ":windows": ["@getopt//:getopt"],
+        "//conditions:default": [],
+    }),
+)
