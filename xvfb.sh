@@ -22,6 +22,14 @@ case "$file" in
 ;;*) ;;
 esac
 
+step=1024
+filesize=$(stat --printf=%s "$file")
+[[ "$filesize" -ge     999999 ]] && ((step*=2))
+[[ "$filesize" -ge    9999999 ]] && ((step*=2))
+[[ "$filesize" -ge   99999999 ]] && ((step*=2))
+[[ "$filesize" -ge  999999999 ]] && ((step*=2))
+[[ "$filesize" -ge 9999999999 ]] && ((step*=2))
+
 rm -rf /tmp/xvfb-run.*
 
 xvfb-run \
@@ -31,6 +39,7 @@ xvfb-run \
   "$bin" \
     --move \
     --exit-at-fin \
+    --slide-step "$step" \
     "$file" &
 xvfb=$!
 
@@ -74,17 +83,16 @@ case "$out" in
     <./stop \
       XAUTHORITY=$(echo /tmp/xvfb*/Xauthority) \
         ffmpeg \
-          -r 30  \
+          -r 24  \
           -f x11grab \
           -draw_mouse 0 \
           -s "$(cut -dx -f1-2 <<<"$wxhxd")" \
           -i :"$display" \
-          -c:v libx265 \
-          -g 1 \
-          -preset ultrafast \
+          -c:v libx264 \
+          -b:v 64k \
+          -crf 36 \
+          -preset veryslow \
           -tune zerolatency \
-          -x265-params lossless=1 \
-          -vtag hvc1 \
           -an \
           "$out" &
     companion=$!
@@ -97,12 +105,3 @@ esac
 wait $xvfb
 echo q >stop # https://stackoverflow.com/a/21032143/1418165
 wait $companion
-
-case "$out" in
-  *.mp4)
-    mv "$out" input
-    ffmpeg -y -i input -c:v libx265 -b:v 2600k -x265-params pass=1 -an -f null /dev/null
-    ffmpeg -i input -c:v libx265 -b:v 2600k -x265-params pass=2 -an "$out"
-    ;;
-  *)
-esac
