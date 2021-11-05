@@ -100,20 +100,20 @@ FROM builder-gcc AS xvfb-gcc
 ARG WxHxD=800x600x24
 ARG BIN=/voidstar
 ARG FILE=./data/BigPictureBG.tga
-ARG OUT=video.webm
+ARG OUT=webm
 RUN ./xvfb.sh
 FROM scratch AS video-gcc
-COPY --from=xvfb-gcc /app/video.webm /
+COPY --from=xvfb-gcc /app/video.* /
 
 # xvfb Clang
 FROM builder-clang AS xvfb-clang
 ARG WxHxD=800x600x24
 ARG BIN=/voidstar
 ARG FILE=./data/BigPictureBG.tga
-ARG OUT=video.webm
+ARG OUT=webm
 RUN ./xvfb.sh
 FROM scratch AS video-clang
-COPY --from=xvfb-clang /app/video.webm /
+COPY --from=xvfb-clang /app/video.* /
 
 
 FROM scratch AS voidstar-clang
