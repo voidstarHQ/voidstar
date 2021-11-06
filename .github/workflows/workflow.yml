@@ -40,17 +40,17 @@ jobs:
         path: ./bin/voidstar
     - run: DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain
     - run: mv ./bin/voidstar voidstar_gcc_ubuntu
-    - run: mv ./video.webm video_gcc_ubuntu.webm
+    - run: mv ./video.mp4 video_gcc_ubuntu.mp4
     - uses: actions/upload-artifact@v2
       with:
         name: video-gcc_ubuntu
-        path: ./video_gcc_ubuntu.webm
+        path: ./video_gcc_ubuntu.mp4
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           voidstar_gcc_ubuntu
-          video_gcc_ubuntu.webm
+          video_gcc_ubuntu.mp4
 
   build_on_ubuntu_with_clang:
     name: on ubuntu with Clang
@@ -69,17 +69,17 @@ jobs:
         path: ./bin/voidstar
     - run: DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain
     - run: mv ./bin/voidstar voidstar_clang_ubuntu
-    - run: mv ./video.webm video_clang_ubuntu.webm
+    - run: mv ./video.mp4 video_clang_ubuntu.mp4
     - uses: actions/upload-artifact@v2
       with:
         name: video-clang_ubuntu
-        path: ./video_clang_ubuntu.webm
+        path: ./video_clang_ubuntu.mp4
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           voidstar_clang_ubuntu
-          video_clang_ubuntu.webm
+          video_clang_ubuntu.mp4
 
   build_on_macos:
     name: on macos
@@ -92,8 +92,9 @@ jobs:
     # - uses: bazelbuild/setup-bazelisk@v1
     - uses: actions/cache@v2
       with:
-        path: "~/.cache/bazel"
+        path: ~/.cache/bazel
         key: bazel
+    - run: chown $USER -R ~/.cache/bazel
     - run: bazel build voidstar
     - run: strip ./bazel-bin/voidstar/voidstar
     - run: ./bazel-bin/voidstar/voidstar --help
@@ -116,8 +117,9 @@ jobs:
     - uses: bazelbuild/setup-bazelisk@v1
     - uses: actions/cache@v2
       with:
-        path: "~/.cache/bazel"
+        path: ~/.cache/bazel
         key: bazel
+    - run: chown $USER -R ~/.cache/bazel
     - name: Work around windows compiler # TODO: a specific bazel --config
       run: |
         grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
