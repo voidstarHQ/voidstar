@@ -95,15 +95,15 @@ jobs:
       with:
         path: ~/.cache/bazel
         key: bazel
-    - run: chown $USER -R ~/.cache/bazel
+    - run: chown -R $USER:staff ~/.cache/bazel
     - run: bazel build voidstar
-    - run: strip ./bazel-bin/voidstar/voidstar
-    - run: ./bazel-bin/voidstar/voidstar --help
+    - run: cp ./bazel-bin/voidstar/voidstar voidstar_clang_macos
+    - run: strip voidstar_clang_macos
+    - run: voidstar_clang_macos --help
     - uses: actions/upload-artifact@v2
       with:
         name: voidstar_macos-latest
-        path: ./bazel-bin/voidstar/voidstar
-    - run: mv ./bazel-bin/voidstar/voidstar voidstar_clang_macos
+        path: voidstar_clang_macos
     - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
@@ -120,7 +120,7 @@ jobs:
       with:
         path: ~/.cache/bazel
         key: bazel
-    - run: chown $USER -R ~/.cache/bazel
+    - run: chown -R $USER ~/.cache/bazel
     - name: Work around windows compiler # TODO: a specific bazel --config
       run: |
         grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
