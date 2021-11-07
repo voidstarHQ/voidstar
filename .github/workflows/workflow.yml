@@ -86,11 +86,7 @@ jobs:
     name: on macos
     runs-on: macos-latest
     steps:
-    # - uses: actions/setup-python@v1
-    #   with:
-    #     python-version: '3.x'
     - uses: actions/checkout@v2
-    # - uses: bazelbuild/setup-bazelisk@v1
     - uses: actions/cache@v2
       with:
         path: ~/.cache/bazel

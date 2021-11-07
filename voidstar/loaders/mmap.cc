@@ -1,6 +1,7 @@
 #include <fcntl.h>
-#include <sys/stat.h>
 #include <unistd.h>
+
+#include <filesystem>
 
 #ifdef _WIN32
 #include "mman.h"
@@ -20,10 +21,8 @@ class MmapLoader final : public Loader {
   }
 
   static bool CanLoad(const std::string& uri) {
-    struct stat info;
     if (Uri<>::parse(uri).protocol.empty())
-      if (!stat(uri.c_str(), &info))
-        if (~info.st_mode & S_IFDIR) return true;
+      return !std::filesystem::is_directory(uri);
     return false;
   };
 
@@ -45,18 +44,18 @@ class MmapLoader final : public Loader {
 REGISTER_LOADER(MmapLoader)
 
 void MmapLoader::load() {
+  std::error_code ec;
+  auto filesize = std::filesystem::file_size(path_, ec);
+  if (ec) throw std::invalid_argument(ec.message());
+  if (filesize > std::numeric_limits<u32>::max())
+    size_ = std::numeric_limits<u32>::max();
+  else
+    size_ = static_cast<u32>(filesize);
+
   if (fd_ < 0) {
     fd_ = open(path_.c_str(), O_RDONLY);
     if (fd_ < 0) throw std::runtime_error("Impossible to read file");
   }
-
-  auto fdsize = lseek(fd_, 0, SEEK_END);
-  if (fdsize == -1) throw std::invalid_argument("Cannot read file");
-  if (fdsize > std::numeric_limits<u32>::max())
-    size_ = std::numeric_limits<u32>::max();
-  else
-    size_ = static_cast<u32>(fdsize);
-  lseek(fd_, 0, SEEK_SET);
 
   auto base = mmap(0, size_, PROT_READ, MAP_PRIVATE, fd_, 0);
   if (nullptr == base) {
