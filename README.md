@@ -75,12 +75,8 @@ Usage:
 1. Open `Terminal.app` (you can search for it in Spotlight)
 1. Type `chmod u+x ` then drag and drop the file you downloaded then press ENTER (now this file can be executed)
 1. Now drag and drop your executable then drag a file you want to look at (e.g. `data/dragon.vox`) then press ENTER
-  * your Terminal command should look like `/Users/you/Downloads/voidstar some_file.xyz`
+  * your Terminal command should look like `/Users/you/Downloads/voidstar_clang_macos some_file.xyz`
 1. A window should appear. Move your mouse and play with your keyboard's arrows. You should see some colored dots in 3D.
-
-### Windows
-
-https://github.com/fenollp/voidstar/issues/2
 
 ### with Docker
 

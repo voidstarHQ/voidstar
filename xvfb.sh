@@ -1,27 +1,34 @@
 #!/bin/bash -eux
 set -o pipefail
 
-_kill_procs() {
-  kill -TERM $companion
-  wait $companion
-  kill -TERM $xvfb
-}
-trap _kill_procs SIGTERM
+# _kill_procs() {
+#   kill -TERM $companion
+#   wait $companion
+#   kill -TERM $xvfb
+# }
+# trap _kill_procs SIGTERM
 
 display=99
 
 wxhxd=${WxHxD:-800x600x24}
 bin=${BIN:-./bin/voidstar}
 file=${FILE:-"$bin"}
-out=${OUT:-video.webm}
+out=video.${OUT:-webm}
 
 case "$file" in
   http://*|https://*)
     curl -fsSLo /file "$file"
     file=/file
-    # ls -lh "$file"; exit 42
 ;;*) ;;
 esac
+
+step=1024
+filesize=$(stat --printf=%s "$file")
+[[ "$filesize" -ge     999999 ]] && ((step*=2))
+[[ "$filesize" -ge    9999999 ]] && ((step*=2))
+[[ "$filesize" -ge   99999999 ]] && ((step*=2))
+[[ "$filesize" -ge  999999999 ]] && ((step*=2))
+[[ "$filesize" -ge 9999999999 ]] && ((step*=2))
 
 rm -rf /tmp/xvfb-run.*
 
@@ -32,33 +39,69 @@ xvfb-run \
   "$bin" \
     --move \
     --exit-at-fin \
+    --slide-step "$step" \
     "$file" &
 xvfb=$!
 
 touch ~/.Xauthority
-xauth generate :0 . trusted || true
-xauth list
+attempts=0
+until ls /tmp/xvfb*/Xauthority >/dev/null; do
+    set +o errexit
+    xauth generate :0 . trusted
+    failed=$?
+    set +o errexit
+    xauth list
+    ((attempts++))
+    [[ $attempts -eq 20 ]] && exit 2
+    [[ $failed -ne 0 ]] && sleep .1
+done
 
-ls /tmp/xvfb*/Xauthority >/dev/null
-
-XAUTHORITY=$(echo /tmp/xvfb*/Xauthority) \
-  ffmpeg \
-    -r 30 \
-    -f x11grab \
-    -draw_mouse 0 \
-    -s "$(cut -dx -f1-2 <<<"$wxhxd")" \
-    -i :"$display" \
-    -c:v libvpx \
-    -quality realtime \
-    -cpu-used 0 \
-    -b:v 384k \
-    -qmin 10 \
-    -qmax 42 \
-    -maxrate 384k \
-    -bufsize 1000k \
-    -an "$out" &
-companion=$!
+touch stop
+case "$out" in
+  *.webm)
+    <./stop \
+      XAUTHORITY=$(echo /tmp/xvfb*/Xauthority) \
+        ffmpeg \
+          -r 30 \
+          -f x11grab \
+          -draw_mouse 0 \
+          -s "$(cut -dx -f1-2 <<<"$wxhxd")" \
+          -i :"$display" \
+          -c:v libvpx \
+          -quality realtime \
+          -cpu-used 0 \
+          -b:v 384k \
+          -qmin 10 \
+          -qmax 42 \
+          -maxrate 384k \
+          -bufsize 1000k \
+          -an \
+          "$out" &
+    companion=$!
+    ;;
+  *.mp4)
+    <./stop \
+      XAUTHORITY=$(echo /tmp/xvfb*/Xauthority) \
+        ffmpeg \
+          -r 24  \
+          -f x11grab \
+          -draw_mouse 0 \
+          -s "$(cut -dx -f1-2 <<<"$wxhxd")" \
+          -i :"$display" \
+          -c:v libx264 \
+          -b:v 64k \
+          -crf 36 \
+          -preset veryslow \
+          -tune zerolatency \
+          -an \
+          "$out" &
+    companion=$!
+    ;;
+  *)
+    echo "Unhandled video format for $out"
+    exit 1
+esac
 
 wait $xvfb
-kill -TERM $companion
-wait $companion || true
+echo q >stop # https://stackoverflow.com/a/21032143/1418165
+wait $companion

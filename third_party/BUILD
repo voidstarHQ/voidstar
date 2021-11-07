@@ -33,3 +33,19 @@ cc_library(
         "//conditions:default": ["@glew//:glew"],
     }),
 )
+
+cc_library(
+    name = "mman",
+    deps = select({
+        ":windows": ["@mman_win32//:mman_win32"],
+        "//conditions:default": [],
+    }),
+)
+
+cc_library(
+    name = "getopt",
+    deps = select({
+        ":windows": ["@getopt//:getopt"],
+        "//conditions:default": [],
+    }),
+)

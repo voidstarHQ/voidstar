@@ -1,13 +1,17 @@
-#include "voidstar/arguments.h"
-
-#include <getopt.h>
-
 #include <cassert>
 #include <iostream>
 
+#ifdef _WIN32
+#include "getopt.h"
+#else
+#include <getopt.h>
+#endif
+
+#include "voidstar/arguments.h"
+
 REGISTRY_IMPLEMENTATION_FOR(Meta)
 
-static void usage(const char* prgname __unused) {
+static void usage(const char* UNUSED(prgname)) {
   std::cout << R"(Usage:
   voidstar  [OPTIONS]  FILE...
 

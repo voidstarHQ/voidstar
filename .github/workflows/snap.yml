@@ -5,7 +5,7 @@ env:
   BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build_snap:
-    name: Build snap on ubuntu
+    name: craft
     runs-on: ubuntu-18.04 # FIXME: https://github.com/samuelmeuli/action-snapcraft/issues/24
     steps:
     - uses: actions/checkout@v2

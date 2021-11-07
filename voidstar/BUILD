@@ -41,7 +41,10 @@ cc_library(
     srcs = ["arguments.cc"],
     hdrs = ["arguments.h"],
     copts = COPTS,
-    deps = [":framework"],
+    deps = [
+        ":framework",
+        "//third_party:getopt",
+    ],
     alwayslink = 1,  # For registration
 )
 

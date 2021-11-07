@@ -15,11 +15,11 @@ cc_library(
     alwayslink = 1,  # For registration
 )
 
-LOADERS = [
-    "fd",
-    "file",
-    "mmap",
-]
+LOADERS = {
+    "fd": [],
+    "file": [],
+    "mmap": ["//third_party:mman"],
+}
 
 cc_library(
     name = "loaders",
@@ -32,8 +32,8 @@ cc_library(
         name = "loader_" + loader,
         srcs = [loader + ".cc"],
         copts = COPTS,
-        deps = [":loader"],
+        deps = [":loader"] + deps,
         alwayslink = 1,  # For registration
     )
-    for loader in LOADERS
+    for loader, deps in LOADERS.items()
 ]

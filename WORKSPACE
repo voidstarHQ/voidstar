@@ -65,3 +65,15 @@ upgradable_repository(
     strip_prefix = "glew-{tag_digits}",
     tag = glew_version_constraint,
 )
+
+upgradable_repository(
+    name = "mman_win32",
+    build_file = "@//third_party:mman_win32.BUILD",
+    remote = "git://github.com/klauspost/mman-win32.git",
+)
+
+upgradable_repository(
+    name = "getopt",
+    build_file = "@//third_party:getopt.BUILD",
+    remote = "git://github.com/skandhurkat/Getopt-for-Visual-Studio.git",
+)
