@@ -1,5 +1,3 @@
-#include <unistd.h>
-
 #include <string>
 
 #include "voidstar/loaders/loader.h"
@@ -7,9 +5,7 @@
 
 class FdLoader final : public Loader {
  public:
-  FdLoader(const std::string& fd) : Loader(true) {
-    if (fd == "-") fd_ = STDIN_FILENO;
-  }
+  FdLoader(const std::string& UNUSED(fd)) : Loader(true) {}
   virtual ~FdLoader() {}
 
   static bool CanLoad(const std::string& uri) { return ("-" == uri); };
@@ -18,7 +14,7 @@ class FdLoader final : public Loader {
   virtual void free();
 
   virtual const u8* data() { throw std::runtime_error("TODO"); }
-  virtual const u8* dataChunk(u32 offset UNUSED, u32 size UNUSED) {
+  virtual const u8* dataChunk(u32 UNUSED(offset), u32 UNUSED(size)) {
     throw std::runtime_error("TODO");
   }
 

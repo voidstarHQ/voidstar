@@ -4,7 +4,7 @@
 
 std::shared_ptr<GLFW3Manager> GLFW3Manager::instance_;
 
-void onFramebufferResize(GLFWwindow* window UNUSED, int width, int height) {
+void onFramebufferResize(GLFWwindow* UNUSED(window), int width, int height) {
   glViewport(0, 0, width, height);
   GLFW3Manager::instance()->viewport(width, height);
   auto scene = GLFW3Manager::instance()->scene();
@@ -15,11 +15,11 @@ void onFramebufferResize(GLFWwindow* window UNUSED, int width, int height) {
   scene->resize(static_cast<u32>(width), static_cast<u32>(height));
 }
 
-static void onError(int errorCode UNUSED, const char* msg) {
+static void onError(int UNUSED(errorCode), const char* msg) {
   throw std::runtime_error(msg);
 }
 
-static void onKeyEvent(GLFWwindow* window UNUSED, int key, int scancode,
+static void onKeyEvent(GLFWwindow* UNUSED(window), int key, int scancode,
                        int action, int mods) {
   auto events = GLFW3Manager::instance()->getEvents();
   auto ev = std::static_pointer_cast<GlfwKeyboardEvents>(events);
@@ -342,7 +342,7 @@ void GlfwKeyboardEvents::update() {
   glfwPollEvents();
 }
 
-void GlfwKeyboardEvents::process(int key, int scancode UNUSED, int action,
+void GlfwKeyboardEvents::process(int key, int UNUSED(scancode), int action,
                                  int mods) {
   if (key < 0) return;
   const auto k = static_cast<size_t>(key);

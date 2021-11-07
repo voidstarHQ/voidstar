@@ -9,8 +9,8 @@
 typedef uint8_t u8;
 typedef uint32_t u32;
 
-#define UNUSED __attribute__((unused))
+#define UNUSED(var) /*empty*/
 
 #define NDEBUG
 #include <cassert>
-#define assertm(exp, msg) assert((msg UNUSED, exp))
+#define assertm(exp, msg) assert((UNUSED(msg), exp))
