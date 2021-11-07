@@ -98,11 +98,13 @@ jobs:
     - name: Work around caching gobbledegook
       run: |
         if [[ -d ~/.cache/bazel ]]; then
-          chown -R $USER:staff ~/.cache/bazel
+          chmod -R a+rwx ~/.cache/bazel
         fi
     - run: bazel build voidstar
     - run: cp ./bazel-bin/voidstar/voidstar voidstar_clang_macos
-    - run: strip voidstar_clang_macos
+    - run: |
+        chmod +w voidstar_clang_macos
+        strip    voidstar_clang_macos
     - run: voidstar_clang_macos --help
     - uses: actions/upload-artifact@v2
       with:
@@ -124,7 +126,11 @@ jobs:
       with:
         path: ~/.cache/bazel
         key: bazel
-    - run: chmod -R a+rwx ~/.cache/bazel
+    - name: Work around caching gobbledegook
+      run: |
+        if [[ -d ~/.cache/bazel ]]; then
+          chmod -R a+rwx ~/.cache/bazel
+        fi
     - name: Work around windows compiler # TODO: a specific bazel --config
       run: |
         grep -vE 'fdiagnostics-color|std=c' .bazelrc >.bazelrc~ && mv .bazelrc~ .bazelrc
