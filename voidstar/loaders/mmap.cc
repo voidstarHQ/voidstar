@@ -1,5 +1,8 @@
 #include <fcntl.h>
+
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 #include <filesystem>
 
@@ -40,6 +43,13 @@ class MmapLoader final : public Loader {
   int fd_ = -1;
   u8* data_ = nullptr;
   std::string path_;
+
+  void close_fd() {
+#ifndef _WIN32  // TODO: close FDs on windows
+    if (fd_ >= 0) close(fd_);
+#endif
+    fd_ = -1;
+  }
 };
 REGISTER_LOADER(MmapLoader)
 
@@ -59,7 +69,7 @@ void MmapLoader::load() {
 
   auto base = mmap(0, size_, PROT_READ, MAP_PRIVATE, fd_, 0);
   if (nullptr == base) {
-    close(fd_);
+    close_fd();
     throw std::runtime_error("Failed to map data");
   }
   data_ = reinterpret_cast<u8*>(base);
@@ -67,9 +77,8 @@ void MmapLoader::load() {
 
 void MmapLoader::free() {
   munmap(data_, size_);
+  close_fd();
   data_ = nullptr;
   offset_ = 0;
   size_ = 0;
-  // fd?
-  // close(fd_)
 }
