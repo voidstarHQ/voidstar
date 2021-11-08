@@ -1,10 +1,10 @@
-# void*
+# `(void *)` · [voidstarhq.github.io](https://voidstarhq.github.io)
 
 Browse data using Corti's 2D projector as well as 3D variants.
 
 The actual file being represented below [is data/BigPictureBG.tga](http://www.docspal.com/viewer?id=ufbxlmfm-12197291).
 
-[![Sorry for potato quality](https://i.vimeocdn.com/video/622736893.webp?mw=480&mh=270)](https://player.vimeo.com/video/207613754?autoplay=1&loop=1)
+https://user-images.githubusercontent.com/278727/140719903-40c56818-0b5c-44ec-bbab-0e9b931c2023.mp4
 
 ## More info, references & inspiration
 
