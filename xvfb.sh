@@ -80,6 +80,7 @@ case "$out" in
     companion=$!
     ;;
   *.mp4)
+      # WRT -pix_fmt yuv420p https://bugzilla.mozilla.org/show_bug.cgi?id=1368063#c7
     <./stop \
       XAUTHORITY=$(echo /tmp/xvfb*/Xauthority) \
         ffmpeg \
@@ -93,6 +94,7 @@ case "$out" in
           -crf 36 \
           -preset veryslow \
           -tune zerolatency \
+          -pix_fmt yuv420p \
           -an \
           "$out" &
     companion=$!
