@@ -5,7 +5,6 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  USE_BAZEL_VERSION: '4.2.1'
 
 defaults:
   run:

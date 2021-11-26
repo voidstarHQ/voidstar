@@ -41,17 +41,15 @@ RUN \
  && apt update \
  && apt install -y --no-install-recommends \
         openjdk-8-jdk
-ARG BAZEL_VERSION=4.2.1
+COPY .bazelversion .
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
     set -ux \
  && mkdir /bazel \
- && curl -fsSLo /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh" \
- && curl -fsSLo /bazel/LICENSE.txt "https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE" \
+ && curl -fsSLo /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/$(cat .bazelversion)/bazel-$(cat .bazelversion)-installer-linux-x86_64.sh" \
  && chmod +x /bazel/installer.sh \
  && /bazel/installer.sh \
- && rm /bazel/installer.sh \
- && bazel version
+ && rm /bazel/installer.sh
 COPY . .
 
 # sync
