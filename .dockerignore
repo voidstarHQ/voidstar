@@ -1,5 +1,6 @@
 *
 !/.bazelrc
+!/.bazelversion
 !/BUILD
 !/data/
 !/resolved.bzl
