@@ -1,4 +1,5 @@
 #include <fstream>
+#include <limits>
 
 #include "voidstar/loaders/loader.h"
 #include "voidstar/loaders/uri.h"
