@@ -1,5 +1,6 @@
 #include <cassert>
 #include <iostream>
+#include <limits>
 
 #ifdef _WIN32
 #include "getopt.h"
