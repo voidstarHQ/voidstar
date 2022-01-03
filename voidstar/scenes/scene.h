@@ -7,7 +7,6 @@
 #include "voidstar/algorithm.h"
 #include "voidstar/arguments.h"
 #include "voidstar/registrar.h"
-#include "voidstar/size2str.h"
 
 class Scene {
  public:
@@ -21,12 +20,7 @@ class Scene {
   virtual void unload() {}
   virtual void reload() {}
 
-  virtual void resize(u32 viewport_width, u32 viewport_height) {
-    const float aspect_ratio = static_cast<float>(viewport_width) /
-                               static_cast<float>(viewport_height);
-    std::cout << "aspect: " << aspect_ratio << " (" << size2str(viewport_width)
-              << 'x' << size2str(viewport_height) << ")\n";
-  }
+  virtual void resize(u32 viewport_width, u32 viewport_height);
 
   GLint program() const {
     assertm(program_ <= std::numeric_limits<GLint>::max(),
