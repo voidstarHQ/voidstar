@@ -1,5 +1,5 @@
 name: voidstar
-version: v1.38.0 # FIXME: 'git'
+version: v1.39.0 # FIXME: 'git'
 summary: void* casts files onto 2D/3D colored spaces for your mind blowing needs # 79 char long summary
 description: |
   Usage:
