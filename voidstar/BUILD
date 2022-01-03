@@ -26,7 +26,10 @@ cc_library(
         "types.h",
     ],
     copts = COPTS,
-    deps = [":indices"],
+    deps = [
+        ":indices",
+        "@fmt",
+    ],
 )
 
 cc_library(

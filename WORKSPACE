@@ -77,3 +77,27 @@ upgradable_repository(
     build_file = "@//third_party:getopt.BUILD",
     remote = "git://github.com/skandhurkat/Getopt-for-Visual-Studio.git",
 )
+
+# From https://github.com/fmtlib/fmt/blob/1b193e7b3716f57d64fa2f98275eb1395fea4eff/support/bazel/README.md
+
+upgradable_repository(
+    name = "fmt",
+    patch_cmds = [
+        "mv support/bazel/.bazelrc .bazelrc",
+        "mv support/bazel/.bazelversion .bazelversion",
+        "mv support/bazel/BUILD.bazel BUILD.bazel",
+        "mv support/bazel/WORKSPACE.bazel WORKSPACE.bazel",
+    ],
+    # Windows-related patch commands are only needed in the case MSYS2 is not installed.
+    # More details about the installation process of MSYS2 on Windows systems can be found here:
+    # https://docs.bazel.build/versions/main/install-windows.html#installing-compilers-and-language-runtimes
+    # Even if MSYS2 is installed the Windows related patch commands can still be used.
+    patch_cmds_win = [
+        "Move-Item -Path support/bazel/.bazelrc -Destination .bazelrc",
+        "Move-Item -Path support/bazel/.bazelversion -Destination .bazelversion",
+        "Move-Item -Path support/bazel/BUILD.bazel -Destination BUILD.bazel",
+        "Move-Item -Path support/bazel/WORKSPACE.bazel -Destination WORKSPACE.bazel",
+    ],
+    remote = "git://github.com/fmtlib/fmt.git",
+    tag = "~8",
+)

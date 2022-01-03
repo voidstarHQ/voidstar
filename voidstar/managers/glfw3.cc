@@ -2,6 +2,8 @@
 // This comments prevents clang-format from reordering includes
 #include "voidstar/managers/glfw3.h"
 
+#include "voidstar/size2str.h"
+
 std::shared_ptr<GLFW3Manager> GLFW3Manager::instance_;
 
 void onFramebufferResize(GLFWwindow* UNUSED(window), int width, int height) {
@@ -231,7 +233,7 @@ bool GLFW3Manager::updateFirst(float deltaTime, glm::mat4* MVP) {
     if (args_->move_window) slide_window_right();
     auto slid = slide_window(scene_->selected(), scene_->indices());
     if (previously_slid_ != slid)
-      std::cout << "#selected: " << slid << std::endl;
+      std::cout << "#selected: " << size2str(slid, "{:10}") << std::endl;
     previously_slid_ = slid;
     if (slid < 1 && args_->move_window) args_->move_window = false;
   }
