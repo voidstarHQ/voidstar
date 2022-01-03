@@ -20,7 +20,7 @@ COPTS = [
     "-Wstrict-overflow=4",
     "-Wundef",
     # "-Wstrict-prototypes", conlyopt
-    "-Wswitch-default",
+    # "-Wswitch-default", @fmt complains
     "-Wswitch-enum",
     ###
     "-fstack-protector-strong",
