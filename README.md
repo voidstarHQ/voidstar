@@ -1,20 +1,21 @@
 # `(void *)` · [voidstarhq.github.io](https://voidstarhq.github.io)
 
-Browse data using Corti's 2D projector as well as 3D variants.
+Browse data using Conti's 2D projector as well as 3D variants.
 
-The actual file being represented below [is data/BigPictureBG.tga](http://www.docspal.com/viewer?id=ufbxlmfm-12197291).
+The actual file being represented below [is data/BigPictureBG.tga](https://github.com/voidstarHQ/voidstar/blob/master/data/BigPictureBG.tga).
 
 https://user-images.githubusercontent.com/278727/140719903-40c56818-0b5c-44ec-bbab-0e9b931c2023.mp4
 
 ## More info, references & inspiration
 
-1. [Greg Conti](https://youtu.be/XATakIdyZdk?t=23m23s)
+1. [Greg Conti](https://youtu.be/XATakIdyZdk?t=23m23s) (*loud and low quality audio*)
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/XATakIdyZdk?start=1413" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 1. [Blackhat 2010 - Voyage of the reverser - Sergey Bratus Greg Conti](https://www.youtube.com/watch?v=T3qqeP4TdPA)
 1. [Conti's & Bratus' `binvis`](https://github.com/rebelbot/binvis)
 1. [Cortesi's `binvis.io`](https://corte.si/posts/binvis/announce/index.html)
 1. [REcon 2013 - The Future of RE : Dynamic Binary Visualization (Christopher Domas)](https://www.youtube.com/watch?v=C8--cXwuuFQ)
 1. [Christopher Domas The future of RE Dynamic Binary Visualization](https://www.youtube.com/watch?v=4bM3Gut1hIk)
-1. [Look for the past, present and future inside of π Edit Add topics](https://github.com/fenollp/minepi)
+1. [Look for the past, present and future inside of π](https://github.com/fenollp/minepi)
 1. [Sloane's Gap. Mathematical and Social Factors Explain the Distribution of Numbers in the OEIS](https://arxiv.org/abs/1101.4470v2)
 1. [rule 30 on OEIS.org](https://oeis.org/search?q=%22rule+30%22&sort=&language=&go=Search)
 1. [Bailey–Borwein–Plouffe formula](https://en.wikipedia.org/wiki/Bailey%E2%80%93Borwein%E2%80%93Plouffe_formula)
