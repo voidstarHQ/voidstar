@@ -9,7 +9,6 @@ https://user-images.githubusercontent.com/278727/140719903-40c56818-0b5c-44ec-bb
 ## More info, references & inspiration
 
 1. [Greg Conti](https://youtu.be/XATakIdyZdk?t=23m23s) (*loud and low quality audio*)
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/XATakIdyZdk?start=1413" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 1. [Blackhat 2010 - Voyage of the reverser - Sergey Bratus Greg Conti](https://www.youtube.com/watch?v=T3qqeP4TdPA)
 1. [Conti's & Bratus' `binvis`](https://github.com/rebelbot/binvis)
 1. [Cortesi's `binvis.io`](https://corte.si/posts/binvis/announce/index.html)
