@@ -12,19 +12,19 @@ https://user-images.githubusercontent.com/278727/140719903-40c56818-0b5c-44ec-bb
 
 <!-- CONTI-IFRAME -->
 
-3. [Blackhat 2010 - Voyage of the reverser - Sergey Bratus Greg Conti](https://www.youtube.com/watch?v=T3qqeP4TdPA)
-4. [Conti's & Bratus' `binvis`](https://github.com/rebelbot/binvis)
-5. [Cortesi's `binvis.io`](https://corte.si/posts/binvis/announce/index.html)
-6. [REcon 2013 - The Future of RE : Dynamic Binary Visualization (Christopher Domas)](https://www.youtube.com/watch?v=C8--cXwuuFQ)
-7. [Christopher Domas The future of RE Dynamic Binary Visualization](https://www.youtube.com/watch?v=4bM3Gut1hIk)
-8. [Look for the past, present and future inside of π](https://github.com/fenollp/minepi)
-9. [Sloane's Gap. Mathematical and Social Factors Explain the Distribution of Numbers in the OEIS](https://arxiv.org/abs/1101.4470v2)
-10. [rule 30 on OEIS.org](https://oeis.org/search?q=%22rule+30%22&sort=&language=&go=Search)
-11. [Bailey–Borwein–Plouffe formula](https://en.wikipedia.org/wiki/Bailey%E2%80%93Borwein%E2%80%93Plouffe_formula)
-12. [Codisec's open source & maintained Veles](https://codisec.com/veles/)
-13. [What do numbers look like?](https://johnhw.github.io/umap_primes/index.md.html)
-14. [Some explorations of string repetition statistics](http://www.fantascienza.net/leonardo/ar/string_repetition_statistics/string_repetition_statistics.html)
-15. [3D scatterplot of an image](https://alexander.engineering/imagescatter/) ([3D RGB Scatterplots of colours used in famous paintings](https://imgur.com/a/aRBd1), [HN discussion](https://news.ycombinator.com/item?id=15931266), [Reddit](https://www.reddit.com/r/dataisbeautiful/comments/7584no/3d_rgb_scatterplots_of_colours_used_in_famous/))
+2. [Blackhat 2010 - Voyage of the reverser - Sergey Bratus Greg Conti](https://www.youtube.com/watch?v=T3qqeP4TdPA)
+1. [Conti's & Bratus' `binvis`](https://github.com/rebelbot/binvis)
+1. [Cortesi's `binvis.io`](https://corte.si/posts/binvis/announce/index.html)
+1. [REcon 2013 - The Future of RE : Dynamic Binary Visualization (Christopher Domas)](https://www.youtube.com/watch?v=C8--cXwuuFQ)
+1. [Christopher Domas The future of RE Dynamic Binary Visualization](https://www.youtube.com/watch?v=4bM3Gut1hIk)
+1. [Look for the past, present and future inside of π](https://github.com/fenollp/minepi)
+1. [Sloane's Gap. Mathematical and Social Factors Explain the Distribution of Numbers in the OEIS](https://arxiv.org/abs/1101.4470v2)
+1. [rule 30 on OEIS.org](https://oeis.org/search?q=%22rule+30%22&sort=&language=&go=Search)
+1. [Bailey–Borwein–Plouffe formula](https://en.wikipedia.org/wiki/Bailey%E2%80%93Borwein%E2%80%93Plouffe_formula)
+1. [Codisec's open source & maintained Veles](https://codisec.com/veles/)
+1. [What do numbers look like?](https://johnhw.github.io/umap_primes/index.md.html)
+1. [Some explorations of string repetition statistics](http://www.fantascienza.net/leonardo/ar/string_repetition_statistics/string_repetition_statistics.html)
+1. [3D scatterplot of an image](https://alexander.engineering/imagescatter/) ([3D RGB Scatterplots of colours used in famous paintings](https://imgur.com/a/aRBd1), [HN discussion](https://news.ycombinator.com/item?id=15931266), [Reddit](https://www.reddit.com/r/dataisbeautiful/comments/7584no/3d_rgb_scatterplots_of_colours_used_in_famous/))
 
 
 ## Usage
