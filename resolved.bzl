@@ -137,7 +137,7 @@ resolved = [
                 "Move-Item -Path support/bazel/BUILD.bazel -Destination BUILD.bazel",
                 "Move-Item -Path support/bazel/WORKSPACE.bazel -Destination WORKSPACE.bazel",
             ],
-            "remote": "git://github.com/fmtlib/fmt.git",
+            "remote": "https://github.com/fmtlib/fmt.git",
             "tag": "~8",
         },
         "repositories": [
@@ -174,7 +174,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "",
                     "release": "",
-                    "remote": "git://github.com/fmtlib/fmt.git",
+                    "remote": "https://github.com/fmtlib/fmt.git",
                     "tag": "~8",
                     "name": "fmt",
                 },
@@ -187,7 +187,7 @@ resolved = [
         "original_attributes": {
             "name": "getopt",
             "build_file": "//third_party:getopt.BUILD",
-            "remote": "git://github.com/skandhurkat/Getopt-for-Visual-Studio.git",
+            "remote": "https://github.com/skandhurkat/Getopt-for-Visual-Studio.git",
         },
         "repositories": [
             {
@@ -214,7 +214,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "",
                     "release": "",
-                    "remote": "git://github.com/skandhurkat/Getopt-for-Visual-Studio.git",
+                    "remote": "https://github.com/skandhurkat/Getopt-for-Visual-Studio.git",
                     "tag": "",
                     "name": "getopt",
                 },
@@ -230,7 +230,7 @@ resolved = [
             "type": "tar.gz",
             "build_file": "//third_party:glew.BUILD",
             "release": "{tag}.tgz",
-            "remote": "git://github.com/nigels-com/glew.git",
+            "remote": "https://github.com/nigels-com/glew.git",
             "tag": "<=2",
         },
         "repositories": [
@@ -258,7 +258,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "",
                     "release": "{tag}.tgz",
-                    "remote": "git://github.com/nigels-com/glew.git",
+                    "remote": "https://github.com/nigels-com/glew.git",
                     "tag": "<=2",
                     "name": "glew",
                 },
@@ -273,7 +273,7 @@ resolved = [
             "strip_prefix": "glew-{tag_digits}",
             "build_file": "//third_party:glew_win64.BUILD",
             "release": "{tag}-win32.zip",
-            "remote": "git://github.com/nigels-com/glew.git",
+            "remote": "https://github.com/nigels-com/glew.git",
             "tag": "<=2",
         },
         "repositories": [
@@ -301,7 +301,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "",
                     "release": "{tag}-win32.zip",
-                    "remote": "git://github.com/nigels-com/glew.git",
+                    "remote": "https://github.com/nigels-com/glew.git",
                     "tag": "<=2",
                     "name": "glew_win64",
                 },
@@ -315,7 +315,7 @@ resolved = [
             "name": "glfw",
             "build_file": "//third_party:glfw3.BUILD",
             "branch": "3.3-stable",
-            "remote": "git://github.com/glfw/glfw.git",
+            "remote": "https://github.com/glfw/glfw.git",
         },
         "repositories": [
             {
@@ -342,7 +342,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "3.3-stable",
                     "release": "",
-                    "remote": "git://github.com/glfw/glfw.git",
+                    "remote": "https://github.com/glfw/glfw.git",
                     "tag": "",
                     "name": "glfw",
                 },
@@ -357,7 +357,7 @@ resolved = [
             "strip_prefix": "glfw-{tag_digits}.bin.MACOS",
             "build_file": "//third_party:glfw3_osx.BUILD",
             "release": "glfw-{tag_digits}.bin.MACOS.zip",
-            "remote": "git://github.com/glfw/glfw.git",
+            "remote": "https://github.com/glfw/glfw.git",
             "tag": "~3",
         },
         "repositories": [
@@ -385,7 +385,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "",
                     "release": "glfw-{tag_digits}.bin.MACOS.zip",
-                    "remote": "git://github.com/glfw/glfw.git",
+                    "remote": "https://github.com/glfw/glfw.git",
                     "tag": "~3",
                     "name": "glfw_osx",
                 },
@@ -398,7 +398,7 @@ resolved = [
         "original_attributes": {
             "name": "glm",
             "build_file": "//third_party:glm.BUILD",
-            "remote": "git://github.com/g-truc/glm.git",
+            "remote": "https://github.com/g-truc/glm.git",
         },
         "repositories": [
             {
@@ -425,7 +425,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "",
                     "release": "",
-                    "remote": "git://github.com/g-truc/glm.git",
+                    "remote": "https://github.com/g-truc/glm.git",
                     "tag": "",
                     "name": "glm",
                 },
@@ -439,7 +439,7 @@ resolved = [
             "name": "khronos_opengl_registry",
             "build_file": "//third_party:gl.BUILD",
             "branch": "main",
-            "remote": "git://github.com/KhronosGroup/OpenGL-Registry.git",
+            "remote": "https://github.com/KhronosGroup/OpenGL-Registry.git",
         },
         "repositories": [
             {
@@ -466,7 +466,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "main",
                     "release": "",
-                    "remote": "git://github.com/KhronosGroup/OpenGL-Registry.git",
+                    "remote": "https://github.com/KhronosGroup/OpenGL-Registry.git",
                     "tag": "",
                     "name": "khronos_opengl_registry",
                 },
@@ -479,7 +479,7 @@ resolved = [
         "original_attributes": {
             "name": "mman_win32",
             "build_file": "//third_party:mman_win32.BUILD",
-            "remote": "git://github.com/klauspost/mman-win32.git",
+            "remote": "https://github.com/klauspost/mman-win32.git",
         },
         "repositories": [
             {
@@ -506,7 +506,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "",
                     "release": "",
-                    "remote": "git://github.com/klauspost/mman-win32.git",
+                    "remote": "https://github.com/klauspost/mman-win32.git",
                     "tag": "",
                     "name": "mman_win32",
                 },
@@ -519,7 +519,7 @@ resolved = [
         "original_attributes": {
             "name": "rules_cc",
             "branch": "main",
-            "remote": "git://github.com/bazelbuild/rules_cc.git",
+            "remote": "https://github.com/bazelbuild/rules_cc.git",
         },
         "repositories": [
             {
@@ -546,7 +546,7 @@ resolved = [
                     "workspace_file_content": "",
                     "branch": "main",
                     "release": "",
-                    "remote": "git://github.com/bazelbuild/rules_cc.git",
+                    "remote": "https://github.com/bazelbuild/rules_cc.git",
                     "tag": "",
                     "name": "rules_cc",
                 },
