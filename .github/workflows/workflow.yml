@@ -20,7 +20,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - uses: actions/checkout@v2
     - run: DOCKER_BUILDKIT=1 docker build -o=. --target=sync . --progress=plain
-    - run: git --no-pager diff && [[ 0 -eq $(git --no-pager diff --name-only | wc -l) ]]
+    - run: git --no-pager diff --exit-code
       continue-on-error: true
 
   build_on_ubuntu_with_gcc:

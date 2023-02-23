@@ -530,14 +530,14 @@ resolved = [
                 "rule_class": "@bazel_upgradable//:rule.bzl%upgradable_repository",
                 "attributes": {
                     "urls": [
-                        "https://github.com/bazelbuild/rules_cc/archive/42f3259960ba2b7b350bafa50f104567883a49eb.tar.gz",
-                        "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/42f3259960ba2b7b350bafa50f104567883a49eb.tar.gz",
+                        "https://github.com/bazelbuild/rules_cc/archive/998319083bf25c9f1acdc2c73bc7cd099a151dff.tar.gz",
+                        "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/998319083bf25c9f1acdc2c73bc7cd099a151dff.tar.gz",
                     ],
-                    "sha256": "845b008ab7d046a8942d4796a2ed848c84b3236f8f673ed614f1e81f77977368",
+                    "sha256": "c85b3d026bd66b8ba215145a8bd4cea7198f5ff122323984691d2b718d536a3c",
                     "netrc": "",
                     "auth_patterns": {},
                     "canonical_id": "",
-                    "strip_prefix": "rules_cc-42f3259960ba2b7b350bafa50f104567883a49eb",
+                    "strip_prefix": "rules_cc-998319083bf25c9f1acdc2c73bc7cd099a151dff",
                     "type": "tar.gz",
                     "patches": [],
                     "patch_tool": "",
@@ -600,6 +600,33 @@ resolved = [
                     "name": "remote_coverage_tools",
                 },
                 "output_tree_hash": "57d60737c04d254ee04aadf408f7df77c4fe893357e74dc049c7319224e141c7",
+            },
+        ],
+    },
+    {
+        "original_rule_class": "@bazel_tools//tools/jdk:local_java_repository.bzl%_local_java_repository_rule",
+        "original_attributes": {
+            "name": "local_jdk",
+            "generator_name": "local_jdk",
+            "generator_function": "maybe",
+            "generator_location": None,
+            "java_home": "/usr/lib/jvm/java-8-openjdk-amd64",
+            "version": "",
+            "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        },
+        "repositories": [
+            {
+                "rule_class": "@bazel_tools//tools/jdk:local_java_repository.bzl%_local_java_repository_rule",
+                "attributes": {
+                    "name": "local_jdk",
+                    "generator_name": "local_jdk",
+                    "generator_function": "maybe",
+                    "generator_location": None,
+                    "java_home": "/usr/lib/jvm/java-8-openjdk-amd64",
+                    "version": "",
+                    "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+                },
+                "output_tree_hash": "4fb6f82b3bb9169dbcd1acdea2f37dcafc81e40bc374eb1320bd7700877f3161",
             },
         ],
     },
@@ -2567,6 +2594,7 @@ resolved = [
         "original_attributes": {
             "name": "//external/register_toolchains",
             "*args": [
+                "@local_jdk//:runtime_toolchain_definition",
                 "@remotejdk11_linux_toolchain_config_repo//:toolchain",
                 "@remotejdk11_linux_aarch64_toolchain_config_repo//:toolchain",
                 "@remotejdk11_linux_ppc64le_toolchain_config_repo//:toolchain",
@@ -2593,7 +2621,7 @@ resolved = [
                 "@local_config_sh//:local_sh_toolchain",
             ],
         },
-        "native": "register_toolchains(\"@remotejdk11_linux_toolchain_config_repo//:toolchain\", \"@remotejdk11_linux_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk11_linux_ppc64le_toolchain_config_repo//:toolchain\", \"@remotejdk11_linux_s390x_toolchain_config_repo//:toolchain\", \"@remotejdk11_macos_toolchain_config_repo//:toolchain\", \"@remotejdk11_macos_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk11_win_toolchain_config_repo//:toolchain\", \"@remotejdk11_win_arm64_toolchain_config_repo//:toolchain\", \"@remotejdk17_linux_toolchain_config_repo//:toolchain\", \"@remotejdk17_linux_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk17_macos_toolchain_config_repo//:toolchain\", \"@remotejdk17_macos_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk17_win_toolchain_config_repo//:toolchain\", \"@remotejdk17_win_arm64_toolchain_config_repo//:toolchain\", \"@remotejdk18_linux_toolchain_config_repo//:toolchain\", \"@remotejdk18_linux_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk18_macos_toolchain_config_repo//:toolchain\", \"@remotejdk18_macos_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk18_win_toolchain_config_repo//:toolchain\", \"@remotejdk18_win_arm64_toolchain_config_repo//:toolchain\", \"@bazel_tools//tools/jdk:all\", \"@bazel_tools//tools/python:autodetecting_toolchain\", \"@local_config_cc_toolchains//:all\", \"@local_config_sh//:local_sh_toolchain\")",
+        "native": "register_toolchains(\"@local_jdk//:runtime_toolchain_definition\", \"@remotejdk11_linux_toolchain_config_repo//:toolchain\", \"@remotejdk11_linux_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk11_linux_ppc64le_toolchain_config_repo//:toolchain\", \"@remotejdk11_linux_s390x_toolchain_config_repo//:toolchain\", \"@remotejdk11_macos_toolchain_config_repo//:toolchain\", \"@remotejdk11_macos_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk11_win_toolchain_config_repo//:toolchain\", \"@remotejdk11_win_arm64_toolchain_config_repo//:toolchain\", \"@remotejdk17_linux_toolchain_config_repo//:toolchain\", \"@remotejdk17_linux_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk17_macos_toolchain_config_repo//:toolchain\", \"@remotejdk17_macos_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk17_win_toolchain_config_repo//:toolchain\", \"@remotejdk17_win_arm64_toolchain_config_repo//:toolchain\", \"@remotejdk18_linux_toolchain_config_repo//:toolchain\", \"@remotejdk18_linux_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk18_macos_toolchain_config_repo//:toolchain\", \"@remotejdk18_macos_aarch64_toolchain_config_repo//:toolchain\", \"@remotejdk18_win_toolchain_config_repo//:toolchain\", \"@remotejdk18_win_arm64_toolchain_config_repo//:toolchain\", \"@bazel_tools//tools/jdk:all\", \"@bazel_tools//tools/python:autodetecting_toolchain\", \"@local_config_cc_toolchains//:all\", \"@local_config_sh//:local_sh_toolchain\")",
     },
     {
         "original_rule_class": "register_execution_platforms",
