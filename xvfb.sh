@@ -1,13 +1,6 @@
 #!/bin/bash -eux
 set -o pipefail
 
-# _kill_procs() {
-#   kill -TERM $companion
-#   wait $companion
-#   kill -TERM $xvfb
-# }
-# trap _kill_procs SIGTERM
-
 display=99
 
 wxhxd=${WxHxD:-800x600x24}

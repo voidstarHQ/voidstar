@@ -94,7 +94,7 @@ class GLFW3Manager final : public Manager {
 
  private:
   void resetFloats() {
-    position_ = glm::vec3(0, 0, 5);
+    position_ = glm::vec3(0.0f, 0.0f, 4.0f);
     horizontal_angle_ = 3.14f;
     vertical_angle_ = 0.0f;  // look at the horizon
     initial_fov_ = 45.0f;
