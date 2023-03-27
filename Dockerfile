@@ -1,7 +1,9 @@
-# syntax=docker.io/docker/dockerfile:1@sha256:42399d4635eddd7a9b8a24be879d2f9a930d0ed040a61324cfdf59ef1357b3b2
+# syntax=docker.io/docker/dockerfile:1@sha256:39b85bbfa7536a5feceb7372a0817649ecb2724562a38360f4d6a7782a409b14
 
-FROM --platform=$BUILDPLATFORM docker.io/whilp/buildifier@sha256:67da91fdddd40e9947153bc9157ab9103c141fcabcdbf646f040ba7a763bc531 AS buildifier
-FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu:20.04@sha256:626ffe58f6e7566e00254b638eb7e0f3b11d4da9675088f4781a50ae288f3322 AS ubuntu
+FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu@sha256:67211c14fa74f070d27cc59d69a7fa9aeff8e28ea118ef3babc295a0428a6d21 AS ubuntu
+
+ARG BUILDOS
+ARG BUILDARCH
 
 FROM ubuntu AS base
 WORKDIR /app
@@ -17,6 +19,7 @@ RUN \
     set -ux \
  && apt update \
  && apt install -y --no-install-recommends \
+        bc \
         build-essential \
         ca-certificates \
         clang \
@@ -25,47 +28,43 @@ RUN \
         git \
         gzip \
         libgl1-mesa-dev \
-        python3 \
+        python-is-python3 \
+        python3-urllib3 \
         software-properties-common \
         tar \
         unzip \
         xauth \
         xorg-dev \
-        xvfb \
- && update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-RUN \
-    --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt \
-    set -ux \
- && add-apt-repository -y ppa:openjdk-r/ppa \
- && apt update \
- && apt install -y --no-install-recommends \
-        openjdk-8-jdk
+        xvfb
 COPY .bazelversion .
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
+    --mount=type=cache,target=/root/.cache/bazelisk \
     set -ux \
- && mkdir /bazel \
- && curl -fsSLo /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/$(cat .bazelversion)/bazel-$(cat .bazelversion)-installer-linux-x86_64.sh" \
- && chmod +x /bazel/installer.sh \
- && /bazel/installer.sh \
- && rm /bazel/installer.sh
+ && curl -#fsSLo /bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-$BUILDOS-$BUILDARCH \
+ && chmod +x /bazelisk \
+ && cd /usr/local/bin \
+ && ln -s /bazelisk bazel \
+ && bazel version
 COPY . .
+
+# buildifier
+FROM base AS buildifier
+RUN \
+    set -ux \
+ && curl -#fsSLo /buildifier "https://github.com/bazelbuild/buildtools/releases/download/$(cat .bazelversion)/buildifier-$BUILDOS-$BUILDARCH" \
+ && chmod +x /buildifier
 
 # sync
 FROM base AS sync-then-fmt
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
+    --mount=type=cache,target=/root/.cache/bazelisk \
     set -ux \
  && bazel sync \
  && grep -v -F \"definition_information\": resolved.bzl >resolved.bzl~ \
  && mv resolved.bzl~ resolved.bzl
 RUN \
-    # Ideally we'd be executing buildifier from within the context of its
-    # container but it turns out to need a shell:
-    #17 [sync-fmt 2/2] RUN     --mount=from=sync-nofmt,source=/app/resolved.bzl,target=/resolved.bzl,readwrite   /buildifier -lint=fix /resolved.bzl
-    #17 0.441 container_linux.go:367: starting container process caused: exec: "/bin/sh": stat /bin/sh: no such file or directory
-    #17 ERROR: executor failed running [/bin/sh -c /buildifier -lint=fix /resolved.bzl]: exit code: 1
     --mount=from=buildifier,source=/buildifier,target=/buildifier \
     set -ux \
  && /buildifier -lint=fix resolved.bzl
@@ -76,6 +75,7 @@ COPY --from=sync-then-fmt /app/resolved.bzl /
 FROM base AS builder-clang
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
+    --mount=type=cache,target=/root/.cache/bazelisk \
     set -ux \
  && bazel build voidstar --repo_env=CC=clang \
  && strip /app/bazel-bin/voidstar/voidstar \
@@ -86,6 +86,7 @@ RUN \
 FROM base AS builder-gcc
 RUN \
     --mount=type=cache,target=/root/.cache/bazel \
+    --mount=type=cache,target=/root/.cache/bazelisk \
     set -ux \
  && bazel build voidstar \
  && strip /app/bazel-bin/voidstar/voidstar \

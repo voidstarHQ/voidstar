@@ -24,11 +24,11 @@ esac
 
 step=1024
 filesize=$(stat --printf=%s "$file")
-[[ "$filesize" -ge     999999 ]] && ((step*=2))
-[[ "$filesize" -ge    9999999 ]] && ((step*=2))
-[[ "$filesize" -ge   99999999 ]] && ((step*=2))
-[[ "$filesize" -ge  999999999 ]] && ((step*=2))
 [[ "$filesize" -ge 9999999999 ]] && ((step*=2))
+[[ "$filesize" -ge  999999999 ]] && ((step*=2))
+[[ "$filesize" -ge   99999999 ]] && ((step*=2))
+[[ "$filesize" -ge    9999999 ]] && ((step*=2))
+[[ "$filesize" -ge     999999 ]] && ((step*=2))
 
 rm -rf /tmp/xvfb-run.*
 
@@ -107,3 +107,14 @@ esac
 wait $xvfb
 echo q >stop # https://stackoverflow.com/a/21032143/1418165
 wait $companion
+
+max_seconds=60
+# Must be shorter than $max_seconds
+duration=$(ffprobe -v error -show_format -show_streams -i "$out" | grep 'duration=' | head -n 1 | sed 's%duration=%%')
+if [[ "$(echo "$duration < $max_seconds" | bc)" = 0 ]]; then
+    ffmpeg \
+        -i "$out" \
+        -filter:v "setpts=PTS/$(echo "1 + $duration / $max_seconds" | bc)" \
+        /tmp/"$out"
+    mv -v /tmp/"$out" "$out"
+fi
