@@ -1,6 +1,6 @@
-# syntax=docker.io/docker/dockerfile:1@sha256:39b85bbfa7536a5feceb7372a0817649ecb2724562a38360f4d6a7782a409b14
+# syntax=docker.io/docker/dockerfile:1@sha256:865e5dd094beca432e8c0a1d5e1c465db5f998dca4e439981029b3b81fb39ed5
 
-FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu@sha256:67211c14fa74f070d27cc59d69a7fa9aeff8e28ea118ef3babc295a0428a6d21 AS ubuntu
+FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu@sha256:99c35190e22d294cdace2783ac55effc69d32896daaa265f0bbedbcde4fbe3e5 AS ubuntu
 
 ARG BUILDOS
 ARG BUILDARCH
@@ -52,7 +52,7 @@ COPY . .
 FROM base AS buildifier
 RUN \
     set -ux \
- && curl -#fsSLo /buildifier "https://github.com/bazelbuild/buildtools/releases/download/$(cat .bazelversion)/buildifier-$BUILDOS-$BUILDARCH" \
+ && curl -#fsSLo /buildifier "https://github.com/bazelbuild/buildtools/releases/download/v$(cat .bazelversion)/buildifier-$BUILDOS-$BUILDARCH" \
  && chmod +x /buildifier
 
 # sync
