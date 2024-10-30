@@ -1,6 +1,6 @@
-# syntax=docker.io/docker/dockerfile:1@sha256:39b85bbfa7536a5feceb7372a0817649ecb2724562a38360f4d6a7782a409b14
+# syntax=docker.io/docker/dockerfile:1@sha256:865e5dd094beca432e8c0a1d5e1c465db5f998dca4e439981029b3b81fb39ed5
 
-FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu@sha256:67211c14fa74f070d27cc59d69a7fa9aeff8e28ea118ef3babc295a0428a6d21 AS ubuntu
+FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu:22.04@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97 AS ubuntu
 
 ARG BUILDOS
 ARG BUILDARCH
@@ -41,7 +41,7 @@ RUN \
     --mount=type=cache,target=/root/.cache/bazel \
     --mount=type=cache,target=/root/.cache/bazelisk \
     set -ux \
- && curl -#fsSLo /bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-$BUILDOS-$BUILDARCH \
+ && curl -#fsSLo /bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.22.1/bazelisk-$BUILDOS-$BUILDARCH \
  && chmod +x /bazelisk \
  && cd /usr/local/bin \
  && ln -s /bazelisk bazel \
@@ -52,7 +52,7 @@ COPY . .
 FROM base AS buildifier
 RUN \
     set -ux \
- && curl -#fsSLo /buildifier "https://github.com/bazelbuild/buildtools/releases/download/$(cat .bazelversion)/buildifier-$BUILDOS-$BUILDARCH" \
+ && curl -#fsSLo /buildifier "https://github.com/bazelbuild/buildtools/releases/download/v$(cat .bazelversion)/buildifier-$BUILDOS-$BUILDARCH" \
  && chmod +x /buildifier
 
 # sync

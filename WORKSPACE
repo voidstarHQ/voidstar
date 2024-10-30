@@ -12,7 +12,7 @@ load("@bazel_upgradable//:rule.bzl", "upgradable_repository")
 
 upgradable_repository(
     name = "rules_cc",
-    branch = "main",
+    tag = "0.0.7",
     remote = "https://github.com/bazelbuild/rules_cc.git",
 )
 
