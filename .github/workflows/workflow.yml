@@ -19,7 +19,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - run: DOCKER_BUILDKIT=1 docker build -o=. --target=sync . --progress=plain
     - run: git --no-pager diff --exit-code
       continue-on-error: true
@@ -32,17 +32,17 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar . --progress=plain
     - run: ./bin/voidstar --help
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: voidstar_gcc_ubuntu
         path: ./bin/voidstar
     - run: DOCKER_BUILDKIT=1 docker build -o=. --target=video-gcc . --progress=plain
     - run: mv ./bin/voidstar voidstar_gcc_ubuntu
     - run: mv ./video.mp4 video_gcc_ubuntu.mp4
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: video-gcc_ubuntu
         path: ./video_gcc_ubuntu.mp4
@@ -61,17 +61,17 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - run: DOCKER_BUILDKIT=1 docker build -o=./bin/ --target=voidstar-clang . --progress=plain
     - run: ./bin/voidstar --help
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: voidstar_clang_ubuntu
         path: ./bin/voidstar
     - run: DOCKER_BUILDKIT=1 docker build -o=. --target=video-clang . --progress=plain
     - run: mv ./bin/voidstar voidstar_clang_ubuntu
     - run: mv ./video.mp4 video_clang_ubuntu.mp4
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: video-clang_ubuntu
         path: ./video_clang_ubuntu.mp4
@@ -86,8 +86,8 @@ jobs:
     name: on macos
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/checkout@v4
+    - uses: actions/cache@v4
       with:
         path: ~/.cache/bazel
         key: bazel
@@ -102,7 +102,7 @@ jobs:
         chmod +w voidstar_clang_macos
         strip    voidstar_clang_macos
     - run: ./voidstar_clang_macos --help
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: voidstar_macos-latest
         path: voidstar_clang_macos
@@ -115,9 +115,9 @@ jobs:
     name: on windows
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: bazelbuild/setup-bazelisk@v1
-    - uses: actions/cache@v2
+    - uses: actions/cache@v4
       with:
         path: ~/.cache/bazel
         key: bazel
@@ -135,7 +135,7 @@ jobs:
     # - run: ls -lha ./bazel-bin/voidstar/
     # - run: strip ./bazel-bin/voidstar/voidstar.exe
     # - run: ./bazel-bin/voidstar/voidstar.exe --help
-    # - uses: actions/upload-artifact@v2
+    # - uses: actions/upload-artifact@v4
     #   with:
     #     name: voidstar_windows-latest
     #     path: ./bazel-bin/voidstar/voidstar.exe
