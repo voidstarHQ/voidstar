@@ -2497,7 +2497,7 @@ resolved = [
                     "generator_function": "cc_configure",
                     "generator_location": None,
                 },
-                "output_tree_hash": "fcc69bfbd80678ef4769e7caf98f1d9a6e558521c1766c3babd184313d8ade5e",
+                "output_tree_hash": "f269f62abb72fc21c02152b7c57fed0a7fe9effcd75a03539e16b2ec063148db",
             },
         ],
     },

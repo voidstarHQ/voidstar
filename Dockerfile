@@ -1,6 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1@sha256:865e5dd094beca432e8c0a1d5e1c465db5f998dca4e439981029b3b81fb39ed5
 
-FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu@sha256:99c35190e22d294cdace2783ac55effc69d32896daaa265f0bbedbcde4fbe3e5 AS ubuntu
+FROM --platform=$BUILDPLATFORM docker.io/library/ubuntu:22.04@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97 AS ubuntu
 
 ARG BUILDOS
 ARG BUILDARCH
