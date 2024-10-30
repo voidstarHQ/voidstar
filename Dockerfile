@@ -41,7 +41,7 @@ RUN \
     --mount=type=cache,target=/root/.cache/bazel \
     --mount=type=cache,target=/root/.cache/bazelisk \
     set -ux \
- && curl -#fsSLo /bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-$BUILDOS-$BUILDARCH \
+ && curl -#fsSLo /bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.22.1/bazelisk-$BUILDOS-$BUILDARCH \
  && chmod +x /bazelisk \
  && cd /usr/local/bin \
  && ln -s /bazelisk bazel \
